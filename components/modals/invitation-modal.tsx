@@ -14,10 +14,7 @@ const InvitationModal: React.FC<InvitationModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div
-      className="fixed inset-0 w-full h-full bg-[url('/img/bg-modal-themeA.jpg')] bg-cover bg-center bg-no-repeat"
-      onClick={onClose}
-    >
+    <div className="fixed inset-0 w-full h-full bg-[url('/img/bg-modal-themeA.jpg')] bg-cover bg-center bg-no-repeat">
       <div
         className="flex flex-col items-center justify-center h-full gap-2"
         data-aos="zoom-in"
