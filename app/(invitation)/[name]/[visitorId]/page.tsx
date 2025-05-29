@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { themeComponents } from "@/components/themes";
 import { fetchInvitationByname } from "@/lib/services/invitation";
 import { Invitation } from "@prisma/client";
