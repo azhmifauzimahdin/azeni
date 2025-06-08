@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "aos/dist/aos.css";
 
-import { Poppins, Dancing_Script } from "next/font/google";
+import { Poppins, Alex_Brush, Scheherazade_New } from "next/font/google";
 import AOSInit from "@/components/AOSInit";
+import localFont from "next/font/local";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -11,10 +12,21 @@ const poppins = Poppins({
   variable: "--font-poppins",
 });
 
-const dancingScript = Dancing_Script({
+const alexBrush = Alex_Brush({
+  weight: "400",
   subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-dancing",
+  variable: "--font-alexbrush",
+});
+
+const scheherazade = Scheherazade_New({
+  weight: "400",
+  subsets: ["arabic"],
+  variable: "--font-scheherazade",
+});
+
+const gallery = localFont({
+  src: "./fonts/Gallery.ttf",
+  variable: "--font-gallery",
 });
 
 export const metadata: Metadata = {
@@ -28,7 +40,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" className={`${poppins.variable} ${dancingScript.variable}`}>
+    <html
+      lang="id"
+      className={`${poppins.variable} ${alexBrush.variable} ${scheherazade.variable} ${gallery.variable}`}
+    >
       <body>
         <AOSInit />
         {children}

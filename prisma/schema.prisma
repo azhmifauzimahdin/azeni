@@ -17,6 +17,24 @@ model Invitation {
   id        String @id @default(uuid())
   name      String @unique
   theme     String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Sample {
+  id        String @id @default(uuid())
+  name      String @unique
+  themeId   String
+  theme     Theme    @relation(fields: [themeId], references: [id], onDelete: Restrict)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Theme{
+  id        String @id @default(uuid())
+  name      String
+  samples   Sample[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

@@ -6,12 +6,14 @@
   --font-poppins: "Poppins", sans-serif;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: var(--font-poppins);
   @apply text-gray-800;
 }
-
-
 
 @layer base {
   :root {
@@ -40,6 +42,34 @@ body {
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
+    /* ======== Colors ======== */
+    /* Color mode HSL (hue, saturation, lightness) */
+    --first-color: hsl(353, 100%, 65%);
+    --title-color: hsl(244, 34%, 26%);
+    --text-color: hsl(244, 16%, 43%);
+    --body-color: hsl(258, 60%, 98%);
+    --container-color: #fff;
+
+    /* ======== Font and Typography ======== */
+    /* .5rem = 8px | 1rem = 16px ... */
+    --body-font: "Rubik", sans-serif;
+    --h1-font-size: 2.25rem;
+    --h2-font-size: 1.5rem;
+    --h3-font-size: 1.25rem;
+    --normal-font-size: 1rem;
+    --small-font-size: 0.875rem;
+    --smaller-font-size: 0.813rem;
+
+    /* ======== Font Weight ======== */
+    --font-medium: 500;
+    --font-semibold: 600;
+    --font-bold: 700;
+
+    /* ======== Box Shadow ======== */
+    --shadow: 0px 5px 20px 0px rgb(69 67 96 / 10%);
+
+    /* ======== Border Radius ======== */
+    --border-radius: 20px;
   }
   .dark {
     --background: 0 0% 3.9%;
@@ -69,13 +99,23 @@ body {
   }
 }
 
-
-
 @layer base {
   * {
     @apply border-border;
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .bg-img-default {
+    @apply bg-cover bg-center bg-no-repeat;
+  }
+  .flex-section {
+    @apply flex flex-col items-center justify-center text-center min-h-screen gap-3 py-10;
+  }
+  .section-title {
+    @apply font-gallery text-3xl font-bold text-green-primary text-center mb-5;
   }
 }
