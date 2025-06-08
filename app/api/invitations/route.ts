@@ -21,7 +21,7 @@ export async function POST(req: Request) {
     }
 
     const newInvitation = await prisma.invitation.create({
-      data: { name, theme, expiresAt },
+      data: { name, theme, expiresAt: new Date(expiresAt) },
     });
 
     return NextResponse.json(newInvitation, { status: 201 });
