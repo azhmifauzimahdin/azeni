@@ -7,6 +7,7 @@ interface ImageProps {
   aspectRatio: string;
   className?: string;
   priority?: boolean;
+  objectFit?: string;
 }
 const Image: React.FC<ImageProps> = ({
   src,
@@ -14,6 +15,7 @@ const Image: React.FC<ImageProps> = ({
   aspectRatio,
   className,
   priority = false,
+  objectFit = "object-cover",
   ...rest
 }) => {
   return (
@@ -27,7 +29,7 @@ const Image: React.FC<ImageProps> = ({
         fill
         sizes="100%"
         priority={priority}
-        className="object-cover"
+        className={objectFit}
       />
     </div>
   );

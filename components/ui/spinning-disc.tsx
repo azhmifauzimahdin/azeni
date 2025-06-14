@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { Disc3 } from "lucide-react";
+import { Music } from "lucide-react";
 import React from "react";
 
 interface SpinningDiscProps {
@@ -7,12 +7,19 @@ interface SpinningDiscProps {
 }
 const SpinningDisc: React.FC<SpinningDiscProps> = ({ play }) => {
   return (
-    <Disc3
-      className={clsx("fixed w-5 h-5 text-green-primary top-5 right-5 z-40", {
-        "animate-spin [animation-duration:2s]": play,
-        hidden: !play,
-      })}
-    />
+    <div
+      className={clsx(
+        "w-6 h-6 rounded-full bg-slate-950 flex-center fixed top-5 right-5 z-40",
+        {
+          "animate-spin [animation-duration:2s]": play,
+          hidden: !play,
+        }
+      )}
+    >
+      <div className="w-3 h-3 rounded-full bg-green-primary text-black flex-center ">
+        <Music size={8} />
+      </div>
+    </div>
   );
 };
 

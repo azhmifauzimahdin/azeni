@@ -4,15 +4,10 @@ import { Button } from "@/components/ui/button";
 import clsx from "clsx";
 import { formatDate } from "@/utils/formatted-date";
 import Image from "@/components/ui/image";
-
-interface Invitation {
-  image: string;
-  name: string;
-  date: string;
-}
+import { Guest, Invitation } from "@/types";
 
 interface InvitationModalProps {
-  invitation: Invitation;
+  invitation: Invitation & { currentGuest: Guest };
   isOpen: boolean;
   onClose: () => void;
   variant?: "001";
@@ -32,7 +27,7 @@ const InvitationModalPremium: React.FC<InvitationModalProps> = ({
   return (
     <div
       className={clsx(
-        "fixed z-50 md:p-10 inset-0 bg-cover bg-center transition-all duration-1000 ease-in-out transform",
+        "fixed z-50 md:p-10 inset-0 bg-slate-50 bg-cover bg-center transition-all duration-1000 ease-in-out transform",
         {
           "translate-y-0 opacity-100": isOpen,
           "-translate-y-full opacity-0 pointer-events-none": !isOpen,
@@ -72,7 +67,8 @@ const InvitationModalPremium: React.FC<InvitationModalProps> = ({
             <div className="text-center mb-8">
               <div>Kepada:</div>
               <div>Yth. Bapak/Ibu/Saudara/i</div>
-              <div className="font-bold">-</div>
+              <div className="font-bold">{invitation.currentGuest.name}</div>
+              <div>{invitation.currentGuest.address}</div>
             </div>
             <Button
               variant="default"

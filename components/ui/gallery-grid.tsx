@@ -2,14 +2,10 @@
 
 import React from "react";
 import Image from "./image";
-
-type GalleryItem = {
-  src: string;
-  description: string;
-};
+import { Gallery } from "@/types";
 
 type GalleryGridProps = {
-  galleries: GalleryItem[];
+  galleries: Gallery[];
 };
 
 const GalleryGrid: React.FC<GalleryGridProps> = ({ galleries }) => {
@@ -19,7 +15,7 @@ const GalleryGrid: React.FC<GalleryGridProps> = ({ galleries }) => {
         {galleries.slice(0, 6).map((gallery, index) => (
           <Image
             key={index}
-            src={gallery.src}
+            src={gallery.image}
             alt={gallery.description}
             className="rounded"
             aspectRatio="aspect-[9/12]"
@@ -33,7 +29,7 @@ const GalleryGrid: React.FC<GalleryGridProps> = ({ galleries }) => {
           {galleries.slice(6, 8).map((gallery, index) => (
             <Image
               key={index}
-              src={gallery.src}
+              src={gallery.image}
               alt={gallery.description}
               className="rounded"
               aspectRatio="aspect-[9/12]"
@@ -48,7 +44,7 @@ const GalleryGrid: React.FC<GalleryGridProps> = ({ galleries }) => {
           {galleries.slice(8).map((gallery, index) => (
             <Image
               key={index}
-              src={gallery.src}
+              src={gallery.image}
               alt={gallery.description}
               className="rounded"
               aspectRatio="aspect-video"

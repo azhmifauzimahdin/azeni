@@ -9,32 +9,171 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider  = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model Invitation {
-  id        String @id @default(uuid())
-  name      String @unique
-  theme     String
-  expiresAt DateTime
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String        @id @default(uuid())
+  userId        String
+  name          String
+  slug          String        @unique
+  themeId       String
+  image         String?
+  date          DateTime      @default(now())
+  expiresAt     DateTime      @default(now())
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  transaction   Transaction?  @relation("InvitationTransaction")
+  theme         Theme         @relation(fields: [themeId], references: [id], onDelete: Restrict)
+  quote         Quote?        @relation("InvitationQuote")
+  schedules     Schedule[]    @relation("InvitationSchedule")
+  couple        Couple?       @relation("InvitationCouple")
+  stories       Story[]       @relation("InvitationStory")
+  galleries     Gallery[]     @relation("InvitationGallery")
+  bankaccounts  BankAccount[] @relation("InvitationBankAccount")
+  comments      Comment[]     @relation("InvitationComment")
+  guests        Guest[]       @relation("InvitationGuest")
 }
 
-model Sample {
-  id        String @id @default(uuid())
-  name      String @unique
-  themeId   String
-  theme     Theme    @relation(fields: [themeId], references: [id], onDelete: Restrict)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Transaction {
+  id            String        @id @default(uuid())
+  invitationId  String        @unique
+  amount        Decimal       @db.Decimal(10, 2)
+  date          DateTime
+  statusId      String
+
+  invitation    Invitation    @relation("InvitationTransaction",fields: [invitationId], references: [id], onDelete: Cascade)
+  status        PaymentStatus  @relation("PaymentStatusTransaction", fields: [statusId], references: [id], onDelete: Cascade)
+}
+
+model PaymentStatus {
+  id            String        @id @default(uuid())
+  name          String
+  transactions  Transaction[] @relation("PaymentStatusTransaction")
 }
 
 model Theme{
-  id        String @id @default(uuid())
-  name      String
-  samples   Sample[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String        @id @default(uuid())
+  name          String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  Invitations   Invitation[]
+}
+
+model Quote {
+  id            String        @id @default(uuid())
+  name          String        @db.Text
+  author        String
+  invitationId  String        @unique
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  invitation    Invitation    @relation("InvitationQuote",fields: [invitationId], references: [id], onDelete: Cascade)
+}
+
+model Schedule {
+  id            String        @id @default(uuid())
+  invitationId  String
+  type          String
+  name          String
+  startDate     DateTime
+  endDate       DateTime
+  location      String
+  location_maps String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  invitation    Invitation    @relation("InvitationSchedule",fields: [invitationId], references: [id], onDelete: Cascade)
+}
+
+model Couple {
+  id            String        @id @default(uuid())
+  invitationId  String        @unique
+  groomName     String
+  groomFather   String
+  groomMother   String
+  groomImage    String
+  brideName     String
+  brideFather   String
+  brideMother   String
+  brideImage    String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  invitation    Invitation    @relation("InvitationCouple",fields: [invitationId], references: [id], onDelete: Cascade)
+}
+
+model Story {
+  id            String        @id @default(uuid())
+  invitationId  String
+  title         String
+  date          DateTime
+  description   String        @db.Text
+  image         String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  invitation    Invitation    @relation("InvitationStory",fields: [invitationId], references: [id], onDelete: Cascade)
+}
+
+model Gallery {
+  id            String        @id @default(uuid())
+  invitationId  String
+  image         String
+  description   String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  invitation    Invitation    @relation("InvitationGallery",fields: [invitationId], references: [id], onDelete: Cascade)
+}
+
+model BankAccount {
+  id            String        @id @default(uuid())
+  invitationId  String
+  bankId        String
+  nomor         String
+  name          String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  invitation    Invitation    @relation("InvitationBankAccount",fields: [invitationId], references: [id], onDelete: Cascade)
+  bank          Bank          @relation("BankAccount", fields: [bankId], references: [id], onDelete: Cascade)
+}
+
+model Bank {
+  id            String        @id @default(uuid())
+  name          String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  bankAccount   BankAccount[] @relation("BankAccount")
+}
+
+model Comment{
+  id            String        @id @default(uuid())
+  invitationId  String
+  guestId       String
+  message       String        @db.Text
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  
+  invitation    Invitation    @relation("InvitationComment",fields: [invitationId], references: [id], onDelete: Cascade)
+  guest         Guest         @relation("GuestComment",fields: [guestId], references: [id], onDelete: Cascade)
+}
+
+model Guest {
+  id            String        @id @default(uuid())
+  invitationId  String
+  name          String
+  address       String
+  color         String
+  isAttending   Boolean       @default(false)        
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  invitation    Invitation    @relation("InvitationGuest",fields: [invitationId], references: [id], onDelete: Cascade)
+  comments      Comment[]     @relation("GuestComment")
 }

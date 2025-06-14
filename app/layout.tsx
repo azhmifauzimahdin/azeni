@@ -5,6 +5,7 @@ import "aos/dist/aos.css";
 import { Poppins, Alex_Brush, Scheherazade_New } from "next/font/google";
 import AOSInit from "@/components/AOSInit";
 import localFont from "next/font/local";
+import { Toaster } from "react-hot-toast";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -30,8 +31,8 @@ const gallery = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "AZENI",
-  description: "AZENI",
+  title: "AZRIN",
+  description: "AZRIN",
 };
 
 export default function RootLayout({
@@ -46,6 +47,7 @@ export default function RootLayout({
     >
       <body>
         <AOSInit />
+        <Toaster />
         {children}
       </body>
     </html>
