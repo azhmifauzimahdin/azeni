@@ -93,31 +93,32 @@ const Premium1Page: React.FC<Invitation & { currentGuest: Guest }> = (
       <section
         id="hero"
         // className="bg-[url('/assets/themes/premium-001/img/bg-001.jpg')] bg-img-default"
+        className="flex-section"
       >
-        <div className="flex-section">
-          <div>The Wedding Of</div>
-          <Image
-            src={invitation.image}
-            alt="Foto"
-            aspectRatio="aspect-square"
-            className="w-5/12 md:w-2/12 rounded-tr-3xl rounded-br-lg rounded-bl-3xl rounded-tl-lg shadow-md mb-3"
-          />
-          <div className="mb-3">
-            <div className="font-alex text-5xl text-green-primary">
-              {invitation.name}
-            </div>
-            <div>{formattedMarriageDate}</div>
+        <div>The Wedding Of</div>
+        <Image
+          src={invitation.image}
+          alt="Foto"
+          aspectRatio="aspect-square"
+          className="w-5/12 md:w-2/12 rounded-tr-3xl rounded-br-lg rounded-bl-3xl rounded-tl-lg shadow-md mb-3"
+        />
+        <div className="mb-3">
+          <div className="font-alex text-5xl text-green-primary">
+            {invitation.name}
           </div>
-          <GoogleCalender
-            title={`Pernikahan ${invitation.name}`}
-            startTime={marriageEvent?.startDate || invitation.date}
-            endTime={marriageEvent?.endDate || invitation.date}
-          />
-          <div className="mt-5">
-            <CountdownTimer targetDate={invitation.date} />
-          </div>
+          <div>{formattedMarriageDate}</div>
         </div>
-        <blockquote className="text-center p-10" data-aos="fade-up">
+        <GoogleCalender
+          title={`Pernikahan ${invitation.name}`}
+          startTime={marriageEvent?.startDate || invitation.date}
+          endTime={marriageEvent?.endDate || invitation.date}
+        />
+        <div className="mt-5">
+          <CountdownTimer targetDate={invitation.date} />
+        </div>
+      </section>
+      <section className="bg-green-primary text-white">
+        <blockquote className="text-center p-3" data-aos="fade-up">
           &quot;{invitation.quote.name}&quot;
           <cite className="block">- {invitation.quote.author} -</cite>
         </blockquote>

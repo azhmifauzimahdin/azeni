@@ -66,6 +66,12 @@ const config: Config = {
       },
     },
   },
+  safelist: [
+    {
+      pattern:
+        /bg-(red|orange|amber|yellow|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-500/,
+    },
+  ],
   plugins: [require("tailwindcss-animate")],
 };
 export default config;
