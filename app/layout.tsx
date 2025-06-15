@@ -6,6 +6,7 @@ import { Poppins, Alex_Brush, Scheherazade_New } from "next/font/google";
 import AOSInit from "@/components/AOSInit";
 import localFont from "next/font/local";
 import { Toaster } from "react-hot-toast";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -31,8 +32,8 @@ const gallery = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "AZRIN",
-  description: "AZRIN",
+  title: "AZEN",
+  description: "AZEN",
 };
 
 export default function RootLayout({
@@ -41,15 +42,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="id"
-      className={`${poppins.variable} ${alexBrush.variable} ${scheherazade.variable} ${gallery.variable}`}
-    >
-      <body>
-        <AOSInit />
-        <Toaster />
-        {children}
-      </body>
-    </html>
+    <ClerkProvider>
+      <html
+        lang="id"
+        className={`${poppins.variable} ${alexBrush.variable} ${scheherazade.variable} ${gallery.variable}`}
+      >
+        <body>
+          <AOSInit />
+          <Toaster />
+          {children}
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
