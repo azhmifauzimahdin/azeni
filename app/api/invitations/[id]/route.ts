@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { ResponseJson } from "@/lib/utils/response-with-wib";
 
 export async function GET(_: Request, { params }: { params: { id: string } }) {
   try {
@@ -17,7 +17,7 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
           quote: true,
           schedules: {
             orderBy: {
-              createdAt: "desc",
+              startDate: "asc",
             },
           },
           couple: true,
@@ -87,18 +87,15 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
     }
 
     if (!invitation) {
-      return NextResponse.json(
+      return ResponseJson(
         { message: "Undangan tidak ditemukan" },
         { status: 404 }
       );
     }
 
-    return NextResponse.json(invitation);
+    return ResponseJson(invitation);
   } catch (error) {
     console.error(error);
-    return NextResponse.json(
-      { message: "Gagal mengambil data" },
-      { status: 500 }
-    );
+    return ResponseJson({ message: "Gagal mengambil data" }, { status: 500 });
   }
 }

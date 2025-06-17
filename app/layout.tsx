@@ -7,6 +7,7 @@ import AOSInit from "@/components/AOSInit";
 import localFont from "next/font/local";
 import { Toaster } from "react-hot-toast";
 import { ClerkProvider } from "@clerk/nextjs";
+import UserSync from "@/components/ui/user-sync";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -50,6 +51,7 @@ export default function RootLayout({
         <body>
           <AOSInit />
           <Toaster />
+          <UserSync />
           {children}
         </body>
       </html>

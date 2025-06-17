@@ -9,6 +9,14 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      backgroundImage: {
+        "gradient-pink-purple":
+          "linear-gradient(to bottom right, #FBCFE8, #D8B4FE)",
+        "gradient-green": "linear-gradient(to bottom right, #BBF7D0, #86EFAC)",
+      },
+      backgroundColor: {
+        skeleton: "#cbd5e1",
+      },
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
@@ -52,6 +60,8 @@ const config: Config = {
         },
         "green-primary": "#35665b",
         "green-secondary": "##2a5349",
+        "green-app-primary": "#008080",
+        "green-app-secondary": "#006666",
       },
       fontFamily: {
         poppins: ["var(--font-poppins)", "sans-serif"],

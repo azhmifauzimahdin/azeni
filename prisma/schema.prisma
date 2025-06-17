@@ -9,17 +9,19 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
+  provider  = "mysql"
   url      = env("DATABASE_URL")
 }
 
 model Invitation {
   id            String        @id @default(uuid())
   userId        String
-  name          String
+  groom         String
+  bride         String
   slug          String        @unique
   themeId       String
   image         String?
+  status        Boolean       @default(true)
   date          DateTime      @default(now())
   expiresAt     DateTime      @default(now())
   createdAt     DateTime      @default(now())
@@ -28,6 +30,7 @@ model Invitation {
   transaction   Transaction?  @relation("InvitationTransaction")
   theme         Theme         @relation(fields: [themeId], references: [id], onDelete: Restrict)
   quote         Quote?        @relation("InvitationQuote")
+  music         Music?        @relation("InvitationMusic")
   schedules     Schedule[]    @relation("InvitationSchedule")
   couple        Couple?       @relation("InvitationCouple")
   stories       Story[]       @relation("InvitationStory")
@@ -57,6 +60,9 @@ model PaymentStatus {
 model Theme{
   id            String        @id @default(uuid())
   name          String
+  originalPrice Decimal       @db.Decimal(10, 2)
+  discount      Decimal       @db.Decimal(10, 2)
+  isPercent     Boolean       @default(true)  
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 
@@ -176,4 +182,14 @@ model Guest {
 
   invitation    Invitation    @relation("InvitationGuest",fields: [invitationId], references: [id], onDelete: Cascade)
   comments      Comment[]     @relation("GuestComment")
+}
+
+model Music {
+  id            String        @id @default(uuid())
+  name          String        @db.Text
+  invitationId  String        @unique
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  invitation    Invitation    @relation("InvitationMusic",fields: [invitationId], references: [id], onDelete: Cascade)
 }

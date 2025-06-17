@@ -2,7 +2,7 @@ import NotFound from "@/components/screens/not-found";
 import { SampleComponents } from "@/components/template";
 import { GuestService, InvitationService } from "@/lib/services";
 import { Guest, Invitation } from "@/types";
-import { handleError } from "@/utils/handle-error";
+import { handleError } from "@/lib/utils/handle-error";
 
 type InvitationPageProps = {
   params: {
@@ -13,22 +13,17 @@ type InvitationPageProps = {
 const InvitationPage = async ({ params }: InvitationPageProps) => {
   const { slug } = params;
   let invitation: Invitation | null = null;
+  let guest: Guest | null = null;
 
   try {
     invitation = await InvitationService.fetchInvitationByslug(slug);
+    guest = await GuestService.fetchGuestById(invitation.id, params.guestId);
   } catch (error: unknown) {
     handleError(error, "invitation");
   }
 
   if (!invitation) {
     return <NotFound message="Undangan tidak ditemukan" />;
-  }
-
-  let guest: Guest | null = null;
-  try {
-    guest = await GuestService.fetchGuestById(invitation.id, params.guestId);
-  } catch (error: unknown) {
-    handleError(error, "Guest");
   }
 
   if (!guest) {

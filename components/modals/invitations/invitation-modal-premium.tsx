@@ -2,7 +2,7 @@ import React from "react";
 import { MailOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import clsx from "clsx";
-import { formatDate } from "@/utils/formatted-date";
+import { formatDate } from "@/lib/utils/formatted-date";
 import Image from "@/components/ui/image";
 import { Guest, Invitation } from "@/types";
 

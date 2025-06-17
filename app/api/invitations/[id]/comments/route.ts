@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { ResponseJson } from "@/lib/utils/response-with-wib";
 import { NextResponse } from "next/server";
 
 export async function POST(
@@ -22,7 +23,7 @@ export async function POST(
       });
 
     if (errors.length > 0) {
-      return NextResponse.json({ errors }, { status: 400 });
+      return ResponseJson({ errors }, { status: 400 });
     }
 
     const invitation = await prisma.invitation.findFirst({
@@ -31,7 +32,7 @@ export async function POST(
       },
     });
     if (!invitation) {
-      return NextResponse.json(
+      return ResponseJson(
         { message: "Undangan tidak ditemukan" },
         { status: 404 }
       );
@@ -53,10 +54,10 @@ export async function POST(
       },
     });
 
-    return NextResponse.json(newComment, { status: 201 });
+    return ResponseJson(newComment, { status: 201 });
   } catch (error) {
     console.error("Error creating comment:", error);
-    return NextResponse.json(
+    return ResponseJson(
       { message: "Gagal membuat komentar." },
       { status: 500 }
     );

@@ -9,14 +9,27 @@ import { Story } from "./story";
 import { Theme } from "./theme";
 import { Transaction } from "./transaction";
 
+export interface InvitationRequest {
+  userId: string;
+  groom: string;
+  bride: string;
+  slug: string;
+  themeId: string;
+  image: string;
+  date: Date;
+  expiresAt: Date;
+}
+
 export interface Invitation {
   id: string;
   userId: string;
-  name: string;
+  groom: string;
+  bride: string;
   slug: string;
   themeId: string;
   image: string;
   date: string;
+  status: boolean;
   expiresAt: string;
   createdAt: string;
   updatedAt: string;

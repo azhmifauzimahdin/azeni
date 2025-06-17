@@ -1,4 +1,4 @@
-import { CommentFormValues } from "@/schemas";
+import { CommentFormValues } from "@/components/ui/comment";
 import { Comment } from "@/types";
 import axios from "axios";
 

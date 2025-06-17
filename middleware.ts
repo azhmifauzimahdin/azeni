@@ -1,26 +1,31 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-const isPublicRoute = createRouteMatcher(["/", "/sign-in(.*)", "/sign-up(.*)"]);
+const isPublicRoute = createRouteMatcher([
+  "/",
+  "/sign-in(.*)",
+  "/sign-up(.*)",
+  "/api/:path*",
+]);
 
-const isAdminRoute = createRouteMatcher(["/dashboard(.*)"]);
-const isUserRoute = createRouteMatcher(["/invitations(.*)"]);
+const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
+const isUserRoute = createRouteMatcher(["/dashboard(.*)"]);
 
 export default clerkMiddleware(async (auth, req) => {
   const { userId, redirectToSignIn } = await auth();
   const role = (await auth()).sessionClaims?.metadata?.role;
 
   if (userId && req.nextUrl.pathname === "/") {
-    const redirectUrl = role === "admin" ? "/dashboard" : "/invitations";
+    const redirectUrl = role === "admin" ? "/admin" : "/dashboard";
     return NextResponse.redirect(new URL(redirectUrl, req.url));
   }
 
   if (isAdminRoute(req) && role !== "admin") {
-    const url = new URL("/invitations", req.url);
+    const url = new URL("/dashboard", req.url);
     return NextResponse.redirect(url);
   }
   if (isUserRoute(req) && role === "admin") {
-    const url = new URL("/dashboard", req.url);
+    const url = new URL("/admin", req.url);
     return NextResponse.redirect(url);
   }
 

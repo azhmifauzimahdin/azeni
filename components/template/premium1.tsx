@@ -9,7 +9,7 @@ import InvitationModalPremium from "../modals/invitations/invitation-modal-premi
 import Image from "../ui/image";
 import GoogleCalender from "../ui/google-calender";
 import CountdownTimer from "../ui/countdown-timer";
-import { formatDate } from "@/utils/formatted-date";
+import { formatDate } from "@/lib/utils/formatted-date";
 import {
   Calendar,
   CalendarDays,
@@ -17,14 +17,14 @@ import {
   Heart,
   MapPinCheckInside,
 } from "lucide-react";
-import { formatTime } from "@/utils/formatted-time";
+import { formatTime } from "@/lib/utils/formatted-time";
 import { Button } from "../ui/button";
 import GalleryGrid from "../ui/gallery-grid";
 import WeddingGift from "../ui/wedding-gift";
 import CommentSection from "../ui/comment";
 import { CommentFormValues } from "@/schemas";
 import { CommentService } from "@/lib/services";
-import { handleError } from "@/utils/handle-error";
+import { handleError } from "@/lib/utils/handle-error";
 import toast from "react-hot-toast";
 
 const Premium1Page: React.FC<Invitation & { currentGuest: Guest }> = (

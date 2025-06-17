@@ -12,13 +12,19 @@ import { id } from "date-fns/locale";
 import { Separator } from "./separator";
 import clsx from "clsx";
 import { Comment } from "@/types";
-import { CommentFormSchema, CommentFormValues } from "@/schemas";
+import { z } from "zod";
 
 interface commentSectionProps {
   comments: Comment[];
   onSubmit: (data: CommentFormValues) => Promise<void>;
   loading: boolean;
 }
+
+export const CommentFormSchema = z.object({
+  message: z.string().min(5),
+});
+
+export type CommentFormValues = z.infer<typeof CommentFormSchema>;
 
 const CommentSection: React.FC<commentSectionProps> = ({
   comments,

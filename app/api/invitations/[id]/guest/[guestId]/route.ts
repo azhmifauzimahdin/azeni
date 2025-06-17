@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { ResponseJson } from "@/lib/utils/response-with-wib";
 
 export async function GET(
   _: Request,
@@ -11,18 +11,12 @@ export async function GET(
     });
 
     if (!guest) {
-      return NextResponse.json(
-        { message: "Guest tidak ditemukan" },
-        { status: 404 }
-      );
+      return ResponseJson({ message: "Tamu tidak ditemukan" }, { status: 404 });
     }
 
-    return NextResponse.json(guest);
+    return ResponseJson(guest);
   } catch (error) {
     console.error(error);
-    return NextResponse.json(
-      { message: "Gagal mengambil data" },
-      { status: 500 }
-    );
+    return ResponseJson({ message: "Gagal mengambil data" }, { status: 500 });
   }
 }

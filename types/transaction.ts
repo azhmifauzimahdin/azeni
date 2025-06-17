@@ -4,4 +4,8 @@ export interface Transaction {
   amount: string;
   date: string;
   statusId: string;
+  status: {
+    id: string;
+    name: string;
+  };
 }

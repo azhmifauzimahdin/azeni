@@ -1,0 +1,45 @@
+import { prisma } from "@/lib/prisma";
+import { ResponseJson } from "@/lib/utils/response-with-wib";
+import { auth } from "@clerk/nextjs/server";
+
+export async function GET(
+  _: Request,
+  { params }: { params: { userId: string } }
+) {
+  try {
+    const { userId } = await auth();
+
+    if (userId !== params.userId) {
+      return ResponseJson(
+        { message: "Anda tidak memiliki akses ini" },
+        { status: 403 }
+      );
+    }
+    const invitation = await prisma.invitation.findMany({
+      where: { userId: params.userId },
+      include: {
+        transaction: {
+          include: {
+            status: true,
+          },
+        },
+        theme: true,
+      },
+      orderBy: {
+        updatedAt: "desc",
+      },
+    });
+
+    if (!invitation) {
+      return ResponseJson(
+        { message: "Undangan tidak ditemukan" },
+        { status: 404 }
+      );
+    }
+
+    return ResponseJson(invitation);
+  } catch (error) {
+    console.error(error);
+    return ResponseJson({ message: "Gagal mengambil data" }, { status: 500 });
+  }
+}

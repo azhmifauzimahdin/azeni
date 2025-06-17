@@ -7,6 +7,8 @@ async function main() {
   const theme = await prisma.theme.create({
     data: {
       name: "premium-001",
+      originalPrice: 50000,
+      discount: 0,
     },
   });
 
@@ -35,22 +37,35 @@ async function main() {
     },
   });
 
-  await prisma.paymentStatus.create({
-    data: {
-      name: "Menunggu Pembayaran",
-    },
+  await prisma.paymentStatus.createMany({
+    data: [
+      {
+        name: "Menunggu Pembayaran",
+      },
+      {
+        name: "Batal",
+      },
+    ],
   });
 
   // Create Invitation
   const invitation = await prisma.invitation.create({
     data: {
       userId: "39efd6e4-0a47-4a39-b4e0-ef1f8756c4f5",
-      name: "Dinda & Rey",
+      groom: "Rey",
+      bride: "Dinda",
       slug: "premium-001",
       themeId: theme.id,
       image: "/assets/themes/premium-001/img/cover.jpg",
       date: new Date("2028-07-27T00:00:00Z"),
       expiresAt: new Date("9999-12-31T00:00:00Z"),
+    },
+  });
+
+  await prisma.music.create({
+    data: {
+      name: "backsound_dhmtt6",
+      invitationId: invitation.id,
     },
   });
 

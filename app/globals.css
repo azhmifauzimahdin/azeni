@@ -124,4 +124,7 @@ body {
   .flex-center {
     @apply flex justify-center items-center;
   }
+  .card-dashboard {
+    @apply w-full bg-white rounded-lg shadow-sm p-3 md:p-6;
+  }
 }

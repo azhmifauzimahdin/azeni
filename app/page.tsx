@@ -8,7 +8,7 @@ export default function Home() {
         Please <a href="/sign-in">Login</a> or <a href="/sign-up">Register</a>{" "}
         to continue.
       </p>
-      <UserButton afterSignOutUrl="/" />
+      <UserButton />
     </main>
   );
 }
