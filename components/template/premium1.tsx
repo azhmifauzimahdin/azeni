@@ -21,8 +21,7 @@ import { formatTime } from "@/lib/utils/formatted-time";
 import { Button } from "../ui/button";
 import GalleryGrid from "../ui/gallery-grid";
 import WeddingGift from "../ui/wedding-gift";
-import CommentSection from "../ui/comment";
-import { CommentFormValues } from "@/schemas";
+import CommentSection, { CommentFormValues } from "../ui/comment";
 import { CommentService } from "@/lib/services";
 import { handleError } from "@/lib/utils/handle-error";
 import toast from "react-hot-toast";
@@ -104,12 +103,12 @@ const Premium1Page: React.FC<Invitation & { currentGuest: Guest }> = (
         />
         <div className="mb-3">
           <div className="font-alex text-5xl text-green-primary">
-            {invitation.name}
+            {invitation.groom} & {invitation.bride}
           </div>
           <div>{formattedMarriageDate}</div>
         </div>
         <GoogleCalender
-          title={`Pernikahan ${invitation.name}`}
+          title={`Pernikahan ${invitation.groom} & ${invitation.bride}`}
           startTime={marriageEvent?.startDate || invitation.date}
           endTime={marriageEvent?.endDate || invitation.date}
         />
@@ -341,7 +340,7 @@ const Premium1Page: React.FC<Invitation & { currentGuest: Guest }> = (
         />
         <div className="mb-3" data-aos="zoom-in">
           <div className="font-alex text-5xl text-green-primary">
-            {invitation.name}
+            {invitation.groom} & {invitation.bride}
           </div>
           <div>{formattedMarriageDate}</div>
         </div>

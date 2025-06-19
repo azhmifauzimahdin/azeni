@@ -52,7 +52,7 @@ const InvitationModalPremium: React.FC<InvitationModalProps> = ({
             />
             <h1>The Wedding Of</h1>
             <div className="font-alex text-5xl text-green-primary">
-              {invitation.name}
+              {invitation.groom} & {invitation.bride}
             </div>
             <div className="grid grid-cols-3 items-center gap-3 my-6 md:my-0">
               <div className="justify-self-end">{dateParts[0] ?? "-"}</div>
