@@ -3,7 +3,7 @@
 import NavLink from "@/components/ui/nav-link";
 import { UserButton, useUser } from "@clerk/nextjs";
 import clsx from "clsx";
-import { AlignJustify, LayoutPanelLeft, Mail } from "lucide-react";
+import { AlignJustify, LayoutPanelLeft, Mail, Wallet } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -25,7 +25,7 @@ const DashboardLayout = ({
     <>
       <div className="bg-slate-100 min-h-screen relative">
         <nav className="fixed top-0 bg-green-app-primary text-white w-full h-11 flex-center shadow z-40">
-          <div className="w-full px-3 py-2 lg:px-5 lg:pl-3">
+          <div className="w-full px-3 py-2 md:px-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center justify-start rtl:justify-end">
                 <div
@@ -34,8 +34,8 @@ const DashboardLayout = ({
                 >
                   <AlignJustify />
                 </div>
-                <Link href="/" className="flex ms-2">
-                  AZENI
+                <Link href="/" className="text-lg font-medium tracking-wide">
+                  AZEN
                 </Link>
               </div>
               <div className="flex-center">
@@ -81,6 +81,16 @@ const DashboardLayout = ({
                 >
                   <Mail />
                   Undangan
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  href="/dashboard/payment"
+                  active={location === "payment"}
+                  onClick={() => setToggleSidebar(false)}
+                >
+                  <Wallet />
+                  Transaksi
                 </NavLink>
               </li>
             </ul>

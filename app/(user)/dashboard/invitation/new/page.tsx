@@ -1,4 +1,8 @@
 import InvitationForm from "./components/invitation-form";
+import { generatePageMetadata } from "@/lib/metadata";
+
+export const generateMetadata = () =>
+  generatePageMetadata({ fallbackTitle: "Buat Undangan" });
 
 export default async function InvitationPage() {
   return (

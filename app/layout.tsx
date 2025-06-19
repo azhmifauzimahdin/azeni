@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import "./globals.css";
 import "aos/dist/aos.css";
 
@@ -31,11 +30,6 @@ const gallery = localFont({
   src: "./fonts/Gallery.ttf",
   variable: "--font-gallery",
 });
-
-export const metadata: Metadata = {
-  title: "AZEN",
-  description: "AZEN",
-};
 
 export default function RootLayout({
   children,

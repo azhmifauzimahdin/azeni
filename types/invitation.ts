@@ -10,7 +10,6 @@ import { Theme } from "./theme";
 import { Transaction } from "./transaction";
 
 export interface InvitationRequest {
-  userId: string;
   groom: string;
   bride: string;
   slug: string;

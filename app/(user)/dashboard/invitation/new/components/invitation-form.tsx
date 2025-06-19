@@ -23,10 +23,10 @@ import { handleError } from "@/lib/utils/handle-error";
 import { Heading } from "@/components/ui/heading";
 import ImageUpload from "@/components/ui/image-upload";
 import { ImageService, InvitationService } from "@/lib/services";
-import useUserStore from "@/stores/user-store";
 import { InvitationRequest } from "@/types";
 import NavigationBack from "@/components/ui/navigation-back";
 import useInvitationStore from "@/stores/invitation-store";
+import useUserInvitations from "@/hooks/use-user-invitation";
 
 const formSchema = z.object({
   groom: z.string().min(1, { message: "Nama panggilan pria wajib diisi" }),
@@ -38,7 +38,7 @@ const formSchema = z.object({
 type InvitationFormValues = z.infer<typeof formSchema>;
 
 const InvitationForm: React.FC = () => {
-  const user = useUserStore((state) => state.user);
+  useUserInvitations();
   const addInvitationAtFirst = useInvitationStore(
     (state) => state.addInvitationAtFirst
   );
@@ -61,20 +61,17 @@ const InvitationForm: React.FC = () => {
     try {
       setLoading(true);
       await deleteAllImages();
-      if (user) {
-        const req: InvitationRequest = {
-          userId: user.id,
-          groom: data.groom,
-          bride: data.bride,
-          slug: slug,
-          themeId: process.env.NEXT_PUBLIC_DEFAULT_ID_THEME!,
-          image: data.image || "",
-          date: new Date(new Date().setMonth(new Date().getMonth() + 1)),
-          expiresAt: new Date(new Date().setMonth(new Date().getMonth() + 6)),
-        };
-        const res = await InvitationService.createInvitation(req);
-        addInvitationAtFirst(res);
-      }
+      const req: InvitationRequest = {
+        groom: data.groom,
+        bride: data.bride,
+        slug: slug,
+        themeId: "",
+        image: data.image || "",
+        date: new Date(new Date().setMonth(new Date().getMonth() + 1)),
+        expiresAt: new Date(new Date().setMonth(new Date().getMonth() + 6)),
+      };
+      const res = await InvitationService.createInvitation(req);
+      addInvitationAtFirst(res);
       router.push(`/dashboard/invitation`);
       toast.success("Undangan berhasil dibuat.");
     } catch (error: unknown) {
@@ -190,7 +187,7 @@ const InvitationForm: React.FC = () => {
                     />
                   </FormControl>
                   <FormDescription>
-                    Gambar digunakan untuk cover undangan (opsional)
+                    Foto digunakan untuk cover (max 2mb)
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

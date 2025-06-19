@@ -1,6 +1,7 @@
 import { generateUniqueSlug } from "@/lib/generateUniqueSlug";
 import { prisma } from "@/lib/prisma";
 import { ResponseJson } from "@/lib/utils/response-with-wib";
+import { auth } from "@clerk/nextjs/server";
 import { Decimal } from "@prisma/client/runtime/library";
 
 function calculateFinalPrice(
@@ -17,14 +18,14 @@ function calculateFinalPrice(
 }
 export async function POST(req: Request) {
   try {
+    const { userId } = await auth();
     const body = await req.json();
 
-    const { userId, groom, bride, slug, themeId, image, date, expiresAt } =
-      body;
+    const { groom, bride, slug, themeId, image, date, expiresAt } = body;
+
+    if (!userId) return ResponseJson("Unauthorized", { status: 401 });
 
     const errors = [];
-    if (!userId)
-      errors.push({ field: "userId", message: "User Id harus diisi." });
     if (!groom)
       errors.push({
         field: "groom",
@@ -36,8 +37,6 @@ export async function POST(req: Request) {
         message: "Nama panggilan wanita harus diisi.",
       });
     if (!slug) errors.push({ field: "slug", message: "Slug harus diisi." });
-    if (!themeId)
-      errors.push({ field: "slug", message: "Theme Id harus diisi." });
     if (!date) errors.push({ field: "date", message: "Tanggal harus diisi." });
     if (!expiresAt)
       errors.push({
@@ -48,11 +47,15 @@ export async function POST(req: Request) {
     if (errors.length > 0) {
       return ResponseJson({ errors }, { status: 400 });
     }
-    const theme = await prisma.theme.findFirst({
-      where: {
-        id: themeId.id,
-      },
-    });
+
+    let theme;
+    if (!themeId) {
+      theme = await prisma.theme.findFirst({
+        where: {
+          name: "premium-001",
+        },
+      });
+    }
 
     if (!theme) {
       return ResponseJson({ message: "Tema tidak ditemukan" }, { status: 404 });
@@ -66,7 +69,7 @@ export async function POST(req: Request) {
         groom,
         bride,
         slug: newSlug,
-        themeId,
+        themeId: themeId || theme.id,
         image,
         status: true,
         date,

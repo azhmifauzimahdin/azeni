@@ -31,6 +31,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 
   const onUpload = (result: any) => {
     onChange(result.info.secure_url);
+    setUpload(false);
   };
 
   function getPublicIdFromUrl(url: string) {
@@ -73,36 +74,34 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
           </div>
         ))}
       </div>
-      {upload && (
-        <CldUploadWidget
-          onSuccess={onUpload}
-          onClose={() => setUpload(false)}
-          options={{
-            folder: path,
-            resourceType: "image",
-            clientAllowedFormats: ["jpg", "jpeg", "png", "webp", "gif"],
-            maxFileSize: 2097152,
-          }}
-          uploadPreset="vstb1kx8"
-        >
-          {({ open }) => {
-            const onClick = () => {
-              open();
-            };
-            return (
-              <Button
-                type="button"
-                disabled={disabled}
-                variant="secondary"
-                onClick={onClick}
-              >
-                <ImagePlus className="h-4 w-4 mr-2" />
-                Upload Foto
-              </Button>
-            );
-          }}
-        </CldUploadWidget>
-      )}
+      <CldUploadWidget
+        onSuccess={onUpload}
+        options={{
+          folder: path,
+          resourceType: "image",
+          clientAllowedFormats: ["jpg", "jpeg", "png", "webp", "gif"],
+          maxFileSize: 2097152,
+        }}
+        uploadPreset="vstb1kx8"
+      >
+        {upload
+          ? ({ open }) => {
+              const onClick = () => open();
+
+              return (
+                <Button
+                  type="button"
+                  disabled={disabled}
+                  variant="secondary"
+                  onClick={onClick}
+                >
+                  <ImagePlus className="h-4 w-4 mr-2" />
+                  Upload Foto
+                </Button>
+              );
+            }
+          : undefined}
+      </CldUploadWidget>
     </div>
   );
 };
