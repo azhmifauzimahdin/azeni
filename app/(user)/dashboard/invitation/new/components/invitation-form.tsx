@@ -70,10 +70,10 @@ const InvitationForm: React.FC = () => {
         date: new Date(new Date().setMonth(new Date().getMonth() + 1)),
         expiresAt: new Date(new Date().setMonth(new Date().getMonth() + 6)),
       };
-      // const res = await InvitationService.createInvitation(req);
-      // addInvitationAtFirst(res);
-      // router.push(`/dashboard/invitation`);
-      // toast.success("Undangan berhasil dibuat.");
+      const res = await InvitationService.createInvitation(req);
+      addInvitationAtFirst(res);
+      router.push(`/dashboard/invitation`);
+      toast.success("Undangan berhasil dibuat.");
     } catch (error: unknown) {
       handleError(error, "invitation");
     } finally {
