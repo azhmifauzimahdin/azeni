@@ -1,7 +1,7 @@
-import axios from "axios";
+import httpRequest from "./api";
 
 export async function deleteImageByPublicId(public_id: string) {
-  const res = await axios.delete(
+  const res = await httpRequest.delete(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/image/`,
     { data: { public_id: public_id } }
   );

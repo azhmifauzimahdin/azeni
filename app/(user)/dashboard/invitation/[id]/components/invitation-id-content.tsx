@@ -3,7 +3,6 @@
 import { Heading } from "@/components/ui/heading";
 import React from "react";
 import InvitationIdList from "./invitation-id-list";
-import useInvitationStore from "@/stores/invitation-store";
 import useUserInvitations from "@/hooks/use-user-invitation";
 import NavigationBack from "@/components/ui/navigation-back";
 
@@ -16,10 +15,7 @@ interface InvitationIdContentProps {
 const InvitationIdContent: React.FC<InvitationIdContentProps> = ({
   params,
 }) => {
-  const { isFetching } = useUserInvitations();
-  const getInvitationById = useInvitationStore(
-    (state) => state.getInvitationById
-  );
+  const { getInvitationById } = useUserInvitations();
   const invitation = getInvitationById(params.id);
 
   const sections = [
@@ -106,11 +102,10 @@ const InvitationIdContent: React.FC<InvitationIdContentProps> = ({
             invitation?.groom ? "&" : ""
           } ${invitation?.bride || ""}`}
           description="Kelola undangan digital Anda dengan mudah dan efisien"
-          isFetching={isFetching}
         />
       </div>
       <div>
-        <InvitationIdList sections={sections} isFetching={isFetching} />
+        <InvitationIdList sections={sections} />
       </div>
     </>
   );

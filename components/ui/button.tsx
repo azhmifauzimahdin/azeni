@@ -42,6 +42,7 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   isLoading?: boolean;
+  isFetching?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -52,12 +53,41 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       size,
       asChild = false,
       isLoading,
+      isFetching,
       children,
       ...props
     },
     ref
   ) => {
     const Comp = asChild ? Slot : "button";
+
+    if (isFetching) {
+      return (
+        <div
+          className={cn(
+            "rounded-md animate-pulse bg-skeleton",
+            size === "sm"
+              ? "h-8 px-3"
+              : size === "lg"
+              ? "h-11 px-8"
+              : size === "icon"
+              ? "h-9 w-9"
+              : "h-10 px-4",
+            className
+          )}
+          aria-busy="true"
+          aria-label="Loading button"
+        >
+          <div
+            className={cn(
+              "inline-flex items-center justify-center gap-2 invisible"
+            )}
+          >
+            {children}
+          </div>
+        </div>
+      );
+    }
 
     return (
       <Comp

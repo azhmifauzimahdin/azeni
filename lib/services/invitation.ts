@@ -1,10 +1,10 @@
 import { Invitation, InvitationRequest } from "@/types";
-import axios from "axios";
+import httpRequest from "./api";
 
 export async function createInvitation(
   request: InvitationRequest
 ): Promise<Invitation> {
-  const res = await axios.post(
+  const res = await httpRequest.post(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/invitations`,
     request
   );
@@ -13,7 +13,7 @@ export async function createInvitation(
 }
 
 export async function fetchInvitationByslug(slug: string): Promise<Invitation> {
-  const res = await axios.get(
+  const res = await httpRequest.get(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/invitations/${slug}`
   );
 
@@ -23,7 +23,7 @@ export async function fetchInvitationByslug(slug: string): Promise<Invitation> {
 export async function fetchInvitationByUserId(
   userId: string
 ): Promise<Invitation[]> {
-  const res = await axios.get(
+  const res = await httpRequest.get(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/invitations/user/${userId}`
   );
   return res.data;

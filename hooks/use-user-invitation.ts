@@ -23,13 +23,20 @@ const useUserInvitations = () => {
     }
   }, [user, setInvitations]);
 
+  const getInvitationById = useCallback(
+    (id: string) => {
+      return invitations.find((invitation) => invitation.id === id);
+    },
+    [invitations]
+  );
+
   useEffect(() => {
     if (user && invitations.length === 0) {
       fetchData();
     }
   }, [user, invitations.length, fetchData]);
 
-  return { invitations, isFetching, refetch: fetchData };
+  return { invitations, isFetching, refetch: fetchData, getInvitationById };
 };
 
 export default useUserInvitations;

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "@/components/ui/image";
 import NavLink from "@/components/ui/nav-link";
 import { UserButton, useUser } from "@clerk/nextjs";
 import clsx from "clsx";
@@ -27,15 +28,26 @@ const DashboardLayout = ({
         <nav className="fixed top-0 bg-green-app-primary text-white w-full h-11 flex-center shadow z-40">
           <div className="w-full px-3 py-2 md:px-6">
             <div className="flex items-center justify-between">
-              <div className="flex items-center justify-start rtl:justify-end">
-                <div
-                  className="inline-flex items-center p-1.5 rounded-lg sm:hidden cursor-pointer hover:bg-white text-xl text-white hover:text-green-primary"
-                  onClick={() => setToggleSidebar(!toggleSidebar)}
+              <div
+                className="inline-flex items-center p-1.5 rounded-lg sm:hidden cursor-pointer hover:bg-white text-xl text-white hover:text-green-primary"
+                onClick={() => setToggleSidebar(!toggleSidebar)}
+              >
+                <AlignJustify />
+              </div>
+              <div>
+                <Link
+                  href="/"
+                  className="flex items-center gap-1.5 text-lg font-medium tracking-wide"
                 >
-                  <AlignJustify />
-                </div>
-                <Link href="/" className="text-lg font-medium tracking-wide">
-                  AZEN
+                  <div className="bg-[#33B3B3] p-1 rounded-tl-lg rounded-bl-sm rounded-br-lg rounded-tr-sm">
+                    <Image
+                      src="/assets/img/azen-white-b.png"
+                      alt="azen"
+                      aspectRatio="aspect-square"
+                      className="h-4"
+                    />
+                  </div>
+                  <div className="pt-0.5">AZEN</div>
                 </Link>
               </div>
               <div className="flex-center">

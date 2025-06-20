@@ -2,7 +2,7 @@ import { generatePageMetadata } from "@/lib/metadata";
 import QuoteContent from "./components/quote-content";
 
 export const generateMetadata = () =>
-  generatePageMetadata({ fallbackTitle: "Tambah Quote" });
+  generatePageMetadata({ fallbackTitle: "Quote" });
 
 interface InvitationIdPageProps {
   params: {

@@ -34,7 +34,7 @@ export interface Invitation {
   updatedAt: string;
   transaction: Transaction;
   theme: Theme;
-  quote: Quote;
+  quote: Quote | null;
   schedules: Schedule[];
   couple: Couple;
   stories: Story[];

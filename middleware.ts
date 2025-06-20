@@ -11,9 +11,49 @@ const isPublicRoute = createRouteMatcher([
 const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
 const isUserRoute = createRouteMatcher(["/dashboard(.*)"]);
 
+const isApiWithApiKey = createRouteMatcher(["/api/:path*"]);
+const allowedOrigins = ["https://azeninv.vercel.app/"];
+
 export default clerkMiddleware(async (auth, req) => {
   const { userId, redirectToSignIn } = await auth();
   const role = (await auth()).sessionClaims?.metadata?.role;
+  const origin = req.headers.get("origin") || "";
+
+  function addCorsHeaders(response: NextResponse) {
+    if (allowedOrigins.includes(origin)) {
+      response.headers.set("Access-Control-Allow-Origin", origin);
+    } else {
+      // response.headers.set("Access-Control-Allow-Origin", "*");
+    }
+    response.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    response.headers.set(
+      "Access-Control-Allow-Headers",
+      "Content-Type, x-api-key, Authorization"
+    );
+    return response;
+  }
+
+  if (req.method === "OPTIONS" && isApiWithApiKey(req)) {
+    const res = new NextResponse(null, { status: 204 });
+    return addCorsHeaders(res);
+  }
+
+  if (isApiWithApiKey(req)) {
+    const apiKey = req.headers.get("x-api-key");
+    const validKeys = [process.env.NEXT_PUBLIC_API_KEY];
+
+    if (!apiKey || !validKeys.includes(apiKey)) {
+      return new NextResponse(
+        JSON.stringify({ error: "Invalid or missing API key" }),
+        {
+          status: 403,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    return NextResponse.next();
+  }
 
   if (userId && req.nextUrl.pathname === "/") {
     const redirectUrl = role === "admin" ? "/admin" : "/dashboard";

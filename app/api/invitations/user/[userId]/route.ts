@@ -24,6 +24,36 @@ export async function GET(
           },
         },
         theme: true,
+        quote: true,
+        schedules: {
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
+        couple: true,
+        stories: {
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
+        galleries: {
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
+        bankaccounts: {
+          include: {
+            bank: true,
+          },
+        },
+        comments: {
+          include: {
+            guest: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
       },
       orderBy: {
         updatedAt: "desc",

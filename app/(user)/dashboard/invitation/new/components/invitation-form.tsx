@@ -135,9 +135,7 @@ const InvitationForm: React.FC = () => {
               name="groom"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Pria <span className="text-red-500">*</span>
-                  </FormLabel>
+                  <FormLabel required>Pria</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Nama panggilan pria"
@@ -155,9 +153,7 @@ const InvitationForm: React.FC = () => {
               name="bride"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Wanita <span className="text-red-500">*</span>
-                  </FormLabel>
+                  <FormLabel required>Wanita</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Nama panggilan wanita"
@@ -194,7 +190,7 @@ const InvitationForm: React.FC = () => {
                 </FormItem>
               )}
             />
-            <div className="space-y-1 md:col-span-2">
+            <div className="space-y-1 md:col-span-3">
               <div className="bg-gradient-pink-purple p-3 rounded-md text-xs text-slate-800">
                 <span className="font-medium pe-1">Link undangan : </span>
                 {process.env.NEXT_PUBLIC_BASE_URL}/{slug}-
@@ -203,14 +199,16 @@ const InvitationForm: React.FC = () => {
               <FormDescription>** Kode unik terbentuk otomatis</FormDescription>
             </div>
           </div>
-          <Button
-            variant="primary"
-            isLoading={loading}
-            className="w-full md:w-auto"
-            type="submit"
-          >
-            <CircleCheckBig /> Buat Undangan
-          </Button>
+          <div className="flex flex-col md:flex-row items-center justify-end gap-3">
+            <Button
+              variant="primary"
+              isLoading={loading}
+              className="w-full md:w-auto"
+              type="submit"
+            >
+              <CircleCheckBig /> Buat Undangan
+            </Button>
+          </div>
         </form>
       </Form>
     </>

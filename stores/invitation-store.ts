@@ -5,20 +5,54 @@ interface InvitationState {
   invitations: Invitation[];
   setInvitations: (invitation: Invitation[]) => void;
   addInvitationAtFirst: (newInvitation: Invitation) => void;
-  getInvitationById: (id: string) => Invitation | undefined;
+  updateQuoteInInvitation: (
+    invitationId: string,
+    updatedQuote: Partial<Invitation["quote"]>
+  ) => void;
+  deleteQuoteInInvitation: (invitationId: string) => void;
 }
 
-const useInvitationStore = create<InvitationState>((set, get) => ({
+const useInvitationStore = create<InvitationState>((set) => ({
   invitations: [],
   setInvitations: (invitations) => set({ invitations }),
   addInvitationAtFirst: (newInvitation) =>
     set((state) => ({
       invitations: [newInvitation, ...state.invitations],
     })),
-  getInvitationById: (id) => {
-    const { invitations } = get();
-    return invitations.find((inv) => inv.id === id);
-  },
+  updateQuoteInInvitation: (invitationId, updatedQuote) =>
+    set((state) => ({
+      invitations: state.invitations.map((invitation) => {
+        if (invitation.id !== invitationId) return invitation;
+
+        const existingQuote = invitation.quote ?? {
+          id: "",
+          name: "",
+          author: "",
+          invitationId: "",
+          createdAt: "",
+          updatedAt: "",
+        };
+
+        return {
+          ...invitation,
+          quote: {
+            ...existingQuote,
+            ...updatedQuote,
+          },
+        };
+      }),
+    })),
+  deleteQuoteInInvitation: (invitationId) =>
+    set((state) => ({
+      invitations: state.invitations.map((invitation) =>
+        invitation.id === invitationId
+          ? {
+              ...invitation,
+              quote: null,
+            }
+          : invitation
+      ),
+    })),
 }));
 
 export default useInvitationStore;

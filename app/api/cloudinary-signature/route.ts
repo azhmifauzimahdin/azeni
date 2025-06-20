@@ -1,7 +1,11 @@
-import { NextResponse } from "next/server";
 import crypto from "crypto";
+import { auth } from "@clerk/nextjs/server";
+import { ResponseJson } from "@/lib/utils/response-with-wib";
 
 export async function POST(req: Request) {
+  const { userId } = await auth();
+  if (!userId) return ResponseJson("Unauthorized", { status: 401 });
+
   const body = await req.json();
   const params = body.paramsToSign;
 
@@ -15,5 +19,5 @@ export async function POST(req: Request) {
     .update(stringToSign + process.env.CLOUDINARY_API_SECRET!)
     .digest("hex");
 
-  return NextResponse.json({ signature });
+  return ResponseJson({ signature });
 }

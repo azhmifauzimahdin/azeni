@@ -1,9 +1,13 @@
 import cloudinary from "@/lib/cloudinary";
 import { ResponseJson } from "@/lib/utils/response-with-wib";
+import { auth } from "@clerk/nextjs/server";
 import { NextRequest } from "next/server";
 
 export async function DELETE(request: NextRequest) {
   try {
+    const { userId } = await auth();
+    if (!userId) return ResponseJson("Unauthorized", { status: 401 });
+
     const body = await request.json();
     const { public_id } = body;
 

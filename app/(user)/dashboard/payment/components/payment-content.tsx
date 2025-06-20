@@ -9,7 +9,6 @@ export default function PaymentContent() {
           description="Riwayat transaksi dan status pembayaran terbaru dapat dilihat di sini"
         />
       </div>
-      <div className="bg-red-50">masuk</div>
     </>
   );
 }

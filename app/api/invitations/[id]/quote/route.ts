@@ -8,11 +8,12 @@ export async function POST(
 ) {
   try {
     const { userId } = await auth();
+    if (!userId) return ResponseJson("Unauthorized", { status: 401 });
+
     const body = await req.json();
 
     const { name, author } = body;
 
-    if (!userId) return ResponseJson("Unauthorized", { status: 401 });
     const errors = [];
     if (!name) errors.push({ field: "name", message: "Quote harus diisi." });
     if (!author)
@@ -50,11 +51,18 @@ export async function POST(
     if (!invitationByUserId)
       return ResponseJson("Unauthorized", { status: 401 });
 
-    const newQuote = await prisma.quote.create({
-      data: { name, author, invitationId: params.id },
+    const quote = await prisma.quote.upsert({
+      where: {
+        invitationId: params.id,
+      },
+      update: {
+        name: "Updated Quote",
+        author: "John Doe",
+      },
+      create: { name, author, invitationId: params.id },
     });
 
-    return ResponseJson(newQuote, { status: 201 });
+    return ResponseJson(quote, { status: 201 });
   } catch (error) {
     console.error("Error creating quote:", error);
     return ResponseJson({ message: "Gagal membuat quote." }, { status: 500 });

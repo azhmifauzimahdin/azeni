@@ -1,8 +1,12 @@
 import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { ResponseJson } from "@/lib/utils/response-with-wib";
+import { auth } from "@clerk/nextjs/server";
 
 export async function POST(req: Request) {
   try {
+    const { userId } = await auth();
+    if (!userId) return ResponseJson("Unauthorized", { status: 401 });
+
     const body = await req.json();
 
     const { name, originalPrice, discount } = body;
@@ -15,19 +19,16 @@ export async function POST(req: Request) {
       errors.push({ field: "discount", message: "Diskon harus diisi." });
 
     if (errors.length > 0) {
-      return NextResponse.json({ errors }, { status: 400 });
+      return ResponseJson({ errors }, { status: 400 });
     }
 
     const newTheme = await prisma.theme.create({
       data: { name, originalPrice, discount },
     });
 
-    return NextResponse.json(newTheme, { status: 201 });
+    return ResponseJson(newTheme, { status: 201 });
   } catch (error) {
     console.error("Error creating theme:", error);
-    return NextResponse.json(
-      { message: "Gagal membuat tema." },
-      { status: 500 }
-    );
+    return ResponseJson({ message: "Gagal membuat tema." }, { status: 500 });
   }
 }

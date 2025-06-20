@@ -25,7 +25,7 @@ const InvitationIdList: React.FC<InvitationIdListProps> = ({
 }) => {
   if (isFetching) {
     return (
-      <div className="grid grid-cols-3 md:grid-cols-8 gap-3">
+      <div className="grid grid-cols-3 md:grid-cols-7 gap-3">
         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((_, i) => (
           <InvitationIdCardSkeleton key={i} />
         ))}
@@ -33,7 +33,7 @@ const InvitationIdList: React.FC<InvitationIdListProps> = ({
     );
   }
   return (
-    <div className="grid grid-cols-3 md:grid-cols-8 gap-3">
+    <div className="grid grid-cols-3 md:grid-cols-7 gap-3">
       {sections.map((data) => (
         <InvitationIdCard key={data.id} data={data} />
       ))}
