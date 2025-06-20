@@ -1,12 +1,20 @@
 import { UserButton } from "@clerk/nextjs";
+import Link from "next/link";
 
 export default function Home() {
   return (
     <main style={{ padding: "2rem", textAlign: "center" }}>
-      <h1>Welcome to the Public Homepage</h1>
+      <h1>Welcome to AZEN Digital Invitation</h1>
       <p>
-        Please <a href="/sign-in">Login</a> or <a href="/sign-up">Register</a>{" "}
-        to continue.
+        Please&nbsp;
+        <Link href="/sign-in" className="text-blue-500">
+          Login
+        </Link>
+        &nbsp;or&nbsp;
+        <Link href="/sign-up" className="text-blue-500">
+          Register
+        </Link>
+        &nbsp;to continue.
       </p>
       <UserButton />
     </main>

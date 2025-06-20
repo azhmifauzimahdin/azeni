@@ -118,8 +118,8 @@ const Premium1Page: React.FC<Invitation & { currentGuest: Guest }> = (
       </section>
       <section className="bg-green-primary text-white">
         <blockquote className="text-center p-3" data-aos="fade-up">
-          &quot;{invitation.quote.name}&quot;
-          <cite className="block">- {invitation.quote.author} -</cite>
+          &quot;{invitation.quote?.name}&quot;
+          <cite className="block">- {invitation.quote?.author} -</cite>
         </blockquote>
       </section>
 
