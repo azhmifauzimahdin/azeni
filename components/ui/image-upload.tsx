@@ -81,9 +81,11 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
           resourceType: "image",
           clientAllowedFormats: ["jpg", "jpeg", "png", "webp", "gif"],
           maxFileSize: 2097152,
+          maxFiles: 1,
+          multiple: false,
         }}
         uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!}
-        signatureEndpoint="/api/cloudinary-signature"
+        signatureEndpoint="/api/public/cloudinary-signature"
       >
         {upload
           ? ({ open }) => {

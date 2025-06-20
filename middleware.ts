@@ -11,15 +11,15 @@ const isPublicRoute = createRouteMatcher([
 const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
 const isUserRoute = createRouteMatcher(["/dashboard(.*)"]);
 
-const isApiWithApiKey = createRouteMatcher(["/api/:path*"]);
 const allowedOrigins = ["https://azeninv.vercel.app/"];
 
 export default clerkMiddleware(async (auth, req) => {
   const { userId, redirectToSignIn } = await auth();
   const role = (await auth()).sessionClaims?.metadata?.role;
+  const pathname = req.nextUrl.pathname;
   const origin = req.headers.get("origin") || "";
 
-  function addCorsHeaders(response: NextResponse) {
+  function addCorsHeaders(response: NextResponse, origin: string) {
     if (allowedOrigins.includes(origin)) {
       response.headers.set("Access-Control-Allow-Origin", origin);
     } else {
@@ -33,12 +33,16 @@ export default clerkMiddleware(async (auth, req) => {
     return response;
   }
 
-  if (req.method === "OPTIONS" && isApiWithApiKey(req)) {
+  if (
+    req.method === "OPTIONS" &&
+    pathname.startsWith("/api/") &&
+    !pathname.startsWith("/api/public")
+  ) {
     const res = new NextResponse(null, { status: 204 });
-    return addCorsHeaders(res);
+    return addCorsHeaders(res, origin);
   }
 
-  if (isApiWithApiKey(req)) {
+  if (pathname.startsWith("/api/") && !pathname.startsWith("/api/public")) {
     const apiKey = req.headers.get("x-api-key");
     const validKeys = [process.env.NEXT_PUBLIC_API_KEY];
 
@@ -71,6 +75,11 @@ export default clerkMiddleware(async (auth, req) => {
 
   if (!userId && !isPublicRoute(req)) {
     return redirectToSignIn();
+  }
+
+  if (pathname.startsWith("/api/public")) {
+    const res = NextResponse.next();
+    return addCorsHeaders(res, origin);
   }
 });
 
