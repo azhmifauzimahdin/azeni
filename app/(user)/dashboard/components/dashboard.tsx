@@ -110,7 +110,7 @@ const DashboardLayout = ({
         </aside>
 
         <div
-          className="p-3 pt-14 md:p-6 md:pt-16 sm:ml-64 min-h-screen "
+          className="p-3 pt-14 md:p-6 md:pt-16 sm:ml-64"
           onClick={handleCloseSidebar}
         >
           {children}

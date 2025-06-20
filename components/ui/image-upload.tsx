@@ -87,23 +87,18 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!}
         signatureEndpoint="/api/public/cloudinary-signature"
       >
-        {upload
-          ? ({ open }) => {
-              const onClick = () => open();
-
-              return (
-                <Button
-                  type="button"
-                  disabled={disabled}
-                  variant="secondary"
-                  onClick={onClick}
-                >
-                  <ImagePlus className="h-4 w-4 mr-2" />
-                  Upload Foto
-                </Button>
-              );
-            }
-          : undefined}
+        {({ open }) => (
+          <Button
+            type="button"
+            disabled={disabled}
+            variant="secondary"
+            onClick={() => open()}
+            className={!upload ? "invisible pointer-events-none" : ""}
+          >
+            <ImagePlus className="h-4 w-4 mr-2" />
+            Upload Foto
+          </Button>
+        )}
       </CldUploadWidget>
     </div>
   );
