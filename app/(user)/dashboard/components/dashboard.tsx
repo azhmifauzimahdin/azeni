@@ -24,7 +24,7 @@ const DashboardLayout = ({
 
   return (
     <>
-      <div className="bg-slate-100 min-h-screen h-[calc(var(--vh)_*_100)] relative">
+      <div className="h-[calc(var(--vh)_*_100)] relative">
         <nav className="fixed top-0 bg-green-app-primary text-white w-full h-11 flex-center shadow z-40">
           <div className="w-full px-3 py-2 md:px-6">
             <div className="flex items-center justify-between">

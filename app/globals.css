@@ -13,6 +13,7 @@ html {
 body {
   font-family: var(--font-poppins);
   @apply text-gray-800;
+  @apply bg-slate-100;
 }
 
 @layer base {
