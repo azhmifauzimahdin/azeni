@@ -23,9 +23,7 @@ export const Heading: React.FC<HeadingProps> = ({
   return (
     <>
       <div>
-        <h2 className="text-2xl font-medium text-green-app-primary tracking-tight">
-          {title}
-        </h2>
+        <h2 className="text-2xl font-medium text-green-app-primary">{title}</h2>
         {description && (
           <p className="text-sm text-muted-foreground">{description}</p>
         )}
