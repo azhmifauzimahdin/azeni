@@ -56,8 +56,8 @@ export async function POST(
         invitationId: params.id,
       },
       update: {
-        name: "Updated Quote",
-        author: "John Doe",
+        name,
+        author,
       },
       create: { name, author, invitationId: params.id },
     });
