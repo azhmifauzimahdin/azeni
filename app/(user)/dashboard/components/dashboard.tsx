@@ -47,7 +47,7 @@ const DashboardLayout = ({
                       className="h-4"
                     />
                   </div>
-                  <div className="pt-0.5">AZEN</div>
+                  <div className="pt-0.5 font-gallery font-medium">AZEN</div>
                 </Link>
               </div>
               <div className="flex-center">
