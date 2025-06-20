@@ -13,9 +13,7 @@ export async function createInvitation(
 }
 
 export async function fetchInvitationByslug(slug: string): Promise<Invitation> {
-  const res = await httpRequest.get(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/invitations/${slug}`
-  );
+  const res = await httpRequest.get(`/api/invitations/${slug}`);
 
   return res.data;
 }
@@ -23,8 +21,6 @@ export async function fetchInvitationByslug(slug: string): Promise<Invitation> {
 export async function fetchInvitationByUserId(
   userId: string
 ): Promise<Invitation[]> {
-  const res = await httpRequest.get(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/invitations/user/${userId}`
-  );
+  const res = await httpRequest.get(`/api/invitations/user/${userId}`);
   return res.data;
 }

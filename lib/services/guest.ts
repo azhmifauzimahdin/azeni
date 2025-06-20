@@ -6,7 +6,7 @@ export async function fetchGuestById(
   id: string
 ): Promise<Guest> {
   const res = await httpRequest.get(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/invitations/${InvitationId}/guest/${id}`
+    `/api/invitations/${InvitationId}/guest/${id}`
   );
   return res.data;
 }

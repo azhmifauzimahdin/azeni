@@ -7,7 +7,7 @@ export async function postComment(
   request: CommentFormValues & { guestId: string }
 ): Promise<Comment> {
   const res = await httpRequest.post(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/invitations/${invitationId}/comments`,
+    `/api/invitations/${invitationId}/comments`,
     request
   );
   return res.data;

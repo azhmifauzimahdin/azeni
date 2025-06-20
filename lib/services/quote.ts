@@ -6,7 +6,7 @@ export async function createQuote(
   request: QuoteRequest
 ): Promise<Quote> {
   const res = await httpRequest.post(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/invitations/${invitationId}/quote`,
+    `/api/invitations/${invitationId}/quote`,
     request
   );
 
@@ -18,7 +18,7 @@ export async function deleteQuote(
   quoteId: string
 ): Promise<Quote> {
   const res = await httpRequest.delete(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/invitations/${invitationId}/quote/${quoteId}`
+    `/api/invitations/${invitationId}/quote/${quoteId}`
   );
 
   return res.data;
