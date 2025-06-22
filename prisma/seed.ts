@@ -48,6 +48,28 @@ async function main() {
     ],
   });
 
+  const music = await prisma.music.create({
+    data: {
+      name: "Ketika Cinta Bertasbih - Melly Goeslaw Cover Cindi Cintya Dewi ( Lirik )",
+      src: "https://res.cloudinary.com/dxtqjuvcg/video/upload/v1750521731/music/w0esrtsvn4caiuubjza9.mp3",
+      origin: "https://www.youtube.com/watch?v=JAqxrXjodn8",
+    },
+  });
+
+  await prisma.music.createMany({
+    data: [
+      {
+        name: "Pernikahan Kita - Arsy Widianto & Tiara Andini Saxophone Cover (FHSax)",
+        src: "https://res.cloudinary.com/dxtqjuvcg/video/upload/v1750586448/music/w0hxevdwcbicvnicamig.mp3",
+        origin: "https://www.youtube.com/watch?v=3bao93imICs",
+      },
+      {
+        name: "Janji Suci Cover Saxophone - Yovie And Nuno",
+        src: "https://res.cloudinary.com/dxtqjuvcg/video/upload/v1750601830/music/zighsz0uef03pg2vyptj.mp3",
+        origin: "https://www.youtube.com/watch?v=NbCCGvl5AQE",
+      },
+    ],
+  });
   // Create Invitation
   const invitation = await prisma.invitation.create({
     data: {
@@ -56,16 +78,10 @@ async function main() {
       bride: "Dinda",
       slug: "premium-001",
       themeId: theme.id,
+      musicId: music.id,
       image: "/assets/themes/premium-001/img/cover.jpg",
       date: new Date("2028-07-27T00:00:00Z"),
       expiresAt: new Date("9999-12-31T00:00:00Z"),
-    },
-  });
-
-  await prisma.music.create({
-    data: {
-      name: "backsound_dhmtt6",
-      invitationId: invitation.id,
     },
   });
 

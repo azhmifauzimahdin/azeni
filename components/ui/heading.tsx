@@ -1,4 +1,7 @@
+import { ReactNode } from "react";
+
 interface HeadingProps {
+  icon?: ReactNode;
   title: string;
   description?: string;
   isFetching?: boolean;
@@ -13,6 +16,7 @@ function HeadingSkeleton() {
   );
 }
 export const Heading: React.FC<HeadingProps> = ({
+  icon,
   title,
   description,
   isFetching,
@@ -23,9 +27,14 @@ export const Heading: React.FC<HeadingProps> = ({
   return (
     <>
       <div>
-        <h2 className="text-2xl font-medium text-green-app-primary">{title}</h2>
+        <h2 className="text-2xl font-semibold text-slate-800 flex items-center gap-2.5">
+          {icon ? (
+            <div className="text-green-app-primary font-bold">{icon}</div>
+          ) : null}
+          {title}
+        </h2>
         {description && (
-          <p className="text-sm text-muted-foreground">{description}</p>
+          <p className="text-sm text-muted-foreground mt-1">{description}</p>
         )}
       </div>
     </>

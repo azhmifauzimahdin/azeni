@@ -15,7 +15,7 @@ const config: Config = {
         "gradient-green": "linear-gradient(to bottom right, #BBF7D0, #86EFAC)",
       },
       backgroundColor: {
-        skeleton: "#cbd5e1",
+        skeleton: "#e6e9ed",
       },
       colors: {
         background: "hsl(var(--background))",

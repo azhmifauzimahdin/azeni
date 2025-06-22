@@ -9,6 +9,10 @@ interface InvitationState {
     invitationId: string,
     updatedQuote: Partial<Invitation["quote"]>
   ) => void;
+  updateMusicInInvitation: (
+    invitationId: string,
+    updatedMusic: Partial<Invitation["music"]>
+  ) => void;
   deleteQuoteInInvitation: (invitationId: string) => void;
 }
 
@@ -38,6 +42,30 @@ const useInvitationStore = create<InvitationState>((set) => ({
           quote: {
             ...existingQuote,
             ...updatedQuote,
+          },
+        };
+      }),
+    })),
+  updateMusicInInvitation: (invitationId, updatedMusic) =>
+    set((state) => ({
+      invitations: state.invitations.map((invitation) => {
+        if (invitation.id !== invitationId) return invitation;
+
+        const existingMusic = invitation.music ?? {
+          id: "",
+          name: "",
+          src: "",
+          origin: "",
+          visibility: false,
+          createdAt: "",
+          updatedAt: "",
+        };
+
+        return {
+          ...invitation,
+          music: {
+            ...existingMusic,
+            ...updatedMusic,
           },
         };
       }),

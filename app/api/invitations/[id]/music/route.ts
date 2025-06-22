@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { ResponseJson } from "@/lib/utils/response-with-wib";
 import { auth } from "@clerk/nextjs/server";
 
-export async function POST(
+export async function PATCH(
   req: Request,
   { params }: { params: { id: string } }
 ) {
@@ -12,12 +12,11 @@ export async function POST(
 
     const body = await req.json();
 
-    const { name, author } = body;
+    const { musicId } = body;
 
     const errors = [];
-    if (!name) errors.push({ field: "name", message: "Quote harus diisi." });
-    if (!author)
-      errors.push({ field: "author", message: "Author harus diisi." });
+    if (!musicId)
+      errors.push({ field: "musicId", message: "Musik ID harus diisi." });
     if (!params.id)
       errors.push({
         field: "invitationId",
@@ -38,20 +37,24 @@ export async function POST(
     if (!invitationByUserId)
       return ResponseJson("Unauthorized", { status: 401 });
 
-    const quote = await prisma.quote.upsert({
+    await prisma.invitation.update({
       where: {
-        invitationId: params.id,
+        id: params.id,
       },
-      update: {
-        name,
-        author,
+      data: {
+        musicId,
       },
-      create: { name, author, invitationId: params.id },
     });
 
-    return ResponseJson(quote, { status: 201 });
+    const music = await prisma.music.findUnique({
+      where: {
+        id: musicId,
+      },
+    });
+
+    return ResponseJson(music, { status: 201 });
   } catch (error) {
-    console.error("Error creating quote:", error);
-    return ResponseJson({ message: "Gagal membuat quote." }, { status: 500 });
+    console.error("Error update musicId:", error);
+    return ResponseJson({ message: "Gagal update musik." }, { status: 500 });
   }
 }

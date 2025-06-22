@@ -3,16 +3,16 @@
 import { Heading } from "@/components/ui/heading";
 import React from "react";
 import NavigationBack from "@/components/ui/navigation-back";
-import QuoteForm from "./quote-form";
 import useUserInvitations from "@/hooks/use-user-invitation";
+import MusicForm from "./music-form";
 
-interface QuoteContentProps {
+interface MusicContentProps {
   params: {
     id: string;
   };
 }
 
-const QuoteContent: React.FC<QuoteContentProps> = ({ params }) => {
+const MusicContent: React.FC<MusicContentProps> = ({ params }) => {
   const { getInvitationById, isFetching } = useUserInvitations();
   const invitation = getInvitationById(params.id);
 
@@ -21,12 +21,12 @@ const QuoteContent: React.FC<QuoteContentProps> = ({ params }) => {
       <NavigationBack href={`/dashboard/invitation/${params.id}`} />
       <div>
         <Heading
-          title="Quote"
-          description="Ungkapkan kisah cinta kalian melalui kutipan manis"
+          title="Musik"
+          description="Dengarkan dan pilih musik yang paling cocok untukmu"
         />
       </div>
       <div>
-        <QuoteForm
+        <MusicForm
           params={params}
           initialData={invitation}
           isFetching={isFetching}
@@ -36,4 +36,4 @@ const QuoteContent: React.FC<QuoteContentProps> = ({ params }) => {
   );
 };
 
-export default QuoteContent;
+export default MusicContent;

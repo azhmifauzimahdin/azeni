@@ -12,12 +12,17 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
       invitation = await prisma.invitation.findUnique({
         where: { id: params.id },
         include: {
-          transaction: true,
+          transaction: {
+            include: {
+              status: true,
+            },
+          },
+          music: true,
           theme: true,
           quote: true,
           schedules: {
             orderBy: {
-              startDate: "asc",
+              createdAt: "desc",
             },
           },
           couple: true,
@@ -50,7 +55,12 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
       invitation = await prisma.invitation.findUnique({
         where: { slug: params.id },
         include: {
-          transaction: true,
+          transaction: {
+            include: {
+              status: true,
+            },
+          },
+          music: true,
           theme: true,
           quote: true,
           schedules: {

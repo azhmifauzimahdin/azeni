@@ -10,3 +10,4 @@ export * from "./story";
 export * from "./theme";
 export * from "./transaction";
 export * from "./guest";
+export * from "./music";

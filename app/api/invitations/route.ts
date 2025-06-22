@@ -23,7 +23,8 @@ export async function POST(req: Request) {
 
     const body = await req.json();
 
-    const { groom, bride, slug, themeId, image, date, expiresAt } = body;
+    const { groom, bride, slug, themeId, musicId, image, date, expiresAt } =
+      body;
 
     const errors = [];
     if (!groom)
@@ -61,6 +62,22 @@ export async function POST(req: Request) {
       return ResponseJson({ message: "Tema tidak ditemukan" }, { status: 404 });
     }
 
+    let music;
+    if (!musicId) {
+      music = await prisma.music.findFirst({
+        where: {
+          name: "Ketika Cinta Bertasbih - Melly Goeslaw Cover Cindi Cintya Dewi ( Lirik )",
+        },
+      });
+    }
+
+    if (!music) {
+      return ResponseJson(
+        { message: "Musik tidak ditemukan" },
+        { status: 404 }
+      );
+    }
+
     const newSlug = await generateUniqueSlug(slug, "invitation");
 
     const invitation = await prisma.invitation.create({
@@ -70,6 +87,7 @@ export async function POST(req: Request) {
         bride,
         slug: newSlug,
         themeId: themeId || theme.id,
+        musicId: musicId || music.id,
         image,
         status: true,
         date,
@@ -113,7 +131,38 @@ export async function POST(req: Request) {
             status: true,
           },
         },
+        music: true,
         theme: true,
+        quote: true,
+        schedules: {
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
+        couple: true,
+        stories: {
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
+        galleries: {
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
+        bankaccounts: {
+          include: {
+            bank: true,
+          },
+        },
+        comments: {
+          include: {
+            guest: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
       },
     });
     return ResponseJson(newInvitation, { status: 201 });

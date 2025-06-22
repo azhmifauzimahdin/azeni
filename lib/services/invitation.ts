@@ -1,4 +1,4 @@
-import { Invitation, InvitationRequest } from "@/types";
+import { Invitation, InvitationRequest, Music } from "@/types";
 import httpRequest from "./api";
 
 export async function createInvitation(
@@ -22,5 +22,13 @@ export async function fetchInvitationByUserId(
   userId: string
 ): Promise<Invitation[]> {
   const res = await httpRequest.get(`/api/invitations/user/${userId}`);
+  return res.data;
+}
+
+export async function updateMusicByUserId(
+  id: string,
+  request: { musicId: string }
+): Promise<Music> {
+  const res = await httpRequest.patch(`/api/invitations/${id}/music`, request);
   return res.data;
 }

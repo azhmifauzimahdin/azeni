@@ -20,6 +20,7 @@ model Invitation {
   bride         String
   slug          String        @unique
   themeId       String
+  musicId       String
   image         String?
   status        Boolean       @default(true)
   date          DateTime      @default(now())
@@ -29,8 +30,8 @@ model Invitation {
 
   transaction   Transaction?  @relation("InvitationTransaction")
   theme         Theme         @relation(fields: [themeId], references: [id], onDelete: Restrict)
+  music         Music?        @relation("MusicInvitations",fields: [musicId], references: [id])
   quote         Quote?        @relation("InvitationQuote")
-  music         Music?        @relation("InvitationMusic")
   schedules     Schedule[]    @relation("InvitationSchedule")
   couple        Couple?       @relation("InvitationCouple")
   stories       Story[]       @relation("InvitationStory")
@@ -186,10 +187,12 @@ model Guest {
 
 model Music {
   id            String        @id @default(uuid())
-  name          String        @db.Text
-  invitationId  String        @unique
+  name          String
+  src           String
+  origin        String
+  visibility    Boolean       @default(false)
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 
-  invitation    Invitation    @relation("InvitationMusic",fields: [invitationId], references: [id], onDelete: Cascade)
+  invitations  Invitation[]   @relation("MusicInvitations")
 }

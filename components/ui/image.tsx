@@ -9,6 +9,14 @@ interface ImageProps {
   priority?: boolean;
   objectFit?: string;
 }
+
+function optimizeCloudinaryUrl(url: string) {
+  if (url.includes("res.cloudinary.com") && url.includes("/upload/")) {
+    return url.replace("/upload/", "/upload/f_auto,q_auto/");
+  }
+  return url;
+}
+
 const Image: React.FC<ImageProps> = ({
   src,
   alt,
@@ -18,13 +26,14 @@ const Image: React.FC<ImageProps> = ({
   objectFit = "object-cover",
   ...rest
 }) => {
+  const optimizedUrl = optimizeCloudinaryUrl(src);
   return (
     <div
       className={clsx("relative overflow-hidden", aspectRatio, className)}
       {...rest}
     >
       <ImageNext
-        src={src}
+        src={optimizedUrl}
         alt={alt}
         fill
         sizes="100%"

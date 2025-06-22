@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import Image from "@/components/ui/image";
 import { LinkButton } from "@/components/ui/link";
 import {
   Mail,
@@ -15,6 +16,7 @@ interface InvitationData {
   groom: string;
   bride: string;
   slug: string;
+  image: string;
   transaction: {
     status: {
       name: string;
@@ -60,9 +62,18 @@ const InvitationCard: React.FC<InvitationCardProps> = ({ data }) => {
   return (
     <div className="w-full bg-white rounded-lg shadow-sm p-6 space-y-5">
       <div className="flex gap-3">
-        <div className="bg-gradient-pink-purple rounded aspect-square p-4 text-white">
-          <Mail size={32} />
-        </div>
+        {data.image ? (
+          <Image
+            src={data.image}
+            alt="Cover"
+            aspectRatio="aspect-square"
+            className="w-16 h-16 rounded overflow-hidden"
+          />
+        ) : (
+          <div className="bg-gradient-pink-purple rounded w-16 h-16 p-4 text-white">
+            <Mail size={32} />
+          </div>
+        )}
         <div className="space-y-2">
           <h2 className="text-xl font-bold text-green-app-primary tracking-tight">
             {data.groom} & {data.bride}

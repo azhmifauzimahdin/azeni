@@ -126,6 +126,21 @@ body {
     @apply flex justify-center items-center;
   }
   .card-dashboard {
-    @apply w-full bg-white rounded-lg shadow-sm p-3 md:p-6;
+    @apply w-full bg-white rounded-lg shadow p-3 md:p-6;
   }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(50%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.marquee {
+  display: inline-block;
+  animation: marquee 20s linear infinite;
+  white-space: nowrap;
 }

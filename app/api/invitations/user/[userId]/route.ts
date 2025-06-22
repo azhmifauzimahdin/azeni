@@ -23,6 +23,7 @@ export async function GET(
             status: true,
           },
         },
+        music: true,
         theme: true,
         quote: true,
         schedules: {

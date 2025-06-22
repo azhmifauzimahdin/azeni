@@ -196,7 +196,7 @@ const InvitationForm: React.FC = () => {
                 {process.env.NEXT_PUBLIC_BASE_URL}/{slug}-
                 <span className="italic">{"{kodeunik}"}</span>
               </div>
-              <FormDescription>** Kode unik terbentuk otomatis</FormDescription>
+              <FormDescription>** Kode unik otomatis</FormDescription>
             </div>
           </div>
           <div className="flex flex-col md:flex-row items-center justify-end gap-3">
