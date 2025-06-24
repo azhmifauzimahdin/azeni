@@ -49,6 +49,24 @@ export async function POST(req: Request) {
       return ResponseJson({ errors }, { status: 400 });
     }
 
+    const unpaidInvitation = await prisma.invitation.findFirst({
+      where: {
+        userId,
+        transaction: {
+          status: {
+            name: "Menunggu Pembayaran",
+          },
+        },
+      },
+    });
+
+    if (unpaidInvitation) {
+      return ResponseJson(
+        { message: "Anda masih memiliki undangan yang belum dibayar" },
+        { status: 409 }
+      );
+    }
+
     let theme;
     if (!themeId) {
       theme = await prisma.theme.findFirst({

@@ -8,7 +8,7 @@ type Options = {
 
 export async function generatePageMetadata({
   slug,
-  fallbackTitle = "Azeni",
+  fallbackTitle = "Azen",
   fallbackDescription = "Undangan pernikahan digital modern dan elegan.",
 }: Options): Promise<Metadata> {
   if (!slug) {

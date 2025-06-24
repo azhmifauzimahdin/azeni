@@ -1,12 +1,12 @@
-import { bank } from "./bank";
+import { Bank } from "./bank";
 
 export interface BankAccount {
   id: string;
   invitationId: string;
-  bankId: string;
+  bankId: Bank;
   nomor: string;
   name: string;
   createdAt: string;
   updatedAt: string;
-  bank: bank;
+  bank: Bank;
 }

@@ -27,6 +27,7 @@ import { InvitationRequest } from "@/types";
 import NavigationBack from "@/components/ui/navigation-back";
 import useInvitationStore from "@/stores/invitation-store";
 import useUserInvitations from "@/hooks/use-user-invitation";
+import axios from "axios";
 
 const formSchema = z.object({
   groom: z.string().min(1, { message: "Nama panggilan pria wajib diisi" }),
@@ -75,7 +76,14 @@ const InvitationForm: React.FC = () => {
       router.push(`/dashboard/invitation`);
       toast.success("Undangan berhasil dibuat.");
     } catch (error: unknown) {
-      handleError(error, "invitation");
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 409) {
+          router.push(`/dashboard/invitation`);
+          toast.error("Anda masih memiliki undangan yang belum dibayar.");
+        } else {
+          handleError(error, "invitation");
+        }
+      }
     } finally {
       setLoading(false);
     }

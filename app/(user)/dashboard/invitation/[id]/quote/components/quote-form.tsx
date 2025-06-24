@@ -80,7 +80,7 @@ const QuoteForm: React.FC<QuoteFormsProps> = ({
       setLoadingSubmit(true);
       const res = await QuoteService.createQuote(params.id, data);
       updateQuoteInInvitation(params.id, res);
-      toast.success("Quote berhasil dibuat.");
+      toast.success("Quote berhasil disimpan.");
     } catch (error: unknown) {
       handleError(error, "quote");
     } finally {

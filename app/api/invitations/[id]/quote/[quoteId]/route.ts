@@ -29,7 +29,7 @@ export async function DELETE(
 
     return ResponseJson(quote, { status: 200 });
   } catch (error) {
-    console.error("Error deleted quote:", error);
+    console.error("Error deleting quote:", error);
     return ResponseJson({ message: "Gagal hapus quote." }, { status: 500 });
   }
 }

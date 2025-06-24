@@ -1,4 +1,4 @@
-import { Invitation } from "@/types";
+import { BankAccount, Invitation } from "@/types";
 import { create } from "zustand";
 
 interface InvitationState {
@@ -9,11 +9,19 @@ interface InvitationState {
     invitationId: string,
     updatedQuote: Partial<Invitation["quote"]>
   ) => void;
+  deleteQuoteInInvitation: (invitationId: string) => void;
   updateMusicInInvitation: (
     invitationId: string,
     updatedMusic: Partial<Invitation["music"]>
   ) => void;
-  deleteQuoteInInvitation: (invitationId: string) => void;
+  addOrUpdateBankAccountToInvitation: (
+    invitationId: string,
+    bankAccount: BankAccount
+  ) => void;
+  deleteBankAccountFromInvitation: (
+    invitationId: string,
+    bankAccountId: string
+  ) => void;
 }
 
 const useInvitationStore = create<InvitationState>((set) => ({
@@ -80,6 +88,49 @@ const useInvitationStore = create<InvitationState>((set) => ({
             }
           : invitation
       ),
+    })),
+  addOrUpdateBankAccountToInvitation: (invitationId, bankAccount) =>
+    set((state) => ({
+      invitations: state.invitations.map((invitation) => {
+        if (invitation.id !== invitationId) return invitation;
+
+        const existingBankAccounts = invitation.bankaccounts ?? [];
+
+        const existingIndex = existingBankAccounts.findIndex(
+          (acc) => acc.id === bankAccount.id
+        );
+
+        let updatedBankAccounts;
+        if (existingIndex !== -1) {
+          updatedBankAccounts = [...existingBankAccounts];
+          updatedBankAccounts[existingIndex] = {
+            ...existingBankAccounts[existingIndex],
+            ...bankAccount,
+          };
+        } else {
+          updatedBankAccounts = [...existingBankAccounts, bankAccount];
+        }
+
+        return {
+          ...invitation,
+          bankaccounts: updatedBankAccounts,
+        };
+      }),
+    })),
+  deleteBankAccountFromInvitation: (invitationId, bankAccountId) =>
+    set((state) => ({
+      invitations: state.invitations.map((invitation) => {
+        if (invitation.id !== invitationId) return invitation;
+
+        const updatedBankAccounts =
+          invitation.bankaccounts?.filter((acc) => acc.id !== bankAccountId) ??
+          [];
+
+        return {
+          ...invitation,
+          bankaccounts: updatedBankAccounts,
+        };
+      }),
     })),
 }));
 

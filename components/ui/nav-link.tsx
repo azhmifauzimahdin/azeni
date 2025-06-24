@@ -18,7 +18,7 @@ const NavLink: FC<NavLinkProps> = (props) => {
       href={href}
       onClick={onClick}
       className={clsx(
-        "flex items-center gap-3 p-3 text-slate-800 rounded-lg group",
+        "flex items-center gap-3 px-3 py-2 text-slate-800 rounded-md group",
         active
           ? "text-white bg-green-app-primary hover:bg-green-app-secondary"
           : "hover:text-green-app-primary",
