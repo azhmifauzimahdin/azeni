@@ -12,11 +12,17 @@ export async function POST(
 
     const body = await req.json();
 
-    const { address } = body;
+    const { bankId, accountNumber, name } = body;
 
     const errors = [];
-    if (!address)
-      errors.push({ field: "address", message: "Alamat harus diisi." });
+    if (!bankId)
+      errors.push({ field: "bankId", message: "Bank ID harus diisi." });
+    if (!accountNumber)
+      errors.push({
+        field: "accountNumber",
+        message: "Nomor rekening harus diisi.",
+      });
+    if (!name) errors.push({ field: "name", message: "Nama harus diisi." });
     if (!params.id)
       errors.push({
         field: "invitationId",
@@ -37,31 +43,15 @@ export async function POST(
     if (!invitationByUserId)
       return ResponseJson("Unauthorized", { status: 401 });
 
-    const gift = await prisma.bankAccount.findFirst({
-      where: {
-        invitationId: params.id,
-        bank: {
-          name: "Kado",
-        },
-      },
-    });
-
-    if (gift) {
-      return ResponseJson(
-        { message: "Gagal membuat alamat." },
-        { status: 409 }
-      );
-    }
-
     const bank = await prisma.bank.findFirst({
       where: {
-        name: "Kado",
+        id: bankId,
       },
     });
 
     if (!bank) {
       return ResponseJson(
-        { message: "Kado ID tidak ditemukan." },
+        { message: "Bank ID tidak ditemukan." },
         { status: 404 }
       );
     }
@@ -69,9 +59,9 @@ export async function POST(
     const bankAccount = await prisma.bankAccount.create({
       data: {
         invitationId: params.id,
-        bankId: bank?.id,
-        accountNumber: "XXXXX",
-        name: address,
+        bankId,
+        accountNumber,
+        name,
       },
       include: {
         bank: true,
@@ -80,7 +70,10 @@ export async function POST(
 
     return ResponseJson(bankAccount, { status: 201 });
   } catch (error) {
-    console.error("Error creating address:", error);
-    return ResponseJson({ message: "Gagal membuat alamat." }, { status: 500 });
+    console.error("Error creating bank account:", error);
+    return ResponseJson(
+      { message: "Gagal membuat nomor rekening." },
+      { status: 500 }
+    );
   }
 }

@@ -239,19 +239,19 @@ async function main() {
       {
         invitationId: invitation.id,
         bankId: bank1.id,
-        nomor: "2732638623612512",
+        accountNumber: "2732638623612512",
         name: "Nyimas Khodijah Nasthiti Adinda",
       },
       {
         invitationId: invitation.id,
         bankId: bank2.id,
-        nomor: "8364718172726262",
+        accountNumber: "8364718172726262",
         name: "Reynaldi Aditya Wisnu",
       },
       {
         invitationId: invitation.id,
         bankId: bank3.id,
-        nomor: "XXXXX",
+        accountNumber: "XXXXX",
         name: "Villa Azila, Cipayung, Jakarta Timur",
       },
     ],

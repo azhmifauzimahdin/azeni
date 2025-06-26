@@ -148,7 +148,6 @@ const InvitationForm: React.FC = () => {
                     <Input
                       placeholder="Nama panggilan pria"
                       disabled={loading}
-                      size={12}
                       {...field}
                     />
                   </FormControl>

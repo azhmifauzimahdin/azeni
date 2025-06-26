@@ -4,12 +4,12 @@ import { Invitation } from "@/types";
 import WaveformPlayer from "@/components/ui/wave-form-player";
 import useUserMusics from "@/hooks/use-user-music";
 import { InvitationService } from "@/lib/services";
-import { useRef, useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import toast from "react-hot-toast";
 import { handleError } from "@/lib/utils/handle-error";
 import useInvitationStore from "@/stores/invitation-store";
 import { Pagination } from "@/components/ui/pagination";
-import { Input } from "@/components/ui/input"; // pastikan komponen ini ada
+import { Input } from "@/components/ui/input";
 import { Music } from "lucide-react";
 
 interface MusicFormsProps {
@@ -26,7 +26,7 @@ const MusicForm: React.FC<MusicFormsProps> = ({
   isFetching,
 }) => {
   const { musics } = useUserMusics();
-  const [loading, setLoading] = useState(false);
+  const [selectMusicId, setselectMusicId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const musicsPerPage = 10;
@@ -35,12 +35,9 @@ const MusicForm: React.FC<MusicFormsProps> = ({
     (state) => state.updateMusicInInvitation
   );
 
-  const selectedMusicIdRef = useRef<string | null>(null);
-
   const onSelectSong = async (musicId: string) => {
     try {
-      selectedMusicIdRef.current = musicId;
-      setLoading(true);
+      setselectMusicId(musicId);
       const res = await InvitationService.updateMusicByUserId(params.id, {
         musicId,
       });
@@ -49,7 +46,7 @@ const MusicForm: React.FC<MusicFormsProps> = ({
     } catch (error: unknown) {
       handleError(error, "music");
     } finally {
-      setLoading(false);
+      setselectMusicId(null);
     }
   };
 
@@ -118,7 +115,7 @@ const MusicForm: React.FC<MusicFormsProps> = ({
                 data={music}
                 selectSong={music.id === initialData?.music?.id ? false : true}
                 onSelectSong={onSelectSong}
-                loading={loading && music.id === selectedMusicIdRef.current}
+                loading={selectMusicId === music.id}
               />
             </div>
           ))

@@ -141,7 +141,7 @@ model BankAccount {
   id            String        @id @default(uuid())
   invitationId  String
   bankId        String
-  nomor         String
+  accountNumber String
   name          String
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt

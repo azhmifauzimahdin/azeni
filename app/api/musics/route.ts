@@ -57,7 +57,10 @@ export async function GET() {
 
     return ResponseJson(music);
   } catch (error) {
-    console.error(error);
-    return ResponseJson({ message: "Gagal mengambil data" }, { status: 500 });
+    console.error("Error getting music:", error);
+    return ResponseJson(
+      { message: "Gagal mengambil data musik" },
+      { status: 500 }
+    );
   }
 }

@@ -6,6 +6,7 @@ import InvitationIdList from "./invitation-id-list";
 import useUserInvitations from "@/hooks/use-user-invitation";
 import NavigationBack from "@/components/ui/navigation-back";
 import useUserMusics from "@/hooks/use-user-music";
+import useUserBanks from "@/hooks/use-user-bank";
 
 interface InvitationIdContentProps {
   params: {
@@ -18,6 +19,7 @@ const InvitationIdContent: React.FC<InvitationIdContentProps> = ({
 }) => {
   const { getInvitationById } = useUserInvitations();
   useUserMusics();
+  useUserBanks();
 
   const invitation = getInvitationById(params.id);
 
