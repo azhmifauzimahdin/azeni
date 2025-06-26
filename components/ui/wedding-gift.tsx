@@ -64,23 +64,13 @@ const WeddingGift: React.FC<WeddingGiftProps> = ({ banks }) => {
                 ) : (
                   <div className="rounded-lg p-5 bg-[url('/assets/img/bg-atm.jpg')] bg-img-default">
                     <div className="flex justify-end">
-                      {bank.bank.name == "Mandiri" ? (
-                        <Image
-                          src="/assets/svg/bank-mandiri.svg"
-                          alt="Logo Bank"
-                          aspectRatio="aspect-[3/1]"
-                          className="w-3/12"
-                          objectFit="h-full object-contain"
-                        />
-                      ) : bank.bank.name == "BCA" ? (
-                        <Image
-                          src="/assets/svg/bank-bca.svg"
-                          alt="Logo Bank"
-                          aspectRatio="aspect-[3/1]"
-                          className="w-3/12"
-                          objectFit="h-full object-contain"
-                        />
-                      ) : null}
+                      <Image
+                        src={bank.bank.icon}
+                        alt="Logo Bank"
+                        aspectRatio="aspect-[3/1]"
+                        className="w-3/12"
+                        objectFit="h-full object-contain"
+                      />
                     </div>
                     <div className="text-left">
                       <Image
@@ -92,13 +82,13 @@ const WeddingGift: React.FC<WeddingGiftProps> = ({ banks }) => {
                       />
                       <div className="flex justify-between">
                         <div className="text-slate-600 text-2xl font-medium mb-5">
-                          {bank.nomor.replace(/(.{4})/g, "$1 ").trim()}
+                          {bank.accountNumber.replace(/(.{4})/g, "$1 ").trim()}
                         </div>
                         <div>
                           <Button
                             variant="default"
                             className="bg-slate-200 text-slate-800 hover:bg-slate-100"
-                            onClick={() => handleCopy(bank.nomor)}
+                            onClick={() => handleCopy(bank.accountNumber)}
                           >
                             <Copy size={16} />
                           </Button>
