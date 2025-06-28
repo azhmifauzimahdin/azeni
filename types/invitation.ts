@@ -39,7 +39,7 @@ export interface Invitation {
   theme: Theme;
   quote: Quote | null;
   schedules: Schedule[];
-  couple: Couple;
+  couple: Couple | null;
   stories: Story[];
   galleries: Gallery[];
   bankaccounts: BankAccount[];

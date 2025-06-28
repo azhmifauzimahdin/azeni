@@ -37,7 +37,10 @@ type GiftFormAddressValues = z.infer<typeof formAddressSchema>;
 
 const formBankSchema = z.object({
   bankId: z.string().min(1, { message: "Bank wajib dipilih" }),
-  accountNumber: z.string().min(1, { message: "Nama wajib dipilih" }),
+  accountNumber: z
+    .string()
+    .min(1, { message: "Nomor rekening wajib diisi" })
+    .regex(/^\d+$/, { message: "Nomor rekening harus berupa angka" }),
   name: z.string().min(1, { message: "Nama wajib dipilih" }),
 });
 

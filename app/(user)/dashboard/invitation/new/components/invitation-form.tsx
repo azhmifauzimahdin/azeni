@@ -90,7 +90,6 @@ const InvitationForm: React.FC = () => {
   };
 
   const onDeleteImage = async (publicId: string) => {
-    console.log(publicId);
     try {
       setLoading(true);
       await ImageService.deleteImageByPublicId(publicId);

@@ -8,6 +8,7 @@ interface ImageProps {
   className?: string;
   priority?: boolean;
   objectFit?: string;
+  isFetching?: boolean;
 }
 
 function optimizeCloudinaryUrl(url: string) {
@@ -24,12 +25,29 @@ const Image: React.FC<ImageProps> = ({
   className,
   priority = false,
   objectFit = "object-cover",
+  isFetching,
   ...rest
 }) => {
   const optimizedUrl = optimizeCloudinaryUrl(src);
+
+  if (isFetching) {
+    return (
+      <div
+        className={clsx(
+          "relative overflow-hidden bg-skeleton",
+          aspectRatio,
+          className
+        )}
+      />
+    );
+  }
   return (
     <div
-      className={clsx("relative overflow-hidden", aspectRatio, className)}
+      className={clsx(
+        "relative overflow-hidden bg-transparent",
+        aspectRatio,
+        className
+      )}
       {...rest}
     >
       <ImageNext

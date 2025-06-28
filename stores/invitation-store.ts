@@ -5,6 +5,15 @@ interface InvitationState {
   invitations: Invitation[];
   setInvitations: (invitation: Invitation[]) => void;
   addInvitationAtFirst: (newInvitation: Invitation) => void;
+  updateCoupleInInvitation: (
+    invitationId: string,
+    updatedQuote: Partial<Invitation["quote"]>
+  ) => void;
+  updateCoupleImageInInvitation(
+    invitationId: string,
+    field: "groomImage" | "brideImage",
+    url: string
+  ): void;
   updateQuoteInInvitation: (
     invitationId: string,
     updatedQuote: Partial<Invitation["quote"]>
@@ -30,6 +39,68 @@ const useInvitationStore = create<InvitationState>((set) => ({
   addInvitationAtFirst: (newInvitation) =>
     set((state) => ({
       invitations: [newInvitation, ...state.invitations],
+    })),
+  updateCoupleInInvitation: (invitationId, updatedCouple) =>
+    set((state) => ({
+      invitations: state.invitations.map((invitation) => {
+        if (invitation.id !== invitationId) return invitation;
+
+        const existingCouple = invitation.couple ?? {
+          id: "",
+          invitationId: "",
+          groomName: "",
+          groomFather: "",
+          groomMother: "",
+          groomImage: "",
+          brideName: "",
+          brideFather: "",
+          brideMother: "",
+          brideImage: "",
+          createdAt: "",
+          updatedAt: "",
+        };
+
+        return {
+          ...invitation,
+          couple: {
+            ...existingCouple,
+            ...updatedCouple,
+          },
+        };
+      }),
+    })),
+  updateCoupleImageInInvitation: (
+    invitationId: string,
+    field: "groomImage" | "brideImage",
+    imageUrl: string
+  ) =>
+    set((state) => ({
+      invitations: state.invitations.map((invitation) => {
+        if (invitation.id !== invitationId) return invitation;
+
+        const existingCouple = invitation.couple ?? {
+          id: "",
+          invitationId: "",
+          groomName: "",
+          groomFather: "",
+          groomMother: "",
+          groomImage: "",
+          brideName: "",
+          brideFather: "",
+          brideMother: "",
+          brideImage: "",
+          createdAt: "",
+          updatedAt: "",
+        };
+
+        return {
+          ...invitation,
+          couple: {
+            ...existingCouple,
+            [field]: imageUrl,
+          },
+        };
+      }),
     })),
   updateQuoteInInvitation: (invitationId, updatedQuote) =>
     set((state) => ({
