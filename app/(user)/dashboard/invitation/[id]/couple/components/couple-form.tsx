@@ -177,6 +177,7 @@ const CoupleForm: React.FC<CoupleFormsProps> = ({
                 onRemove={() => handleDeleteImage("groomImage")}
                 path="couple"
                 value={groomImage}
+                defaultValue="https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751191834/default-groom_hzxypj.png"
                 isFetching={isFetching}
               />
             </div>
@@ -250,6 +251,7 @@ const CoupleForm: React.FC<CoupleFormsProps> = ({
                 onRemove={() => handleDeleteImage("brideImage")}
                 path="couple"
                 value={brideImage}
+                defaultValue="https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751191840/default-bride_vr19el.png"
                 isFetching={isFetching}
               />
             </div>

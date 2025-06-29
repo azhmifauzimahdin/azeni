@@ -141,19 +141,19 @@ const Premium1Page: React.FC<Invitation & { currentGuest: Guest }> = (
               className="font-alex text-2xl font-bold text-green-primary mb-3"
               data-aos="fade-down"
             >
-              {invitation.couple.brideName}
+              {invitation.couple?.brideName}
             </h2>
             <p
               className="text-slate-600 text-sm"
               data-aos="fade-right"
               data-aos-delay="700"
             >
-              Putri dari Bapak {invitation.couple.brideFather} &&nbsp;
-              {invitation.couple.brideMother}
+              Putri dari Bapak {invitation.couple?.brideFather} &&nbsp;
+              {invitation.couple?.brideMother}
             </p>
           </div>
           <Image
-            src={invitation.couple.brideImage}
+            src={invitation.couple?.brideImage || ""}
             alt="Bridge"
             aspectRatio="aspect-square"
             className="rounded-tl-3xl rounded-bl-lg shadow-md"
@@ -168,7 +168,7 @@ const Premium1Page: React.FC<Invitation & { currentGuest: Guest }> = (
         </div>
         <div className="grid grid-cols-2 gap-3">
           <Image
-            src={invitation.couple.groomImage}
+            src={invitation.couple?.groomImage || ""}
             alt="Groom"
             aspectRatio="aspect-square"
             className="rounded-tr-3xl rounded-br-lg shadow-md"
@@ -179,15 +179,15 @@ const Premium1Page: React.FC<Invitation & { currentGuest: Guest }> = (
               className="font-alex text-2xl font-bold text-green-primary"
               data-aos="fade-down"
             >
-              {invitation.couple.groomName}
+              {invitation.couple?.groomName}
             </h2>
             <p
               className="text-slate-600 text-sm"
               data-aos="fade-left"
               data-aos-delay="700"
             >
-              Putra dari Bapak {invitation.couple.brideFather} &&nbsp;
-              {invitation.couple.brideMother}
+              Putra dari Bapak {invitation.couple?.brideFather} &&nbsp;
+              {invitation.couple?.brideMother}
             </p>
           </div>
         </div>

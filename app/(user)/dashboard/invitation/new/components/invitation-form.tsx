@@ -21,13 +21,13 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { handleError } from "@/lib/utils/handle-error";
 import { Heading } from "@/components/ui/heading";
-import ImageUpload from "@/components/ui/image-upload";
 import { ImageService, InvitationService } from "@/lib/services";
 import { InvitationRequest } from "@/types";
 import NavigationBack from "@/components/ui/navigation-back";
 import useInvitationStore from "@/stores/invitation-store";
 import useUserInvitations from "@/hooks/use-user-invitation";
 import axios from "axios";
+import ImageUpload from "./image-upload";
 
 const formSchema = z.object({
   groom: z.string().min(1, { message: "Nama panggilan pria wajib diisi" }),
@@ -185,7 +185,7 @@ const InvitationForm: React.FC = () => {
                         setImageDelete((prev) => [...prev, publicId]);
                         field.onChange("");
                       }}
-                      value={field.value ? [field.value] : []}
+                      value={field.value || ""}
                       path="invitations"
                     />
                   </FormControl>
