@@ -23,6 +23,10 @@ interface InvitationState {
     invitationId: string,
     updatedMusic: Partial<Invitation["music"]>
   ) => void;
+  updateThemeInInvitation: (
+    invitationId: string,
+    updatedTheme: Partial<Invitation["theme"]>
+  ) => void;
   addOrUpdateBankAccountToInvitation: (
     invitationId: string,
     bankAccount: BankAccount
@@ -145,6 +149,32 @@ const useInvitationStore = create<InvitationState>((set) => ({
           music: {
             ...existingMusic,
             ...updatedMusic,
+          },
+        };
+      }),
+    })),
+  updateThemeInInvitation: (invitationId, updatedTheme) =>
+    set((state) => ({
+      invitations: state.invitations.map((invitation) => {
+        if (invitation.id !== invitationId) return invitation;
+
+        const existingTheme = invitation.theme ?? {
+          id: "",
+          name: "",
+          thumbnail: "",
+          colorTag: "",
+          originalPrice: 0,
+          discount: 0,
+          isPercent: true,
+          createdAt: "",
+          updatedAt: "",
+        };
+
+        return {
+          ...invitation,
+          theme: {
+            ...existingTheme,
+            ...updatedTheme,
           },
         };
       }),

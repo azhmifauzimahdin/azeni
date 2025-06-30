@@ -1,5 +1,5 @@
 import { generatePageMetadata } from "@/lib/metadata";
-import DashboardContent from "./components/dashboard-content";
+import ThemeContent from "./components/theme-content";
 
 export const generateMetadata = () =>
   generatePageMetadata({ fallbackTitle: "Tema" });
@@ -13,7 +13,7 @@ interface ThemePageProps {
 export default function ThemePage({ params }: ThemePageProps) {
   return (
     <div className="space-y-4">
-      <DashboardContent />
+      <ThemeContent params={params} />
     </div>
   );
 }

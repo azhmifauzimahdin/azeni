@@ -44,5 +44,5 @@ export interface Invitation {
   galleries: Gallery[];
   bankaccounts: BankAccount[];
   comments: Comment[];
-  guest: Guest[];
+  guest: Guest;
 }

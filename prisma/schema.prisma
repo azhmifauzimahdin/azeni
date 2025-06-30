@@ -61,13 +61,15 @@ model PaymentStatus {
 model Theme{
   id            String        @id @default(uuid())
   name          String
+  thumbnail     String
+  colorTag      String
   originalPrice Decimal       @db.Decimal(10, 2)
   discount      Decimal       @db.Decimal(10, 2)
-  isPercent     Boolean       @default(true)  
+  isPercent     Boolean       @default(true)
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 
-  Invitations   Invitation[]
+  invitations   Invitation[]
 }
 
 model Quote {

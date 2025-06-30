@@ -67,7 +67,9 @@ const InvitationModalPremium: React.FC<InvitationModalProps> = ({
             <div className="text-center mb-8">
               <div>Kepada:</div>
               <div>Yth. Bapak/Ibu/Saudara/i</div>
-              <div className="font-bold">{invitation.currentGuest.name}</div>
+              <div className="font-bold capitalize">
+                {invitation.currentGuest.name}
+              </div>
               <div>{invitation.currentGuest.address}</div>
             </div>
             <Button

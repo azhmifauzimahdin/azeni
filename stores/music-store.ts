@@ -4,13 +4,13 @@ import { create } from "zustand";
 interface MusicState {
   musics: Music[];
   setMusics: (musics: Music[]) => void;
-  addInvitationAtFirst: (newMusic: Music) => void;
+  addMusicAtFirst: (newMusic: Music) => void;
 }
 
 const useMusicStore = create<MusicState>((set) => ({
   musics: [],
   setMusics: (musics) => set({ musics }),
-  addInvitationAtFirst: (newMusic) =>
+  addMusicAtFirst: (newMusic) =>
     set((state) => ({
       musics: [newMusic, ...state.musics],
     })),

@@ -7,8 +7,22 @@ async function main() {
   const theme = await prisma.theme.create({
     data: {
       name: "premium-001",
+      thumbnail:
+        "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751205982/thumbnail-premium001_ijf4jj.png",
       originalPrice: 50000,
       discount: 0,
+      colorTag: "green",
+    },
+  });
+
+  await prisma.theme.create({
+    data: {
+      name: "premium-002",
+      thumbnail:
+        "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751205982/thumbnail-premium001_ijf4jj.png",
+      originalPrice: 50000,
+      discount: 0,
+      colorTag: "green",
     },
   });
 
@@ -260,7 +274,7 @@ async function main() {
   const guest = await prisma.guest.create({
     data: {
       invitationId: invitation.id,
-      name: "Hamba Allah",
+      name: "tamu",
       address: "-",
       isAttending: false,
       color: "bg-teal-500",

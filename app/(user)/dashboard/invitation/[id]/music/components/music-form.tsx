@@ -10,7 +10,7 @@ import { handleError } from "@/lib/utils/handle-error";
 import useInvitationStore from "@/stores/invitation-store";
 import { Pagination } from "@/components/ui/pagination";
 import { Input } from "@/components/ui/input";
-import { Music } from "lucide-react";
+import Image from "@/components/ui/image";
 
 interface MusicFormsProps {
   params: {
@@ -26,7 +26,7 @@ const MusicForm: React.FC<MusicFormsProps> = ({
   isFetching,
 }) => {
   const { musics } = useUserMusics();
-  const [selectMusicId, setselectMusicId] = useState<string | null>(null);
+  const [selectMusicId, setSelectMusicId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const musicsPerPage = 10;
@@ -37,7 +37,7 @@ const MusicForm: React.FC<MusicFormsProps> = ({
 
   const onSelectSong = async (musicId: string) => {
     try {
-      setselectMusicId(musicId);
+      setSelectMusicId(musicId);
       const res = await InvitationService.updateMusicByUserId(params.id, {
         musicId,
       });
@@ -46,7 +46,7 @@ const MusicForm: React.FC<MusicFormsProps> = ({
     } catch (error: unknown) {
       handleError(error, "music");
     } finally {
-      setselectMusicId(null);
+      setSelectMusicId(null);
     }
   };
 
@@ -121,7 +121,12 @@ const MusicForm: React.FC<MusicFormsProps> = ({
           ))
         ) : (
           <div className="col-span-full flex flex-col items-center justify-center py-10 text-center text-muted-foreground">
-            <Music strokeWidth={1.5} size={64} />
+            <Image
+              src="https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751291610/music-green_lu3d0w.png"
+              alt="Icon Tema"
+              aspectRatio="aspect-square"
+              className="w-20 mb-5"
+            />
             <p className="text-sm font-medium">Musik tidak ditemukan</p>
             <p className="text-xs">Coba gunakan kata kunci lain.</p>
           </div>

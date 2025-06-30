@@ -93,7 +93,7 @@ const CommentSection: React.FC<commentSectionProps> = ({
                 </div>
               </div>
               <div>
-                <h4 className="font-semibold text-gray-800 truncate">
+                <h4 className="font-semibold text-gray-800 truncate capitalize">
                   {comment.guest.name}
                 </h4>
                 <span className="text-sm text-gray-500 truncate">

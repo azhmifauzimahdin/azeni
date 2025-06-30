@@ -22,9 +22,9 @@ const linkVariants = cva(
           "bg-green-app-primary text-white shadow-sm hover:bg-green-app-secondary",
       },
       size: {
-        default: "h-9 px-4 py-2",
+        default: "h-10 px-4 py-2",
         sm: "h-8 rounded-md px-3 text-xs",
-        lg: "h-10 rounded-md px-8",
+        lg: "h-11 rounded-md px-8",
         icon: "h-9 w-9",
       },
     },
@@ -42,12 +42,19 @@ export interface LinkProps
 }
 
 const LinkButton = React.forwardRef<HTMLAnchorElement, LinkProps>(
-  ({ className, variant, size, children, href, ...props }, ref) => {
+  (
+    { className, variant, size, children, href, target, rel, ...props },
+    ref
+  ) => {
+    const isExternal = target === "_blank";
+    const relValue = rel ?? (isExternal ? "noopener noreferrer" : undefined);
     return (
       <Link href={href} passHref legacyBehavior>
         <a
           ref={ref}
           className={cn(linkVariants({ variant, size, className }))}
+          rel={relValue}
+          target={target}
           {...props}
         >
           {children}
