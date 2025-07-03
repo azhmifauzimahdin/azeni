@@ -22,6 +22,7 @@ import { QuoteService } from "@/lib/services";
 import { handleError } from "@/lib/utils/handle-error";
 import { Invitation } from "@/types";
 import useInvitationStore from "@/stores/invitation-store";
+import DeleteConfirmationModal from "@/components/ui/delete-confirmation-modal";
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "Quote wajib diisi" }),
@@ -52,6 +53,8 @@ const QuoteForm: React.FC<QuoteFormsProps> = ({
 
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false);
+  const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
+  const [deletingQuoteId, setDeletingQuoteId] = useState<string | null>(null);
 
   const form = useForm<QuoteFormValues>({
     resolver: zodResolver(formSchema),
@@ -88,11 +91,11 @@ const QuoteForm: React.FC<QuoteFormsProps> = ({
     }
   };
 
-  const handleDelete = async () => {
+  const onDelete = async () => {
     try {
       setLoadingDelete(true);
-      if (initialData?.quote?.id) {
-        await QuoteService.deleteQuote(params.id, initialData.quote.id);
+      if (deletingQuoteId) {
+        await QuoteService.deleteQuote(params.id, deletingQuoteId);
       }
       toast.success("Quote berhasil dihapus.");
       deleteQuoteInInvitation(params.id);
@@ -109,6 +112,16 @@ const QuoteForm: React.FC<QuoteFormsProps> = ({
 
   return (
     <>
+      <DeleteConfirmationModal
+        description="quote"
+        isOpen={isModalDeleteOpen}
+        onOpenChange={() => {
+          setDeletingQuoteId(null);
+          setIsModalDeleteOpen(false);
+        }}
+        onConfirm={onDelete}
+        loading={loadingDelete}
+      />
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -168,9 +181,12 @@ const QuoteForm: React.FC<QuoteFormsProps> = ({
             {initialData?.quote ? (
               <Button
                 variant="destructive"
-                isLoading={loadingDelete}
+                isLoading={deletingQuoteId ? true : false}
                 disabled={loadingSubmit || loadingDelete}
-                onClick={handleDelete}
+                onClick={() => {
+                  setIsModalDeleteOpen(true);
+                  setDeletingQuoteId(initialData?.quote?.id || "xxxx");
+                }}
                 className="w-full md:w-auto"
                 type="button"
                 isFetching={isFetching}

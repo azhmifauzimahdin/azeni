@@ -28,6 +28,7 @@ import useUserBanks from "@/hooks/use-user-bank";
 import Image from "@/components/ui/image";
 import { Input } from "@/components/ui/input";
 import GiftCard from "./gift-card";
+import DeleteConfirmationModal from "@/components/ui/delete-confirmation-modal";
 
 const formAddressSchema = z.object({
   address: z.string().min(1, { message: "Alamat wajib diisi" }),
@@ -96,9 +97,16 @@ const GiftForm: React.FC<GiftFormsProps> = ({
 
   const [loadingSubmitAddress, setLoadingSubmitAddress] = useState(false);
   const [loadingDeleteAddress, setLoadingDeleteAddress] = useState(false);
+  const [deletingAddressId, setDeletingAddressId] = useState<string | null>(
+    null
+  );
   const [loadingSubmitBank, setLoadingSubmitBank] = useState(false);
+  const [loadingDeleteBank, setLoadingDeleteBank] = useState(false);
   const [deletingBankId, setDeletingBankId] = useState<string | null>(null);
   const [updatingBankId, setUpdatingBankId] = useState<string | null>(null);
+  const [isModalDeleteBankOpen, setIsModalDeleteBankOpen] = useState(false);
+  const [isModalDeleteAddressOpen, setIsModalDeleteAddressOpen] =
+    useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const addOrUpdateBankAccountToInvitation = useInvitationStore(
     (state) => state.addOrUpdateBankAccountToInvitation
@@ -180,37 +188,6 @@ const GiftForm: React.FC<GiftFormsProps> = ({
     }
   };
 
-  const handleDeleteAddress = async () => {
-    try {
-      setLoadingDeleteAddress(true);
-      if (firstGift?.id) {
-        await GiftService.deleteAddress(params.id, firstGift.id);
-      }
-      toast.success("Alamat berhasil dihapus.");
-      deleteBankAccountFromInvitation(params.id, firstGift?.id ?? "");
-      formAddress.reset({
-        address: "",
-      });
-    } catch (error: unknown) {
-      handleError(error, "address");
-    } finally {
-      setLoadingDeleteAddress(false);
-    }
-  };
-
-  const handleDeleteBank = async (bankId: string) => {
-    try {
-      setDeletingBankId(bankId);
-      await GiftService.deleteAddress(params.id, bankId);
-      toast.success("Rekening berhasil dihapus.");
-      deleteBankAccountFromInvitation(params.id, bankId);
-    } catch (error: unknown) {
-      handleError(error, "bank");
-    } finally {
-      setDeletingBankId(null);
-    }
-  };
-
   const handleOpenModalEditBank = (id: string) => {
     setUpdatingBankId(id);
     setIsOpen(true);
@@ -220,6 +197,34 @@ const GiftForm: React.FC<GiftFormsProps> = ({
       accountNumber: bank?.accountNumber,
       name: bank?.name,
     });
+  };
+
+  const onDelete = async () => {
+    try {
+      if (deletingBankId) {
+        setLoadingDeleteBank(true);
+        await GiftService.deleteAddress(params.id, deletingBankId);
+        toast.success("Rekening berhasil dihapus.");
+        deleteBankAccountFromInvitation(params.id, deletingBankId);
+      } else if (deletingAddressId) {
+        setLoadingDeleteAddress(true);
+        if (firstGift?.id) {
+          await GiftService.deleteAddress(params.id, firstGift.id);
+        }
+        toast.success("Alamat berhasil dihapus.");
+        deleteBankAccountFromInvitation(params.id, firstGift?.id ?? "");
+        formAddress.reset({
+          address: "",
+        });
+      }
+    } catch (error: unknown) {
+      handleError(error, "bankAccount");
+    } finally {
+      setLoadingDeleteBank(false);
+      setLoadingDeleteAddress(false);
+      setDeletingAddressId(null);
+      setDeletingBankId(null);
+    }
   };
 
   return (
@@ -327,6 +332,18 @@ const GiftForm: React.FC<GiftFormsProps> = ({
           </form>
         </Form>
       </Modal>
+      <DeleteConfirmationModal
+        description={isModalDeleteBankOpen ? "nomor rekening" : "alamat"}
+        isOpen={isModalDeleteBankOpen || isModalDeleteAddressOpen}
+        onOpenChange={() => {
+          setDeletingBankId(null);
+          setIsModalDeleteBankOpen(false);
+          setDeletingAddressId(null);
+          setIsModalDeleteAddressOpen(false);
+        }}
+        onConfirm={onDelete}
+        loading={loadingDeleteBank || loadingDeleteAddress}
+      />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
         <div className="space-y-4 card-dashboard ">
           {isFetching ? (
@@ -374,7 +391,10 @@ const GiftForm: React.FC<GiftFormsProps> = ({
                       key={bank.id}
                       data={bank}
                       onClick={(id) => handleOpenModalEditBank(id)}
-                      onDelete={() => handleDeleteBank(bank.id)}
+                      onDelete={(id: string) => {
+                        setDeletingBankId(id);
+                        setIsModalDeleteBankOpen(true);
+                      }}
                       isLoadingDelete={deletingBankId === bank.id}
                     />
                   ))}
@@ -424,9 +444,12 @@ const GiftForm: React.FC<GiftFormsProps> = ({
                 {firstGift ? (
                   <Button
                     variant="destructive"
-                    isLoading={loadingDeleteAddress}
+                    isLoading={deletingAddressId ? true : false}
                     disabled={loadingSubmitAddress || loadingDeleteAddress}
-                    onClick={handleDeleteAddress}
+                    onClick={() => {
+                      setDeletingAddressId(firstGift?.id);
+                      setIsModalDeleteAddressOpen(true);
+                    }}
                     className="w-full md:w-auto"
                     type="button"
                     isFetching={isFetching}
