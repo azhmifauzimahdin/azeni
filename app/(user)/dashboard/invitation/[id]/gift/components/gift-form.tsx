@@ -3,7 +3,7 @@
 import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
-import { CreditCard, Save, Trash2 } from "lucide-react";
+import { CreditCard, Pencil, Save, Trash2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo, useState } from "react";
@@ -225,9 +225,19 @@ const GiftForm: React.FC<GiftFormsProps> = ({
   return (
     <>
       <Modal
-        title="Tambah Nomor Rekening"
+        title={`${updatingBankId ? "Ubah" : "Tambah"} Nomor Rekening`}
         isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
+        onClose={() => {
+          setIsOpen(false);
+          if (updatingBankId) {
+            formbank.reset({
+              bankId: "",
+              accountNumber: "",
+              name: "",
+            });
+            setUpdatingBankId(null);
+          }
+        }}
       >
         <Form {...formbank}>
           <form
@@ -301,7 +311,17 @@ const GiftForm: React.FC<GiftFormsProps> = ({
                 type="submit"
                 isFetching={isFetching}
               >
-                <Save /> Simpan
+                {updatingBankId ? (
+                  <>
+                    <Pencil />
+                    Ubah
+                  </>
+                ) : (
+                  <>
+                    <Save />
+                    Simpan
+                  </>
+                )}
               </Button>
             </div>
           </form>
@@ -309,15 +329,22 @@ const GiftForm: React.FC<GiftFormsProps> = ({
       </Modal>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
         <div className="space-y-4 card-dashboard ">
-          <div
-            role="button"
-            tabIndex={0}
-            onClick={() => setIsOpen(true)}
-            className="flex items-center gap-3 bg-green-app-primary text-white rounded-lg shadow p-4 cursor-pointer hover:bg-green-app-secondary"
-          >
-            <CreditCard size={32} />
-            <span className="font-medium">Tambah Nomor Rekening</span>
-          </div>
+          {isFetching ? (
+            <div className="flex items-center gap-3 bg-muted text-muted-foreground rounded-lg shadow p-4 max-w-md animate-pulse">
+              <div className="w-8 h-8 bg-skeleton rounded" />
+              <div className="h-4 w-40 bg-skeleton rounded" />
+            </div>
+          ) : (
+            <div
+              role="button"
+              tabIndex={0}
+              onClick={() => setIsOpen(true)}
+              className="flex items-center gap-3 bg-green-app-primary text-white rounded-lg shadow p-4 cursor-pointer hover:bg-green-app-secondary"
+            >
+              <CreditCard size={32} />
+              <span className="font-medium">Tambah Nomor Rekening</span>
+            </div>
+          )}
           <div className="text-base text-slate-600">
             {(bankAccounts ?? []).length > 0
               ? "Daftar Rekening"

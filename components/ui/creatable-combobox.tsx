@@ -18,7 +18,7 @@ import {
   CommandList,
 } from "./command";
 import { Popover, PopoverTrigger, PopoverContent } from "./popover";
-import { Button } from "./button";
+import { buttonVariants } from "./button";
 
 type Option = {
   value: string;
@@ -26,7 +26,7 @@ type Option = {
   searchText: string;
 };
 
-type ComboboxProps = {
+type CreatableComboboxProps = {
   options: Option[];
   placeholder?: string;
   value?: string;
@@ -34,22 +34,12 @@ type ComboboxProps = {
   onChange?: (value: string) => void;
 };
 
-// ✅ forwardRef untuk expose ref ke luar (tanpa kasih langsung ke Slot/Button)
-const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
-  (
-    {
-      options,
-      placeholder = "Pilih...",
-      value,
-      disabled,
-      onChange,
-    }: ComboboxProps,
-    ref
-  ) => {
+const CreatableCombobox = forwardRef<HTMLButtonElement, CreatableComboboxProps>(
+  ({ options, placeholder = "Pilih...", value, disabled, onChange }, ref) => {
     const [open, setOpen] = useState(false);
+    const [inputValue, setInputValue] = useState("");
     const internalRef = useRef<HTMLButtonElement>(null);
     const [popoverWidth, setPopoverWidth] = useState<string | number>("100%");
-    const [inputValue, setInputValue] = useState("");
 
     useImperativeHandle(ref, () => internalRef.current!, []);
 
@@ -61,36 +51,57 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
 
     const selectedOption = options.find((o) => o.value === value);
 
-    const filteredOptions = options.filter((option) =>
-      option.searchText.toLowerCase().includes(inputValue.toLowerCase())
+    const filteredOptions = options.filter((opt) =>
+      opt.searchText.toLowerCase().includes(inputValue.trim().toLowerCase())
     );
+
+    const isCustomInput =
+      inputValue.trim().length > 0 &&
+      !options.some(
+        (opt) =>
+          opt.searchText.toLowerCase() === inputValue.trim().toLowerCase()
+      );
 
     const handleSelect = (val: string) => {
       onChange?.(val);
-      setOpen(false);
       setInputValue("");
+      setOpen(false);
     };
 
     return (
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button
+          <button
             ref={internalRef}
-            variant="outline"
+            type="button"
+            disabled={disabled}
             role="combobox"
             aria-expanded={open}
-            disabled={disabled}
-            className="w-full relative text-left justify-start text-base font-normal"
+            aria-controls="combobox-popover"
+            className={cn(
+              buttonVariants({ variant: "outline" }),
+              "w-full relative text-left justify-start text-base font-normal"
+            )}
           >
-            {selectedOption?.label ?? `Pilih ${placeholder}`}
+            {selectedOption
+              ? selectedOption.label
+              : value?.trim()
+              ? value
+              : `Pilih ${placeholder}`}
             <ChevronsUpDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 shrink-0 opacity-50" />
-          </Button>
+          </button>
         </PopoverTrigger>
 
-        <PopoverContent style={{ width: popoverWidth }} className="p-0">
+        <PopoverContent
+          style={{ width: popoverWidth }}
+          className="p-0"
+          id="combobox-popover"
+        >
           <Command>
             <CommandInput
               placeholder={`Cari ${placeholder?.toLowerCase()}...`}
+              value={inputValue}
+              onValueChange={setInputValue}
             />
             <CommandList>
               <CommandEmpty>Tidak ditemukan.</CommandEmpty>
@@ -110,6 +121,15 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
                     {option.label}
                   </CommandItem>
                 ))}
+
+                {isCustomInput && (
+                  <CommandItem
+                    onSelect={() => handleSelect(inputValue.trim())}
+                    className="text-blue-600"
+                  >
+                    Gunakan &quot;{inputValue}&quot;
+                  </CommandItem>
+                )}
               </CommandGroup>
             </CommandList>
           </Command>
@@ -119,6 +139,6 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
   }
 );
 
-Combobox.displayName = "Combobox";
+CreatableCombobox.displayName = "CreatableCombobox";
 
-export default Combobox;
+export default CreatableCombobox;

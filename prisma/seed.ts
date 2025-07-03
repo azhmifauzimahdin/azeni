@@ -127,10 +127,11 @@ async function main() {
       invitationId: invitation.id,
       type: "marriage",
       name: "Akad Nikah",
-      startDate: new Date("2028-07-27T10:00:00Z"),
-      endDate: new Date("2028-07-27T12:00:00Z"),
+      startDate: new Date("2028-07-27T02:00:00Z"),
+      endDate: new Date("2028-07-27T05:00:00Z"),
       location: "Villa Azila, Cipayung, Jakarta Timur",
-      location_maps: "https://maps.app.goo.gl/6Ti5v9FkwVf5gkhx6",
+      locationMaps: "https://maps.app.goo.gl/6Ti5v9FkwVf5gkhx6",
+      timezone: "WIB",
     },
   });
 
@@ -139,10 +140,11 @@ async function main() {
       invitationId: invitation.id,
       type: "reception",
       name: "Resepsi",
-      startDate: new Date("2028-07-27T12:00:00Z"),
-      endDate: new Date("2028-07-27T15:00:00Z"),
+      startDate: new Date("2028-07-27T05:00:00Z"),
+      endDate: new Date("2028-07-27T08:00:00Z"),
       location: "Villa Azila, Cipayung, Jakarta Timur",
-      location_maps: "https://maps.app.goo.gl/6Ti5v9FkwVf5gkhx6",
+      locationMaps: "https://maps.app.goo.gl/6Ti5v9FkwVf5gkhx6",
+      timezone: "WIB",
     },
   });
 

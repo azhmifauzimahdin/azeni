@@ -1,7 +1,5 @@
 import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-
 import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 
@@ -40,71 +38,46 @@ const buttonVariants = cva(
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
-  asChild?: boolean;
   isLoading?: boolean;
   isFetching?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    {
-      className,
-      variant,
-      size,
-      asChild = false,
-      isLoading,
-      isFetching,
-      children,
-      ...props
-    },
+    { className, variant, size, isLoading, isFetching, children, ...props },
     ref
   ) => {
-    const Comp = asChild ? Slot : "button";
-
-    if (isFetching) {
-      return (
-        <div
-          className={cn(
-            "rounded-md animate-pulse bg-skeleton",
-            size === "sm"
-              ? "h-8 px-3"
-              : size === "lg"
-              ? "h-11 px-8"
-              : size === "icon"
-              ? "h-9 w-9"
-              : "h-10 px-4",
-            className
-          )}
-          aria-busy="true"
-          aria-label="Loading button"
-        >
-          <div
-            className={cn(
-              "inline-flex items-center justify-center gap-2 invisible"
-            )}
-          >
-            {children}
-          </div>
-        </div>
-      );
-    }
-
     return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
+      <button
         ref={ref}
+        className={cn(
+          "relative",
+          isFetching
+            ? "rounded-md animate-pulse bg-skeleton"
+            : buttonVariants({ variant, size }),
+          className
+        )}
+        aria-busy={isFetching || isLoading}
         disabled={isLoading || props.disabled}
         {...props}
       >
-        {isLoading && <Loader2 className="absolute h-4 w-4 animate-spin" />}
-        <div
-          className={cn("inline-flex items-center justify-center gap-2", {
-            invisible: isLoading,
-          })}
-        >
-          {children}
-        </div>
-      </Comp>
+        {isFetching ? (
+          <div className="inline-flex items-center justify-center gap-2 invisible">
+            {children}
+          </div>
+        ) : (
+          <>
+            {isLoading && <Loader2 className="absolute h-4 w-4 animate-spin" />}
+            <div
+              className={cn("inline-flex items-center justify-center gap-2", {
+                invisible: isLoading,
+              })}
+            >
+              {children}
+            </div>
+          </>
+        )}
+      </button>
     );
   }
 );

@@ -8,3 +8,4 @@ export * as GiftService from "./gift";
 export * as BankService from "./bank";
 export * as CoupleService from "./couple";
 export * as ThemeService from "./theme";
+export * as ScheduleService from "./schedule";

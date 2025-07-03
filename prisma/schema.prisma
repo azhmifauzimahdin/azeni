@@ -91,7 +91,8 @@ model Schedule {
   startDate     DateTime
   endDate       DateTime
   location      String
-  location_maps String
+  locationMaps  String
+  timezone      String
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 

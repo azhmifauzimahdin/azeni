@@ -2,15 +2,9 @@ import { generatePageMetadata } from "@/lib/metadata";
 import DashboardContent from "./components/dashboard-content";
 
 export const generateMetadata = () =>
-  generatePageMetadata({ fallbackTitle: "Tema" });
+  generatePageMetadata({ fallbackTitle: "Dashboard" });
 
-interface ThemePageProps {
-  params: {
-    id: string;
-  };
-}
-
-export default function ThemePage({ params }: ThemePageProps) {
+export default function DashboardPage() {
   return (
     <div className="space-y-4">
       <DashboardContent />

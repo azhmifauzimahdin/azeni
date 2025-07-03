@@ -263,7 +263,7 @@ const Premium1Page: React.FC<Invitation & { currentGuest: Guest }> = (
                   className="bg-green-primary hover:bg-green-secondary"
                   onClick={() =>
                     window.open(
-                      schedule.location_maps,
+                      schedule.locationMaps,
                       "_blank",
                       "noopener,noreferrer"
                     )

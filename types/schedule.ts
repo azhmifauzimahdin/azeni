@@ -1,12 +1,22 @@
+export interface ScheduleRequest {
+  name: string;
+  startDate: Date;
+  endDate: Date;
+  timezone: string;
+  location: string;
+  locationMaps: string;
+}
+
 export interface Schedule {
   id: string;
   invitationId: string;
-  type: "marriage" | "reception";
+  type: string;
   name: string;
   startDate: string;
   endDate: string;
   location: string;
-  location_maps: string;
+  locationMaps: string;
+  timezone: string;
   createdAt: string;
   updatedAt: string;
 }

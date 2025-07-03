@@ -19,7 +19,7 @@ const GiftCard: React.FC<BankAccountCardProps> = ({
 }) => {
   return (
     <div
-      className="flex items-center justify-between p-4 rounded-xl border shadow-sm bg-white cursor-pointer hover:bg-gray-50 transition-colors"
+      className="flex items-center justify-between p-4 rounded-xl border shadow-sm bg-white cursor-pointer hover:bg-gray-100 transition-colors"
       onClick={() => onClick?.(data.id)}
     >
       <div className="flex items-center gap-4">

@@ -154,7 +154,7 @@ export async function POST(req: Request) {
         quote: true,
         schedules: {
           orderBy: {
-            createdAt: "desc",
+            startDate: "asc",
           },
         },
         couple: true,

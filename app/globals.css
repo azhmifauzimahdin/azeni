@@ -144,3 +144,15 @@ body {
   animation: marquee 20s linear infinite;
   white-space: nowrap;
 }
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+[data-state="open"] > button.absolute.top-4.right-4 {
+  display: none;
+}

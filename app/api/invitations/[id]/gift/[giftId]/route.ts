@@ -29,6 +29,11 @@ export async function PUT(
         field: "invitationId",
         message: "Invitation ID harus diisi.",
       });
+    if (!params.giftId)
+      errors.push({
+        field: "giftId",
+        message: "Gift ID harus diisi.",
+      });
 
     if (errors.length > 0) {
       return ResponseJson({ errors }, { status: 400 });
@@ -88,6 +93,22 @@ export async function DELETE(
   try {
     const { userId } = await auth();
     if (!userId) return ResponseJson("Unauthorized", { status: 401 });
+
+    const errors = [];
+    if (!params.id)
+      errors.push({
+        field: "invitationId",
+        message: "Invitation ID harus diisi.",
+      });
+    if (!params.giftId)
+      errors.push({
+        field: "giftId",
+        message: "Gift ID harus diisi.",
+      });
+
+    if (errors.length > 0) {
+      return ResponseJson({ errors }, { status: 400 });
+    }
 
     const InvitaionByUserId = await prisma.invitation.findFirst({
       where: {

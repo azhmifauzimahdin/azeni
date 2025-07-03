@@ -1,4 +1,4 @@
-import { BankAccount, Invitation } from "@/types";
+import { BankAccount, Invitation, Schedule } from "@/types";
 import { create } from "zustand";
 
 interface InvitationState {
@@ -34,6 +34,14 @@ interface InvitationState {
   deleteBankAccountFromInvitation: (
     invitationId: string,
     bankAccountId: string
+  ) => void;
+  addOrUpdateScheduleToInvitation: (
+    invitationId: string,
+    schedule: Schedule
+  ) => void;
+  deleteScheduleFromInvitation: (
+    invitationId: string,
+    scheduleId: string
   ) => void;
 }
 
@@ -230,6 +238,56 @@ const useInvitationStore = create<InvitationState>((set) => ({
         return {
           ...invitation,
           bankaccounts: updatedBankAccounts,
+        };
+      }),
+    })),
+  addOrUpdateScheduleToInvitation: (invitationId, schedule) =>
+    set((state) => ({
+      invitations: state.invitations.map((invitation) => {
+        if (invitation.id !== invitationId) return invitation;
+
+        const existingSchedules = invitation.schedules ?? [];
+
+        const existingIndex = existingSchedules.findIndex(
+          (acc) => acc.id === schedule.id
+        );
+
+        let updatedSchedules;
+
+        if (existingIndex !== -1) {
+          updatedSchedules = [...existingSchedules];
+          updatedSchedules[existingIndex] = {
+            ...existingSchedules[existingIndex],
+            ...schedule,
+          };
+        } else {
+          updatedSchedules = [...existingSchedules, schedule];
+        }
+
+        updatedSchedules.sort((a, b) => {
+          const dateA = new Date(a.startDate).getTime();
+          const dateB = new Date(b.startDate).getTime();
+          return dateA - dateB;
+        });
+
+        return {
+          ...invitation,
+          schedules: updatedSchedules,
+        };
+      }),
+    })),
+
+  deleteScheduleFromInvitation: (invitationId, scheduleId) =>
+    set((state) => ({
+      invitations: state.invitations.map((invitation) => {
+        if (invitation.id !== invitationId) return invitation;
+
+        const updatedSchedules =
+          invitation.schedules?.filter((acc) => acc.id !== scheduleId) ?? [];
+
+        return {
+          ...invitation,
+          schedules: updatedSchedules,
         };
       }),
     })),

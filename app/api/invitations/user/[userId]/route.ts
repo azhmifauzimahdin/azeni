@@ -28,7 +28,7 @@ export async function GET(
         quote: true,
         schedules: {
           orderBy: {
-            createdAt: "desc",
+            startDate: "asc",
           },
         },
         couple: true,
