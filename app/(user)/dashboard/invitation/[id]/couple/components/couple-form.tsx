@@ -22,6 +22,7 @@ import { Invitation } from "@/types";
 import useInvitationStore from "@/stores/invitation-store";
 import ImageUpload from "./image-upload";
 import { Input } from "@/components/ui/input";
+import { getFolderFromInvitationId } from "@/lib/utils/get-folder-from-invitation-id";
 
 const formSchema = z.object({
   groomName: z.string().min(1, { message: "Nama mempelai pria wajib diisi" }),
@@ -175,7 +176,7 @@ const CoupleForm: React.FC<CoupleFormsProps> = ({
                   setGroomImage(url);
                 }}
                 onRemove={() => handleDeleteImage("groomImage")}
-                path="couple"
+                path={`couple/${getFolderFromInvitationId(params.id)}`}
                 value={groomImage}
                 defaultValue="https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751191834/default-groom_hzxypj.png"
                 isFetching={isFetching}
@@ -249,7 +250,7 @@ const CoupleForm: React.FC<CoupleFormsProps> = ({
                   setBrideImage(url);
                 }}
                 onRemove={() => handleDeleteImage("brideImage")}
-                path="couple"
+                path={`couple/${getFolderFromInvitationId(params.id)}`}
                 value={brideImage}
                 defaultValue="https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751191840/default-bride_vr19el.png"
                 isFetching={isFetching}

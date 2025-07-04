@@ -1,4 +1,4 @@
-import { BankAccount, Invitation, Schedule } from "@/types";
+import { BankAccount, Gallery, Invitation, Schedule } from "@/types";
 import { create } from "zustand";
 
 interface InvitationState {
@@ -42,6 +42,11 @@ interface InvitationState {
   deleteScheduleFromInvitation: (
     invitationId: string,
     scheduleId: string
+  ) => void;
+  addGalleryToInvitation: (invitationId: string, gallery: Gallery) => void;
+  deleteGalleryFromInvitation: (
+    invitationId: string,
+    galleryId: string
   ) => void;
 }
 
@@ -288,6 +293,39 @@ const useInvitationStore = create<InvitationState>((set) => ({
         return {
           ...invitation,
           schedules: updatedSchedules,
+        };
+      }),
+    })),
+  addGalleryToInvitation: (invitationId, gallery) =>
+    set((state) => ({
+      invitations: state.invitations.map((invitation) => {
+        if (invitation.id !== invitationId) return invitation;
+
+        const existingGalleries = invitation.galleries ?? [];
+
+        const alreadyExists = existingGalleries.some(
+          (g) => g.id === gallery.id
+        );
+        if (alreadyExists) return invitation;
+
+        return {
+          ...invitation,
+          galleries: [...existingGalleries, gallery],
+        };
+      }),
+    })),
+
+  deleteGalleryFromInvitation: (invitationId, galleryId) =>
+    set((state) => ({
+      invitations: state.invitations.map((invitation) => {
+        if (invitation.id !== invitationId) return invitation;
+
+        const updatedGalleries =
+          invitation.galleries?.filter((g) => g.id !== galleryId) ?? [];
+
+        return {
+          ...invitation,
+          galleries: updatedGalleries,
         };
       }),
     })),

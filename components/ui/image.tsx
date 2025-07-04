@@ -4,7 +4,7 @@ import ImageNext from "next/image";
 interface ImageProps {
   src: string;
   alt: string;
-  aspectRatio: string;
+  aspectRatio?: string;
   className?: string;
   priority?: boolean;
   objectFit?: string;
@@ -33,32 +33,44 @@ const Image: React.FC<ImageProps> = ({
   if (isFetching) {
     return (
       <div
-        className={clsx(
-          "relative overflow-hidden bg-skeleton",
-          aspectRatio,
-          className
-        )}
+        className={clsx("overflow-hidden bg-skeleton", aspectRatio, className)}
       />
     );
   }
+
+  if (aspectRatio) {
+    return (
+      <div
+        className={clsx(
+          "relative overflow-hidden bg-transparent",
+          aspectRatio,
+          className
+        )}
+        {...rest}
+      >
+        <ImageNext
+          src={optimizedUrl}
+          alt={alt}
+          fill
+          sizes="100%"
+          priority={priority}
+          className={objectFit}
+        />
+      </div>
+    );
+  }
+
   return (
-    <div
-      className={clsx(
-        "relative overflow-hidden bg-transparent",
-        aspectRatio,
-        className
-      )}
+    <ImageNext
+      src={optimizedUrl}
+      alt={alt}
+      width={800}
+      height={600}
+      sizes="100vw"
+      priority={priority}
+      className={clsx("w-full h-auto", objectFit, className)}
       {...rest}
-    >
-      <ImageNext
-        src={optimizedUrl}
-        alt={alt}
-        fill
-        sizes="100%"
-        priority={priority}
-        className={objectFit}
-      />
-    </div>
+    />
   );
 };
 

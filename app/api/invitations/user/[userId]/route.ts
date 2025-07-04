@@ -39,7 +39,7 @@ export async function GET(
         },
         galleries: {
           orderBy: {
-            createdAt: "desc",
+            createdAt: "asc",
           },
         },
         bankaccounts: {
