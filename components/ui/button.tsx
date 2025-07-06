@@ -54,13 +54,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         className={cn(
           "relative",
-          isFetching
-            ? "rounded-md animate-pulse bg-skeleton"
-            : buttonVariants({ variant, size }),
+          buttonVariants({ variant, size }),
+          isFetching && "animate-pulse bg-skeleton",
           className
         )}
         aria-busy={isFetching || isLoading}
-        disabled={isLoading || props.disabled}
+        disabled={isLoading || props.disabled || isFetching}
         {...props}
       >
         {isFetching ? (

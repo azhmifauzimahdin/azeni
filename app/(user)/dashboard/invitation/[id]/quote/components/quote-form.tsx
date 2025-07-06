@@ -3,7 +3,7 @@
 import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
-import { Save, Trash2 } from "lucide-react";
+import { Quote, Save, Trash2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
@@ -24,6 +24,8 @@ import { Invitation } from "@/types";
 import useInvitationStore from "@/stores/invitation-store";
 import DeleteConfirmationModal from "@/components/ui/delete-confirmation-modal";
 import { createQuoteSchema } from "@/lib/schemas/quote";
+import Modal from "@/components/ui/modal";
+import useUserQuoteTemplates from "@/hooks/use-user-quote-template";
 
 type QuoteFormValues = z.infer<typeof createQuoteSchema>;
 
@@ -40,6 +42,8 @@ const QuoteForm: React.FC<QuoteFormsProps> = ({
   initialData,
   isFetching,
 }) => {
+  const { quoteTemplates } = useUserQuoteTemplates();
+
   const updateQuoteInInvitation = useInvitationStore(
     (state) => state.updateQuoteInInvitation
   );
@@ -49,8 +53,12 @@ const QuoteForm: React.FC<QuoteFormsProps> = ({
 
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
   const [deletingQuoteId, setDeletingQuoteId] = useState<string | null>(null);
+  const [selectedQuoteTemplateId, setSelectedQuoteTemplateId] = useState<
+    string | null
+  >(null);
 
   const form = useForm<QuoteFormValues>({
     resolver: zodResolver(createQuoteSchema),
@@ -108,6 +116,46 @@ const QuoteForm: React.FC<QuoteFormsProps> = ({
 
   return (
     <>
+      <Modal
+        title="Koleksi Quote"
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+        }}
+      >
+        <div className="space-y-3">
+          {quoteTemplates.map((quote) => (
+            <div
+              key={quote.id}
+              className="p-3 border rounded-md cursor-pointer"
+            >
+              <blockquote className="text-center p-3">
+                &quot;{quote.name}&quot;
+                <cite className="block">- {quote.author} -</cite>
+              </blockquote>
+              {quote.name !== form.getValues("name") &&
+                quote.author !== form.getValues("author") && (
+                  <Button
+                    type="button"
+                    variant="primary"
+                    className="w-full"
+                    isLoading={quote.id === selectedQuoteTemplateId}
+                    disabled={loadingSubmit || loadingDelete}
+                    onClick={async () => {
+                      setSelectedQuoteTemplateId(quote.id);
+                      await onSubmit(quote);
+                      setIsModalOpen(false);
+                      setSelectedQuoteTemplateId(null);
+                    }}
+                  >
+                    <Quote />
+                    Gunakan Quote
+                  </Button>
+                )}
+            </div>
+          ))}
+        </div>
+      </Modal>
       <DeleteConfirmationModal
         description="quote"
         isOpen={isModalDeleteOpen}
@@ -123,6 +171,15 @@ const QuoteForm: React.FC<QuoteFormsProps> = ({
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-4 card-dashboard"
         >
+          <Button
+            variant="primary"
+            type="button"
+            className="w-full"
+            isFetching={isFetching}
+            onClick={() => setIsModalOpen(true)}
+          >
+            <Quote /> Koleksi Quote
+          </Button>
           <div className="grid grid-cols-1 items-end justify-end gap-3">
             <FormField
               control={form.control}
@@ -158,7 +215,7 @@ const QuoteForm: React.FC<QuoteFormsProps> = ({
                     <Input
                       id={field.name}
                       placeholder="Author"
-                      disabled={loadingSubmit || loadingDelete}
+                      disabled={loadingSubmit || loadingDelete || isFetching}
                       size={12}
                       isFetching={isFetching}
                       {...field}

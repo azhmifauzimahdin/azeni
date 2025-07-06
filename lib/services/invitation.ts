@@ -12,8 +12,18 @@ export async function createInvitation(
   return res.data;
 }
 
-export async function fetchInvitationByslug(slug: string): Promise<Invitation> {
+export async function fetchInvitationByslug(
+  slug: string
+): Promise<ApiResponse<Invitation>> {
   const res = await httpRequest.get(`/api/invitations/${slug}`);
+
+  return res.data;
+}
+
+export async function fetchInvitationById(
+  id: string
+): Promise<ApiResponse<Invitation>> {
+  const res = await httpRequest.get(`/api/invitations/${id}`);
 
   return res.data;
 }

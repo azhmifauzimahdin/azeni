@@ -1,13 +1,16 @@
 "use client";
 
 import { Heading } from "@/components/ui/heading";
-import React from "react";
+import React, { useEffect } from "react";
 import InvitationIdList from "./invitation-id-list";
 import useUserInvitations from "@/hooks/use-user-invitation";
 import NavigationBack from "@/components/ui/navigation-back";
 import useUserMusics from "@/hooks/use-user-music";
 import useUserBanks from "@/hooks/use-user-bank";
 import useThemes from "@/hooks/use-theme";
+import { InvitationService } from "@/lib/services";
+import useUserQuoteTemplates from "@/hooks/use-user-quote-template";
+import { useRouter } from "next/navigation";
 
 interface InvitationIdContentProps {
   params: {
@@ -18,12 +21,27 @@ interface InvitationIdContentProps {
 const InvitationIdContent: React.FC<InvitationIdContentProps> = ({
   params,
 }) => {
+  const router = useRouter();
+
   const { getInvitationById } = useUserInvitations();
   useUserMusics();
   useUserBanks();
+  useUserQuoteTemplates();
   useThemes();
 
   const invitation = getInvitationById(params.id);
+
+  useEffect(() => {
+    const checkInvitationAvailability = async () => {
+      try {
+        await InvitationService.fetchInvitationById(params.id);
+      } catch {
+        router.push("/invitation");
+      }
+    };
+
+    checkInvitationAvailability();
+  }, [params.id, router]);
 
   const sections = [
     {

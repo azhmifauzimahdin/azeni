@@ -112,6 +112,29 @@ async function main() {
     },
   });
 
+  // Create Quote Template
+
+  await prisma.quoteTemplate.createMany({
+    data: [
+      {
+        name: "Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang. Sungguh, pada yang demikian itu benar-benar terdapat tanda-tanda (kebesaran Allah) bagi kaum yang berpikir.",
+        author: "QS. Ar-Rum: 21",
+      },
+      {
+        name: "Dan nikahkanlah orang-orang yang masih membujang di antara kamu, dan juga orang-orang yang layak (menikah) dari hamba-hamba sahayamu yang laki-laki dan perempuan. Jika mereka miskin, Allah akan memberi kemampuan kepada mereka dengan karunia-Nya.",
+        author: "QS. An-Nur: 32",
+      },
+      {
+        name: "Ya Tuhan kami, anugerahkanlah kepada kami istri-istri kami dan keturunan kami sebagai penyenang hati (kami), dan jadikanlah kami pemimpin bagi orang-orang yang bertakwa.",
+        author: "QS. Al-Furqan: 74",
+      },
+      {
+        name: "Dialah yang menciptakan kamu dari diri yang satu dan dari padanya Dia menciptakan istrinya, agar dia merasa senang kepadanya.",
+        author: "QS. Al-A'raf: 189",
+      },
+    ],
+  });
+
   // Create Quote
   await prisma.quote.create({
     data: {
