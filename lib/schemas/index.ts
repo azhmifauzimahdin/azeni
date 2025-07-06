@@ -8,3 +8,4 @@ export * as CoupleSchema from "./couple";
 export * as BankAccountSchema from "./bank-account";
 export * as QuoteSchema from "./quote";
 export * as ScheduleSchema from "./schedule";
+export * as StorySchema from "./story";

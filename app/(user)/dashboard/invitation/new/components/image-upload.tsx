@@ -4,6 +4,7 @@
 import { Button } from "@/components/ui/button";
 import Image from "@/components/ui/image";
 import Modal from "@/components/ui/modal";
+import { ImageSchema } from "@/lib/schemas";
 import { ImageService } from "@/lib/services";
 import getCroppedImg from "@/lib/utils/crop-image";
 import extractCloudinaryPublicId from "@/lib/utils/extract-cloudinary-public-id";
@@ -55,6 +56,12 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     setIsOpen(true);
     const file = e.target.files?.[0];
     if (!file) return;
+
+    const result = ImageSchema.imageSchema.safeParse(file);
+    if (!result.success) {
+      toast.error(result.error.errors[0].message);
+      return;
+    }
 
     setFileMimeType(file.type);
 
@@ -118,7 +125,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       );
 
       onChange(uploadRes.secure_url);
-      toast.success("Foto berhasil diupload.");
     } catch (err) {
       toast.error("Terjadi kesalahan saat mengupload foto.");
       console.error(err);

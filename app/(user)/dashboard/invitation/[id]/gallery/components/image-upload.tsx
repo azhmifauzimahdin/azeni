@@ -17,6 +17,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Pagination } from "@/components/ui/pagination";
+import { ImageSchema } from "@/lib/schemas";
 
 function CloseModalButton({ onClick }: { onClick: () => void }) {
   return (
@@ -58,6 +59,12 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
       for (const file of acceptedFiles) {
+        const result = ImageSchema.imageSchema.safeParse(file);
+        if (!result.success) {
+          toast.error(result.error.errors[0].message);
+          continue;
+        }
+
         const key = `${file.name}-${Date.now()}`;
         const previewUrl = URL.createObjectURL(file);
         setUploadingFiles((prev) => [
@@ -235,7 +242,7 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
             />
             <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-200">
               <div
-                className="bg-gradient-to-r from-pink-500 to-purple-500 h-full transition-all duration-300"
+                className="bg-gradient-pink-purple h-full transition-all duration-300"
                 style={{ width: `${file.progress}%` }}
               />
             </div>

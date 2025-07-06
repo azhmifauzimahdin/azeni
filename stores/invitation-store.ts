@@ -1,4 +1,4 @@
-import { BankAccount, Gallery, Invitation, Schedule } from "@/types";
+import { BankAccount, Gallery, Invitation, Schedule, Story } from "@/types";
 import { create } from "zustand";
 
 interface InvitationState {
@@ -43,6 +43,8 @@ interface InvitationState {
     invitationId: string,
     scheduleId: string
   ) => void;
+  addOrUpdateStoryToInvitation: (invitationId: string, story: Story) => void;
+  deleteStoryFromInvitation: (invitationId: string, storyId: string) => void;
   addGalleryToInvitation: (invitationId: string, gallery: Gallery) => void;
   deleteGalleryFromInvitation: (
     invitationId: string,
@@ -293,6 +295,56 @@ const useInvitationStore = create<InvitationState>((set) => ({
         return {
           ...invitation,
           schedules: updatedSchedules,
+        };
+      }),
+    })),
+  addOrUpdateStoryToInvitation: (invitationId, story) =>
+    set((state) => ({
+      invitations: state.invitations.map((invitation) => {
+        if (invitation.id !== invitationId) return invitation;
+
+        const existingStories = invitation.stories ?? [];
+
+        const existingIndex = existingStories.findIndex(
+          (acc) => acc.id === story.id
+        );
+
+        let updatedStories;
+
+        if (existingIndex !== -1) {
+          updatedStories = [...existingStories];
+          updatedStories[existingIndex] = {
+            ...existingStories[existingIndex],
+            ...story,
+          };
+        } else {
+          updatedStories = [...existingStories, story];
+        }
+
+        updatedStories.sort((a, b) => {
+          const dateA = new Date(a.date).getTime();
+          const dateB = new Date(b.date).getTime();
+          return dateA - dateB;
+        });
+
+        return {
+          ...invitation,
+          stories: updatedStories,
+        };
+      }),
+    })),
+
+  deleteStoryFromInvitation: (invitationId, storyId) =>
+    set((state) => ({
+      invitations: state.invitations.map((invitation) => {
+        if (invitation.id !== invitationId) return invitation;
+
+        const updatedStories =
+          invitation.stories?.filter((acc) => acc.id !== storyId) ?? [];
+
+        return {
+          ...invitation,
+          stories: updatedStories,
         };
       }),
     })),

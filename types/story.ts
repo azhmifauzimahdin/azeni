@@ -1,3 +1,10 @@
+export interface StoryRequest {
+  title: string;
+  date: Date;
+  description: string;
+  image: string;
+}
+
 export interface Story {
   id: string;
   invitationId: string;

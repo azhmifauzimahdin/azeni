@@ -39,8 +39,8 @@ export const ScheduleCardSkeleton = () => {
 
 interface ScheduleCardProps {
   data: Schedule;
-  onClick: (sceduleId: string) => void;
-  onDelete?: (sceduleId: string, scheduleName: string) => void;
+  onClick: (scheduleId: string) => void;
+  onDelete?: (scheduleId: string, scheduleName: string) => void;
   isLoadingDelete?: boolean;
 }
 

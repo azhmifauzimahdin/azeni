@@ -3,7 +3,7 @@
 import * as z from "zod";
 
 import { Invitation } from "@/types";
-import { CalendarDays, Pencil, Save } from "lucide-react";
+import { Pencil, Save } from "lucide-react";
 import { useState } from "react";
 import Modal from "@/components/ui/modal";
 import {
@@ -30,9 +30,7 @@ import DeleteConfirmationModal from "@/components/ui/delete-confirmation-modal";
 import { ScheduleCard, ScheduleCardSkeleton } from "./schedule-card";
 import { scheduleSchema } from "@/lib/schemas/schedule";
 import { Pagination } from "@/components/ui/pagination";
-
-const today = new Date();
-today.setHours(0, 0, 0, 0);
+import Image from "@/components/ui/image";
 
 type ScheduleFormValues = z.infer<typeof scheduleSchema>;
 interface ScheduleFormsProps {
@@ -378,7 +376,12 @@ const ScheduleForm: React.FC<ScheduleFormsProps> = ({
             onClick={() => setIsModalOpen(true)}
             className="flex items-center gap-3 bg-green-app-primary text-white rounded-lg shadow p-4 cursor-pointer hover:bg-green-app-secondary max-w-md"
           >
-            <CalendarDays size={32} />
+            <Image
+              src="https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751291124/schedule_mwwixp.png"
+              alt="icon schedule"
+              aspectRatio="aspect-square"
+              className="w-1/12"
+            />
             <span className="font-medium">Tambah Jadwal Acara</span>
           </div>
         )}

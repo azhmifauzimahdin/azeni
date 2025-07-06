@@ -57,7 +57,9 @@ const DateTimeInput = forwardRef<HTMLButtonElement, DateTimeInputProps>(
               disabled={disabled}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
-              {date ? format(date, "yyyy-MM-dd") : <span>Pilih tanggal</span>}
+              <span className="flex items-center h-full">
+                {date ? format(date, "yyyy-MM-dd") : "Pilih tanggal"}
+              </span>
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">

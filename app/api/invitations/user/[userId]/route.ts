@@ -40,7 +40,7 @@ export async function GET(
         couple: true,
         stories: {
           orderBy: {
-            createdAt: "desc",
+            date: "asc",
           },
         },
         galleries: {
