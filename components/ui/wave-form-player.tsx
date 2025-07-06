@@ -30,6 +30,9 @@ export default function WaveformPlayer({
   onSelectSong,
   loading,
 }: Props) {
+  const instanceIdRef = useRef<string>(crypto.randomUUID());
+  const instanceId = instanceIdRef.current;
+
   const { id, name, src, origin } = data;
   const waveformRef = useRef<HTMLDivElement>(null);
   const wavesurfer = useRef<WaveSurfer | null>(null);
@@ -39,22 +42,30 @@ export default function WaveformPlayer({
   const [isLoadingWaveform, setIsLoadingWaveform] = useState(true);
 
   const emitPlayEvent = useCallback(() => {
-    window.dispatchEvent(new CustomEvent("waveform-play", { detail: { id } }));
-  }, [id]);
+    window.dispatchEvent(
+      new CustomEvent("waveform-play", {
+        detail: {
+          id,
+          instanceId: instanceId,
+        },
+      })
+    );
+  }, [id, instanceId]);
 
   const onExternalPlay = useCallback(
     (e: CustomEvent) => {
-      const playingId = e.detail.id;
+      const { id: playingId, instanceId: sourceInstanceId } = e.detail;
+
       if (
-        playingId !== id &&
-        wavesurfer.current &&
-        wavesurfer.current.isPlaying()
+        playingId === id &&
+        sourceInstanceId !== instanceId &&
+        wavesurfer.current?.isPlaying()
       ) {
         wavesurfer.current.pause();
         setIsPlaying(false);
       }
     },
-    [id]
+    [id, instanceId]
   );
 
   const togglePlay = useCallback(() => {

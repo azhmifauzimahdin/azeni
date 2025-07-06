@@ -1,11 +1,15 @@
 import { prisma } from "@/lib/prisma";
-import { ResponseJson } from "@/lib/utils/response-with-wib";
+import {
+  handleError,
+  ResponseJson,
+  unauthorizedError,
+} from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
 
 export async function GET() {
   try {
     const { userId } = await auth();
-    if (!userId) return ResponseJson("Unauthorized", { status: 401 });
+    if (!userId) return unauthorizedError();
 
     const bank = await prisma.bank.findMany({
       where: {
@@ -16,16 +20,14 @@ export async function GET() {
       },
     });
 
-    if (!bank) {
-      return ResponseJson({ message: "Bank tidak ditemukan" }, { status: 404 });
-    }
-
-    return ResponseJson(bank);
-  } catch (error) {
-    console.error("Error getting bank:", error);
     return ResponseJson(
-      { message: "Gagal mengambil data bank" },
-      { status: 500 }
+      {
+        message: "Data bank berhasil diambil",
+        data: bank,
+      },
+      { status: 200 }
     );
+  } catch (error) {
+    return handleError(error, "Gagal mengambil data bank");
   }
 }

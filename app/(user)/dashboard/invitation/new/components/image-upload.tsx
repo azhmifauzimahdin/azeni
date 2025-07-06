@@ -13,6 +13,7 @@ import Cropper from "react-easy-crop";
 import toast from "react-hot-toast";
 
 interface ImageUploadProps {
+  id?: string;
   isLoadingUpload?: boolean;
   isLoadingDelete?: boolean;
   disabled?: boolean;
@@ -24,6 +25,7 @@ interface ImageUploadProps {
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
+  id,
   isLoadingUpload,
   isLoadingDelete,
   disabled,
@@ -43,6 +45,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   const [fileMimeType, setFileMimeType] = useState<string>("image/jpeg");
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const uploadButtonRef = useRef<HTMLButtonElement>(null);
 
   const handleClick = () => {
     if (!isLoadingUpload) fileInputRef.current?.click();
@@ -68,6 +71,13 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     setCroppedAreaPixels(pixels);
   }, []);
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    await uploadCroppedImage();
+  };
+
   const uploadCroppedImage = async () => {
     try {
       setUploading(true);
@@ -82,10 +92,12 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       const timestamp = Math.floor(Date.now() / 1000);
       const folder = path || "default";
 
-      const { signature } = await ImageService.getSignature({
+      const res = await ImageService.getSignature({
         timestamp: timestamp.toString(),
         folder,
       });
+
+      const { signature } = res.data;
 
       const uploadRes = await ImageService.uploadImageToCloudinary(
         {
@@ -137,15 +149,25 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     }
   }, [isOpen]);
 
+  useEffect(() => {
+    if (isOpen && cropperReady) {
+      const timeout = setTimeout(() => {
+        uploadButtonRef.current?.focus();
+      }, 100);
+      return () => clearTimeout(timeout);
+    }
+  }, [isOpen, cropperReady]);
+
   return (
     <>
       <Modal
         title="Upload Foto"
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
+        initialFocusRef={uploadButtonRef}
       >
         {imageSrc && (
-          <>
+          <form onSubmit={handleSubmit}>
             <div className="relative w-full aspect-square bg-gray-200 rounded-sm overflow-hidden">
               <Cropper
                 key={cropperReady ? "ready" : "not-ready"}
@@ -175,36 +197,34 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                 Batal
               </Button>
               <Button
-                onClick={uploadCroppedImage}
                 isLoading={uploading}
+                ref={uploadButtonRef}
                 variant="primary"
-                type="button"
+                type="submit"
               >
                 Upload
               </Button>
             </div>
-          </>
+          </form>
         )}
       </Modal>
 
       <div>
         {value ? (
-          <div className="relative w-[200px] h-[200px] rounded-md overflow-hidden">
-            <div className="z-10 absolute top-1 right-1">
-              <Button
-                onClick={handleRemove}
-                isLoading={isLoadingDelete}
-                disabled={isLoadingUpload || isLoadingDelete || disabled}
-                type="button"
-                isFetching={isFetching}
-                variant="default"
-                size="icon"
-                className="text-destructive bg-transparent shadow-none hover:bg-transparent hover:text-green-app-primary"
-              >
-                <X className="h-5 w-5" />
-                <span className="sr-only">Hapus foto</span>
-              </Button>
-            </div>
+          <div className="relative w-[200px] h-[200px] rounded-md">
+            <Button
+              variant="delete"
+              size="icon"
+              type="button"
+              onClick={handleRemove}
+              isLoading={isLoadingDelete}
+              disabled={isLoadingUpload || isLoadingDelete || disabled}
+              isFetching={isFetching}
+              className="z-10 absolute -top-3 -right-3"
+            >
+              <X className="h-5 w-5" />
+              <span className="sr-only">Hapus foto</span>
+            </Button>
             <Image
               src={
                 value ||
@@ -212,7 +232,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
               }
               alt="Foto"
               aspectRatio="aspect-square"
-              className="rounded-lg mb-1 w-1/3 md:w-full mx-auto"
+              className="rounded-lg mb-1 w-full mx-auto"
               isFetching={isFetching}
             />
           </div>
@@ -224,6 +244,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
               ref={fileInputRef}
               onChange={handleFileChange}
               style={{ display: "none" }}
+              id={id}
             />
 
             <Button

@@ -3,7 +3,7 @@
 
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { ImagePlus, Loader2, X } from "lucide-react";
+import { ImagePlus, X } from "lucide-react";
 import toast from "react-hot-toast";
 import { uploadImageToCloudinary } from "@/lib/services/image";
 import { ImageService } from "@/lib/services";
@@ -16,33 +16,6 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog";
-
-function RemoveImageButton({
-  onClick,
-  loading,
-  className = "",
-}: {
-  onClick: () => void;
-  loading?: boolean;
-  className?: string;
-}) {
-  return (
-    <Button
-      variant="ghost"
-      size="icon"
-      type="button"
-      onClick={onClick}
-      className={`z-50 text-white hover:text-red-500 bg-red-600/80 hover:bg-red-700/80 backdrop-blur-sm p-1 rounded-full shadow ${className}`}
-      disabled={loading}
-    >
-      {loading ? (
-        <Loader2 className="w-4 h-4 animate-spin" />
-      ) : (
-        <X className="w-4 h-4" />
-      )}
-    </Button>
-  );
-}
 
 function CloseModalButton({ onClick }: { onClick: () => void }) {
   return (
@@ -93,12 +66,14 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
 
         try {
           const timestamp = Math.floor(Date.now() / 1000);
-          const { signature } = await ImageService.getSignature({
+          const res = await ImageService.getSignature({
             timestamp: timestamp.toString(),
             folder: path,
           });
 
-          const res = await uploadImageToCloudinary(
+          const { signature } = res.data;
+
+          const uploadRes = await uploadImageToCloudinary(
             {
               file,
               api_key: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY!,
@@ -121,7 +96,7 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
           );
 
           try {
-            await onUploadFinish(res.secure_url);
+            await onUploadFinish(uploadRes.secure_url);
             toast.success("Gambar berhasil disimpan.");
           } catch {
             toast.error("Gambar gagal disimpan.");
@@ -220,11 +195,17 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
                     isFetching={isFetching}
                   />
                 </div>
-                <RemoveImageButton
+                <Button
+                  variant="delete"
+                  size="icon"
+                  type="button"
                   onClick={() => handleRemove(item.id, item.image)}
-                  loading={deletingGalleryId === item.id}
+                  isLoading={deletingGalleryId === item.id}
                   className="absolute -top-3 -right-3"
-                />
+                >
+                  <X className="h-5 w-5" />
+                  <span className="sr-only">Hapus foto</span>
+                </Button>
               </div>
             ))}
 
@@ -264,7 +245,10 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
                 className="max-h-[55vh] md:max-h-[75vh] max-w-full object-contain rounded-md shadow-xl"
               />
 
-              <RemoveImageButton
+              <Button
+                variant="delete"
+                size="icon"
+                type="button"
                 onClick={() => {
                   const current = values[currentIndex];
                   if (current) {
@@ -272,9 +256,12 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
                     setIsModalOpen(false);
                   }
                 }}
-                loading={deletingGalleryId === values[currentIndex]?.id}
+                isLoading={deletingGalleryId === values[currentIndex]?.id}
                 className="absolute top-7 right-8 md:right-12"
-              />
+              >
+                <X className="h-5 w-5" />
+                <span className="sr-only">Hapus foto</span>
+              </Button>
             </div>
 
             <button

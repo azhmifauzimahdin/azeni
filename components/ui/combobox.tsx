@@ -27,6 +27,7 @@ type Option = {
 };
 
 type ComboboxProps = {
+  id?: string;
   options: Option[];
   placeholder?: string;
   value?: string;
@@ -34,10 +35,10 @@ type ComboboxProps = {
   onChange?: (value: string) => void;
 };
 
-// ✅ forwardRef untuk expose ref ke luar (tanpa kasih langsung ke Slot/Button)
 const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
   (
     {
+      id,
       options,
       placeholder = "Pilih...",
       value,
@@ -75,6 +76,7 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
+            id={id}
             ref={internalRef}
             variant="outline"
             role="combobox"

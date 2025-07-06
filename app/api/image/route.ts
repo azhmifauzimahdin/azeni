@@ -1,12 +1,18 @@
 import crypto from "crypto";
 import cloudinary from "@/lib/cloudinary";
-import { ResponseJson } from "@/lib/utils/response-with-wib";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest } from "next/server";
+import {
+  handleError,
+  handleZodError,
+  ResponseJson,
+  unauthorizedError,
+} from "@/lib/utils/response";
+import { ImageSchema } from "@/lib/schemas";
 
 export async function POST(req: Request) {
   const { userId } = await auth();
-  if (!userId) return ResponseJson("Unauthorized", { status: 401 });
+  if (!userId) return unauthorizedError();
 
   const body = await req.json();
   const params = body.paramsToSign;
@@ -21,30 +27,49 @@ export async function POST(req: Request) {
     .update(stringToSign + process.env.CLOUDINARY_API_SECRET!)
     .digest("hex");
 
-  return ResponseJson({ signature });
+  return ResponseJson({
+    message: "Signature berhasil dibuat",
+    data: {
+      signature,
+      stringToSign,
+      timestamp: params.timestamp,
+    },
+  });
 }
 
-export async function DELETE(request: NextRequest) {
+export async function DELETE(req: NextRequest) {
   try {
     const { userId } = await auth();
-    if (!userId) return ResponseJson("Unauthorized", { status: 401 });
+    if (!userId) return unauthorizedError();
 
-    const body = await request.json();
-    const { public_id } = body;
+    const body = await req.json();
+    const parsed = ImageSchema.deleteImageSchema.safeParse(body);
 
-    const errors = [];
-    if (!public_id) {
-      errors.push({ field: "public_id", message: "Public Id harus diisi." });
+    if (!parsed.success) {
+      return handleZodError(parsed.error);
     }
-    if (errors.length > 0) {
-      return ResponseJson({ errors }, { status: 400 });
-    }
+
+    const { public_id } = parsed.data;
 
     const result = await cloudinary.uploader.destroy(public_id);
 
-    return ResponseJson(result, { status: 200 });
+    if (result.result !== "ok") {
+      return ResponseJson(
+        {
+          message: "Gagal menghapus gambar dari Cloudinary",
+          detail: result.result,
+        },
+        { status: 400 }
+      );
+    }
+
+    return ResponseJson({
+      message: "Gambar berhasil dihapus dari Cloudinary",
+      data: {
+        result: result.result,
+      },
+    });
   } catch (error) {
-    console.error("Error deleted image:", error);
-    return ResponseJson({ message: "Gagal hapus gambar." }, { status: 500 });
+    return handleError(error, "Gagal hapus gambar");
   }
 }

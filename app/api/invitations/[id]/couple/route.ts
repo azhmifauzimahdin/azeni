@@ -1,5 +1,12 @@
 import { prisma } from "@/lib/prisma";
-import { ResponseJson } from "@/lib/utils/response-with-wib";
+import { CoupleSchema } from "@/lib/schemas";
+import {
+  forbiddenError,
+  handleError,
+  handleZodError,
+  ResponseJson,
+  unauthorizedError,
+} from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
 
 export async function POST(
@@ -8,9 +15,25 @@ export async function POST(
 ) {
   try {
     const { userId } = await auth();
-    if (!userId) return ResponseJson("Unauthorized", { status: 401 });
+    if (!userId) return unauthorizedError();
 
     const body = await req.json();
+    const parsed = CoupleSchema.createCoupleSchema.safeParse(body);
+
+    if (!parsed.success) {
+      return handleZodError(parsed.error);
+    }
+    if (!params.id) {
+      return ResponseJson(
+        {
+          message: "Validasi gagal",
+          errors: {
+            id: ["ID wajib diisi"],
+          },
+        },
+        { status: 422 }
+      );
+    }
 
     const {
       groomName,
@@ -19,48 +42,7 @@ export async function POST(
       brideName,
       brideFather,
       brideMother,
-    } = body;
-
-    const errors = [];
-    if (!groomName)
-      errors.push({
-        field: "groomName",
-        message: "Nama mempelai pria harus diisi.",
-      });
-    if (!groomFather)
-      errors.push({
-        field: "groomFather",
-        message: "Nama ayah mempelai pria harus diisi.",
-      });
-    if (!groomMother)
-      errors.push({
-        field: "groomMother",
-        message: "Nama ibu mempelai pria harus diisi.",
-      });
-    if (!brideName)
-      errors.push({
-        field: "brideName",
-        message: "Nama mempelai wanita harus diisi.",
-      });
-    if (!brideFather)
-      errors.push({
-        field: "brideFather",
-        message: "Nama ayah mempelai wanita harus diisi.",
-      });
-    if (!brideMother)
-      errors.push({
-        field: "brideMother",
-        message: "Nama ibu mempelai wanita harus diisi.",
-      });
-    if (!params.id)
-      errors.push({
-        field: "invitationId",
-        message: "Invitation ID harus diisi.",
-      });
-
-    if (errors.length > 0) {
-      return ResponseJson({ errors }, { status: 400 });
-    }
+    } = parsed.data;
 
     const invitationByUserId = await prisma.invitation.findFirst({
       where: {
@@ -69,10 +51,13 @@ export async function POST(
       },
     });
 
-    if (!invitationByUserId)
-      return ResponseJson("Unauthorized", { status: 401 });
+    if (!invitationByUserId) return forbiddenError();
 
-    const quote = await prisma.couple.upsert({
+    const existing = await prisma.couple.findUnique({
+      where: { invitationId: params.id },
+    });
+
+    const couple = await prisma.couple.upsert({
       where: {
         invitationId: params.id,
       },
@@ -97,12 +82,18 @@ export async function POST(
       },
     });
 
-    return ResponseJson(quote, { status: 201 });
-  } catch (error) {
-    console.error("Error creating couple:", error);
+    const isCreate = !existing;
+
     return ResponseJson(
-      { message: "Gagal membuat pasangan." },
-      { status: 500 }
+      {
+        message: isCreate
+          ? "Data pasangan berhasil dibuat"
+          : "Data pasangan berhasil diperbarui",
+        data: couple,
+      },
+      { status: isCreate ? 201 : 200 }
     );
+  } catch (error) {
+    return handleError(error, "Gagal membuat atau memperbarui pasangan");
   }
 }

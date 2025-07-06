@@ -1,5 +1,10 @@
 import { prisma } from "@/lib/prisma";
-import { ResponseJson } from "@/lib/utils/response-with-wib";
+import {
+  forbiddenError,
+  handleError,
+  ResponseJson,
+  unauthorizedError,
+} from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest } from "next/server";
 
@@ -9,7 +14,31 @@ export async function DELETE(
 ) {
   try {
     const { userId } = await auth();
-    if (!userId) return ResponseJson("Unauthorized", { status: 401 });
+    if (!userId) return unauthorizedError();
+
+    if (!params.id) {
+      return ResponseJson(
+        {
+          message: "Validasi gagal",
+          errors: {
+            id: ["ID wajib diisi"],
+          },
+        },
+        { status: 400 }
+      );
+    }
+
+    if (!params.quoteId) {
+      return ResponseJson(
+        {
+          message: "Validasi gagal",
+          errors: {
+            quoteId: ["Quote ID wajib diisi"],
+          },
+        },
+        { status: 400 }
+      );
+    }
 
     const InvitaionByUserId = await prisma.invitation.findFirst({
       where: {
@@ -18,8 +47,7 @@ export async function DELETE(
       },
     });
 
-    if (!InvitaionByUserId)
-      return ResponseJson("Unauthorized", { status: 401 });
+    if (!InvitaionByUserId) return forbiddenError();
 
     const quote = await prisma.quote.delete({
       where: {
@@ -27,9 +55,11 @@ export async function DELETE(
       },
     });
 
-    return ResponseJson(quote, { status: 200 });
+    return ResponseJson(
+      { message: "Kutipan berhasil dihapus", data: quote },
+      { status: 200 }
+    );
   } catch (error) {
-    console.error("Error deleting quote:", error);
-    return ResponseJson({ message: "Gagal hapus quote." }, { status: 500 });
+    return handleError(error, "Gagal menghapus kutipan");
   }
 }

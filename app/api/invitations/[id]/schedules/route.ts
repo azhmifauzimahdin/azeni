@@ -1,5 +1,12 @@
 import { prisma } from "@/lib/prisma";
-import { ResponseJson } from "@/lib/utils/response-with-wib";
+import { ScheduleSchema } from "@/lib/schemas";
+import {
+  forbiddenError,
+  handleError,
+  handleZodError,
+  ResponseJson,
+  unauthorizedError,
+} from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
 
 export async function POST(
@@ -8,45 +15,29 @@ export async function POST(
 ) {
   try {
     const { userId } = await auth();
-    if (!userId) return ResponseJson("Unauthorized", { status: 401 });
+    if (!userId) return unauthorizedError();
 
     const body = await req.json();
+    const parsed = ScheduleSchema.createApiScheduleSchema.safeParse(body);
 
-    const { name, startDate, endDate, timezone, location, locationMaps } = body;
-
-    const errors = [];
-    if (!name) errors.push({ field: "name", message: "Quote harus diisi." });
-    if (!startDate)
-      errors.push({
-        field: "startDate",
-        message: "Tanggal mulai harus diisi.",
-      });
-    if (!endDate)
-      errors.push({
-        field: "endDate",
-        message: "Tanggal selesai harus diisi.",
-      });
-    if (!timezone)
-      errors.push({
-        field: "timezone",
-        message: "Zona waktu harus diisi.",
-      });
-    if (!location)
-      errors.push({ field: "location", message: "Lokasi harus diisi." });
-    if (!locationMaps)
-      errors.push({
-        field: "locationMaps",
-        message: "Maps lokasi harus diisi.",
-      });
-    if (!params.id)
-      errors.push({
-        field: "invitationId",
-        message: "Invitation ID harus diisi.",
-      });
-
-    if (errors.length > 0) {
-      return ResponseJson({ errors }, { status: 400 });
+    if (!parsed.success) {
+      return handleZodError(parsed.error);
     }
+
+    if (!params.id) {
+      return ResponseJson(
+        {
+          message: "Validasi gagal",
+          errors: {
+            id: ["ID wajib diisi"],
+          },
+        },
+        { status: 400 }
+      );
+    }
+
+    const { name, startDate, endDate, timezone, location, locationMaps } =
+      parsed.data;
 
     const invitationByUserId = await prisma.invitation.findFirst({
       where: {
@@ -55,8 +46,7 @@ export async function POST(
       },
     });
 
-    if (!invitationByUserId)
-      return ResponseJson("Unauthorized", { status: 401 });
+    if (!invitationByUserId) return forbiddenError();
 
     const scheduleExists = await prisma.schedule.findFirst({
       where: {
@@ -66,9 +56,10 @@ export async function POST(
     });
 
     if (scheduleExists)
-      return ResponseJson("Jadwal acara dengan nama yang sama sudah ada.", {
-        status: 409,
-      });
+      return ResponseJson(
+        { message: "Jadwal acara dengan nama yang sama sudah ada." },
+        { status: 409 }
+      );
 
     const schedule = await prisma.schedule.create({
       data: {
@@ -88,12 +79,14 @@ export async function POST(
       },
     });
 
-    return ResponseJson(schedule, { status: 201 });
-  } catch (error) {
-    console.error("Error creating schedule:", error);
     return ResponseJson(
-      { message: "Gagal membuat jadwal acara." },
-      { status: 500 }
+      {
+        message: "Data jadwal acara berhasil dibuat",
+        data: schedule,
+      },
+      { status: 201 }
     );
+  } catch (error) {
+    return handleError(error, "Gagal membuat jadwal acara");
   }
 }

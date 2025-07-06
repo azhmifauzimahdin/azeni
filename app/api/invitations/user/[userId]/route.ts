@@ -1,5 +1,10 @@
 import { prisma } from "@/lib/prisma";
-import { ResponseJson } from "@/lib/utils/response-with-wib";
+import {
+  forbiddenError,
+  handleError,
+  ResponseJson,
+  unauthorizedError,
+} from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
 
 export async function GET(
@@ -8,13 +13,14 @@ export async function GET(
 ) {
   try {
     const { userId } = await auth();
+    if (!userId) {
+      return unauthorizedError();
+    }
 
     if (userId !== params.userId) {
-      return ResponseJson(
-        { message: "Anda tidak memiliki akses ini" },
-        { status: 403 }
-      );
+      return forbiddenError();
     }
+
     const invitation = await prisma.invitation.findMany({
       where: { userId: params.userId },
       include: {
@@ -61,16 +67,14 @@ export async function GET(
       },
     });
 
-    if (!invitation) {
-      return ResponseJson(
-        { message: "Undangan tidak ditemukan" },
-        { status: 404 }
-      );
-    }
-
-    return ResponseJson(invitation);
+    return ResponseJson(
+      {
+        message: "Data undangan berhasil diambil",
+        data: invitation,
+      },
+      { status: 200 }
+    );
   } catch (error) {
-    console.error(error);
-    return ResponseJson({ message: "Gagal mengambil data" }, { status: 500 });
+    return handleError(error, "Gagal mengambil undangan");
   }
 }

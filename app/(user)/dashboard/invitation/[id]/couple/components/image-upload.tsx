@@ -46,6 +46,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   const [fileMimeType, setFileMimeType] = useState<string>("image/jpeg");
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const uploadButtonRef = useRef<HTMLButtonElement>(null);
 
   const handleClick = () => {
     if (!isLoadingUpload) fileInputRef.current?.click();
@@ -71,6 +72,13 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     setCroppedAreaPixels(pixels);
   }, []);
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    await uploadCroppedImage();
+  };
+
   const uploadCroppedImage = async () => {
     try {
       setUploading(true);
@@ -85,10 +93,12 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       const timestamp = Math.floor(Date.now() / 1000);
       const folder = path || "default";
 
-      const { signature } = await ImageService.getSignature({
+      const res = await ImageService.getSignature({
         timestamp: timestamp.toString(),
         folder,
       });
+
+      const { signature } = res.data;
 
       const uploadRes = await ImageService.uploadImageToCloudinary(
         {
@@ -109,7 +119,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       );
 
       onChange(uploadRes.secure_url);
-      toast.success("Foto berhasil diupload.");
     } catch (err) {
       toast.error("Terjadi kesalahan saat mengupload foto.");
       console.error(err);
@@ -133,12 +142,21 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     if (isOpen) {
       const timeout = setTimeout(() => {
         setCropperReady(true);
-      }, 150);
+      }, 200);
       return () => clearTimeout(timeout);
     } else {
       setCropperReady(false);
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    if (isOpen && cropperReady) {
+      const timeout = setTimeout(() => {
+        uploadButtonRef.current?.focus();
+      }, 100);
+      return () => clearTimeout(timeout);
+    }
+  }, [isOpen, cropperReady]);
 
   return (
     <>
@@ -146,9 +164,10 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         title="Upload Foto"
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
+        initialFocusRef={uploadButtonRef}
       >
         {imageSrc && (
-          <>
+          <form onSubmit={handleSubmit}>
             <div className="relative w-full aspect-square bg-gray-200 rounded-sm overflow-hidden p-3">
               <Cropper
                 key={cropperReady ? "ready" : "not-ready"}
@@ -178,15 +197,15 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                 Batal
               </Button>
               <Button
-                onClick={uploadCroppedImage}
+                ref={uploadButtonRef}
                 isLoading={uploading}
                 variant="primary"
-                type="button"
+                type="submit"
               >
                 Upload
               </Button>
             </div>
-          </>
+          </form>
         )}
       </Modal>
 

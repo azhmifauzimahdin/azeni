@@ -11,7 +11,7 @@ const useThemes = () => {
     setIsFetching(true);
     try {
       const res = await ThemeService.fetchThemes();
-      setThemes(res);
+      setThemes(res.data);
     } catch (error) {
       console.error("Error fetching themes:", error);
     } finally {

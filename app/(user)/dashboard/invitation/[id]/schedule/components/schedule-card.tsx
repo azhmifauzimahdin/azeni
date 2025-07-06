@@ -40,7 +40,7 @@ export const ScheduleCardSkeleton = () => {
 interface ScheduleCardProps {
   data: Schedule;
   onClick: (sceduleId: string) => void;
-  onDelete?: (sceduleId: string) => void;
+  onDelete?: (sceduleId: string, scheduleName: string) => void;
   isLoadingDelete?: boolean;
 }
 
@@ -65,7 +65,7 @@ export const ScheduleCard: React.FC<ScheduleCardProps> = ({
     <div className="relative pl-6" onClick={() => onClick(data.id)}>
       <div className="absolute -left-2 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-green-app-primary border-2 border-white shadow-md z-10" />
 
-      <div className="flex justify-between items-center bg-white rounded-xl border border-gray-200 p-4 shadow-sm transition duration-300">
+      <div className="flex justify-between items-center bg-white cursor-pointer hover:bg-gray-100 rounded-xl border border-gray-200 p-4 shadow-sm transition duration-300">
         <div>
           <h3 className="text-base font-semibold text-slate-800 mb-3">
             {data.name}
@@ -106,7 +106,7 @@ export const ScheduleCard: React.FC<ScheduleCardProps> = ({
               size="icon"
               onClick={(e) => {
                 e.stopPropagation();
-                onDelete(data.id);
+                onDelete(data.id, data.name);
               }}
               className="text-destructive hover:text-red-600"
               isLoading={isLoadingDelete}

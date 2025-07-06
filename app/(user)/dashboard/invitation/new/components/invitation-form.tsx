@@ -14,6 +14,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormLabelText,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -28,15 +29,16 @@ import useInvitationStore from "@/stores/invitation-store";
 import useUserInvitations from "@/hooks/use-user-invitation";
 import axios from "axios";
 import ImageUpload from "./image-upload";
+import { createInvitationSchema } from "@/lib/schemas/invitation";
 
-const formSchema = z.object({
-  groom: z.string().min(1, { message: "Nama panggilan pria wajib diisi" }),
-  bride: z.string().min(1, { message: "Nama panggilan wanita wajib diisi" }),
-  slug: z.string().min(1, { message: "Slug wajib diisi" }),
-  image: z.string().optional(),
+const invitationSchema = createInvitationSchema.pick({
+  groom: true,
+  bride: true,
+  slug: true,
+  image: true,
 });
 
-type InvitationFormValues = z.infer<typeof formSchema>;
+type InvitationFormValues = z.infer<typeof invitationSchema>;
 
 const InvitationForm: React.FC = () => {
   useUserInvitations();
@@ -49,7 +51,7 @@ const InvitationForm: React.FC = () => {
   const [imageDelete, setImageDelete] = useState<string[]>([]);
 
   const form = useForm<InvitationFormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(invitationSchema),
     defaultValues: {
       groom: "",
       bride: "",
@@ -67,12 +69,14 @@ const InvitationForm: React.FC = () => {
         bride: data.bride,
         slug: slug,
         themeId: "",
+        musicId: "",
         image: data.image || "",
         date: new Date(new Date().setMonth(new Date().getMonth() + 1)),
         expiresAt: new Date(new Date().setMonth(new Date().getMonth() + 6)),
       };
       const res = await InvitationService.createInvitation(req);
-      addInvitationAtFirst(res);
+      console.log(res);
+      addInvitationAtFirst(res.data);
       router.push(`/dashboard/invitation`);
       toast.success("Undangan berhasil dibuat.");
     } catch (error: unknown) {
@@ -142,9 +146,12 @@ const InvitationForm: React.FC = () => {
               name="groom"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel required>Pria</FormLabel>
+                  <FormLabel required htmlFor={field.name}>
+                    Pria
+                  </FormLabel>
                   <FormControl>
                     <Input
+                      id={field.name}
                       placeholder="Nama panggilan pria"
                       disabled={loading}
                       {...field}
@@ -159,9 +166,12 @@ const InvitationForm: React.FC = () => {
               name="bride"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel required>Wanita</FormLabel>
+                  <FormLabel required htmlFor={field.name}>
+                    Wanita
+                  </FormLabel>
                   <FormControl>
                     <Input
+                      id={field.name}
                       placeholder="Nama panggilan wanita"
                       disabled={loading}
                       {...field}
@@ -176,9 +186,10 @@ const InvitationForm: React.FC = () => {
               name="image"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Foto</FormLabel>
+                  <FormLabelText>Foto</FormLabelText>
                   <FormControl>
                     <ImageUpload
+                      id={field.name}
                       disabled={loading}
                       onChange={(url) => field.onChange(url)}
                       onRemove={(publicId) => {

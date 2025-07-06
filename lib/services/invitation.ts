@@ -1,9 +1,9 @@
 import { Invitation, InvitationRequest, Music, Theme } from "@/types";
-import httpRequest from "./api";
+import httpRequest, { ApiResponse } from "./api";
 
 export async function createInvitation(
   request: InvitationRequest
-): Promise<Invitation> {
+): Promise<ApiResponse<Invitation>> {
   const res = await httpRequest.post(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/invitations`,
     request
@@ -20,7 +20,7 @@ export async function fetchInvitationByslug(slug: string): Promise<Invitation> {
 
 export async function fetchInvitationByUserId(
   userId: string
-): Promise<Invitation[]> {
+): Promise<ApiResponse<Invitation[]>> {
   const res = await httpRequest.get(`/api/invitations/user/${userId}`);
   return res.data;
 }
@@ -28,7 +28,7 @@ export async function fetchInvitationByUserId(
 export async function updateMusicByUserId(
   id: string,
   request: { musicId: string }
-): Promise<Music> {
+): Promise<ApiResponse<Music>> {
   const res = await httpRequest.patch(`/api/invitations/${id}/music`, request);
   return res.data;
 }
@@ -36,7 +36,7 @@ export async function updateMusicByUserId(
 export async function updateThemeByUserId(
   id: string,
   request: { themeId: string }
-): Promise<Theme> {
+): Promise<ApiResponse<Theme>> {
   const res = await httpRequest.patch(`/api/invitations/${id}/theme`, request);
   return res.data;
 }

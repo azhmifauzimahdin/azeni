@@ -38,11 +38,11 @@ const GalleryForm: React.FC<GalleryFormsProps> = ({
     invitationId: string,
     url: string
   ): Promise<Gallery> => {
-    const newGallery = await GalleryService.createGallery(invitationId, {
+    const res = await GalleryService.createGallery(invitationId, {
       image: url,
     });
-    addGalleryToInvitation(invitationId, newGallery);
-    return newGallery;
+    addGalleryToInvitation(invitationId, res.data);
+    return res.data;
   };
 
   const onRemove = async (galleryId: string) => {

@@ -15,7 +15,7 @@ const useUserBanks = () => {
     setIsFetching(true);
     try {
       const res = await BankService.fetchBanks();
-      setBanks(res);
+      setBanks(res.data);
     } catch (error) {
       console.error("Error fetching banks:", error);
     } finally {

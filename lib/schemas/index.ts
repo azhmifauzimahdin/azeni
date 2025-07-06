@@ -1,0 +1,10 @@
+export * as GallerySchema from "./gallery";
+export * as ImageSchema from "./image";
+export * as MusicSchema from "./music";
+export * as ThemeSchema from "./theme";
+export * as InvitationSchema from "./invitation";
+export * as CommentSchema from "./comment";
+export * as CoupleSchema from "./couple";
+export * as BankAccountSchema from "./bank-account";
+export * as QuoteSchema from "./quote";
+export * as ScheduleSchema from "./schedule";

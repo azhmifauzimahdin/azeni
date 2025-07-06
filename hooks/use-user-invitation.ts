@@ -15,7 +15,7 @@ const useUserInvitations = () => {
     setIsFetching(true);
     try {
       const res = await InvitationService.fetchInvitationByUserId(user.id);
-      setInvitations(res);
+      setInvitations(res.data);
     } catch (error) {
       console.error("Error fetching invitations:", error);
     } finally {

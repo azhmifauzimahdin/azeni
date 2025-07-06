@@ -1,7 +1,14 @@
 import { prisma } from "@/lib/prisma";
-import { ResponseJson } from "@/lib/utils/response-with-wib";
+import {
+  forbiddenError,
+  handleError,
+  handleZodError,
+  ResponseJson,
+  unauthorizedError,
+} from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest } from "next/server";
+import { addressSchema } from "../route";
 
 export async function PUT(
   req: Request,
@@ -9,24 +16,40 @@ export async function PUT(
 ) {
   try {
     const { userId } = await auth();
-    if (!userId) return ResponseJson("Unauthorized", { status: 401 });
+    if (!userId) return unauthorizedError();
 
     const body = await req.json();
+    const parsed = addressSchema.safeParse(body);
 
-    const { address } = body;
-
-    const errors = [];
-    if (!address)
-      errors.push({ field: "address", message: "Alamat harus diisi." });
-    if (!params.id)
-      errors.push({
-        field: "invitationId",
-        message: "Invitation ID harus diisi.",
-      });
-
-    if (errors.length > 0) {
-      return ResponseJson({ errors }, { status: 400 });
+    if (!parsed.success) {
+      return handleZodError(parsed.error);
     }
+
+    if (!params.id) {
+      return ResponseJson(
+        {
+          message: "Validasi gagal",
+          errors: {
+            id: ["ID wajib diisi"],
+          },
+        },
+        { status: 400 }
+      );
+    }
+
+    if (!params.addressId) {
+      return ResponseJson(
+        {
+          message: "Validasi gagal",
+          errors: {
+            addressId: ["Address ID wajib diisi"],
+          },
+        },
+        { status: 400 }
+      );
+    }
+
+    const { address } = parsed.data;
 
     const invitationByUserId = await prisma.invitation.findFirst({
       where: {
@@ -35,8 +58,7 @@ export async function PUT(
       },
     });
 
-    if (!invitationByUserId)
-      return ResponseJson("Unauthorized", { status: 401 });
+    if (!invitationByUserId) return forbiddenError();
 
     const bankAccount = await prisma.bankAccount.update({
       where: {
@@ -50,10 +72,15 @@ export async function PUT(
       },
     });
 
-    return ResponseJson(bankAccount, { status: 201 });
+    return ResponseJson(
+      {
+        message: "Alamat berhasil diperbarui",
+        data: bankAccount,
+      },
+      { status: 200 }
+    );
   } catch (error) {
-    console.error("Error updating  address:", error);
-    return ResponseJson({ message: "Gagal ubah alamat." }, { status: 500 });
+    return handleError(error, "Gagal memperbarui alamat");
   }
 }
 
@@ -63,7 +90,7 @@ export async function DELETE(
 ) {
   try {
     const { userId } = await auth();
-    if (!userId) return ResponseJson("Unauthorized", { status: 401 });
+    if (!userId) return unauthorizedError();
 
     const InvitaionByUserId = await prisma.invitation.findFirst({
       where: {
@@ -72,8 +99,7 @@ export async function DELETE(
       },
     });
 
-    if (!InvitaionByUserId)
-      return ResponseJson("Unauthorized", { status: 401 });
+    if (!InvitaionByUserId) return forbiddenError();
 
     const gift = await prisma.bankAccount.delete({
       where: {
@@ -81,9 +107,14 @@ export async function DELETE(
       },
     });
 
-    return ResponseJson(gift, { status: 200 });
+    return ResponseJson(
+      {
+        message: "Alamat berhasil dihapus",
+        data: gift,
+      },
+      { status: 200 }
+    );
   } catch (error) {
-    console.error("Error deleting address:", error);
-    return ResponseJson({ message: "Gagal hapus alamat." }, { status: 500 });
+    return handleError(error, "Gagal menghapus alamat");
   }
 }

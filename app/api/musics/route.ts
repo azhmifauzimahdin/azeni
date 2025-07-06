@@ -1,17 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import cloudinary from "@/lib/cloudinary";
 import { prisma } from "@/lib/prisma";
-import { ResponseJson } from "@/lib/utils/response-with-wib";
+import { MusicSchema } from "@/lib/schemas";
+import {
+  handleError,
+  handleZodError,
+  ResponseJson,
+  unauthorizedError,
+} from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
 
 export async function POST(req: Request) {
   try {
     const formData = await req.formData();
-    const file = formData.get("file");
+    const rawFile = formData.get("file");
 
-    if (!file || !(file instanceof File)) {
-      return ResponseJson({ error: "No file uploaded" }, { status: 400 });
+    const parsed = MusicSchema.createMusicSchema.safeParse({ rawFile });
+
+    if (!parsed.success) {
+      return handleZodError(parsed.error);
     }
+
+    const { file } = parsed.data as { file: File };
 
     const buffer = Buffer.from(await file.arrayBuffer());
 
@@ -31,16 +41,26 @@ export async function POST(req: Request) {
       uploadStream.end(buffer);
     });
 
-    return ResponseJson({ url: result.secure_url });
+    return ResponseJson(
+      {
+        message: "File musik berhasil diunggah",
+        data: {
+          url: result.secure_url,
+          public_id: result.public_id,
+          resource_type: result.resource_type,
+        },
+      },
+      { status: 201 }
+    );
   } catch (error) {
-    return ResponseJson({ error: (error as Error).message }, { status: 500 });
+    return handleError(error, "Gagal membuat musik");
   }
 }
 
 export async function GET() {
   try {
     const { userId } = await auth();
-    if (!userId) return ResponseJson("Unauthorized", { status: 401 });
+    if (!userId) return unauthorizedError();
 
     const music = await prisma.music.findMany({
       orderBy: {
@@ -48,19 +68,14 @@ export async function GET() {
       },
     });
 
-    if (!music) {
-      return ResponseJson(
-        { message: "Musik tidak ditemukan" },
-        { status: 404 }
-      );
-    }
-
-    return ResponseJson(music);
-  } catch (error) {
-    console.error("Error getting music:", error);
     return ResponseJson(
-      { message: "Gagal mengambil data musik" },
-      { status: 500 }
+      {
+        message: "Data musik berhasil diambil",
+        data: music,
+      },
+      { status: 200 }
     );
+  } catch (error) {
+    return handleError(error, "Gagal mengambil musik");
   }
 }

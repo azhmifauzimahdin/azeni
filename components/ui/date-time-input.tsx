@@ -51,7 +51,7 @@ const DateTimeInput = forwardRef<HTMLButtonElement, DateTimeInputProps>(
           <PopoverTrigger asChild>
             <Button
               ref={ref}
-              id={id ? `${id}-date` : undefined}
+              id={id ? `${id}` : undefined}
               variant="outline"
               className="col-span-2 w-full justify-start text-left text-base font-normal"
               disabled={disabled}

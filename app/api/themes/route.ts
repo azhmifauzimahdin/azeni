@@ -1,39 +1,41 @@
 import { prisma } from "@/lib/prisma";
-import { ResponseJson } from "@/lib/utils/response-with-wib";
+import { ThemeSchema } from "@/lib/schemas";
+import {
+  handleError,
+  handleZodError,
+  ResponseJson,
+  unauthorizedError,
+} from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
 
 export async function POST(req: Request) {
   try {
     const { userId } = await auth();
-    if (!userId) return ResponseJson("Unauthorized", { status: 401 });
+    if (!userId) return unauthorizedError();
 
     const body = await req.json();
+    const parsed = ThemeSchema.createThemeSchema.safeParse(body);
 
-    const { name, thumbnail, colorTag, originalPrice, discount } = body;
-
-    const errors = [];
-    if (!name) errors.push({ field: "name", message: "Nama harus diisi." });
-    if (!thumbnail)
-      errors.push({ field: "thumbnail", message: "Thumbnail harus diisi." });
-    if (!colorTag)
-      errors.push({ field: "name", message: "Tag warna harus diisi." });
-    if (!originalPrice)
-      errors.push({ field: "originalPrice", message: "Harga harus diisi." });
-    if (!discount)
-      errors.push({ field: "discount", message: "Diskon harus diisi." });
-
-    if (errors.length > 0) {
-      return ResponseJson({ errors }, { status: 400 });
+    if (!parsed.success) {
+      return handleZodError(parsed.error);
     }
 
-    const newTheme = await prisma.theme.create({
-      data: { name, thumbnail, colorTag, originalPrice, discount },
+    const { name, thumbnail, colorTag, originalPrice, discount, isPercent } =
+      parsed.data;
+
+    const theme = await prisma.theme.create({
+      data: { name, thumbnail, colorTag, originalPrice, discount, isPercent },
     });
 
-    return ResponseJson(newTheme, { status: 201 });
+    return ResponseJson(
+      {
+        message: "Tema berhasil dibuat",
+        data: theme,
+      },
+      { status: 201 }
+    );
   } catch (error) {
-    console.error("Error creating theme:", error);
-    return ResponseJson({ message: "Gagal membuat tema." }, { status: 500 });
+    return handleError(error, "Gagal membuat tema");
   }
 }
 
@@ -52,10 +54,6 @@ export async function GET() {
         },
       },
     });
-
-    if (!themes || themes.length === 0) {
-      return ResponseJson({ message: "Tema tidak ditemukan" }, { status: 404 });
-    }
 
     const result = themes.map((theme) => {
       const matchingInvitation = theme.invitations.find(
@@ -83,12 +81,14 @@ export async function GET() {
       };
     });
 
-    return ResponseJson(result);
-  } catch (error) {
-    console.error("Error getting themes:", error);
     return ResponseJson(
-      { message: "Gagal mengambil data tema" },
-      { status: 500 }
+      {
+        message: "Data tema berhasil diambil",
+        data: result,
+      },
+      { status: 200 }
     );
+  } catch (error) {
+    return handleError(error, "Gagal mengambil tema");
   }
 }

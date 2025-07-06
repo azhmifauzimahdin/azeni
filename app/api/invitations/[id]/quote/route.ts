@@ -1,5 +1,12 @@
 import { prisma } from "@/lib/prisma";
-import { ResponseJson } from "@/lib/utils/response-with-wib";
+import { QuoteSchema } from "@/lib/schemas";
+import {
+  forbiddenError,
+  handleError,
+  handleZodError,
+  ResponseJson,
+  unauthorizedError,
+} from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
 
 export async function POST(
@@ -8,25 +15,28 @@ export async function POST(
 ) {
   try {
     const { userId } = await auth();
-    if (!userId) return ResponseJson("Unauthorized", { status: 401 });
+    if (!userId) return unauthorizedError();
 
     const body = await req.json();
+    const parsed = QuoteSchema.createQuoteSchema.safeParse(body);
 
-    const { name, author } = body;
-
-    const errors = [];
-    if (!name) errors.push({ field: "name", message: "Quote harus diisi." });
-    if (!author)
-      errors.push({ field: "author", message: "Author harus diisi." });
-    if (!params.id)
-      errors.push({
-        field: "invitationId",
-        message: "Invitation ID harus diisi.",
-      });
-
-    if (errors.length > 0) {
-      return ResponseJson({ errors }, { status: 400 });
+    if (!parsed.success) {
+      return handleZodError(parsed.error);
     }
+
+    if (!params.id) {
+      return ResponseJson(
+        {
+          message: "Validasi gagal",
+          errors: {
+            id: ["ID wajib diisi"],
+          },
+        },
+        { status: 400 }
+      );
+    }
+
+    const { name, author } = parsed.data;
 
     const invitationByUserId = await prisma.invitation.findFirst({
       where: {
@@ -35,8 +45,13 @@ export async function POST(
       },
     });
 
-    if (!invitationByUserId)
-      return ResponseJson("Unauthorized", { status: 401 });
+    if (!invitationByUserId) return forbiddenError();
+
+    const existing = await prisma.quote.findFirst({
+      where: {
+        invitationId: params.id,
+      },
+    });
 
     const quote = await prisma.quote.upsert({
       where: {
@@ -49,9 +64,18 @@ export async function POST(
       create: { name, author, invitationId: params.id },
     });
 
-    return ResponseJson(quote, { status: 201 });
+    const isCreate = !existing;
+
+    return ResponseJson(
+      {
+        message: isCreate
+          ? "Data kutipan berhasil dibuat"
+          : "Data kutipan berhasil diperbarui",
+        data: quote,
+      },
+      { status: isCreate ? 201 : 200 }
+    );
   } catch (error) {
-    console.error("Error creating quote:", error);
-    return ResponseJson({ message: "Gagal membuat quote." }, { status: 500 });
+    return handleError(error, "Gagal membuat atau memperbarui kutipan");
   }
 }

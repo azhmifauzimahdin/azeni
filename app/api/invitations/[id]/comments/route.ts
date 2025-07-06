@@ -1,6 +1,11 @@
 import { prisma } from "@/lib/prisma";
-import { ResponseJson } from "@/lib/utils/response-with-wib";
-import { NextResponse } from "next/server";
+import { CommentSchema } from "@/lib/schemas";
+import {
+  forbiddenError,
+  handleError,
+  handleZodError,
+  ResponseJson,
+} from "@/lib/utils/response";
 
 export async function POST(
   req: Request,
@@ -8,32 +13,39 @@ export async function POST(
 ) {
   try {
     const body = await req.json();
+    const parsed = CommentSchema.createCommentSchema.safeParse(body);
 
-    const { guestId, message } = body;
-
-    const errors = [];
-    if (!guestId)
-      errors.push({ field: "guestId", message: "Guest Id harus diisi." });
-    if (!message)
-      errors.push({ field: "message", message: "Pesan harus diisi." });
-    if (!params.id)
-      errors.push({
-        field: "invitationId",
-        message: "Invitation ID harus diisi.",
-      });
-
-    if (errors.length > 0) {
-      return ResponseJson({ errors }, { status: 400 });
+    if (!parsed.success) {
+      return handleZodError(parsed.error);
     }
+    if (!params.id) {
+      return ResponseJson(
+        {
+          message: "Validasi gagal",
+          errors: {
+            id: ["ID wajib diisi"],
+          },
+        },
+        { status: 400 }
+      );
+    }
+
+    const { guestId, message } = parsed.data;
 
     const invitation = await prisma.invitation.findFirst({
       where: {
         id: params.id,
       },
     });
+
     if (!invitation) {
       return ResponseJson(
-        { message: "Undangan tidak ditemukan" },
+        {
+          message: "Komentar tidak ditemukan",
+          errors: {
+            id: ["ID komentar tidak ditemukan atau tidak valid"],
+          },
+        },
         { status: 404 }
       );
     }
@@ -45,21 +57,23 @@ export async function POST(
       },
     });
 
-    if (!guest) return new NextResponse("Unauthorized", { status: 401 });
+    if (!guest) return forbiddenError();
 
-    const newComment = await prisma.comment.create({
+    const comment = await prisma.comment.create({
       data: { guestId, message, invitationId: params.id },
       include: {
         guest: true,
       },
     });
 
-    return ResponseJson(newComment, { status: 201 });
-  } catch (error) {
-    console.error("Error creating comment:", error);
     return ResponseJson(
-      { message: "Gagal membuat komentar." },
-      { status: 500 }
+      {
+        message: "Komentar berhasil dibuat",
+        data: comment,
+      },
+      { status: 201 }
     );
+  } catch (error) {
+    return handleError(error, "Gagal membuat komentar");
   }
 }

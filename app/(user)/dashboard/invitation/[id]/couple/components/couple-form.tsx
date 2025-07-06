@@ -23,21 +23,9 @@ import useInvitationStore from "@/stores/invitation-store";
 import ImageUpload from "./image-upload";
 import { Input } from "@/components/ui/input";
 import { getFolderFromInvitationId } from "@/lib/utils/get-folder-from-invitation-id";
+import { createCoupleSchema } from "@/lib/schemas/couple";
 
-const formSchema = z.object({
-  groomName: z.string().min(1, { message: "Nama mempelai pria wajib diisi" }),
-  groomFather: z.string().min(1, { message: "Ayah mempelai pria wajib diisi" }),
-  groomMother: z.string().min(1, { message: "Ibu mempelai pria wajib diisi" }),
-  brideName: z.string().min(1, { message: "Nama mempelai wanita wajib diisi" }),
-  brideFather: z
-    .string()
-    .min(1, { message: "Ayah mempelai wanita wajib diisi" }),
-  brideMother: z
-    .string()
-    .min(1, { message: "Ibu mempelai wanita wajib diisi" }),
-});
-
-type CoupleFormValues = z.infer<typeof formSchema>;
+type CoupleFormValues = z.infer<typeof createCoupleSchema>;
 
 interface CoupleFormsProps {
   params: {
@@ -68,7 +56,7 @@ const CoupleForm: React.FC<CoupleFormsProps> = ({
   );
 
   const form = useForm<CoupleFormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(createCoupleSchema),
     defaultValues: initialData?.couple
       ? {
           groomName: initialData.couple.groomName,
@@ -107,7 +95,7 @@ const CoupleForm: React.FC<CoupleFormsProps> = ({
     try {
       setLoading(true);
       const res = await CoupleService.createCouple(params.id, data);
-      updateCoupleInInvitation(params.id, res);
+      updateCoupleInInvitation(params.id, res.data);
       toast.success("Data pengantin berhasil disimpan.");
     } catch (error: unknown) {
       console.log(error);
@@ -149,6 +137,7 @@ const CoupleForm: React.FC<CoupleFormsProps> = ({
         await CoupleService.deleteCoupleImage(params.id, "brideImage");
         updateCoupleImageInInvitation(params.id, "brideImage", "");
       }
+      toast.success("Foto berhasil dihapus.");
     } catch (error) {
       console.log(error);
       handleError(error, "image");
@@ -188,9 +177,12 @@ const CoupleForm: React.FC<CoupleFormsProps> = ({
                 name="groomName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel required>Mempelai Pria</FormLabel>
+                    <FormLabel required htmlFor={field.name}>
+                      Mempelai Pria
+                    </FormLabel>
                     <FormControl>
                       <Input
+                        id={field.name}
                         placeholder="Azhmi Fauzi"
                         disabled={loading}
                         isFetching={isFetching}
@@ -206,9 +198,12 @@ const CoupleForm: React.FC<CoupleFormsProps> = ({
                 name="groomFather"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel required>Ayah</FormLabel>
+                    <FormLabel required htmlFor={field.name}>
+                      Ayah
+                    </FormLabel>
                     <FormControl>
                       <Input
+                        id={field.name}
                         placeholder="H. Ahmad Subekti"
                         disabled={loading}
                         isFetching={isFetching}
@@ -224,9 +219,12 @@ const CoupleForm: React.FC<CoupleFormsProps> = ({
                 name="groomMother"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel required>Ibu</FormLabel>
+                    <FormLabel required htmlFor={field.name}>
+                      Ibu
+                    </FormLabel>
                     <FormControl>
                       <Input
+                        id={field.name}
                         placeholder="Hj. Siti Maemunah"
                         disabled={loading}
                         isFetching={isFetching}
@@ -262,9 +260,12 @@ const CoupleForm: React.FC<CoupleFormsProps> = ({
                 name="brideName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel required>Mempelai Wanita</FormLabel>
+                    <FormLabel required htmlFor={field.name}>
+                      Mempelai Wanita
+                    </FormLabel>
                     <FormControl>
                       <Input
+                        id={field.name}
                         placeholder="Anisa Putri Lestari"
                         disabled={loading}
                         isFetching={isFetching}
@@ -280,9 +281,12 @@ const CoupleForm: React.FC<CoupleFormsProps> = ({
                 name="brideFather"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel required>Ayah</FormLabel>
+                    <FormLabel required htmlFor={field.name}>
+                      Ayah
+                    </FormLabel>
                     <FormControl>
                       <Input
+                        id={field.name}
                         placeholder="Drs. H. Bambang Santosa"
                         disabled={loading}
                         isFetching={isFetching}
@@ -298,9 +302,12 @@ const CoupleForm: React.FC<CoupleFormsProps> = ({
                 name="brideMother"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel required>Ibu</FormLabel>
+                    <FormLabel required htmlFor={field.name}>
+                      Ibu
+                    </FormLabel>
                     <FormControl>
                       <Input
+                        id={field.name}
                         placeholder="Hj. Nur Aini"
                         disabled={loading}
                         isFetching={isFetching}

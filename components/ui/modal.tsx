@@ -16,6 +16,7 @@ interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   children?: React.ReactNode;
+  initialFocusRef?: React.RefObject<HTMLElement>;
 }
 
 const Modal = ({
@@ -24,6 +25,7 @@ const Modal = ({
   isOpen,
   onClose,
   children,
+  initialFocusRef,
 }: ModalProps) => {
   const onChange = (open: boolean) => {
     if (!open) {
@@ -33,7 +35,15 @@ const Modal = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onChange}>
-      <DialogContent className="max-h-[calc(var(--vh)_*_96)] p-0 flex flex-col gap-1 overflow-hidden">
+      <DialogContent
+        onOpenAutoFocus={(e) => {
+          if (initialFocusRef?.current) {
+            e.preventDefault();
+            initialFocusRef.current.focus();
+          }
+        }}
+        className="max-h-[calc(var(--vh)_*_96)] p-0 flex flex-col gap-1 overflow-hidden"
+      >
         <div className="sticky top-0 z-10 flex items-center justify-between bg-white pl-6 pr-3 pt-3">
           <DialogHeader className="flex-1">
             <DialogTitle>{title}</DialogTitle>

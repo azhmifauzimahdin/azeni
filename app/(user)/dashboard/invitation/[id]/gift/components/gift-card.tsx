@@ -6,7 +6,7 @@ import Image from "@/components/ui/image";
 
 type BankAccountCardProps = {
   data: BankAccount;
-  onDelete: (id: string) => void;
+  onDelete: (id: string, name: string) => void;
   onClick?: (id: string) => void;
   isLoadingDelete?: boolean;
 };
@@ -47,7 +47,7 @@ const GiftCard: React.FC<BankAccountCardProps> = ({
         size="icon"
         onClick={(e) => {
           e.stopPropagation();
-          onDelete(data.id);
+          onDelete(data.id, data.name);
         }}
         className="text-destructive hover:text-destructive"
         isLoading={isLoadingDelete}

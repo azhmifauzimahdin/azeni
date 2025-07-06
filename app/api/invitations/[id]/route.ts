@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { ResponseJson } from "@/lib/utils/response-with-wib";
+import { handleError, ResponseJson } from "@/lib/utils/response";
 
 export async function GET(_: Request, { params }: { params: { id: string } }) {
   try {
@@ -103,9 +103,14 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
       );
     }
 
-    return ResponseJson(invitation);
+    return ResponseJson(
+      {
+        message: "Data undangan berhasil diambil",
+        data: invitation,
+      },
+      { status: 200 }
+    );
   } catch (error) {
-    console.error(error);
-    return ResponseJson({ message: "Gagal mengambil data" }, { status: 500 });
+    return handleError(error, "Gagal mengambil undangan");
   }
 }

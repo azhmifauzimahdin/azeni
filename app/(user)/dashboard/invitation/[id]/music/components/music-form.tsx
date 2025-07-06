@@ -41,7 +41,7 @@ const MusicForm: React.FC<MusicFormsProps> = ({
       const res = await InvitationService.updateMusicByUserId(params.id, {
         musicId,
       });
-      updateMusicInInvitation(params.id, res);
+      updateMusicInInvitation(params.id, res.data);
       toast.success("Musik berhasil dipilih.");
     } catch (error: unknown) {
       handleError(error, "music");
@@ -88,6 +88,7 @@ const MusicForm: React.FC<MusicFormsProps> = ({
       <h2 className="font-medium text-lg mb-2">Pilih Dari Daftar Musik</h2>
 
       <Input
+        id="search"
         placeholder="Cari judul musik..."
         value={searchTerm}
         type="search"

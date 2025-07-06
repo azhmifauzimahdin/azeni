@@ -1,6 +1,17 @@
 import { prisma } from "@/lib/prisma";
-import { ResponseJson } from "@/lib/utils/response-with-wib";
+import {
+  forbiddenError,
+  handleError,
+  handleZodError,
+  ResponseJson,
+  unauthorizedError,
+} from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
+import { z } from "zod";
+
+export const themeSchema = z.object({
+  themeId: z.string().min(1, { message: "Tema undangan wajib dipilih" }),
+});
 
 export async function PATCH(
   req: Request,
@@ -8,24 +19,28 @@ export async function PATCH(
 ) {
   try {
     const { userId } = await auth();
-    if (!userId) return ResponseJson("Unauthorized", { status: 401 });
+    if (!userId) return unauthorizedError();
 
     const body = await req.json();
+    const parsed = themeSchema.safeParse(body);
 
-    const { themeId } = body;
-
-    const errors = [];
-    if (!themeId)
-      errors.push({ field: "themeId", message: "Tema ID harus diisi." });
-    if (!params.id)
-      errors.push({
-        field: "invitationId",
-        message: "Invitation ID harus diisi.",
-      });
-
-    if (errors.length > 0) {
-      return ResponseJson({ errors }, { status: 400 });
+    if (!parsed.success) {
+      return handleZodError(parsed.error);
     }
+
+    if (!params.id) {
+      return ResponseJson(
+        {
+          message: "Validasi gagal",
+          errors: {
+            id: ["ID wajib diisi"],
+          },
+        },
+        { status: 400 }
+      );
+    }
+
+    const { themeId } = parsed.data;
 
     const invitationByUserId = await prisma.invitation.findFirst({
       where: {
@@ -34,8 +49,7 @@ export async function PATCH(
       },
     });
 
-    if (!invitationByUserId)
-      return ResponseJson("Unauthorized", { status: 401 });
+    if (!invitationByUserId) return forbiddenError();
 
     await prisma.invitation.update({
       where: {
@@ -52,9 +66,8 @@ export async function PATCH(
       },
     });
 
-    return ResponseJson(theme, { status: 201 });
+    return ResponseJson({ message: "Tema berhasil diperbarui", data: theme });
   } catch (error) {
-    console.error("Error update themeId:", error);
-    return ResponseJson({ message: "Gagal update tema." }, { status: 500 });
+    return handleError(error, "Gagal memperbarui tema");
   }
 }

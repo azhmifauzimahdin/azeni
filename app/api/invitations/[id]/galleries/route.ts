@@ -1,19 +1,16 @@
 import cloudinary from "@/lib/cloudinary";
 import { prisma } from "@/lib/prisma";
+import { GallerySchema } from "@/lib/schemas";
 import extractCloudinaryPublicId from "@/lib/utils/extract-cloudinary-public-id";
-import { ResponseJson } from "@/lib/utils/response-with-wib";
-import { unauthorizedError } from "@/lib/utils/unauthorized-error";
+import {
+  forbiddenError,
+  handleError,
+  handleZodError,
+  ResponseJson,
+  unauthorizedError,
+} from "@/lib/utils/response";
 import { validationError } from "@/lib/utils/validation-error";
 import { auth } from "@clerk/nextjs/server";
-import { z } from "zod";
-
-const bodySchema = z.object({
-  image: z
-    .string({ required_error: "URL gambar wajib diisi" })
-    .url("URL gambar tidak valid"),
-
-  description: z.string().optional().default(""),
-});
 
 export async function POST(
   req: Request,
@@ -25,22 +22,16 @@ export async function POST(
   }
 
   if (!params.id || params.id.trim() === "") {
-    return ResponseJson(
-      validationError({
-        invitationId: ["ID undangan wajib diisi"],
-      }),
-      { status: 422 }
-    );
+    return validationError({
+      invitationId: ["ID undangan wajib diisi"],
+    });
   }
 
   const body = await req.json();
-  const parsed = bodySchema.safeParse(body);
+  const parsed = GallerySchema.createGallerySchema.safeParse(body);
 
   if (!parsed.success) {
-    return ResponseJson(
-      { message: "Validasi gagal", errors: parsed.error.flatten() },
-      { status: 422 }
-    );
+    return handleZodError(parsed.error);
   }
 
   const { image, description } = parsed.data;
@@ -53,7 +44,7 @@ export async function POST(
       },
     });
 
-    if (!InvitaionByUserId) return unauthorizedError();
+    if (!InvitaionByUserId) return forbiddenError();
 
     const gallery = await prisma.gallery.create({
       data: {
@@ -63,10 +54,14 @@ export async function POST(
       },
     });
 
-    return ResponseJson(gallery);
+    return ResponseJson(
+      {
+        message: "Gallery berhasil dibuat",
+        data: gallery,
+      },
+      { status: 201 }
+    );
   } catch (error) {
-    console.error("Error creating gallery item:", error);
-
     const publicId = extractCloudinaryPublicId(image);
     if (publicId) {
       try {
@@ -77,6 +72,6 @@ export async function POST(
       }
     }
 
-    return ResponseJson("Gagal membuat item galeri", { status: 500 });
+    return handleError(error, "Gagal membuat galeri");
   }
 }

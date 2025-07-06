@@ -14,6 +14,7 @@ export interface InvitationRequest {
   groom: string;
   bride: string;
   slug: string;
+  musicId: string;
   themeId: string;
   image: string;
   date: Date;

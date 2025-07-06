@@ -1,10 +1,10 @@
 import { Quote, QuoteRequest } from "@/types";
-import httpRequest from "./api";
+import httpRequest, { ApiResponse } from "./api";
 
 export async function createQuote(
   invitationId: string,
   request: QuoteRequest
-): Promise<Quote> {
+): Promise<ApiResponse<Quote>> {
   const res = await httpRequest.post(
     `/api/invitations/${invitationId}/quote`,
     request
@@ -16,7 +16,7 @@ export async function createQuote(
 export async function deleteQuote(
   invitationId: string,
   quoteId: string
-): Promise<Quote> {
+): Promise<ApiResponse<Quote>> {
   const res = await httpRequest.delete(
     `/api/invitations/${invitationId}/quote/${quoteId}`
   );

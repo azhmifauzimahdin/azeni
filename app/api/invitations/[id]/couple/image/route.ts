@@ -1,8 +1,29 @@
 import cloudinary from "@/lib/cloudinary";
 import { prisma } from "@/lib/prisma";
 import extractCloudinaryPublicId from "@/lib/utils/extract-cloudinary-public-id";
-import { ResponseJson } from "@/lib/utils/response-with-wib";
+import {
+  forbiddenError,
+  handleError,
+  handleZodError,
+  ResponseJson,
+  unauthorizedError,
+} from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
+import { z } from "zod";
+
+const imageFieldSchema = z.object({
+  field: z.enum(["groomImage", "brideImage"], {
+    required_error: "Field gambar wajib diisi",
+    invalid_type_error: "Field gambar harus berupa string tertentu",
+  }),
+
+  url: z
+    .string({
+      required_error: "URL gambar wajib diisi",
+      invalid_type_error: "URL gambar harus berupa teks",
+    })
+    .url({ message: "URL gambar harus berupa link yang valid" }),
+});
 
 export async function POST(
   req: Request,
@@ -10,41 +31,34 @@ export async function POST(
 ) {
   try {
     const { userId } = await auth();
-    if (!userId) return ResponseJson("Unauthorized", { status: 401 });
+    if (!userId) return unauthorizedError();
 
     const body = await req.json();
-    const { field, url } = body;
-    const errors = [];
+    const parsed = imageFieldSchema.safeParse(body);
 
-    const allowedFields = ["groomImage", "brideImage"];
-    if (!field)
-      errors.push({
-        field: "field",
-        message: "Kolom harus diisi.",
-      });
-    if (!url)
-      errors.push({
-        field: "url",
-        message: "Url harus diisi.",
-      });
-    if (!allowedFields.includes(field)) {
-      errors.push({
-        field: "field",
-        message: "Kolom tidak sesuai.",
-      });
+    if (!parsed.success) {
+      return handleZodError(parsed.error);
+    }
+    if (!params.id) {
+      return ResponseJson(
+        {
+          message: "Validasi gagal",
+          errors: {
+            id: ["ID wajib diisi"],
+          },
+        },
+        { status: 400 }
+      );
     }
 
-    if (errors.length > 0) {
-      return ResponseJson({ errors }, { status: 400 });
-    }
+    const { field, url } = parsed.data;
 
     const invitationByUserId = await prisma.invitation.findFirst({
       where: { id: params.id, userId },
       include: { couple: true },
     });
 
-    if (!invitationByUserId)
-      return ResponseJson("Unauthorized", { status: 401 });
+    if (!invitationByUserId) return forbiddenError();
 
     type CoupleImageField = "groomImage" | "brideImage";
     const existingImage =
@@ -73,12 +87,19 @@ export async function POST(
       },
     });
 
-    return ResponseJson(updatedCouple, { status: 200 });
-  } catch (error) {
-    console.error("Error updating couple image:", error);
+    const isCreate =
+      updatedCouple.groomName === "" && updatedCouple.brideName === "";
+
     return ResponseJson(
-      { message: "Gagal update foto pengantin." },
-      { status: 500 }
+      {
+        message: isCreate
+          ? "Gambar pasangan berhasil dibuat"
+          : "Gambar pasangan berhasil diperbarui",
+        data: updatedCouple,
+      },
+      { status: isCreate ? 201 : 200 }
     );
+  } catch (error) {
+    return handleError(error, "Gagal membuat atau memperbarui gambar pasangan");
   }
 }

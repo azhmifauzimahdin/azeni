@@ -28,28 +28,12 @@ import useInvitationStore from "@/stores/invitation-store";
 import Combobox from "@/components/ui/combobox";
 import DeleteConfirmationModal from "@/components/ui/delete-confirmation-modal";
 import { ScheduleCard, ScheduleCardSkeleton } from "./schedule-card";
+import { scheduleSchema } from "@/lib/schemas/schedule";
 
 const today = new Date();
 today.setHours(0, 0, 0, 0);
-const formSchema = z
-  .object({
-    name: z.string().min(1, { message: "Nama Acara wajib dipilih" }),
-    startDate: z.date().refine((date) => date >= today, {
-      message: "Tanggal harus hari ini atau lebih",
-    }),
-    endDate: z.date().refine((date) => date >= today, {
-      message: "Tanggal harus hari ini atau lebih",
-    }),
-    timezone: z.string().min(1, { message: "Zona waktu wajib diisi" }),
-    location: z.string().min(1, { message: "Lokasi wajib diisi" }),
-    locationMaps: z.string().min(1, { message: "Maps wajib diisi" }),
-  })
-  .refine((data) => data.endDate > data.startDate, {
-    message: "Tanggal selesai harus setelah atau sama dengan tanggal mulai",
-    path: ["endDate"],
-  });
 
-type ScheduleFormValues = z.infer<typeof formSchema>;
+type ScheduleFormValues = z.infer<typeof scheduleSchema>;
 interface ScheduleFormsProps {
   params: {
     id: string;
@@ -72,6 +56,9 @@ const ScheduleForm: React.FC<ScheduleFormsProps> = ({
   const [deletingScheduleId, setDeletingScheduleId] = useState<string | null>(
     null
   );
+  const [deletingScheduleName, setDeletingScheduleName] = useState<
+    string | null
+  >(null);
 
   const addOrUpdateScheduleToInvitation = useInvitationStore(
     (state) => state.addOrUpdateScheduleToInvitation
@@ -81,11 +68,11 @@ const ScheduleForm: React.FC<ScheduleFormsProps> = ({
   );
 
   const form = useForm<ScheduleFormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(scheduleSchema),
     defaultValues: {
       name: "",
       startDate: new Date(),
-      endDate: new Date(new Date().getTime() + 1 * 60 * 60 * 1000),
+      endDate: new Date(Date.now() + 60 * 60 * 1000),
       timezone: "",
       location: "",
       locationMaps: "",
@@ -103,7 +90,7 @@ const ScheduleForm: React.FC<ScheduleFormsProps> = ({
           data
         );
       else res = await ScheduleService.createSchedule(params.id, data);
-      addOrUpdateScheduleToInvitation(params.id, res);
+      addOrUpdateScheduleToInvitation(params.id, res.data);
       toast.success("Jadwal acara berhasil disimpan.");
       setIsModalOpen(false);
       form.reset({
@@ -118,7 +105,7 @@ const ScheduleForm: React.FC<ScheduleFormsProps> = ({
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 409) {
-          toast.error(error.response.data);
+          toast.error(error.response.data.message);
         } else {
           handleError(error, "schedule");
         }
@@ -154,6 +141,7 @@ const ScheduleForm: React.FC<ScheduleFormsProps> = ({
     } finally {
       setLoading(false);
       setDeletingScheduleId(null);
+      setDeletingScheduleName(null);
     }
   };
 
@@ -184,9 +172,12 @@ const ScheduleForm: React.FC<ScheduleFormsProps> = ({
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel required>Nama Acara</FormLabel>
+                  <FormLabel required htmlFor={field.name}>
+                    Nama Acara
+                  </FormLabel>
                   <FormControl>
                     <CreatableCombobox
+                      id={field.name}
                       options={[
                         {
                           value: "marriage",
@@ -256,6 +247,7 @@ const ScheduleForm: React.FC<ScheduleFormsProps> = ({
                   </FormLabel>
                   <FormControl>
                     <Combobox
+                      id={field.name}
                       options={[
                         {
                           value: "WIT",
@@ -347,10 +339,11 @@ const ScheduleForm: React.FC<ScheduleFormsProps> = ({
         </Form>
       </Modal>
       <DeleteConfirmationModal
-        description="jadwal acara"
+        description={`jadwal acara ${deletingScheduleName}`}
         isOpen={isModalDeleteOpen}
         onOpenChange={() => {
           setDeletingScheduleId(null);
+          setDeletingScheduleName(null);
           setIsModalDeleteOpen(false);
         }}
         onConfirm={onDelete}
@@ -393,8 +386,9 @@ const ScheduleForm: React.FC<ScheduleFormsProps> = ({
                   key={schedule.id}
                   data={schedule}
                   onClick={(id: string) => onOpenModalEdit(id)}
-                  onDelete={(id: string) => {
+                  onDelete={(id: string, name: string) => {
                     setDeletingScheduleId(id);
+                    setDeletingScheduleName(name);
                     setIsModalDeleteOpen(true);
                   }}
                   isLoadingDelete={deletingScheduleId === schedule.id}

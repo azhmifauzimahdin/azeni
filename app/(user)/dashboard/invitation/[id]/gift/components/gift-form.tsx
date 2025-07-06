@@ -29,23 +29,20 @@ import Image from "@/components/ui/image";
 import { Input } from "@/components/ui/input";
 import GiftCard from "./gift-card";
 import DeleteConfirmationModal from "@/components/ui/delete-confirmation-modal";
+import { createBankAccountSchema } from "@/lib/schemas/bank-account";
 
 const formAddressSchema = z.object({
-  address: z.string().min(1, { message: "Alamat wajib diisi" }),
+  address: z
+    .string({
+      required_error: "Alamat wajib diisi",
+      invalid_type_error: "Alamat harus berupa string",
+    })
+    .min(1, { message: "Alamat tidak boleh kosong" }),
 });
 
 type GiftFormAddressValues = z.infer<typeof formAddressSchema>;
 
-const formBankSchema = z.object({
-  bankId: z.string().min(1, { message: "Bank wajib dipilih" }),
-  accountNumber: z
-    .string()
-    .min(1, { message: "Nomor rekening wajib diisi" })
-    .regex(/^\d+$/, { message: "Nomor rekening harus berupa angka" }),
-  name: z.string().min(1, { message: "Nama wajib dipilih" }),
-});
-
-type GiftFormBankValues = z.infer<typeof formBankSchema>;
+type GiftFormBankValues = z.infer<typeof createBankAccountSchema>;
 
 interface GiftFormsProps {
   params: {
@@ -103,6 +100,7 @@ const GiftForm: React.FC<GiftFormsProps> = ({
   const [loadingSubmitBank, setLoadingSubmitBank] = useState(false);
   const [loadingDeleteBank, setLoadingDeleteBank] = useState(false);
   const [deletingBankId, setDeletingBankId] = useState<string | null>(null);
+  const [deletingBankName, setDeletingBankName] = useState<string | null>(null);
   const [updatingBankId, setUpdatingBankId] = useState<string | null>(null);
   const [isModalDeleteBankOpen, setIsModalDeleteBankOpen] = useState(false);
   const [isModalDeleteAddressOpen, setIsModalDeleteAddressOpen] =
@@ -123,7 +121,7 @@ const GiftForm: React.FC<GiftFormsProps> = ({
   });
 
   const formbank = useForm<GiftFormBankValues>({
-    resolver: zodResolver(formBankSchema),
+    resolver: zodResolver(createBankAccountSchema),
     defaultValues: {
       bankId: "",
     },
@@ -145,7 +143,7 @@ const GiftForm: React.FC<GiftFormsProps> = ({
         res = await GiftService.updateAddress(params.id, firstGift.id, data);
       else res = await GiftService.createAddress(params.id, data);
 
-      addOrUpdateBankAccountToInvitation(params.id, res);
+      addOrUpdateBankAccountToInvitation(params.id, res.data);
       toast.success("Alamat berhasil disimpan.");
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
@@ -166,7 +164,7 @@ const GiftForm: React.FC<GiftFormsProps> = ({
       if (updatingBankId)
         res = await GiftService.updateBank(params.id, updatingBankId, data);
       else res = await GiftService.createBank(params.id, data);
-      addOrUpdateBankAccountToInvitation(params.id, res);
+      addOrUpdateBankAccountToInvitation(params.id, res.data);
       toast.success("Rekening berhasil disimpan.");
       setIsOpen(false);
       formbank.reset({
@@ -224,6 +222,7 @@ const GiftForm: React.FC<GiftFormsProps> = ({
       setLoadingDeleteAddress(false);
       setDeletingAddressId(null);
       setDeletingBankId(null);
+      setDeletingBankName(null);
     }
   };
 
@@ -254,9 +253,12 @@ const GiftForm: React.FC<GiftFormsProps> = ({
               name="bankId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel required>Bank</FormLabel>
+                  <FormLabel htmlFor={field.name} required>
+                    Bank
+                  </FormLabel>
                   <FormControl>
                     <Combobox
+                      id={field.name}
                       options={bankOptions}
                       placeholder="bank"
                       disabled={loadingSubmitBank}
@@ -333,10 +335,15 @@ const GiftForm: React.FC<GiftFormsProps> = ({
         </Form>
       </Modal>
       <DeleteConfirmationModal
-        description={isModalDeleteBankOpen ? "nomor rekening" : "alamat"}
+        description={
+          isModalDeleteBankOpen
+            ? `nomor rekening a.n ${deletingBankName}`
+            : "alamat"
+        }
         isOpen={isModalDeleteBankOpen || isModalDeleteAddressOpen}
         onOpenChange={() => {
           setDeletingBankId(null);
+          setDeletingBankName(null);
           setIsModalDeleteBankOpen(false);
           setDeletingAddressId(null);
           setIsModalDeleteAddressOpen(false);
@@ -391,8 +398,9 @@ const GiftForm: React.FC<GiftFormsProps> = ({
                       key={bank.id}
                       data={bank}
                       onClick={(id) => handleOpenModalEditBank(id)}
-                      onDelete={(id: string) => {
+                      onDelete={(id: string, name: string) => {
                         setDeletingBankId(id);
+                        setDeletingBankName(name);
                         setIsModalDeleteBankOpen(true);
                       }}
                       isLoadingDelete={deletingBankId === bank.id}

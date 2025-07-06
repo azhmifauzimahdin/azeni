@@ -1,7 +1,7 @@
 import { Theme } from "@/types";
-import httpRequest from "./api";
+import httpRequest, { ApiResponse } from "./api";
 
-export async function fetchThemes(): Promise<Theme[]> {
+export async function fetchThemes(): Promise<ApiResponse<Theme[]>> {
   const res = await httpRequest.get("/api/themes");
   return res.data;
 }

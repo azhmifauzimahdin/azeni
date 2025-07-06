@@ -1,6 +1,23 @@
 import { prisma } from "@/lib/prisma";
-import { ResponseJson } from "@/lib/utils/response-with-wib";
+import {
+  forbiddenError,
+  handleError,
+  handleZodError,
+  ResponseJson,
+  unauthorizedError,
+} from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
+import { z } from "zod";
+
+export const addressSchema = z.object({
+  address: z
+    .string({
+      required_error: "Alamat wajib diisi",
+      invalid_type_error: "Alamat harus berupa teks",
+    })
+    .min(5, { message: "Alamat terlalu pendek, minimal 5 karakter" })
+    .max(255, { message: "Alamat terlalu panjang, maksimal 255 karakter" }),
+});
 
 export async function POST(
   req: Request,
@@ -8,24 +25,28 @@ export async function POST(
 ) {
   try {
     const { userId } = await auth();
-    if (!userId) return ResponseJson("Unauthorized", { status: 401 });
+    if (!userId) return unauthorizedError();
 
     const body = await req.json();
+    const parsed = addressSchema.safeParse(body);
 
-    const { address } = body;
-
-    const errors = [];
-    if (!address)
-      errors.push({ field: "address", message: "Alamat harus diisi." });
-    if (!params.id)
-      errors.push({
-        field: "invitationId",
-        message: "Invitation ID harus diisi.",
-      });
-
-    if (errors.length > 0) {
-      return ResponseJson({ errors }, { status: 400 });
+    if (!parsed.success) {
+      return handleZodError(parsed.error);
     }
+
+    if (!params.id) {
+      return ResponseJson(
+        {
+          message: "Validasi gagal",
+          errors: {
+            id: ["ID wajib diisi"],
+          },
+        },
+        { status: 400 }
+      );
+    }
+
+    const { address } = parsed.data;
 
     const invitationByUserId = await prisma.invitation.findFirst({
       where: {
@@ -34,8 +55,7 @@ export async function POST(
       },
     });
 
-    if (!invitationByUserId)
-      return ResponseJson("Unauthorized", { status: 401 });
+    if (!invitationByUserId) return forbiddenError();
 
     const gift = await prisma.bankAccount.findFirst({
       where: {
@@ -48,7 +68,12 @@ export async function POST(
 
     if (gift) {
       return ResponseJson(
-        { message: "Gagal membuat alamat." },
+        {
+          message: "Gagal membuat alamat.",
+          errors: {
+            address: ["Alamat kado sudah tersedia."],
+          },
+        },
         { status: 409 }
       );
     }
@@ -61,7 +86,12 @@ export async function POST(
 
     if (!bank) {
       return ResponseJson(
-        { message: "Kado ID tidak ditemukan." },
+        {
+          message: "Bank tidak ditemukan",
+          errors: {
+            bank: ["Bank dengan ID atau nama tersebut tidak tersedia"],
+          },
+        },
         { status: 404 }
       );
     }
@@ -78,9 +108,14 @@ export async function POST(
       },
     });
 
-    return ResponseJson(bankAccount, { status: 201 });
+    return ResponseJson(
+      {
+        message: "Alamat berhasil dibuat",
+        data: bankAccount,
+      },
+      { status: 201 }
+    );
   } catch (error) {
-    console.error("Error creating address:", error);
-    return ResponseJson({ message: "Gagal membuat alamat." }, { status: 500 });
+    return handleError(error, "Gagal membuat alamat");
   }
 }

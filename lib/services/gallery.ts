@@ -1,4 +1,5 @@
-import httpRequest from "./api";
+import { Gallery } from "@/types";
+import httpRequest, { ApiResponse } from "./api";
 
 export async function createGallery(
   invitationId: string,
@@ -6,7 +7,7 @@ export async function createGallery(
     image: string;
     description?: string;
   }
-) {
+): Promise<ApiResponse<Gallery>> {
   const res = await httpRequest.post(
     `/api/invitations/${invitationId}/galleries`,
     request
@@ -14,7 +15,10 @@ export async function createGallery(
   return res.data;
 }
 
-export async function deleteGallery(invitationId: string, galleryId: string) {
+export async function deleteGallery(
+  invitationId: string,
+  galleryId: string
+): Promise<ApiResponse<Gallery>> {
   const res = await httpRequest.delete(
     `/api/invitations/${invitationId}/galleries/${galleryId}`
   );

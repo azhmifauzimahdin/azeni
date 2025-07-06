@@ -35,7 +35,7 @@ const ThemeContent: React.FC<ThemeContentProps> = ({ params }) => {
       const res = await InvitationService.updateThemeByUserId(params.id, {
         themeId,
       });
-      updateThemeInInvitation(params.id, res);
+      updateThemeInInvitation(params.id, res.data);
       toast.success("Tema berhasil diaktifkan.");
     } catch (error: unknown) {
       handleError(error, "theme");
@@ -94,7 +94,7 @@ const ThemeContent: React.FC<ThemeContentProps> = ({ params }) => {
         <h2 className="font-medium text-lg mb-2">Pilih Tema</h2>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
           {isFetching ? (
-            [...Array(4)].map((_, i) => (
+            [...Array(5)].map((_, i) => (
               <div
                 key={i}
                 className="relative bg-white rounded-lg shadow-md overflow-hidden animate-pulse"

@@ -1,8 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosProgressEvent } from "axios";
-import httpRequest from "./api";
+import httpRequest, { ApiResponse } from "./api";
 
-export async function deleteImageByPublicId(public_id: string) {
+export async function deleteImageByPublicId(public_id: string): Promise<
+  ApiResponse<{
+    result: string;
+  }>
+> {
   const res = await httpRequest.delete(`/api/image/`, {
     data: { public_id: public_id },
   });
@@ -12,7 +16,13 @@ export async function deleteImageByPublicId(public_id: string) {
 export async function getSignature(paramsToSign: {
   timestamp: string;
   folder: string;
-}) {
+}): Promise<
+  ApiResponse<{
+    signature: string;
+    stringToSign: string;
+    timestamp: number;
+  }>
+> {
   const res = await httpRequest.post("/api/image", {
     paramsToSign,
   });

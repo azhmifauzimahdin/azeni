@@ -113,6 +113,32 @@ const FormLabel = React.forwardRef<
 
 FormLabel.displayName = "FormLabel";
 
+const FormLabelText = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement> & {
+    required?: boolean;
+  }
+>(({ className, required = false, children, ...props }, ref) => {
+  const { error } = useFormField();
+
+  return (
+    <div
+      ref={ref}
+      className={cn(
+        "text-base font-medium",
+        error && "text-destructive",
+        className
+      )}
+      {...props}
+    >
+      {children}
+      {required && <span className="text-red-500 ml-1">*</span>}
+    </div>
+  );
+});
+
+FormLabelText.displayName = "FormLabelText";
+
 const FormControl = React.forwardRef<
   React.ElementRef<typeof Slot>,
   React.ComponentPropsWithoutRef<typeof Slot>
@@ -182,6 +208,7 @@ export {
   Form,
   FormItem,
   FormLabel,
+  FormLabelText,
   FormControl,
   FormDescription,
   FormMessage,

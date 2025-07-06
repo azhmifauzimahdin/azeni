@@ -1,31 +1,50 @@
 import { prisma } from "@/lib/prisma";
-import { ResponseJson } from "@/lib/utils/response-with-wib";
+import {
+  forbiddenError,
+  handleError,
+  handleZodError,
+  ResponseJson,
+  unauthorizedError,
+} from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
+import { z } from "zod";
 
+export const musicIdSchema = z.object({
+  musicId: z
+    .string({
+      required_error: "ID musik wajib diisi",
+      invalid_type_error: "ID musik harus berupa teks",
+    })
+    .min(1, { message: "ID musik tidak boleh kosong" }),
+});
 export async function PATCH(
   req: Request,
   { params }: { params: { id: string } }
 ) {
   try {
     const { userId } = await auth();
-    if (!userId) return ResponseJson("Unauthorized", { status: 401 });
+    if (!userId) return unauthorizedError();
 
     const body = await req.json();
+    const parsed = musicIdSchema.safeParse(body);
 
-    const { musicId } = body;
-
-    const errors = [];
-    if (!musicId)
-      errors.push({ field: "musicId", message: "Musik ID harus diisi." });
-    if (!params.id)
-      errors.push({
-        field: "invitationId",
-        message: "Invitation ID harus diisi.",
-      });
-
-    if (errors.length > 0) {
-      return ResponseJson({ errors }, { status: 400 });
+    if (!parsed.success) {
+      return handleZodError(parsed.error);
     }
+
+    if (!params.id) {
+      return ResponseJson(
+        {
+          message: "Validasi gagal",
+          errors: {
+            id: ["ID wajib diisi"],
+          },
+        },
+        { status: 400 }
+      );
+    }
+
+    const { musicId } = parsed.data;
 
     const invitationByUserId = await prisma.invitation.findFirst({
       where: {
@@ -34,8 +53,7 @@ export async function PATCH(
       },
     });
 
-    if (!invitationByUserId)
-      return ResponseJson("Unauthorized", { status: 401 });
+    if (!invitationByUserId) return forbiddenError();
 
     await prisma.invitation.update({
       where: {
@@ -52,9 +70,14 @@ export async function PATCH(
       },
     });
 
-    return ResponseJson(music, { status: 201 });
+    return ResponseJson(
+      {
+        message: "Musik berhasil diperbarui",
+        data: music,
+      },
+      { status: 200 }
+    );
   } catch (error) {
-    console.error("Error update musicId:", error);
-    return ResponseJson({ message: "Gagal update musik." }, { status: 500 });
+    return handleError(error, "Gagal memperbarui musik");
   }
 }

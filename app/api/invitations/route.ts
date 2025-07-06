@@ -1,6 +1,12 @@
 import { generateUniqueSlug } from "@/lib/generateUniqueSlug";
 import { prisma } from "@/lib/prisma";
-import { ResponseJson } from "@/lib/utils/response-with-wib";
+import { InvitationSchema } from "@/lib/schemas";
+import {
+  handleError,
+  handleZodError,
+  ResponseJson,
+  unauthorizedError,
+} from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
 import { Decimal } from "@prisma/client/runtime/library";
 
@@ -16,38 +22,21 @@ function calculateFinalPrice(
 
   return Math.max(0, finalPrice);
 }
+
 export async function POST(req: Request) {
   try {
     const { userId } = await auth();
-    if (!userId) return ResponseJson("Unauthorized", { status: 401 });
+    if (!userId) return unauthorizedError();
 
     const body = await req.json();
+    const parsed = InvitationSchema.createInvitationSchema.safeParse(body);
+
+    if (!parsed.success) {
+      return handleZodError(parsed.error);
+    }
 
     const { groom, bride, slug, themeId, musicId, image, date, expiresAt } =
-      body;
-
-    const errors = [];
-    if (!groom)
-      errors.push({
-        field: "groom",
-        message: "Nama panggilan pria harus diisi.",
-      });
-    if (!bride)
-      errors.push({
-        field: "bride",
-        message: "Nama panggilan wanita harus diisi.",
-      });
-    if (!slug) errors.push({ field: "slug", message: "Slug harus diisi." });
-    if (!date) errors.push({ field: "date", message: "Tanggal harus diisi." });
-    if (!expiresAt)
-      errors.push({
-        field: "expiresAt",
-        message: "Tanggal berlaku harus diisi.",
-      });
-
-    if (errors.length > 0) {
-      return ResponseJson({ errors }, { status: 400 });
-    }
+      parsed.data;
 
     const unpaidInvitation = await prisma.invitation.findFirst({
       where: {
@@ -62,7 +51,12 @@ export async function POST(req: Request) {
 
     if (unpaidInvitation) {
       return ResponseJson(
-        { message: "Anda masih memiliki undangan yang belum dibayar" },
+        {
+          message: "Tidak dapat membuat undangan baru",
+          errors: {
+            transaction: ["Anda masih memiliki undangan yang belum dibayar"],
+          },
+        },
         { status: 409 }
       );
     }
@@ -77,7 +71,15 @@ export async function POST(req: Request) {
     }
 
     if (!theme) {
-      return ResponseJson({ message: "Tema tidak ditemukan" }, { status: 404 });
+      return ResponseJson(
+        {
+          message: "Tema tidak ditemukan",
+          errors: {
+            themeId: ["Tema dengan ID atau nama tersebut tidak tersedia"],
+          },
+        },
+        { status: 404 }
+      );
     }
 
     let music;
@@ -91,14 +93,19 @@ export async function POST(req: Request) {
 
     if (!music) {
       return ResponseJson(
-        { message: "Musik tidak ditemukan" },
+        {
+          message: "Musik tidak ditemukan",
+          errors: {
+            themeId: ["Musik dengan ID atau nama tersebut tidak tersedia"],
+          },
+        },
         { status: 404 }
       );
     }
 
     const newSlug = await generateUniqueSlug(slug, "invitation");
 
-    const invitation = await prisma.invitation.create({
+    const newInvitation = await prisma.invitation.create({
       data: {
         userId,
         groom,
@@ -121,14 +128,21 @@ export async function POST(req: Request) {
 
     if (!status) {
       return ResponseJson(
-        { message: "Status pembayaran tidak ditemukan" },
+        {
+          message: "Status pembayaran tidak ditemukan",
+          errors: {
+            themeId: [
+              "Status pembayaran dengan ID atau nama tersebut tidak tersedia",
+            ],
+          },
+        },
         { status: 404 }
       );
     }
 
     await prisma.transaction.create({
       data: {
-        invitationId: invitation.id,
+        invitationId: newInvitation.id,
         amount: calculateFinalPrice(
           theme.originalPrice,
           theme.discount,
@@ -139,9 +153,9 @@ export async function POST(req: Request) {
       },
     });
 
-    const newInvitation = await prisma.invitation.findUnique({
+    const invitation = await prisma.invitation.findUnique({
       where: {
-        id: invitation.id,
+        id: newInvitation.id,
       },
       include: {
         transaction: {
@@ -183,12 +197,15 @@ export async function POST(req: Request) {
         },
       },
     });
-    return ResponseJson(newInvitation, { status: 201 });
-  } catch (error) {
-    console.error("Error creating invitation:", error);
+
     return ResponseJson(
-      { message: "Gagal membuat undangan." },
-      { status: 500 }
+      {
+        message: "Undangan berhasil dibuat",
+        data: invitation,
+      },
+      { status: 201 }
     );
+  } catch (error) {
+    return handleError(error, "Gagal membuat undangan");
   }
 }

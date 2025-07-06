@@ -1,5 +1,12 @@
 import { prisma } from "@/lib/prisma";
-import { ResponseJson } from "@/lib/utils/response-with-wib";
+import { ScheduleSchema } from "@/lib/schemas";
+import {
+  forbiddenError,
+  handleError,
+  handleZodError,
+  ResponseJson,
+  unauthorizedError,
+} from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest } from "next/server";
 
@@ -9,50 +16,41 @@ export async function PUT(
 ) {
   try {
     const { userId } = await auth();
-    if (!userId) return ResponseJson("Unauthorized", { status: 401 });
+    if (!userId) return unauthorizedError();
 
     const body = await req.json();
+    const parsed = ScheduleSchema.updateApiScheduleSchema.safeParse(body);
 
-    const { name, startDate, endDate, timezone, location, locationMaps } = body;
-
-    const errors = [];
-    if (!name) errors.push({ field: "name", message: "Quote harus diisi." });
-    if (!startDate)
-      errors.push({
-        field: "startDate",
-        message: "Tanggal mulai harus diisi.",
-      });
-    if (!endDate)
-      errors.push({
-        field: "endDate",
-        message: "Tanggal selesai harus diisi.",
-      });
-    if (!timezone)
-      errors.push({
-        field: "timezone",
-        message: "Zona waktu harus diisi.",
-      });
-    if (!location)
-      errors.push({ field: "location", message: "Lokasi harus diisi." });
-    if (!locationMaps)
-      errors.push({
-        field: "locationMaps",
-        message: "Maps lokasi harus diisi.",
-      });
-    if (!params.id)
-      errors.push({
-        field: "invitationId",
-        message: "Invitation ID harus diisi.",
-      });
-    if (!params.scheduleId)
-      errors.push({
-        field: "scheduleId",
-        message: "Schedule ID harus diisi.",
-      });
-
-    if (errors.length > 0) {
-      return ResponseJson({ errors }, { status: 400 });
+    if (!parsed.success) {
+      return handleZodError(parsed.error);
     }
+
+    if (!params.id) {
+      return ResponseJson(
+        {
+          message: "Validasi gagal",
+          errors: {
+            id: ["ID wajib diisi"],
+          },
+        },
+        { status: 400 }
+      );
+    }
+
+    if (!params.scheduleId) {
+      return ResponseJson(
+        {
+          message: "Validasi gagal",
+          errors: {
+            scheduleId: ["Schedule ID wajib diisi"],
+          },
+        },
+        { status: 400 }
+      );
+    }
+
+    const { name, startDate, endDate, timezone, location, locationMaps } =
+      parsed.data;
 
     const invitationByUserId = await prisma.invitation.findFirst({
       where: {
@@ -61,8 +59,7 @@ export async function PUT(
       },
     });
 
-    if (!invitationByUserId)
-      return ResponseJson("Unauthorized", { status: 401 });
+    if (!invitationByUserId) return forbiddenError();
 
     const scheduleExists = await prisma.schedule.findFirst({
       where: {
@@ -73,9 +70,10 @@ export async function PUT(
     });
 
     if (scheduleExists)
-      return ResponseJson("Jadwal acara dengan nama yang sama sudah ada.", {
-        status: 409,
-      });
+      return ResponseJson(
+        { message: "Jadwal acara dengan nama yang sama sudah ada." },
+        { status: 409 }
+      );
 
     const schedule = await prisma.schedule.update({
       where: {
@@ -98,13 +96,15 @@ export async function PUT(
       },
     });
 
-    return ResponseJson(schedule, { status: 201 });
-  } catch (error) {
-    console.error("Error updating schedule:", error);
     return ResponseJson(
-      { message: "Gagal ubah jadwal acara." },
-      { status: 500 }
+      {
+        message: "Data jadwal acara berhasil diperbarui",
+        data: schedule,
+      },
+      { status: 200 }
     );
+  } catch (error) {
+    return handleError(error, "Gagal memperbarui jadwal acara");
   }
 }
 
@@ -114,22 +114,30 @@ export async function DELETE(
 ) {
   try {
     const { userId } = await auth();
-    if (!userId) return ResponseJson("Unauthorized", { status: 401 });
+    if (!userId) return unauthorizedError();
 
-    const errors = [];
-    if (!params.id)
-      errors.push({
-        field: "invitationId",
-        message: "Invitation ID harus diisi.",
-      });
-    if (!params.scheduleId)
-      errors.push({
-        field: "scheduleId",
-        message: "Schedule ID harus diisi.",
-      });
+    if (!params.id) {
+      return ResponseJson(
+        {
+          message: "Validasi gagal",
+          errors: {
+            id: ["ID wajib diisi"],
+          },
+        },
+        { status: 400 }
+      );
+    }
 
-    if (errors.length > 0) {
-      return ResponseJson({ errors }, { status: 400 });
+    if (!params.scheduleId) {
+      return ResponseJson(
+        {
+          message: "Validasi gagal",
+          errors: {
+            scheduleId: ["Schedule ID wajib diisi"],
+          },
+        },
+        { status: 400 }
+      );
     }
 
     const InvitaionByUserId = await prisma.invitation.findFirst({
@@ -139,8 +147,7 @@ export async function DELETE(
       },
     });
 
-    if (!InvitaionByUserId)
-      return ResponseJson("Unauthorized", { status: 401 });
+    if (!InvitaionByUserId) return forbiddenError();
 
     const schedule = await prisma.schedule.delete({
       where: {
@@ -148,12 +155,11 @@ export async function DELETE(
       },
     });
 
-    return ResponseJson(schedule, { status: 200 });
-  } catch (error) {
-    console.error("Error deleting schedule:", error);
     return ResponseJson(
-      { message: "Gagal hapus jadwal acara." },
-      { status: 500 }
+      { message: "Data jadwal acara berhasil dihapus", data: schedule },
+      { status: 200 }
     );
+  } catch (error) {
+    return handleError(error, "Gagal menghapus jadwal acara");
   }
 }

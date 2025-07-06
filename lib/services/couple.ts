@@ -1,10 +1,10 @@
 import { CoupleRequest, Couple } from "@/types";
-import httpRequest from "./api";
+import httpRequest, { ApiResponse } from "./api";
 
 export async function createCouple(
   invitationId: string,
   request: CoupleRequest
-): Promise<Couple> {
+): Promise<ApiResponse<Couple>> {
   const res = await httpRequest.post(
     `/api/invitations/${invitationId}/couple`,
     request
@@ -16,7 +16,7 @@ export async function createCouple(
 export async function updateCoupleImage(
   invitationId: string,
   request: { field: string; url: string }
-): Promise<Couple> {
+): Promise<ApiResponse<Couple>> {
   const res = await httpRequest.post(
     `/api/invitations/${invitationId}/couple/image`,
     request
@@ -27,7 +27,7 @@ export async function updateCoupleImage(
 export async function deleteCoupleImage(
   invitationId: string,
   field: string
-): Promise<Couple> {
+): Promise<ApiResponse<Couple>> {
   const res = await httpRequest.delete(
     `/api/invitations/${invitationId}/couple/image/${field}`
   );

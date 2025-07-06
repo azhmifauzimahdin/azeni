@@ -1,5 +1,11 @@
 import axios from "axios";
 
+export type ApiResponse<T> = {
+  success: boolean;
+  message: string;
+  data: T;
+};
+
 const httpRequest = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
   headers: {

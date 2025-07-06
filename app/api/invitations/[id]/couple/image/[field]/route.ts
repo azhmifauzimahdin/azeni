@@ -1,7 +1,12 @@
 import cloudinary from "@/lib/cloudinary";
 import { prisma } from "@/lib/prisma";
 import extractCloudinaryPublicId from "@/lib/utils/extract-cloudinary-public-id";
-import { ResponseJson } from "@/lib/utils/response-with-wib";
+import {
+  forbiddenError,
+  handleError,
+  ResponseJson,
+  unauthorizedError,
+} from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest } from "next/server";
 
@@ -15,25 +20,25 @@ export async function DELETE(
 ) {
   try {
     const { userId } = await auth();
-    if (!userId) return ResponseJson("Unauthorized", { status: 401 });
-
-    const errors = [];
+    if (!userId) return unauthorizedError();
 
     const allowedFields = ["groomImage", "brideImage"];
-    if (!params.field)
-      errors.push({
-        params: "field",
-        message: "Kolom harus diisi.",
-      });
-    if (!allowedFields.includes(params.field)) {
-      errors.push({
-        field: "field",
-        message: "Kolom tidak sesuai.",
-      });
+    const fieldErrors: Record<string, string[]> = {};
+
+    if (!params.field) {
+      fieldErrors["field"] = ["Kolom harus diisi."];
+    } else if (!allowedFields.includes(params.field)) {
+      fieldErrors["field"] = ["Kolom tidak sesuai."];
     }
 
-    if (errors.length > 0) {
-      return ResponseJson({ errors }, { status: 400 });
+    if (Object.keys(fieldErrors).length > 0) {
+      return ResponseJson(
+        {
+          message: "Validasi gagal",
+          errors: fieldErrors,
+        },
+        { status: 422 }
+      );
     }
 
     const invitationByUserId = await prisma.invitation.findFirst({
@@ -46,8 +51,7 @@ export async function DELETE(
       },
     });
 
-    if (!invitationByUserId)
-      return ResponseJson("Unauthorized", { status: 401 });
+    if (!invitationByUserId) return forbiddenError();
 
     type CoupleImageField = "groomImage" | "brideImage";
     const existingImage =
@@ -69,12 +73,14 @@ export async function DELETE(
       },
     });
 
-    return ResponseJson(couple, { status: 200 });
-  } catch (error) {
-    console.error("Error deleting couple image:", error);
     return ResponseJson(
-      { message: "Gagal hapus foto pengantin." },
-      { status: 500 }
+      {
+        message: "Data gambar pasangan berhasil direset",
+        data: couple,
+      },
+      { status: 200 }
     );
+  } catch (error) {
+    return handleError(error, "Gagal reset gambar pasangan");
   }
 }

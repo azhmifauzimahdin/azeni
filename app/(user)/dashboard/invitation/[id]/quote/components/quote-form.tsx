@@ -23,13 +23,9 @@ import { handleError } from "@/lib/utils/handle-error";
 import { Invitation } from "@/types";
 import useInvitationStore from "@/stores/invitation-store";
 import DeleteConfirmationModal from "@/components/ui/delete-confirmation-modal";
+import { createQuoteSchema } from "@/lib/schemas/quote";
 
-const formSchema = z.object({
-  name: z.string().min(1, { message: "Quote wajib diisi" }),
-  author: z.string().min(1, { message: "Author wajib diisi" }),
-});
-
-type QuoteFormValues = z.infer<typeof formSchema>;
+type QuoteFormValues = z.infer<typeof createQuoteSchema>;
 
 interface QuoteFormsProps {
   params: {
@@ -57,7 +53,7 @@ const QuoteForm: React.FC<QuoteFormsProps> = ({
   const [deletingQuoteId, setDeletingQuoteId] = useState<string | null>(null);
 
   const form = useForm<QuoteFormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(createQuoteSchema),
     defaultValues: initialData?.quote
       ? {
           name: initialData.quote.name,
@@ -82,7 +78,7 @@ const QuoteForm: React.FC<QuoteFormsProps> = ({
     try {
       setLoadingSubmit(true);
       const res = await QuoteService.createQuote(params.id, data);
-      updateQuoteInInvitation(params.id, res);
+      updateQuoteInInvitation(params.id, res.data);
       toast.success("Quote berhasil disimpan.");
     } catch (error: unknown) {
       handleError(error, "quote");
@@ -133,9 +129,12 @@ const QuoteForm: React.FC<QuoteFormsProps> = ({
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel required>Quote</FormLabel>
+                  <FormLabel htmlFor={field.name} required>
+                    Quote
+                  </FormLabel>
                   <FormControl>
                     <Textarea
+                      id={field.name}
                       placeholder="Quote"
                       disabled={loadingSubmit || loadingDelete}
                       className="h-44"
@@ -152,9 +151,12 @@ const QuoteForm: React.FC<QuoteFormsProps> = ({
               name="author"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel required>Author</FormLabel>
+                  <FormLabel htmlFor={field.name} required>
+                    Author
+                  </FormLabel>
                   <FormControl>
                     <Input
+                      id={field.name}
                       placeholder="Author"
                       disabled={loadingSubmit || loadingDelete}
                       size={12}

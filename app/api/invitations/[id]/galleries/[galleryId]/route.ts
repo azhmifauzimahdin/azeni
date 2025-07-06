@@ -1,9 +1,13 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { ResponseJson } from "@/lib/utils/response-with-wib";
-import { unauthorizedError } from "@/lib/utils/unauthorized-error";
 import extractCloudinaryPublicId from "@/lib/utils/extract-cloudinary-public-id";
 import cloudinary from "@/lib/cloudinary";
+import {
+  forbiddenError,
+  handleError,
+  ResponseJson,
+  unauthorizedError,
+} from "@/lib/utils/response";
 
 export async function DELETE(
   _: Request,
@@ -22,7 +26,7 @@ export async function DELETE(
       },
     });
 
-    if (!InvitaionByUserId) return unauthorizedError();
+    if (!InvitaionByUserId) return forbiddenError();
 
     const deleted = await prisma.gallery.delete({
       where: { id: params.galleryId },
@@ -33,9 +37,14 @@ export async function DELETE(
 
     await cloudinary.uploader.destroy(publicId);
 
-    return ResponseJson(deleted);
+    return ResponseJson(
+      {
+        message: "Galeri berhasil dihapus",
+        data: deleted,
+      },
+      { status: 200 }
+    );
   } catch (error) {
-    console.error("Error deleting gallery:", error);
-    return ResponseJson({ message: "Gagal hapus galeri." }, { status: 500 });
+    return handleError(error, "Gagal hapus galeri");
   }
 }

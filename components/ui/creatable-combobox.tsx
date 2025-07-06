@@ -27,6 +27,7 @@ type Option = {
 };
 
 type CreatableComboboxProps = {
+  id?: string;
   options: Option[];
   placeholder?: string;
   value?: string;
@@ -35,7 +36,10 @@ type CreatableComboboxProps = {
 };
 
 const CreatableCombobox = forwardRef<HTMLButtonElement, CreatableComboboxProps>(
-  ({ options, placeholder = "Pilih...", value, disabled, onChange }, ref) => {
+  (
+    { id, options, placeholder = "Pilih...", value, disabled, onChange },
+    ref
+  ) => {
     const [open, setOpen] = useState(false);
     const [inputValue, setInputValue] = useState("");
     const internalRef = useRef<HTMLButtonElement>(null);
@@ -72,6 +76,7 @@ const CreatableCombobox = forwardRef<HTMLButtonElement, CreatableComboboxProps>(
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <button
+            id={id}
             ref={internalRef}
             type="button"
             disabled={disabled}
@@ -99,6 +104,7 @@ const CreatableCombobox = forwardRef<HTMLButtonElement, CreatableComboboxProps>(
         >
           <Command>
             <CommandInput
+              id="combobox-input"
               placeholder={`Cari ${placeholder?.toLowerCase()}...`}
               value={inputValue}
               onValueChange={setInputValue}

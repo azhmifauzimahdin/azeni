@@ -20,6 +20,8 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
         primary:
           "bg-green-app-primary text-white shadow hover:bg-green-app-secondary",
+        delete:
+          "text-white hover:text-red-500 bg-red-600/80 hover:bg-red-700/80 backdrop-blur-sm rounded-full",
       },
       size: {
         default: "h-10 px-4 py-2",
