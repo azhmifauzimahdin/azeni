@@ -29,6 +29,7 @@ import Combobox from "@/components/ui/combobox";
 import DeleteConfirmationModal from "@/components/ui/delete-confirmation-modal";
 import { ScheduleCard, ScheduleCardSkeleton } from "./schedule-card";
 import { scheduleSchema } from "@/lib/schemas/schedule";
+import { Pagination } from "@/components/ui/pagination";
 
 const today = new Date();
 today.setHours(0, 0, 0, 0);
@@ -144,6 +145,21 @@ const ScheduleForm: React.FC<ScheduleFormsProps> = ({
       setDeletingScheduleName(null);
     }
   };
+
+  const schedulesPerPage = 10;
+  const totalPages = Math.ceil(
+    (initialData?.schedules ?? []).length / schedulesPerPage
+  );
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const currentschedules = initialData?.schedules.slice(
+    (currentPage - 1) * schedulesPerPage,
+    currentPage * schedulesPerPage
+  );
+
+  function handlePageChange(page: number) {
+    setCurrentPage(page);
+  }
 
   return (
     <>
@@ -377,11 +393,11 @@ const ScheduleForm: React.FC<ScheduleFormsProps> = ({
               ))}
             </div>
           </div>
-        ) : (initialData?.schedules?.length ?? 0) > 0 ? (
+        ) : (currentschedules?.length ?? 0) > 0 ? (
           <div className="relative">
             <div className="absolute left-1 top-0 bottom-0 w-0.5 bg-gray-200" />
             <div className="space-y-4 pl-2">
-              {initialData?.schedules.map((schedule) => (
+              {(currentschedules || []).map((schedule) => (
                 <ScheduleCard
                   key={schedule.id}
                   data={schedule}
@@ -397,6 +413,16 @@ const ScheduleForm: React.FC<ScheduleFormsProps> = ({
             </div>
           </div>
         ) : null}
+        {totalPages > 1 && (
+          <div className="mt-8 flex-center">
+            <Pagination
+              totalPages={totalPages}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+              siblingCount={1}
+            />
+          </div>
+        )}
       </div>
     </>
   );

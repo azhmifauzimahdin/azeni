@@ -30,6 +30,7 @@ import { Input } from "@/components/ui/input";
 import GiftCard from "./gift-card";
 import DeleteConfirmationModal from "@/components/ui/delete-confirmation-modal";
 import { createBankAccountSchema } from "@/lib/schemas/bank-account";
+import { Pagination } from "@/components/ui/pagination";
 
 const formAddressSchema = z.object({
   address: z
@@ -226,6 +227,21 @@ const GiftForm: React.FC<GiftFormsProps> = ({
     }
   };
 
+  const bankAccountsPerPage = 10;
+  const totalPages = Math.ceil(
+    (bankAccounts || []).length / bankAccountsPerPage
+  );
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const currentbankAccounts = (bankAccounts || []).slice(
+    (currentPage - 1) * bankAccountsPerPage,
+    currentPage * bankAccountsPerPage
+  );
+
+  function handlePageChange(page: number) {
+    setCurrentPage(page);
+  }
+
   return (
     <>
       <Modal
@@ -391,9 +407,9 @@ const GiftForm: React.FC<GiftFormsProps> = ({
                   <div className="w-8 h-8 bg-gray-200 rounded-full" />{" "}
                 </div>
               ))
-            : (bankAccounts ?? []).length > 0 && (
+            : (currentbankAccounts ?? []).length > 0 && (
                 <div className="space-y-2">
-                  {bankAccounts?.map((bank) => (
+                  {currentbankAccounts?.map((bank) => (
                     <GiftCard
                       key={bank.id}
                       data={bank}
@@ -408,6 +424,16 @@ const GiftForm: React.FC<GiftFormsProps> = ({
                   ))}
                 </div>
               )}
+          {totalPages > 1 && (
+            <div className="mt-8 flex-center">
+              <Pagination
+                totalPages={totalPages}
+                currentPage={currentPage}
+                onPageChange={handlePageChange}
+                siblingCount={1}
+              />
+            </div>
+          )}
         </div>
 
         <div className=" card-dashboard">

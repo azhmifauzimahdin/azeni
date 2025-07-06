@@ -3,7 +3,7 @@
 
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { ImagePlus, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, ImagePlus, X } from "lucide-react";
 import toast from "react-hot-toast";
 import { uploadImageToCloudinary } from "@/lib/services/image";
 import { ImageService } from "@/lib/services";
@@ -16,6 +16,7 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Pagination } from "@/components/ui/pagination";
 
 function CloseModalButton({ onClick }: { onClick: () => void }) {
   return (
@@ -128,6 +129,19 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
     multiple: true,
   });
 
+  const valuesPerPage = 12;
+  const totalPages = Math.ceil(values.length / valuesPerPage);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const currentvalues = values.slice(
+    (currentPage - 1) * valuesPerPage,
+    currentPage * valuesPerPage
+  );
+
+  function handlePageChange(page: number) {
+    setCurrentPage(page);
+  }
+
   return (
     <div>
       <div
@@ -178,7 +192,7 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
                 </div>
               </div>
             ))
-          : values.map((item, index) => (
+          : currentvalues.map((item, index) => (
               <div key={item.id} className="relative">
                 <div
                   onClick={() => {
@@ -228,6 +242,16 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
           </div>
         ))}
       </div>
+      {totalPages > 1 && (
+        <div className="mt-8 flex-center">
+          <Pagination
+            totalPages={totalPages}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+            siblingCount={1}
+          />
+        </div>
+      )}
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="w-full max-w-6xl bg-transparent p-0 border-none shadow-none mx-auto px-4 sm:px-6 md:px-8">
@@ -266,24 +290,30 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
 
             <button
               onClick={() =>
-                setCurrentIndex((prev) =>
-                  prev === 0 ? values.length - 1 : prev - 1
-                )
+                setCurrentIndex((prev) => {
+                  const newIndex = prev === 0 ? values.length - 1 : prev - 1;
+                  const newPage = Math.floor(newIndex / valuesPerPage) + 1;
+                  setCurrentPage(newPage);
+                  return newIndex;
+                })
               }
               className="absolute top-1/2 left-2 sm:left-4 -translate-y-1/2 z-50 bg-white/20 hover:bg-white/40 text-white px-3 sm:px-4 py-2 rounded-full shadow backdrop-blur-md"
             >
-              ‹
+              <ChevronLeft size={14} />
             </button>
 
             <button
               onClick={() =>
-                setCurrentIndex((prev) =>
-                  prev === values.length - 1 ? 0 : prev + 1
-                )
+                setCurrentIndex((prev) => {
+                  const newIndex = prev === values.length - 1 ? 0 : prev + 1;
+                  const newPage = Math.floor(newIndex / valuesPerPage) + 1;
+                  setCurrentPage(newPage);
+                  return newIndex;
+                })
               }
               className="absolute top-1/2 right-2 sm:right-4 -translate-y-1/2 z-50 bg-white/20 hover:bg-white/40 text-white px-3 sm:px-4 py-2 rounded-full shadow backdrop-blur-md"
             >
-              ›
+              <ChevronRight size={14} />
             </button>
 
             <CloseModalButton onClick={() => setIsModalOpen(false)} />

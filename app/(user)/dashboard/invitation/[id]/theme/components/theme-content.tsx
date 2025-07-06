@@ -44,7 +44,7 @@ const ThemeContent: React.FC<ThemeContentProps> = ({ params }) => {
     }
   };
 
-  const themesPerPage = 8;
+  const themesPerPage = 12;
   const totalPages = Math.ceil(themes.length / themesPerPage);
   const [currentPage, setCurrentPage] = useState(1);
 
