@@ -282,7 +282,9 @@ const OurStoryForm: React.FC<StoryFormsProps> = ({
                         field.onChange("");
                       }}
                       value={field.value || ""}
-                      path={`story/${getFolderFromInvitationId(params.id)}`}
+                      path={`users/stories/${getFolderFromInvitationId(
+                        params.id
+                      )}`}
                     />
                   </FormControl>
                   <FormDescription>max 2mb</FormDescription>

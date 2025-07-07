@@ -197,7 +197,7 @@ const InvitationForm: React.FC = () => {
                         field.onChange("");
                       }}
                       value={field.value || ""}
-                      path="invitations"
+                      path="users/invitations"
                     />
                   </FormControl>
                   <FormDescription>

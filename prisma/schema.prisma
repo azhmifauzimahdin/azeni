@@ -113,11 +113,11 @@ model Couple {
   groomName     String
   groomFather   String
   groomMother   String
-  groomImage    String
+  groomImage    String?
   brideName     String
   brideFather   String
   brideMother   String
-  brideImage    String
+  brideImage    String?
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 

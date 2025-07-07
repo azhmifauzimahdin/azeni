@@ -64,7 +64,7 @@ const GalleryForm: React.FC<GalleryFormsProps> = ({
           onUploadFinish={(url) => onUploadFinish(params.id, url)}
           onRemove={onRemove}
           isFetching={isFetching}
-          path={`gallery/${getFolderFromInvitationId(params.id)}`}
+          path={`users/galleries/${getFolderFromInvitationId(params.id)}`}
         />
       </div>
     </>

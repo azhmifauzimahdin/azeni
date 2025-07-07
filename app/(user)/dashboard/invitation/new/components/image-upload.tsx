@@ -60,6 +60,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     const result = ImageSchema.imageSchema.safeParse(file);
     if (!result.success) {
       toast.error(result.error.errors[0].message);
+      setIsOpen(false);
       return;
     }
 

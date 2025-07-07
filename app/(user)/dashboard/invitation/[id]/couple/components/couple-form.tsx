@@ -165,7 +165,7 @@ const CoupleForm: React.FC<CoupleFormsProps> = ({
                   setGroomImage(url);
                 }}
                 onRemove={() => handleDeleteImage("groomImage")}
-                path={`couple/${getFolderFromInvitationId(params.id)}`}
+                path={`users/couples/${getFolderFromInvitationId(params.id)}`}
                 value={groomImage}
                 defaultValue="https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751191834/default-groom_hzxypj.png"
                 isFetching={isFetching}
