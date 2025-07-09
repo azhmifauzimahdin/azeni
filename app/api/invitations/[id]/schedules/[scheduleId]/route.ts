@@ -8,7 +8,6 @@ import {
   unauthorizedError,
 } from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
-import { NextRequest } from "next/server";
 
 export async function PUT(
   req: Request,
@@ -109,7 +108,7 @@ export async function PUT(
 }
 
 export async function DELETE(
-  _: NextRequest,
+  _: Request,
   { params }: { params: { id: string; scheduleId: string } }
 ) {
   try {

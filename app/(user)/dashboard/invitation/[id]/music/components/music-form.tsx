@@ -95,6 +95,7 @@ const MusicForm: React.FC<MusicFormsProps> = ({
         onChange={handleSearchChange}
         className="mb-4 max-w-md"
         isFetching={isFetching}
+        autoComplete="off"
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">

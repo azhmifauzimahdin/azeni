@@ -34,11 +34,25 @@ model Invitation {
   quote         Quote?        @relation("InvitationQuote")
   schedules     Schedule[]    @relation("InvitationSchedule")
   couple        Couple?       @relation("InvitationCouple")
+  setting       Setting?      @relation("InvitationSetting")
   stories       Story[]       @relation("InvitationStory")
   galleries     Gallery[]     @relation("InvitationGallery")
   bankaccounts  BankAccount[] @relation("InvitationBankAccount")
   comments      Comment[]     @relation("InvitationComment")
   guests        Guest[]       @relation("InvitationGuest")
+}
+
+model Setting {
+  id            String        @id @default(cuid())
+  invitationId  String        @unique
+  maxGuests     Int           @default(1)     
+  deadline      DateTime?
+  allowNote     Boolean       @default(true)
+  whatsappMessageTemplate String? @db.Text
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  invitation    Invitation    @relation("InvitationSetting",fields: [invitationId], references: [id], onDelete: Cascade)
 }
 
 model Transaction {
@@ -185,11 +199,19 @@ model Comment{
 
 model Guest {
   id            String        @id @default(uuid())
+  code          String        @unique
   invitationId  String
   name          String
-  address       String
+  group         String?
+  address       String?
   color         String
-  isAttending   Boolean       @default(false)        
+  isAttending   Boolean       @default(false)  
+  confirmedAt   DateTime?
+  totalGuests   Int           @default(1)
+  notes         String?
+  isCheckedIn   Boolean      @default(false)
+  checkedInAt   DateTime?
+  checkedOutAt  DateTime?
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 

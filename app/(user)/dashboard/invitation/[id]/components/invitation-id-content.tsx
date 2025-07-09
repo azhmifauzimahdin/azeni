@@ -52,9 +52,9 @@ const InvitationIdContent: React.FC<InvitationIdContentProps> = ({
     },
     {
       id: "2",
-      label: "Tema",
-      icon: "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751291126/theme_ay2axt.png",
-      href: `${params.id}/theme`,
+      label: "Quote",
+      icon: "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751291124/quote_vzwjwb.png",
+      href: `${params.id}/quote`,
     },
     {
       id: "3",
@@ -64,9 +64,9 @@ const InvitationIdContent: React.FC<InvitationIdContentProps> = ({
     },
     {
       id: "4",
-      label: "Musik",
-      icon: "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751291123/music_wmdan8.png",
-      href: `${params.id}/music`,
+      label: "Cerita Kita",
+      icon: "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751291123/love-story_rc4kbl.png",
+      href: `${params.id}/our-story`,
     },
     {
       id: "5",
@@ -82,39 +82,33 @@ const InvitationIdContent: React.FC<InvitationIdContentProps> = ({
     },
     {
       id: "7",
+      label: "Tema",
+      icon: "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751291126/theme_ay2axt.png",
+      href: `${params.id}/theme`,
+    },
+    {
+      id: "8",
+      label: "Musik",
+      icon: "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751291123/music_wmdan8.png",
+      href: `${params.id}/music`,
+    },
+    {
+      id: "9",
       label: "RSVP",
       icon: "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751291125/rsvp_x8g0wf.png",
       href: `${params.id}/rsvp`,
     },
     {
-      id: "8",
-      label: "Cerita Kita",
-      icon: "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751291123/love-story_rc4kbl.png",
-      href: `${params.id}/our-story`,
-    },
-    {
-      id: "9",
-      label: "Quote",
-      icon: "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751291124/quote_vzwjwb.png",
-      href: `${params.id}/quote`,
-    },
-    {
       id: "10",
-      label: "Setting",
-      icon: "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751291125/settings_sfbujg.png",
-      href: `${params.id}/setting`,
-    },
-    {
-      id: "11",
       label: "Buku Tamu",
       icon: "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751291124/guestbook_zg9dxt.png",
       href: `${params.id}/guestbook`,
     },
     {
-      id: "12",
-      label: "Kirim",
-      icon: "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751291125/send_g1dzoj.png",
-      href: `${params.id}/send`,
+      id: "11",
+      label: "Setting",
+      icon: "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751291125/settings_sfbujg.png",
+      href: `${params.id}/setting`,
     },
   ];
 

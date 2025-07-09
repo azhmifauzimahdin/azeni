@@ -32,6 +32,7 @@ export const createStorySchema = z.object({
     .optional()
     .or(z.literal("").transform(() => undefined)),
 });
+
 export const createApiStorySchema = z.object({
   title: z
     .string({

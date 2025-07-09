@@ -2,6 +2,29 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+function generateKode(): string {
+  const num = Math.floor(10000 + Math.random() * 90000);
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let suffix = "";
+  for (let i = 0; i < 4; i++) {
+    suffix += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return `${num}${suffix}`;
+}
+
+async function generateUniqueCode(): Promise<string> {
+  let code = "";
+  let unique = false;
+
+  while (!unique) {
+    code = generateKode();
+    const existing = await prisma.guest.findUnique({ where: { code } });
+    if (!existing) unique = true;
+  }
+
+  return code;
+}
+
 async function main() {
   // Create Theme
   const theme = await prisma.theme.create({
@@ -109,6 +132,36 @@ async function main() {
       amount: 50000,
       date: new Date("2025-01-01T12:00:00Z"),
       statusId: paymentStatus.id,
+    },
+  });
+
+  // Create Setting
+  await prisma.setting.createMany({
+    data: {
+      invitationId: invitation.id,
+      whatsappMessageTemplate: `
+Assalamu'alaikum warahmatullahi wabarakatuh,
+
+Segala puji bagi Allah SWT yang telah mempertemukan dua insan dalam ikatan suci pernikahan.
+
+Dengan penuh syukur, kami bermaksud mengabarkan kabar bahagia bahwa kami akan melangsungkan akad nikah dan walimatul 'urs dalam waktu dekat.
+
+InsyaAllah akan menikah:
+
+*{{brideName}} & {{groomName}}*  
+
+Kami mengundang Bapak/Ibu/Saudara/i {{ name }} untuk turut hadir dan berbagi doa restu dalam momen istimewa ini. Doa dan kehadiran Anda sangat berarti bagi kami dan keluarga besar.
+
+Informasi lengkap mengenai waktu dan tempat pelaksanaan acara dapat dilihat melalui undangan digital berikut:
+
+{{invitationLink}}
+
+Semoga Allah SWT memberkahi langkah kami, dan semoga Bapak/Ibu/Saudara/i senantiasa diberi kesehatan dan kemudahan dalam segala urusan.
+
+Wassalamu'alaikum warahmatullahi wabarakatuh.  
+Hormat kami,  
+*{{brideName}} & {{groomName}}*
+      `.trim(),
     },
   });
 
@@ -296,8 +349,11 @@ async function main() {
     ],
   });
 
+  const kode = await generateUniqueCode();
+
   const guest = await prisma.guest.create({
     data: {
+      code: kode,
       invitationId: invitation.id,
       name: "tamu",
       address: "-",

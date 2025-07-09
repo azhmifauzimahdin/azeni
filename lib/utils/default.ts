@@ -1,12 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
-
-async function main() {
-  await prisma.setting.createMany({
-    data: {
-      invitationId: "f189f78e-2b84-462d-90d8-f312ba49060b",
-      whatsappMessageTemplate: `
+export const defaultWhatsappMessageTemplate = `
 Assalamu'alaikum warahmatullahi wabarakatuh,
 
 Segala puji bagi Allah SWT yang telah mempertemukan dua insan dalam ikatan suci pernikahan.
@@ -17,7 +9,7 @@ InsyaAllah akan menikah:
 
 *{{brideName}} & {{groomName}}*  
 
-Kami mengundang Bapak/Ibu/Saudara/i untuk turut hadir dan berbagi doa restu dalam momen istimewa ini. Doa dan kehadiran Anda sangat berarti bagi kami dan keluarga besar.
+Kami mengundang Bapak/Ibu/Saudara/i {{ name }} untuk turut hadir dan berbagi doa restu dalam momen istimewa ini. Doa dan kehadiran Anda sangat berarti bagi kami dan keluarga besar.
 
 Informasi lengkap mengenai waktu dan tempat pelaksanaan acara dapat dilihat melalui undangan digital berikut:
 
@@ -28,16 +20,4 @@ Semoga Allah SWT memberkahi langkah kami, dan semoga Bapak/Ibu/Saudara/i senanti
 Wassalamu'alaikum warahmatullahi wabarakatuh.  
 Hormat kami,  
 *{{brideName}} & {{groomName}}*
-      `.trim(),
-    },
-  });
-}
-
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+`.trim();

@@ -62,6 +62,7 @@ const config: Config = {
         "green-secondary": "##2a5349",
         "green-app-primary": "#008080",
         "green-app-secondary": "#006666",
+        skeleton: "#e6e9ed",
       },
       fontFamily: {
         poppins: ["var(--font-poppins)", "sans-serif"],

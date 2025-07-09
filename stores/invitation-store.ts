@@ -1,4 +1,11 @@
-import { BankAccount, Gallery, Invitation, Schedule, Story } from "@/types";
+import {
+  BankAccount,
+  Gallery,
+  Guest,
+  Invitation,
+  Schedule,
+  Story,
+} from "@/types";
 import { create } from "zustand";
 
 interface InvitationState {
@@ -42,6 +49,18 @@ interface InvitationState {
   deleteScheduleFromInvitation: (
     invitationId: string,
     scheduleId: string
+  ) => void;
+  addOrUpdateGuestToInvitation: (invitationId: string, guest: Guest) => void;
+  deleteGuestFromInvitation: (invitationId: string, guestId: string) => void;
+  checkInGuestInInvitation: (
+    invitationId: string,
+    guestId: string,
+    time: string
+  ) => void;
+  checkOutGuestInInvitation: (
+    invitationId: string,
+    guestId: string,
+    time: string
   ) => void;
   addOrUpdateStoryToInvitation: (invitationId: string, story: Story) => void;
   deleteStoryFromInvitation: (invitationId: string, storyId: string) => void;
@@ -298,6 +317,93 @@ const useInvitationStore = create<InvitationState>((set) => ({
         };
       }),
     })),
+  addOrUpdateGuestToInvitation: (invitationId, guest) =>
+    set((state) => ({
+      invitations: state.invitations.map((invitation) => {
+        if (invitation.id !== invitationId) return invitation;
+
+        const existingGuest = invitation.guests ?? [];
+
+        const existingIndex = existingGuest.findIndex(
+          (acc) => acc.id === guest.id
+        );
+
+        let updatedGuest;
+
+        if (existingIndex !== -1) {
+          updatedGuest = [...existingGuest];
+          updatedGuest[existingIndex] = {
+            ...existingGuest[existingIndex],
+            ...guest,
+          };
+        } else {
+          updatedGuest = [guest, ...existingGuest];
+        }
+
+        return {
+          ...invitation,
+          guests: updatedGuest,
+        };
+      }),
+    })),
+
+  deleteGuestFromInvitation: (invitationId, guestId) =>
+    set((state) => ({
+      invitations: state.invitations.map((invitation) => {
+        if (invitation.id !== invitationId) return invitation;
+
+        const updatedGuest =
+          invitation.guests?.filter((acc) => acc.id !== guestId) ?? [];
+
+        return {
+          ...invitation,
+          guests: updatedGuest,
+        };
+      }),
+    })),
+  checkInGuestInInvitation: (invitationId, guestId, time) =>
+    set((state) => ({
+      invitations: state.invitations.map((invitation) => {
+        if (invitation.id !== invitationId) return invitation;
+
+        const updatedGuests = invitation.guests.map((guest) =>
+          guest.id === guestId
+            ? {
+                ...guest,
+                isCheckedIn: true,
+                checkedInAt: time,
+              }
+            : guest
+        );
+
+        return {
+          ...invitation,
+          guests: updatedGuests,
+        };
+      }),
+    })),
+
+  checkOutGuestInInvitation: (invitationId, guestId, time) =>
+    set((state) => ({
+      invitations: state.invitations.map((invitation) => {
+        if (invitation.id !== invitationId) return invitation;
+
+        const updatedGuests = invitation.guests.map((guest) =>
+          guest.id === guestId
+            ? {
+                ...guest,
+                checkedOutAt: time,
+              }
+            : guest
+        );
+
+        return {
+          ...invitation,
+          guests: updatedGuests,
+        };
+      }),
+    })),
+
   addOrUpdateStoryToInvitation: (invitationId, story) =>
     set((state) => ({
       invitations: state.invitations.map((invitation) => {

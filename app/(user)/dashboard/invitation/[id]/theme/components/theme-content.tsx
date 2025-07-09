@@ -120,7 +120,7 @@ const ThemeContent: React.FC<ThemeContentProps> = ({ params }) => {
                 loading={theme.id === selectedThemeId}
                 isActive={theme.id === invitation?.theme?.id}
                 onActivate={onActiveTheme}
-                demoHref={`/${theme.invitation?.slug}/${theme.invitation?.guest.id}`}
+                demoHref={`/${theme.invitation?.slug}/${theme.invitation?.guest.code}`}
               />
             ))
           ) : (

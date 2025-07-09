@@ -12,3 +12,4 @@ export * from "./transaction";
 export * from "./guest";
 export * from "./music";
 export * from "./quote-template";
+export * from "./setting";

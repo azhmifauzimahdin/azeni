@@ -61,6 +61,12 @@ export async function GET(
             createdAt: "desc",
           },
         },
+        guests: {
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
+        setting: true,
       },
       orderBy: {
         updatedAt: "desc",

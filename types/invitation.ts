@@ -6,6 +6,7 @@ import { Guest } from "./guest";
 import { Music } from "./music";
 import { Quote } from "./quote";
 import { Schedule } from "./schedule";
+import { Setting } from "./setting";
 import { Story } from "./story";
 import { Theme } from "./theme";
 import { Transaction } from "./transaction";
@@ -41,9 +42,11 @@ export interface Invitation {
   quote: Quote | null;
   schedules: Schedule[];
   couple: Couple | null;
+  setting: Setting | null;
   stories: Story[];
   galleries: Gallery[];
   bankaccounts: BankAccount[];
   comments: Comment[];
+  guests: Guest[];
   guest: Guest;
 }

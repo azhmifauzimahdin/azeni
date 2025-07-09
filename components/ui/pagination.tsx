@@ -72,6 +72,7 @@ export function Pagination({
       className="inline-flex items-center space-x-2"
     >
       <Button
+        type="button"
         variant="ghost"
         size="sm"
         onClick={() => onPageChange(currentPage - 1)}
@@ -95,6 +96,7 @@ export function Pagination({
 
         return (
           <Button
+            type="button"
             key={page}
             variant={page === currentPage ? "primary" : "ghost"}
             size="sm"
@@ -107,6 +109,7 @@ export function Pagination({
       })}
 
       <Button
+        type="button"
         variant="ghost"
         size="sm"
         onClick={() => onPageChange(currentPage + 1)}

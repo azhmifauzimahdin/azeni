@@ -153,6 +153,12 @@ export async function POST(req: Request) {
       },
     });
 
+    await prisma.setting.create({
+      data: {
+        invitationId: newInvitation.id,
+      },
+    });
+
     const invitation = await prisma.invitation.findUnique({
       where: {
         id: newInvitation.id,

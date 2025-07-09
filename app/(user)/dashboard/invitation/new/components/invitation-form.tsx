@@ -200,10 +200,10 @@ const InvitationForm: React.FC = () => {
                       path="users/invitations"
                     />
                   </FormControl>
+                  <FormMessage />
                   <FormDescription>
                     Foto digunakan untuk cover (max 2mb)
                   </FormDescription>
-                  <FormMessage />
                 </FormItem>
               )}
             />
