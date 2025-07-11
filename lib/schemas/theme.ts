@@ -41,3 +41,7 @@ export const createThemeSchema = z.object({
     invalid_type_error: "Jenis diskon harus berupa nilai true/false",
   }),
 });
+
+export const patchThemeSchema = z.object({
+  themeId: z.string().min(1, { message: "Tema undangan wajib dipilih" }),
+});

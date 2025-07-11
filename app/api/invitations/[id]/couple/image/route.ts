@@ -1,5 +1,6 @@
 import cloudinary from "@/lib/cloudinary";
 import { prisma } from "@/lib/prisma";
+import { ImageSchema } from "@/lib/schemas";
 import extractCloudinaryPublicId from "@/lib/utils/extract-cloudinary-public-id";
 import {
   forbiddenError,
@@ -9,21 +10,6 @@ import {
   unauthorizedError,
 } from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
-import { z } from "zod";
-
-const imageFieldSchema = z.object({
-  field: z.enum(["groomImage", "brideImage"], {
-    required_error: "Field gambar wajib diisi",
-    invalid_type_error: "Field gambar harus berupa string tertentu",
-  }),
-
-  url: z
-    .string({
-      required_error: "URL gambar wajib diisi",
-      invalid_type_error: "URL gambar harus berupa teks",
-    })
-    .url({ message: "URL gambar harus berupa link yang valid" }),
-});
 
 export async function POST(
   req: Request,
@@ -34,7 +20,7 @@ export async function POST(
     if (!userId) return unauthorizedError();
 
     const body = await req.json();
-    const parsed = imageFieldSchema.safeParse(body);
+    const parsed = ImageSchema.imageFieldSchema.safeParse(body);
 
     if (!parsed.success) {
       return handleZodError(parsed.error);

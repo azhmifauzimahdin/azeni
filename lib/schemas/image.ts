@@ -18,3 +18,17 @@ export const imageSchema = z
   .refine((file) => ACCEPTED_MIME_TYPES.includes(file.type), {
     message: "Format file tidak didukung. Gunakan JPG, PNG, atau WebP.",
   });
+
+export const imageFieldSchema = z.object({
+  field: z.enum(["groomImage", "brideImage"], {
+    required_error: "Field gambar wajib diisi",
+    invalid_type_error: "Field gambar harus berupa string tertentu",
+  }),
+
+  url: z
+    .string({
+      required_error: "URL gambar wajib diisi",
+      invalid_type_error: "URL gambar harus berupa teks",
+    })
+    .url({ message: "URL gambar harus berupa link yang valid" }),
+});

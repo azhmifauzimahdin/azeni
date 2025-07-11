@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { ThemeSchema } from "@/lib/schemas";
 import {
   forbiddenError,
   handleError,
@@ -7,11 +8,6 @@ import {
   unauthorizedError,
 } from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
-import { z } from "zod";
-
-export const themeSchema = z.object({
-  themeId: z.string().min(1, { message: "Tema undangan wajib dipilih" }),
-});
 
 export async function PATCH(
   req: Request,
@@ -22,7 +18,7 @@ export async function PATCH(
     if (!userId) return unauthorizedError();
 
     const body = await req.json();
-    const parsed = themeSchema.safeParse(body);
+    const parsed = ThemeSchema.patchThemeSchema.safeParse(body);
 
     if (!parsed.success) {
       return handleZodError(parsed.error);
