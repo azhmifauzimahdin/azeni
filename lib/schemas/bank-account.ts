@@ -1,5 +1,15 @@
 import { z } from "zod";
 
+export const addressSchema = z.object({
+  address: z
+    .string({
+      required_error: "Alamat wajib diisi",
+      invalid_type_error: "Alamat harus berupa teks",
+    })
+    .min(5, { message: "Alamat terlalu pendek, minimal 5 karakter" })
+    .max(255, { message: "Alamat terlalu panjang, maksimal 255 karakter" }),
+});
+
 export const createBankAccountSchema = z.object({
   bankId: z
     .string({

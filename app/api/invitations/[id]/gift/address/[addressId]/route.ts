@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { BankAccountSchema } from "@/lib/schemas";
 import {
   forbiddenError,
   handleError,
@@ -8,7 +9,6 @@ import {
 } from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest } from "next/server";
-import { addressSchema } from "../route";
 
 export async function PUT(
   req: Request,
@@ -19,7 +19,7 @@ export async function PUT(
     if (!userId) return unauthorizedError();
 
     const body = await req.json();
-    const parsed = addressSchema.safeParse(body);
+    const parsed = BankAccountSchema.addressSchema.safeParse(body);
 
     if (!parsed.success) {
       return handleZodError(parsed.error);

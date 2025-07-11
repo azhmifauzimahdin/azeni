@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { BankAccountSchema } from "@/lib/schemas";
 import {
   forbiddenError,
   handleError,
@@ -7,17 +8,6 @@ import {
   unauthorizedError,
 } from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
-import { z } from "zod";
-
-export const addressSchema = z.object({
-  address: z
-    .string({
-      required_error: "Alamat wajib diisi",
-      invalid_type_error: "Alamat harus berupa teks",
-    })
-    .min(5, { message: "Alamat terlalu pendek, minimal 5 karakter" })
-    .max(255, { message: "Alamat terlalu panjang, maksimal 255 karakter" }),
-});
 
 export async function POST(
   req: Request,
@@ -28,7 +18,7 @@ export async function POST(
     if (!userId) return unauthorizedError();
 
     const body = await req.json();
-    const parsed = addressSchema.safeParse(body);
+    const parsed = BankAccountSchema.addressSchema.safeParse(body);
 
     if (!parsed.success) {
       return handleZodError(parsed.error);
