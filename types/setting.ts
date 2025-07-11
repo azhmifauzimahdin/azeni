@@ -1,10 +1,17 @@
+export interface SettingRSVPRequest {
+  rsvpEnabled: boolean;
+  rsvpMaxGuests: number;
+  rsvpDeadline: Date;
+  rsvpAllowNote: boolean;
+}
+
 export interface Setting {
   id: string;
   invitationId: string;
-  maxGuests: string;
-  greeting: string;
-  deadline: string;
-  allowNote: string;
+  rsvpEnabled: boolean;
+  rsvpMaxGuests: number;
+  rsvpDeadline: Date;
+  rsvpAllowNote: boolean;
   whatsappMessageTemplate: string;
   createdAt: string;
   updatedAt: string;

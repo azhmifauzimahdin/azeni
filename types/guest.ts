@@ -13,7 +13,7 @@ export interface Guest {
   color: string;
   isAttending: boolean;
   confirmedAt: string;
-  totalGuests: string;
+  totalGuests: number;
   notes: string;
   isCheckedIn: boolean;
   checkedInAt: string;

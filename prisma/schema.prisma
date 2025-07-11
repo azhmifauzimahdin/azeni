@@ -43,14 +43,15 @@ model Invitation {
 }
 
 model Setting {
-  id            String        @id @default(cuid())
-  invitationId  String        @unique
-  maxGuests     Int           @default(1)     
-  deadline      DateTime?
-  allowNote     Boolean       @default(true)
+  id              String        @id @default(cuid())
+  invitationId    String        @unique
+  rsvpEnabled     Boolean       @default(true)
+  rsvpMaxGuests   Int           @default(1)
+  rsvpDeadline    DateTime?   
+  rsvpAllowNote   Boolean       @default(true)
   whatsappMessageTemplate String? @db.Text
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 
   invitation    Invitation    @relation("InvitationSetting",fields: [invitationId], references: [id], onDelete: Cascade)
 }

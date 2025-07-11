@@ -12,7 +12,11 @@ const config: Config = {
       backgroundImage: {
         "gradient-pink-purple":
           "linear-gradient(to bottom right, #FBCFE8, #D8B4FE)",
-        "gradient-green": "linear-gradient(to bottom right, #BBF7D0, #86EFAC)",
+        "gradient-wedding-green":
+          "linear-gradient(to bottom right, #e0f7e9, #a7e8c3)",
+      },
+      boxShadow: {
+        "alert-soft": "0 4px 12px rgba(0, 0, 0, 0.04)",
       },
       backgroundColor: {
         skeleton: "#e6e9ed",

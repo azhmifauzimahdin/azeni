@@ -37,7 +37,7 @@ export function ResponseJson(
     detail?: any;
   },
   init?: ResponseInit
-) {
+): NextResponse {
   const responseBody = {
     success: data.success ?? !data.errors,
     message: data.message,

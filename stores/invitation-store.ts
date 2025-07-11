@@ -25,6 +25,10 @@ interface InvitationState {
     invitationId: string,
     updatedQuote: Partial<Invitation["quote"]>
   ) => void;
+  updateSettingInInvitation: (
+    invitationId: string,
+    updatedSetting: Partial<Invitation["setting"]>
+  ) => void;
   deleteQuoteInInvitation: (invitationId: string) => void;
   updateMusicInInvitation: (
     invitationId: string,
@@ -159,6 +163,32 @@ const useInvitationStore = create<InvitationState>((set) => ({
           quote: {
             ...existingQuote,
             ...updatedQuote,
+          },
+        };
+      }),
+    })),
+  updateSettingInInvitation: (invitationId, updateSetting) =>
+    set((state) => ({
+      invitations: state.invitations.map((invitation) => {
+        if (invitation.id !== invitationId) return invitation;
+
+        const existingSetting = invitation.setting ?? {
+          id: "",
+          invitationId: "",
+          rsvpEnabled: true,
+          rsvpMaxGuests: 1,
+          rsvpDeadline: new Date(),
+          rsvpAllowNote: true,
+          whatsappMessageTemplate: "",
+          createdAt: "",
+          updatedAt: "",
+        };
+
+        return {
+          ...invitation,
+          setting: {
+            ...existingSetting,
+            ...updateSetting,
           },
         };
       }),

@@ -19,6 +19,8 @@ const badgeVariants = cva(
           "border-transparent bg-yellow-100 text-yellow-800 shadow hover:bg-yellow-100/80",
         fullyPaid:
           "border-transparent bg-green-100 bg-green-800 shadow hover:bg-green-100/80",
+        primary:
+          "border-transparent bg-green-app-primary text-white shadow hover:bg-primary/80",
       },
     },
     defaultVariants: {

@@ -55,6 +55,7 @@ const DateTimeInput = forwardRef<HTMLButtonElement, DateTimeInputProps>(
               variant="outline"
               className="col-span-2 w-full justify-start text-left text-base font-normal"
               disabled={disabled}
+              type="button"
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
               <span className="flex items-center h-full">

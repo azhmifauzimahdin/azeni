@@ -25,15 +25,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableHead,
-  TableRow,
-  TableCell,
-} from "@/components/ui/table";
-import { Pagination } from "@/components/ui/pagination";
+import { DataTable } from "./data-table";
+import { columns } from "./columns";
 
 const importFormSchema = z.object({
   file: z
@@ -61,7 +54,7 @@ const ImportGuestBookForm: React.FC<ImportGuestBookFormsProps> = ({
 }) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [previewData, setPreviewData] = useState<any[][]>([]);
+  const [tableData, setTableData] = useState<any[]>([]);
 
   const addOrUpdateGuestToInvitation = useInvitationStore(
     (state) => state.addOrUpdateGuestToInvitation
@@ -86,7 +79,16 @@ const ImportGuestBookForm: React.FC<ImportGuestBookFormsProps> = ({
           const jsonData: any[][] = XLSX.utils.sheet_to_json(worksheet, {
             header: 1,
           });
-          setPreviewData(jsonData);
+
+          const [headers, ...rows] = jsonData;
+          const parsedData = rows.map((row) =>
+            headers.reduce((acc: any, header: string, i: number) => {
+              acc[header] = row[i];
+              return acc;
+            }, {})
+          );
+
+          setTableData(parsedData);
         };
         reader.readAsArrayBuffer(file);
       }
@@ -120,20 +122,6 @@ const ImportGuestBookForm: React.FC<ImportGuestBookFormsProps> = ({
       setLoading(false);
     }
   };
-
-  const guestPerPage = 10;
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const totalGuests = previewData.length > 1 ? previewData.length - 1 : 0;
-  const totalPages = Math.ceil(totalGuests / guestPerPage);
-
-  const currentGuest = previewData
-    .slice(1)
-    .slice((currentPage - 1) * guestPerPage, currentPage * guestPerPage);
-
-  function handlePageChange(page: number) {
-    setCurrentPage(page);
-  }
 
   return (
     <Form {...form}>
@@ -195,55 +183,20 @@ const ImportGuestBookForm: React.FC<ImportGuestBookFormsProps> = ({
           )}
         />
 
-        {previewData.length > 0 && (
+        {tableData.length > 0 && (
           <>
-            <div className="mt-6 overflow-auto border rounded-md">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-10">No</TableHead>
-                    <TableHead>Nama</TableHead>
-                    <TableHead>Grup</TableHead>
-                    <TableHead>Alamat</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {currentGuest.map((row, rowIndex) => (
-                    <TableRow key={rowIndex}>
-                      <TableCell>
-                        {(currentPage - 1) * guestPerPage + rowIndex + 1}
-                      </TableCell>
-                      <TableCell>{row[0]}</TableCell>
-                      <TableCell>{row[1]}</TableCell>
-                      <TableCell>{row[2]}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+            <DataTable columns={columns} data={tableData || []} />
+            <div className="flex flex-col md:flex-row items-center justify-end gap-3">
+              <Button
+                variant="primary"
+                isLoading={loading}
+                type="submit"
+                className="w-full md:w-auto"
+              >
+                <Upload className="w-4 h-4 mr-2" />
+                Import
+              </Button>
             </div>
-            {totalPages > 1 && (
-              <div className="mt-8 flex-center">
-                <Pagination
-                  totalPages={totalPages}
-                  currentPage={currentPage}
-                  onPageChange={handlePageChange}
-                  siblingCount={1}
-                />
-              </div>
-            )}
-            {previewData.length > 1 && (
-              <div className="flex flex-col md:flex-row items-center justify-end gap-3">
-                <Button
-                  variant="primary"
-                  isLoading={loading}
-                  type="submit"
-                  className="w-full md:w-auto"
-                >
-                  <Upload className="w-4 h-4 mr-2" />
-                  Import
-                </Button>
-              </div>
-            )}
           </>
         )}
       </form>
