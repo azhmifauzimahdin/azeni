@@ -167,7 +167,7 @@ export async function GET(
       );
     }
     const guest = await prisma.guest.findUnique({
-      where: { id: params.guestId, invitationId: params.id },
+      where: { code: params.guestId, invitationId: params.id },
     });
 
     if (!guest) {

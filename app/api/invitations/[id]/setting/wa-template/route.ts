@@ -18,7 +18,8 @@ export async function PATCH(
     if (!userId) return unauthorizedError();
 
     const body = await req.json();
-    const parsed = SettingSchema.createApiRSVPSchema.safeParse(body);
+    const parsed =
+      SettingSchema.createWhatsappMessageTemplateSchema.safeParse(body);
 
     if (!parsed.success) {
       return handleZodError(parsed.error);
@@ -36,8 +37,7 @@ export async function PATCH(
       );
     }
 
-    const { rsvpEnabled, rsvpMaxGuests, rsvpDeadline, rsvpAllowNote } =
-      parsed.data;
+    const { whatsappMessageTemplate } = parsed.data;
 
     const invitationByUserId = await prisma.invitation.findFirst({
       where: {
@@ -53,21 +53,21 @@ export async function PATCH(
         invitationId: params.id,
       },
       data: {
-        rsvpEnabled,
-        rsvpMaxGuests,
-        rsvpDeadline,
-        rsvpAllowNote,
+        whatsappMessageTemplate,
       },
     });
 
     return ResponseJson(
       {
-        message: "Data pengaturan RSVP berhasil diperbarui",
+        message: "Data pengaturan template pesan Whatsapp berhasil diperbarui",
         data: setting,
       },
       { status: 200 }
     );
   } catch (error) {
-    return handleError(error, "Gagal memperbarui pengaturan RSVP");
+    return handleError(
+      error,
+      "Gagal memperbarui pengaturan template pesan Whatsapp"
+    );
   }
 }

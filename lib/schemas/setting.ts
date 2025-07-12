@@ -47,3 +47,46 @@ export const createApiRSVPSchema = z.object({
       "Status catatan tambahan harus berupa boolean (ya/tidak)",
   }),
 });
+const allowedPlaceholders = [
+  "name",
+  "brideName",
+  "groomName",
+  "invitationLink",
+];
+
+export const createWhatsappMessageTemplateSchema = z.object({
+  whatsappMessageTemplate: z
+    .string()
+    .min(10, { message: "Template pesan minimal 10 karakter." })
+    .max(5000, { message: "Template terlalu panjang. Maksimal 5000 karakter." })
+    .refine(
+      (val) => {
+        const openBraces = (val.match(/\{\{/g) || []).length;
+        const closeBraces = (val.match(/\}\}/g) || []).length;
+        return openBraces === closeBraces;
+      },
+      {
+        message: "Jumlah '{{' dan '}}' tidak seimbang.",
+      }
+    )
+    .refine(
+      (val) => {
+        const placeholderPattern = /\{\{(\w+)\}\}/g;
+        const usedPlaceholders: string[] = [];
+
+        let match: RegExpExecArray | null;
+        while ((match = placeholderPattern.exec(val)) !== null) {
+          usedPlaceholders.push(match[1]);
+        }
+
+        return usedPlaceholders.every((name) =>
+          allowedPlaceholders.includes(name)
+        );
+      },
+      {
+        message: `Hanya placeholder berikut yang diizinkan: ${allowedPlaceholders
+          .map((p) => `{{${p}}}`)
+          .join(", ")}`,
+      }
+    ),
+});

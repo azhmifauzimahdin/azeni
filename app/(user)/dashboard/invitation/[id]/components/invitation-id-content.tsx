@@ -106,7 +106,7 @@ const InvitationIdContent: React.FC<InvitationIdContentProps> = ({
     },
     {
       id: "11",
-      label: "Setting",
+      label: "Pengaturan",
       icon: "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751291125/settings_sfbujg.png",
       href: `${params.id}/setting`,
     },

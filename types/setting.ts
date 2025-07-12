@@ -1,3 +1,6 @@
+export interface SettingWaTemplateRequest {
+  whatsappMessageTemplate: string;
+}
 export interface SettingRSVPRequest {
   rsvpEnabled: boolean;
   rsvpMaxGuests: number;

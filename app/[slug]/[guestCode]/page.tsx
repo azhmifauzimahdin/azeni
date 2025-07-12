@@ -1,28 +1,30 @@
 import NotFound from "@/components/screens/not-found";
 import { SampleComponents } from "@/components/template";
 import { GuestService, InvitationService } from "@/lib/services";
-import { Guest, Invitation } from "@/types";
 import { handleError } from "@/lib/utils/handle-error";
 
 type InvitationPageProps = {
   params: {
     slug: string;
-    guestId: string;
+    guestCode: string;
   };
 };
 const InvitationPage = async ({ params }: InvitationPageProps) => {
   const { slug } = params;
-  let invitation: Invitation | null = null;
-  let guest: Guest | null = null;
+  let invitation = null;
+  let guest = null;
 
   try {
     invitation = await InvitationService.fetchInvitationByslug(slug);
-    guest = await GuestService.fetchGuestById(invitation.id, params.guestId);
+    guest = await GuestService.fetchGuestByCode(
+      invitation.data.id,
+      params.guestCode
+    );
   } catch (error: unknown) {
     handleError(error, "invitation");
   }
 
-  if (!invitation) {
+  if (!invitation?.data) {
     return <NotFound message="Undangan tidak ditemukan" />;
   }
 
@@ -31,11 +33,11 @@ const InvitationPage = async ({ params }: InvitationPageProps) => {
   }
 
   const props = {
-    ...invitation,
-    currentGuest: guest,
+    ...invitation.data,
+    currentGuest: guest.data,
   };
 
-  const ThemeComponent = SampleComponents[invitation.theme.name];
+  const ThemeComponent = SampleComponents[invitation.data.theme.name];
   return <ThemeComponent {...props} />;
 };
 

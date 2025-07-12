@@ -85,10 +85,10 @@ export async function checkOutGuest(
   return res.data;
 }
 
-export async function fetchGuestById(
+export async function fetchGuestByCode(
   InvitationId: string,
   id: string
-): Promise<Guest> {
+): Promise<ApiResponse<Guest>> {
   const res = await httpRequest.get(
     `/api/invitations/${InvitationId}/guest/${id}`
   );
