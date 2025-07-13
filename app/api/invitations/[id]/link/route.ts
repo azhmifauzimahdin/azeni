@@ -47,6 +47,26 @@ export async function PATCH(
 
     if (!invitationByUserId) return forbiddenError();
 
+    const existingGuest = await prisma.guest.findFirst({
+      where: {
+        invitationId: params.id,
+      },
+      orderBy: {
+        createdAt: "asc",
+      },
+      skip: 1,
+    });
+
+    if (existingGuest) {
+      return ResponseJson(
+        {
+          message:
+            "Link undangan tidak dapat diubah karena sudah ada tamu yang ditambahkan.",
+        },
+        { status: 409 }
+      );
+    }
+
     const existingSlug = await prisma.invitation.findFirst({
       where: {
         OR: [{ slug: url }, { id: url }],
@@ -64,6 +84,22 @@ export async function PATCH(
         { status: 409 }
       );
     }
+
+    const existingAddGuest = await prisma.invitationChange.findFirst({
+      where: {
+        invitationId: params.id,
+        type: "guest",
+      },
+    });
+
+    if (existingAddGuest)
+      return ResponseJson(
+        {
+          message:
+            "Link undangan tidak dapat diubah karena sudah pernah ada tamu yang ditambahkan.",
+        },
+        { status: 409 }
+      );
 
     const existingInvitationChange = await prisma.invitationChange.findFirst({
       where: {
@@ -87,6 +123,15 @@ export async function PATCH(
       },
       data: {
         slug: url,
+      },
+    });
+
+    await prisma.transaction.update({
+      where: {
+        invitationId: params.id,
+      },
+      data: {
+        invitationSlug: url,
       },
     });
 

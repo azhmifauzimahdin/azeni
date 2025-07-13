@@ -12,6 +12,7 @@ interface InvitationState {
   invitations: Invitation[];
   setInvitations: (invitation: Invitation[]) => void;
   addInvitationAtFirst: (newInvitation: Invitation) => void;
+  deleteInvitationById: (invitationId: string) => void;
   updateSlugInInvitation: (invitationId: string, slug: string) => void;
   updateCoupleInInvitation: (
     invitationId: string,
@@ -82,6 +83,12 @@ const useInvitationStore = create<InvitationState>((set) => ({
   addInvitationAtFirst: (newInvitation) =>
     set((state) => ({
       invitations: [newInvitation, ...state.invitations],
+    })),
+  deleteInvitationById: (invitationId) =>
+    set((state) => ({
+      invitations: state.invitations.filter(
+        (invitation) => invitation.id !== invitationId
+      ),
     })),
   updateSlugInInvitation: (invitationId, slug) =>
     set((state) => ({

@@ -11,7 +11,7 @@ const isPublicRoute = createRouteMatcher([
 const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
 const isUserRoute = createRouteMatcher(["/dashboard(.*)"]);
 
-const allowedOrigins = ["https://azeninv.vercel.app/"];
+const allowedOrigins = [`${process.env.NEXT_PUBLIC_BASE_URL}`];
 
 export default clerkMiddleware(async (auth, req) => {
   const { userId, redirectToSignIn } = await auth();

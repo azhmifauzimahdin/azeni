@@ -9,7 +9,7 @@ InsyaAllah akan menikah:
 
 *{{brideName}} & {{groomName}}*  
 
-Kami mengundang Bapak/Ibu/Saudara/i {{ name }} untuk turut hadir dan berbagi doa restu dalam momen istimewa ini. Doa dan kehadiran Anda sangat berarti bagi kami dan keluarga besar.
+Kami mengundang Bapak/Ibu/Saudara/i *{{name}}* untuk turut hadir dan berbagi doa restu dalam momen istimewa ini. Doa dan kehadiran Anda sangat berarti bagi kami dan keluarga besar.
 
 Informasi lengkap mengenai waktu dan tempat pelaksanaan acara dapat dilihat melalui undangan digital berikut:
 

@@ -63,6 +63,13 @@ export async function POST(
       },
     });
 
+    await prisma.invitationChange.create({
+      data: {
+        invitationId: params.id,
+        type: "guest",
+      },
+    });
+
     return ResponseJson(
       {
         message: "Data tamu berhasil dibuat",

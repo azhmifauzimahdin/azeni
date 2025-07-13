@@ -13,17 +13,21 @@ export async function generateUniqueSlug(
   let slug = baseSlug;
 
   const model = (prisma as any)[modelName];
-
   if (!model) {
     throw new Error(
       `Model ${String(modelName)} tidak ditemukan di Prisma client`
     );
   }
 
+  const now = new Date();
+
   const similarSlugs = await model.findMany({
     where: {
       [slugField]: {
         startsWith: baseSlug,
+      },
+      expiresAt: {
+        gt: now,
       },
     },
     select: {

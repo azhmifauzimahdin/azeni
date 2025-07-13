@@ -3,6 +3,7 @@
 import { Invitation } from "@/types";
 import SettingTemplateForm from "./setting-template-form";
 import SettingLinkForm from "./setting-link-form";
+import SettingDeleteForm from "./setting-delete-form";
 
 interface SettingFormsProps {
   params: { id: string };
@@ -23,6 +24,11 @@ const SettingForm: React.FC<SettingFormsProps> = ({
         isFetching={isFetching}
       />
       <SettingTemplateForm
+        params={params}
+        initialData={initialData}
+        isFetching={isFetching}
+      />
+      <SettingDeleteForm
         params={params}
         initialData={initialData}
         isFetching={isFetching}

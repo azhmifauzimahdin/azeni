@@ -18,7 +18,7 @@ model Invitation {
   userId        String
   groom         String
   bride         String
-  slug          String        @unique
+  slug          String
   themeId       String
   musicId       String
   image         String?
@@ -29,8 +29,8 @@ model Invitation {
   updatedAt     DateTime      @updatedAt
 
   transaction   Transaction?  @relation("InvitationTransaction")
-  theme         Theme         @relation(fields: [themeId], references: [id], onDelete: Restrict)
-  music         Music?        @relation("MusicInvitations",fields: [musicId], references: [id])
+  theme         Theme         @relation("ThemecInvitations", fields: [themeId], references: [id], onDelete: Restrict)
+  music         Music         @relation("MusicInvitations",fields: [musicId], references: [id], onDelete: Restrict)
   quote         Quote?        @relation("InvitationQuote")
   schedules     Schedule[]    @relation("InvitationSchedule")
   couple        Couple?       @relation("InvitationCouple")
@@ -54,18 +54,21 @@ model Setting {
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
 
-  invitation    Invitation    @relation("InvitationSetting",fields: [invitationId], references: [id], onDelete: Cascade)
+  invitation    Invitation      @relation("InvitationSetting",fields: [invitationId], references: [id], onDelete: Cascade)
 }
 
 model Transaction {
-  id            String        @id @default(uuid())
-  invitationId  String        @unique
-  amount        Decimal       @db.Decimal(10, 2)
-  date          DateTime
-  statusId      String
+  id              String        @id @default(uuid())
+  invitationId    String?       @unique
+  invitationSlug  String?
+  groomName       String?
+  brideName       String?
+  amount          Decimal       @db.Decimal(10, 2)
+  date            DateTime
+  statusId        String
 
-  invitation    Invitation    @relation("InvitationTransaction",fields: [invitationId], references: [id], onDelete: Cascade)
-  status        PaymentStatus  @relation("PaymentStatusTransaction", fields: [statusId], references: [id], onDelete: Cascade)
+  invitation      Invitation?    @relation("InvitationTransaction", fields: [invitationId], references: [id], onDelete: SetNull)
+  status          PaymentStatus  @relation("PaymentStatusTransaction", fields: [statusId], references: [id], onDelete: Cascade)
 }
 
 model PaymentStatus {
@@ -85,7 +88,7 @@ model Theme{
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 
-  invitations   Invitation[]
+  invitations   Invitation[]  @relation("ThemecInvitations")
 }
 
 model Quote {

@@ -10,7 +10,7 @@ const alertVariants = cva(
       variant: {
         default: "bg-gradient-wedding-green border-green-200 text-green-900/90",
         destructive:
-          "border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive",
+          "bg-gradient-destructive border-red-200 text-red-900/90 [&>svg]:text-red-900",
       },
     },
     defaultVariants: {

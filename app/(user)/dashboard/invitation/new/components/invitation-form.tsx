@@ -30,6 +30,7 @@ import useUserInvitations from "@/hooks/use-user-invitation";
 import axios from "axios";
 import ImageUpload from "./image-upload";
 import { createInvitationSchema } from "@/lib/schemas/invitation";
+import { Alert } from "@/components/ui/alert";
 
 const invitationSchema = createInvitationSchema.pick({
   groom: true,
@@ -75,7 +76,6 @@ const InvitationForm: React.FC = () => {
         expiresAt: new Date(new Date().setMonth(new Date().getMonth() + 12)),
       };
       const res = await InvitationService.createInvitation(req);
-      console.log(res);
       addInvitationAtFirst(res.data);
       router.push(`/dashboard/invitation`);
       toast.success("Undangan berhasil dibuat.");
@@ -129,12 +129,16 @@ const InvitationForm: React.FC = () => {
   return (
     <>
       <NavigationBack href="/dashboard/invitation" />
-      <div className="flex items-center justify-between">
-        <Heading
-          title="Buat Undangan"
-          description="Buat undanganmu sekarang juga"
-        />
-      </div>
+      <Heading
+        title="Buat Undangan"
+        description="Buat undanganmu sekarang juga"
+      />
+      <Alert variant="default">
+        Pastikan nama panggilan untuk mempelai pria dan wanita sudah benar,
+        termasuk penggunaan huruf besar. Panggilan ini tidak dapat diubah
+        setelah disimpan dan akan digunakan di beberapa bagian undangan secara
+        otomatis.
+      </Alert>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -213,7 +217,10 @@ const InvitationForm: React.FC = () => {
                 {process.env.NEXT_PUBLIC_BASE_URL}/{slug}-
                 <span className="italic">{"{kodeunik}"}</span>
               </div>
-              <FormDescription>** Kode unik otomatis</FormDescription>
+              <FormDescription>
+                ** Kode unik terbentuk otomatis jika link undangan sudah
+                terpakai pengguna lain
+              </FormDescription>
             </div>
           </div>
           <div className="flex flex-col md:flex-row items-center justify-end gap-3">

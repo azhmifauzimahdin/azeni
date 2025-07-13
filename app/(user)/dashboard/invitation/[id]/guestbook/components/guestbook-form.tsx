@@ -40,6 +40,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useRouter } from "next/navigation";
+import { Alert } from "@/components/ui/alert";
 
 type GuestBookFormValues = z.infer<typeof createGuestSchema>;
 
@@ -413,7 +414,7 @@ const GuestBookForm: React.FC<StoryFormsProps> = ({
                       href="setting"
                       className="text-green-app-primary hover:text-green-app-secondary transition-colors"
                     >
-                      Setting
+                      Penganturan
                     </Link>
                     .
                   </FormDescription>
@@ -558,6 +559,21 @@ const GuestBookForm: React.FC<StoryFormsProps> = ({
         onConfirm={onDelete}
         loading={loading}
       />
+      <Alert variant="default" className="mb-4">
+        Sebelum menambahkan tamu undangan, pastikan link undangan sudah benar.
+        Link hanya dapat diubah satu kali, dan tidak bisa diubah lagi setelah
+        tamu ditambahkan. jika Anda sudah pernah menambahkan tamu dan kemudian
+        menghapusnya, sistem tetap akan mendeteksi bahwa tamu pernah
+        ditambahkan, sehingga link undangan tidak dapat diubah. Untuk mengubah
+        link undangan, buka menu&nbsp;
+        <Link
+          href="setting"
+          className="text-pink-500 hover:text-pink-600 transition-colors"
+        >
+          Pengaturan
+        </Link>
+        .
+      </Alert>
       <div className="space-y-4 card-dashboard ">
         <div className="flex flex-col-reverse md:flex-row md:items-center md:justify-between gap-4">
           <Input

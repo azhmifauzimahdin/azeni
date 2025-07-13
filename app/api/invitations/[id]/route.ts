@@ -1,5 +1,13 @@
+import cloudinary from "@/lib/cloudinary";
 import { prisma } from "@/lib/prisma";
-import { handleError, ResponseJson } from "@/lib/utils/response";
+import extractCloudinaryPublicId from "@/lib/utils/extract-cloudinary-public-id";
+import {
+  forbiddenError,
+  handleError,
+  ResponseJson,
+  unauthorizedError,
+} from "@/lib/utils/response";
+import { auth } from "@clerk/nextjs/server";
 
 export async function GET(_: Request, { params }: { params: { id: string } }) {
   try {
@@ -52,8 +60,13 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
         },
       });
     } else {
-      invitation = await prisma.invitation.findUnique({
-        where: { slug: params.id },
+      invitation = await prisma.invitation.findFirst({
+        where: {
+          slug: params.id,
+          expiresAt: {
+            gt: new Date(),
+          },
+        },
         include: {
           transaction: {
             include: {
@@ -112,5 +125,71 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
     );
   } catch (error) {
     return handleError(error, "Gagal mengambil undangan");
+  }
+}
+
+export async function DELETE(
+  _: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const { userId } = await auth();
+    if (!userId) return unauthorizedError();
+
+    if (!params.id) {
+      return ResponseJson(
+        {
+          message: "Validasi gagal",
+          errors: {
+            id: ["ID wajib diisi"],
+          },
+        },
+        { status: 400 }
+      );
+    }
+
+    const invitation = await prisma.invitation.findFirst({
+      where: {
+        id: params.id,
+        userId,
+      },
+      include: {
+        couple: true,
+        stories: true,
+        galleries: true,
+      },
+    });
+
+    if (!invitation) return forbiddenError();
+
+    const urlsToDelete: string[] = [
+      invitation.image,
+      invitation.couple?.groomImage,
+      invitation.couple?.brideImage,
+      ...invitation.stories.map((s) => s.image),
+      ...invitation.galleries.map((g) => g.image),
+    ].filter(Boolean) as string[];
+
+    for (const url of urlsToDelete) {
+      const publicId = extractCloudinaryPublicId(url);
+      if (publicId) {
+        try {
+          await cloudinary.uploader.destroy(publicId);
+        } catch {
+          console.warn("Gagal hapus gambar:", publicId);
+        }
+      }
+    }
+
+    await prisma.invitation.delete({
+      where: { id: params.id },
+    });
+
+    return ResponseJson(
+      { message: "Data undangan berhasil dihapus", data: invitation },
+      { status: 200 }
+    );
+  } catch (error) {
+    return handleError(error, "Gagal menghapus undangan");
   }
 }

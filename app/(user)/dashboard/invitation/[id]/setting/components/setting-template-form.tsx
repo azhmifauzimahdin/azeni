@@ -111,9 +111,9 @@ const SettingTemplateForm: React.FC<SettingTemplateFormsProps> = ({
 
   const preview = renderTemplate(form.watch("whatsappMessageTemplate"), {
     name: "Azhmi Fauzi Mahdin",
-    brideName: "Dinda",
-    groomName: "Rey",
-    invitationLink: `${process.env.NEXT_PUBLIC_BASE_URL}/rey-dinda`,
+    brideName: initialData?.groom || "undefined",
+    groomName: initialData?.bride || "undefined",
+    invitationLink: `${process.env.NEXT_PUBLIC_BASE_URL}/${initialData?.slug}`,
   });
 
   return (
@@ -191,15 +191,15 @@ const SettingTemplateForm: React.FC<SettingTemplateFormsProps> = ({
           <h2 className="font-medium text-base">Preview Pesan</h2>
           {isFetching ? (
             <div className="p-4 bg-muted/50 border rounded-md text-sm min-h-[600px]">
-              <div className="bg-green-100 p-3 rounded-xl space-y-3 animate-pulse h-full flex flex-col justify-start">
+              <div className="bg-slate-100 p-3 rounded-xl space-y-3 animate-pulse h-full flex flex-col justify-start">
                 {[...Array(3)].map((_, i) => (
                   <div key={i} className="space-y-3">
-                    <div className="h-4 bg-green-300 rounded w-3/4" />
-                    <div className="h-4 bg-green-300 rounded w-1/2" />
-                    <div className="h-4 bg-green-300 rounded w-full" />
-                    <div className="h-4 bg-green-300 rounded w-[60%]" />
-                    <div className="h-4 bg-green-300 rounded w-2/3" />
-                    <div className="h-4 bg-green-300 rounded w-1/3" />
+                    <div className="h-4 bg-slate-300 rounded w-3/4" />
+                    <div className="h-4 bg-slate-300 rounded w-1/2" />
+                    <div className="h-4 bg-slate-300 rounded w-full" />
+                    <div className="h-4 bg-slate-300 rounded w-[60%]" />
+                    <div className="h-4 bg-slate-300 rounded w-2/3" />
+                    <div className="h-4 bg-slate-300 rounded w-1/3" />
                   </div>
                 ))}
               </div>

@@ -64,11 +64,10 @@ const SettingLinkForm: React.FC<SettingLinkFormsProps> = ({
       setLoading(true);
       const res = await InvitationService.updateLinkByUserId(params.id, data);
       updateSlugInInvitation(params.id, res.data.slug);
-      toast.success("Jadwal acara berhasil disimpan.");
+      toast.success("Link undangan berhasil diubah.");
       setIsModalOpen(false);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
-        console.log("status : ", error.response?.status);
         if (error.response?.status === 409) {
           toast.error(error.response.data.message);
         } else {
@@ -137,9 +136,15 @@ const SettingLinkForm: React.FC<SettingLinkFormsProps> = ({
       <div className="card-dashboard space-y-6">
         <h2 className="text-xl font-semibold text-slate-800">Link Undangan</h2>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div className="flex-1 bg-gradient-pink-purple p-3 rounded-md text-xs text-slate-800">
-            {process.env.NEXT_PUBLIC_BASE_URL}/{initialData?.slug}{" "}
-          </div>
+          {isFetching ? (
+            <div className="flex-1 bg-slate-100 p-3 rounded-md">
+              <div className="h-5 bg-slate-200 rounded animate-pulse" />
+            </div>
+          ) : (
+            <div className="flex-1 bg-gradient-pink-purple p-3 rounded-md text-xs text-slate-800">
+              {process.env.NEXT_PUBLIC_BASE_URL}/{initialData?.slug}
+            </div>
+          )}
 
           <div className="w-full md:w-auto flex justify-end">
             <Button

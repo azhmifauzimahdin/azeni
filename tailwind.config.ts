@@ -14,7 +14,10 @@ const config: Config = {
           "linear-gradient(to bottom right, #FBCFE8, #D8B4FE)",
         "gradient-wedding-green":
           "linear-gradient(to bottom right, #e0f7e9, #a7e8c3)",
+        "gradient-destructive":
+          "linear-gradient(to bottom right, #fdecea, #fbb6b6)",
       },
+
       boxShadow: {
         "alert-soft": "0 4px 12px rgba(0, 0, 0, 0.04)",
       },

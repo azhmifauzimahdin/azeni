@@ -20,6 +20,14 @@ export async function fetchInvitationByslug(
   return res.data;
 }
 
+export async function deleteInvitationById(
+  id: string
+): Promise<ApiResponse<Invitation>> {
+  const res = await httpRequest.delete(`/api/invitations/${id}`);
+
+  return res.data;
+}
+
 export async function fetchInvitationById(
   id: string
 ): Promise<ApiResponse<Invitation>> {

@@ -1,6 +1,8 @@
 import { generateUniqueSlug } from "@/lib/generateUniqueSlug";
 import { prisma } from "@/lib/prisma";
 import { InvitationSchema } from "@/lib/schemas";
+import { defaultWhatsappMessageTemplate } from "@/lib/utils/default";
+import { generateUniqueGuestCode } from "@/lib/utils/generate-unique-guest-code";
 import {
   handleError,
   handleZodError,
@@ -103,23 +105,6 @@ export async function POST(req: Request) {
       );
     }
 
-    const newSlug = await generateUniqueSlug(slug, "invitation");
-
-    const newInvitation = await prisma.invitation.create({
-      data: {
-        userId,
-        groom,
-        bride,
-        slug: newSlug,
-        themeId: themeId || theme.id,
-        musicId: musicId || music.id,
-        image,
-        status: true,
-        date,
-        expiresAt,
-      },
-    });
-
     const status = await prisma.paymentStatus.findFirst({
       where: {
         name: "Menunggu Pembayaran",
@@ -140,9 +125,29 @@ export async function POST(req: Request) {
       );
     }
 
+    const newSlug = await generateUniqueSlug(slug, "invitation");
+
+    const newInvitation = await prisma.invitation.create({
+      data: {
+        userId,
+        groom,
+        bride,
+        slug: newSlug,
+        themeId: themeId || theme.id,
+        musicId: musicId || music.id,
+        image,
+        status: true,
+        date,
+        expiresAt,
+      },
+    });
+
     await prisma.transaction.create({
       data: {
         invitationId: newInvitation.id,
+        invitationSlug: newInvitation.slug,
+        groomName: newInvitation.groom,
+        brideName: newInvitation.bride,
         amount: calculateFinalPrice(
           theme.originalPrice,
           theme.discount,
@@ -156,6 +161,19 @@ export async function POST(req: Request) {
     await prisma.setting.create({
       data: {
         invitationId: newInvitation.id,
+        whatsappMessageTemplate: defaultWhatsappMessageTemplate,
+      },
+    });
+
+    const kode = await generateUniqueGuestCode();
+
+    await prisma.guest.create({
+      data: {
+        code: kode,
+        invitationId: newInvitation.id,
+        name: "tamu",
+        isAttending: false,
+        color: "bg-teal-500",
       },
     });
 
@@ -180,12 +198,12 @@ export async function POST(req: Request) {
         couple: true,
         stories: {
           orderBy: {
-            createdAt: "desc",
+            date: "asc",
           },
         },
         galleries: {
           orderBy: {
-            createdAt: "desc",
+            createdAt: "asc",
           },
         },
         bankaccounts: {
@@ -201,6 +219,12 @@ export async function POST(req: Request) {
             createdAt: "desc",
           },
         },
+        guests: {
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
+        setting: true,
       },
     });
 

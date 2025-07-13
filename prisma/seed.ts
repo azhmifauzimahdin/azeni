@@ -129,6 +129,9 @@ async function main() {
   await prisma.transaction.create({
     data: {
       invitationId: invitation.id,
+      invitationSlug: invitation.slug,
+      groomName: invitation.groom,
+      brideName: invitation.bride,
       amount: 50000,
       date: new Date("2025-01-01T12:00:00Z"),
       statusId: paymentStatus.id,
@@ -150,7 +153,7 @@ InsyaAllah akan menikah:
 
 *{{brideName}} & {{groomName}}*  
 
-Kami mengundang Bapak/Ibu/Saudara/i {{ name }} untuk turut hadir dan berbagi doa restu dalam momen istimewa ini. Doa dan kehadiran Anda sangat berarti bagi kami dan keluarga besar.
+Kami mengundang Bapak/Ibu/Saudara/i *{{name}}* untuk turut hadir dan berbagi doa restu dalam momen istimewa ini. Doa dan kehadiran Anda sangat berarti bagi kami dan keluarga besar.
 
 Informasi lengkap mengenai waktu dan tempat pelaksanaan acara dapat dilihat melalui undangan digital berikut:
 
@@ -161,7 +164,7 @@ Semoga Allah SWT memberkahi langkah kami, dan semoga Bapak/Ibu/Saudara/i senanti
 Wassalamu'alaikum warahmatullahi wabarakatuh.  
 Hormat kami,  
 *{{brideName}} & {{groomName}}*
-      `.trim(),
+`.trim(),
     },
   });
 
@@ -356,13 +359,11 @@ Hormat kami,
       code: kode,
       invitationId: invitation.id,
       name: "tamu",
-      address: "-",
       isAttending: false,
       color: "bg-teal-500",
     },
   });
 
-  // Create Comments
   await prisma.comment.createMany({
     data: [
       {
