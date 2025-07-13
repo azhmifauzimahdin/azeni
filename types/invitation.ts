@@ -3,6 +3,7 @@ import { Comment } from "./comment";
 import { Couple } from "./couple";
 import { Gallery } from "./gallery";
 import { Guest } from "./guest";
+import { InvitationChange } from "./invitation-change";
 import { Music } from "./music";
 import { Quote } from "./quote";
 import { Schedule } from "./schedule";
@@ -49,4 +50,5 @@ export interface Invitation {
   comments: Comment[];
   guests: Guest[];
   guest: Guest;
+  invitationChanges: InvitationChange[];
 }

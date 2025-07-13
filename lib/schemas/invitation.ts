@@ -1,5 +1,16 @@
 import { z } from "zod";
 
+export const updateLinkInvitationSchema = z.object({
+  url: z
+    .string()
+    .min(3, { message: "Link undangan minimal terdiri dari 3 karakter." })
+    .max(30, { message: "Link undangan maksimal terdiri dari 30 karakter." })
+    .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, {
+      message:
+        "Link undangan hanya boleh huruf kecil, angka, dan tanda hubung (-), tidak boleh diawali atau diakhiri dengan '-'.",
+    }),
+});
+
 export const createInvitationSchema = z.object({
   groom: z
     .string({

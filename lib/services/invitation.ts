@@ -50,3 +50,11 @@ export async function updateThemeByUserId(
   const res = await httpRequest.patch(`/api/invitations/${id}/theme`, request);
   return res.data;
 }
+
+export async function updateLinkByUserId(
+  id: string,
+  request: { url: string }
+): Promise<ApiResponse<Invitation>> {
+  const res = await httpRequest.patch(`/api/invitations/${id}/link`, request);
+  return res.data;
+}

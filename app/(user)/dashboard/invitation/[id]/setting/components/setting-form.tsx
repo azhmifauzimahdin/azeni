@@ -2,6 +2,7 @@
 
 import { Invitation } from "@/types";
 import SettingTemplateForm from "./setting-template-form";
+import SettingLinkForm from "./setting-link-form";
 
 interface SettingFormsProps {
   params: { id: string };
@@ -15,13 +16,18 @@ const SettingForm: React.FC<SettingFormsProps> = ({
   isFetching,
 }) => {
   return (
-    <>
+    <div className="space-y-4">
+      <SettingLinkForm
+        params={params}
+        initialData={initialData}
+        isFetching={isFetching}
+      />
       <SettingTemplateForm
         params={params}
         initialData={initialData}
         isFetching={isFetching}
       />
-    </>
+    </div>
   );
 };
 

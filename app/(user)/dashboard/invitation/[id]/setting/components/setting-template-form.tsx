@@ -117,106 +117,100 @@ const SettingTemplateForm: React.FC<SettingTemplateFormsProps> = ({
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 card-dashboard">
       <h2 className="text-xl font-semibold text-slate-800">
         Format Pesan WhatsApp
       </h2>
-
-      <div className="bg-white rounded-lg shadow-sm p-6 border">
-        <div className="grid gap-8 md:grid-cols-2 items-start">
-          <div className="space-y-6">
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-4"
-              >
-                <FormField
-                  control={form.control}
-                  name="whatsappMessageTemplate"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="font-medium text-base">
-                        Isi Pesan
-                      </FormLabel>
-                      <div className="text-sm text-muted-foreground space-y-2">
-                        <div>
-                          <span className="inline-block bg-muted text-foreground text-xs font-mono font-medium px-2 py-0.5 rounded-md">
-                            {"{{name}}"}
-                          </span>{" "}
-                          : Nama tamu
-                        </div>
-                        <div>
-                          <span className="inline-block bg-muted text-foreground text-xs font-mono font-medium px-2 py-0.5 rounded-md">
-                            {"{{brideName}}"}
-                          </span>{" "}
-                          : Nama mempelai wanita
-                        </div>
-                        <div>
-                          <span className="inline-block bg-muted text-foreground text-xs font-mono font-medium px-2 py-0.5 rounded-md">
-                            {"{{groomName}}"}
-                          </span>{" "}
-                          : Nama mempelai pria
-                        </div>
-                        <div>
-                          <span className="inline-block bg-muted text-foreground text-xs font-mono font-medium px-2 py-0.5 rounded-md">
-                            {"{{invitationLink}}"}
-                          </span>{" "}
-                          : Tautan undangan digital
-                        </div>
+      <div className="grid gap-8 md:grid-cols-2 items-start">
+        <div className="space-y-6">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="whatsappMessageTemplate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-medium text-base">
+                      Isi Pesan
+                    </FormLabel>
+                    <div className="text-sm text-muted-foreground space-y-2">
+                      <div>
+                        <span className="inline-block bg-muted text-foreground text-xs font-mono font-medium px-2 py-0.5 rounded-md">
+                          {"{{name}}"}
+                        </span>{" "}
+                        : Nama tamu
                       </div>
-                      <FormControl>
-                        <Textarea
-                          className="min-h-[400px]"
-                          disabled={loading}
-                          isFetching={isFetching}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <div className="flex flex-col md:flex-row items-center justify-end gap-3">
-                  <Button
-                    type="submit"
-                    variant="primary"
-                    className="w-full md:w-auto"
-                    disabled={loading}
-                    isFetching={isFetching}
-                  >
-                    Simpan Template
-                  </Button>
-                </div>
-              </form>
-            </Form>
-          </div>
-
-          <div className="space-y-2">
-            <h2 className="font-medium text-base">Preview Pesan</h2>
-            {isFetching ? (
-              <div className="p-4 bg-muted/50 border rounded-md text-sm min-h-[600px]">
-                <div className="bg-green-100 p-3 rounded-xl space-y-3 animate-pulse h-full flex flex-col justify-start">
-                  {[...Array(3)].map((_, i) => (
-                    <div key={i} className="space-y-3">
-                      <div className="h-4 bg-green-300 rounded w-3/4" />
-                      <div className="h-4 bg-green-300 rounded w-1/2" />
-                      <div className="h-4 bg-green-300 rounded w-full" />
-                      <div className="h-4 bg-green-300 rounded w-[60%]" />
-                      <div className="h-4 bg-green-300 rounded w-2/3" />
-                      <div className="h-4 bg-green-300 rounded w-1/3" />
+                      <div>
+                        <span className="inline-block bg-muted text-foreground text-xs font-mono font-medium px-2 py-0.5 rounded-md">
+                          {"{{brideName}}"}
+                        </span>{" "}
+                        : Nama mempelai wanita
+                      </div>
+                      <div>
+                        <span className="inline-block bg-muted text-foreground text-xs font-mono font-medium px-2 py-0.5 rounded-md">
+                          {"{{groomName}}"}
+                        </span>{" "}
+                        : Nama mempelai pria
+                      </div>
+                      <div>
+                        <span className="inline-block bg-muted text-foreground text-xs font-mono font-medium px-2 py-0.5 rounded-md">
+                          {"{{invitationLink}}"}
+                        </span>{" "}
+                        : Tautan undangan digital
+                      </div>
                     </div>
-                  ))}
-                </div>
+                    <FormControl>
+                      <Textarea
+                        className="min-h-[400px]"
+                        disabled={loading}
+                        isFetching={isFetching}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div className="flex flex-col md:flex-row items-center justify-end gap-3">
+                <Button
+                  type="submit"
+                  variant="primary"
+                  className="w-full md:w-auto"
+                  disabled={loading}
+                  isFetching={isFetching}
+                >
+                  Simpan Template
+                </Button>
               </div>
-            ) : (
-              <div className="p-4 bg-muted/50 border rounded-md text-sm h-full whitespace-pre-line">
-                <div className="bg-green-100 text-green-900 p-3 rounded-xl">
-                  {preview}
-                </div>
+            </form>
+          </Form>
+        </div>
+
+        <div className="space-y-2">
+          <h2 className="font-medium text-base">Preview Pesan</h2>
+          {isFetching ? (
+            <div className="p-4 bg-muted/50 border rounded-md text-sm min-h-[600px]">
+              <div className="bg-green-100 p-3 rounded-xl space-y-3 animate-pulse h-full flex flex-col justify-start">
+                {[...Array(3)].map((_, i) => (
+                  <div key={i} className="space-y-3">
+                    <div className="h-4 bg-green-300 rounded w-3/4" />
+                    <div className="h-4 bg-green-300 rounded w-1/2" />
+                    <div className="h-4 bg-green-300 rounded w-full" />
+                    <div className="h-4 bg-green-300 rounded w-[60%]" />
+                    <div className="h-4 bg-green-300 rounded w-2/3" />
+                    <div className="h-4 bg-green-300 rounded w-1/3" />
+                  </div>
+                ))}
               </div>
-            )}
-          </div>
+            </div>
+          ) : (
+            <div className="p-4 bg-muted/50 border rounded-md text-sm h-full whitespace-pre-line">
+              <div className="bg-green-100 text-green-900 p-3 rounded-xl">
+                {preview}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

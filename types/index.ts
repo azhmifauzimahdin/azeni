@@ -13,3 +13,4 @@ export * from "./guest";
 export * from "./music";
 export * from "./quote-template";
 export * from "./setting";
+export * from "./invitation-change";

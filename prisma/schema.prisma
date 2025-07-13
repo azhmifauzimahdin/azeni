@@ -40,6 +40,7 @@ model Invitation {
   bankaccounts  BankAccount[] @relation("InvitationBankAccount")
   comments      Comment[]     @relation("InvitationComment")
   guests        Guest[]       @relation("InvitationGuest")
+  invitationChanges InvitationChange[] @relation("InvitationChange")
 }
 
 model Setting {
@@ -96,6 +97,18 @@ model Quote {
   updatedAt     DateTime      @updatedAt
 
   invitation    Invitation    @relation("InvitationQuote",fields: [invitationId], references: [id], onDelete: Cascade)
+}
+
+model InvitationChange {
+  id            String         @id @default(uuid())
+  invitationId  String         
+  type          String 
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  invitation    Invitation    @relation("InvitationChange",fields: [invitationId], references: [id], onDelete: Cascade)
+
+  @@unique([invitationId, type])
 }
 
 model QuoteTemplate  {
