@@ -49,6 +49,7 @@ const InvitationList: React.FC<InvitationListProps> = ({
             alt="Icon undangan"
             aspectRatio="aspect-square"
             className="w-20 mb-5"
+            priority
           />
           <p className="text-sm font-medium">Undangan tidak ditemukan</p>
           <p className="text-xs">Kamu belum membuat undangan pernikahan.</p>

@@ -16,6 +16,7 @@ export async function deleteImageByPublicId(public_id: string): Promise<
 export async function getSignature(paramsToSign: {
   timestamp: string;
   folder: string;
+  transformation?: string;
 }): Promise<
   ApiResponse<{
     signature: string;
@@ -35,6 +36,7 @@ export interface UploadImageRequest {
   timestamp: string;
   signature: string;
   folder?: string;
+  transformation?: string;
 }
 
 export interface UploadImageResponse {
@@ -55,6 +57,8 @@ export async function uploadImageToCloudinary(
   formData.append("timestamp", data.timestamp);
   formData.append("signature", data.signature);
   if (data.folder) formData.append("folder", data.folder);
+  if (data.transformation)
+    formData.append("transformation", data.transformation);
 
   const res = await axios.post<UploadImageResponse>(
     `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,

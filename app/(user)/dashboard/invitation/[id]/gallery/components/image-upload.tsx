@@ -3,11 +3,18 @@
 
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { ChevronLeft, ChevronRight, ImagePlus, X } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ImageIcon,
+  ImagePlus,
+  X,
+} from "lucide-react";
 import toast from "react-hot-toast";
 import { uploadImageToCloudinary } from "@/lib/services/image";
 import { ImageService } from "@/lib/services";
 import Image from "@/components/ui/image";
+import ImageNext from "next/image";
 import type { Gallery } from "@/types";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,6 +25,9 @@ import {
 } from "@/components/ui/dialog";
 import { Pagination } from "@/components/ui/pagination";
 import { ImageSchema } from "@/lib/schemas";
+import heic2any from "heic2any";
+import { FILE_TRANFORMATION } from "@/lib/schemas/image";
+import { cloudinaryProxyLoader } from "@/lib/cloudinary-loader";
 
 function CloseModalButton({ onClick }: { onClick: () => void }) {
   return (
@@ -48,7 +58,7 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
   path = "default",
 }) => {
   const [uploadingFiles, setUploadingFiles] = useState<
-    { key: string; previewUrl: string; progress: number }[]
+    { key: string; previewUrl: string; progress: number; isReady: boolean }[]
   >([]);
   const [deletingGalleryId, setDeletingGalleryId] = useState<string | null>(
     null
@@ -67,27 +77,101 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
 
         const key = `${file.name}-${Date.now()}`;
         const previewUrl = URL.createObjectURL(file);
+
+        // Tambahkan dummy dulu agar ada loader
         setUploadingFiles((prev) => [
           ...prev,
-          { key, previewUrl, progress: 0 },
+          { key, previewUrl, progress: 0, isReady: false },
         ]);
+
+        let finalFile = file;
+        const fileExt = file.name.split(".").pop()?.toLowerCase();
+        const isHeicLike =
+          file.type === "image/heic" ||
+          file.type === "image/heif" ||
+          (!file.type && (fileExt === "heic" || fileExt === "heif"));
+
+        if (isHeicLike) {
+          try {
+            const output = await heic2any({
+              blob: file,
+              toType: "image/jpeg",
+              quality: 0.95,
+            });
+
+            const blob = Array.isArray(output) ? output[0] : output;
+            finalFile = new File([blob], file.name.replace(/\.\w+$/, ".jpg"), {
+              type: "image/jpeg",
+            });
+
+            const convertedPreviewUrl = URL.createObjectURL(finalFile);
+
+            const img = new window.Image();
+            img.onload = () => {
+              setUploadingFiles((prev) =>
+                prev.map((item) =>
+                  item.key === key
+                    ? {
+                        ...item,
+                        previewUrl: convertedPreviewUrl,
+                        isReady: true,
+                      }
+                    : item
+                )
+              );
+            };
+            img.onerror = () => {
+              toast.error("Gagal memuat preview gambar HEIC.");
+              setUploadingFiles((prev) =>
+                prev.filter((item) => item.key !== key)
+              );
+            };
+            img.src = convertedPreviewUrl;
+          } catch (err) {
+            console.error("Konversi HEIC gagal:", err);
+            toast.error("Gagal mengkonversi gambar HEIC.");
+            setUploadingFiles((prev) =>
+              prev.filter((item) => item.key !== key)
+            );
+            continue;
+          }
+        } else {
+          // Untuk non-HEIC langsung preload
+          const img = new window.Image();
+          img.onload = () => {
+            setUploadingFiles((prev) =>
+              prev.map((item) =>
+                item.key === key ? { ...item, isReady: true } : item
+              )
+            );
+          };
+          img.onerror = () => {
+            toast.error("Gagal memuat preview gambar.");
+            setUploadingFiles((prev) =>
+              prev.filter((item) => item.key !== key)
+            );
+          };
+          img.src = previewUrl;
+        }
 
         try {
           const timestamp = Math.floor(Date.now() / 1000);
           const res = await ImageService.getSignature({
             timestamp: timestamp.toString(),
             folder: path,
+            transformation: FILE_TRANFORMATION,
           });
 
           const { signature } = res.data;
 
           const uploadRes = await uploadImageToCloudinary(
             {
-              file,
+              file: finalFile,
               api_key: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY!,
               timestamp: timestamp.toString(),
               signature,
               folder: path,
+              transformation: FILE_TRANFORMATION,
             },
             (progressEvent) => {
               if (progressEvent.total) {
@@ -107,7 +191,7 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
             await onUploadFinish(uploadRes.secure_url);
             toast.success("Gambar berhasil disimpan.");
           } catch {
-            toast.error("Gambar gagal disimpan.");
+            toast.error("Gambar gagal disimpan ke database.");
             continue;
           }
         } catch (err) {
@@ -161,9 +245,7 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
           <p className="text-sm font-medium">
             Klik atau seret untuk mengunggah foto
           </p>
-          <p className="text-xs text-gray-400">
-            Maksimal 2MB. Format JPG, PNG, dll.
-          </p>
+          <p className="text-xs text-gray-400">Format JPG, PNG, dll.</p>
         </div>
       </div>
 
@@ -173,25 +255,7 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
               <div key={i} className="relative">
                 <div className="border rounded-md overflow-hidden cursor-pointer">
                   <div className="aspect-square w-full bg-gray-200 animate-pulse flex items-center justify-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-8 h-8 text-gray-400"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M3 5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M21 15l-5.5-5.5L5 21"
-                      />
-                    </svg>
+                    <ImageIcon className="w-8 h-8 text-slate-400" />
                   </div>
                 </div>
                 <div className="absolute -top-3 -right-3">
@@ -235,11 +299,18 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
             key={file.key}
             className="relative border rounded-md overflow-hidden"
           >
-            <img
-              src={file.previewUrl}
-              alt="Uploading..."
-              className="object-cover w-full aspect-square opacity-70"
-            />
+            {!file.isReady ? (
+              <div className="w-full aspect-square flex items-center justify-center bg-gray-100">
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-green-app-primary" />
+              </div>
+            ) : (
+              <Image
+                src={file.previewUrl}
+                alt="Uploading..."
+                aspectRatio="aspect-square"
+                className="object-cover w-full aspect-square opacity-70"
+              />
+            )}
             <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-200">
               <div
                 className="bg-gradient-pink-purple h-full transition-all duration-300"
@@ -270,7 +341,12 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
           </div>
           <div className="relative h-[75vh] md:h-[90vh] flex items-center justify-center bg-black/70 backdrop-blur-sm rounded-xl">
             <div className="relative max-h-full max-w-full px-12 sm:px-16 py-10">
-              <img
+              <ImageNext
+                loader={cloudinaryProxyLoader}
+                width={0}
+                height={0}
+                sizes="100vw"
+                style={{ width: "auto", height: "auto" }}
                 src={values[currentIndex]?.image}
                 alt={`image-${values[currentIndex]?.id}`}
                 className="max-h-[55vh] md:max-h-[75vh] max-w-full object-contain rounded-md shadow-xl"

@@ -41,10 +41,11 @@ const DashboardLayout = ({
                 >
                   <div className="bg-[#33B3B3] p-1 rounded-tl-lg rounded-bl-sm rounded-br-lg rounded-tr-sm">
                     <Image
-                      src="/assets/img/azen-white-b.png"
+                      src="https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751291122/azen-white-b_rzbq1g.png"
                       alt="azen"
                       aspectRatio="aspect-square"
                       className="h-4"
+                      priority
                     />
                   </div>
                   <div className="pt-0.5 font-gallery font-medium">AZEN</div>

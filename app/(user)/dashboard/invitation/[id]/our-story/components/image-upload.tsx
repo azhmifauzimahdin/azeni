@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
@@ -10,6 +9,8 @@ import { ImageService } from "@/lib/services";
 import extractCloudinaryPublicId from "@/lib/utils/extract-cloudinary-public-id";
 import ImageComponent from "@/components/ui/image";
 import { ImageSchema } from "@/lib/schemas";
+import heic2any from "heic2any";
+import { FILE_TRANFORMATION } from "@/lib/schemas/image";
 
 interface ImageUploadProps {
   id?: string;
@@ -40,6 +41,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   const [previewAspectRatio, setPreviewAspectRatio] = useState<
     string | undefined
   >(undefined);
+  const [isConverting, setIsConverting] = useState(false);
 
   useEffect(() => {
     if (value && !previewAspectRatio) {
@@ -56,10 +58,39 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     const file = e.target.files?.[0];
     if (!file) return;
 
+    setIsConverting(true);
     const result = ImageSchema.imageSchema.safeParse(file);
     if (!result.success) {
       toast.error(result.error.errors[0].message);
+      setIsConverting(false);
       return;
+    }
+
+    let finalFile = file;
+
+    const fileExt = file.name.split(".").pop()?.toLowerCase();
+    const isHeicLike =
+      file.type === "image/heic" ||
+      file.type === "image/heif" ||
+      (!file.type && (fileExt === "heic" || fileExt === "heif"));
+
+    if (isHeicLike) {
+      try {
+        const output = await heic2any({
+          blob: file,
+          toType: "image/jpeg",
+          quality: 0.95,
+        });
+        const blob = Array.isArray(output) ? output[0] : output;
+        finalFile = new File([blob], file.name.replace(/\.\w+$/, ".jpg"), {
+          type: "image/jpeg",
+        });
+      } catch (err) {
+        console.error("Konversi HEIC gagal:", err);
+        toast.error("Gagal mengkonversi gambar HEIC.");
+        setIsConverting(false);
+        return;
+      }
     }
 
     const reader = new FileReader();
@@ -82,17 +113,19 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         const res = await ImageService.getSignature({
           timestamp: timestamp.toString(),
           folder,
+          transformation: FILE_TRANFORMATION,
         });
 
         const { signature } = res.data;
 
         const uploadRes = await ImageService.uploadImageToCloudinary(
           {
-            file,
+            file: finalFile,
             api_key: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY!,
             timestamp: timestamp.toString(),
             signature,
             folder,
+            transformation: FILE_TRANFORMATION,
           },
           (progressEvent) => {
             if (progressEvent.total) {
@@ -111,10 +144,11 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       } finally {
         setUploadProgress(null);
         setPreviewUrl(null);
+        setIsConverting(false);
       }
     };
 
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(finalFile);
     e.target.value = "";
   };
 
@@ -141,20 +175,33 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         id={id}
       />
 
-      {value ? (
+      {isConverting && !previewUrl ? (
         <div
           className="relative max-w-[150px]"
           style={{ aspectRatio: previewAspectRatio ?? "1 / 1" }}
         >
-          <div className="w-full h-full rounded-md relative">
-            <ImageComponent
-              src={value}
-              alt="Foto"
-              isFetching={isFetching}
-              objectFit="object-contain"
-              className="w-full h-full object-contain rounded-md"
-              priority
-            />
+          <div className="w-full h-full rounded-md overflow-hidden relative bg-gray-100">
+            <div className="absolute inset-0 flex items-center justify-center bg-white/60 z-10">
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-green-app-primary" />
+            </div>
+          </div>
+        </div>
+      ) : value ? (
+        <div
+          className="relative max-w-[150px]"
+          style={{ aspectRatio: previewAspectRatio ?? "1 / 1" }}
+        >
+          <div className="relative">
+            <div className="w-full h-full rounded-lg overflow-hidden">
+              <ImageComponent
+                src={value}
+                alt="Foto"
+                isFetching={isFetching}
+                objectFit="object-contain"
+                className="w-full h-full object-contain"
+                priority
+              />
+            </div>
             <Button
               variant="delete"
               size="icon"
@@ -176,11 +223,16 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
           style={{ aspectRatio: previewAspectRatio ?? "1 / 1" }}
         >
           <div className="w-full h-full rounded-md overflow-hidden relative bg-gray-100">
-            <img
+            <ImageComponent
               src={previewUrl}
               alt="Uploading..."
               className="w-full h-full object-contain rounded-md opacity-70"
             />
+            {isConverting && (
+              <div className="absolute inset-0 flex items-center justify-center bg-white/60 z-10">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-green-app-primary" />
+              </div>
+            )}
             <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-200">
               <div
                 className="bg-gradient-pink-purple h-full transition-all duration-300"

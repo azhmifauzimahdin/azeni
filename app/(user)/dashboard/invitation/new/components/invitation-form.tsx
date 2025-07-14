@@ -135,9 +135,10 @@ const InvitationForm: React.FC = () => {
       />
       <Alert variant="default">
         Pastikan nama panggilan untuk mempelai pria dan wanita sudah benar,
-        termasuk penggunaan huruf besar. Panggilan ini tidak dapat diubah
-        setelah disimpan dan akan digunakan di beberapa bagian undangan secara
-        otomatis.
+        termasuk penggunaan huruf besar. Nama tidak dapat diubah setelah
+        disimpan dan akan digunakan di beberapa bagian undangan secara otomatis.
+        Undangan aktif selama <span className="font-bold">6 bulan</span> dimulai
+        sejak tanggal dibuat.
       </Alert>
       <Form {...form}>
         <form
@@ -205,9 +206,7 @@ const InvitationForm: React.FC = () => {
                     />
                   </FormControl>
                   <FormMessage />
-                  <FormDescription>
-                    Foto digunakan untuk cover (max 2mb)
-                  </FormDescription>
+                  <FormDescription>Foto digunakan untuk cover</FormDescription>
                 </FormItem>
               )}
             />

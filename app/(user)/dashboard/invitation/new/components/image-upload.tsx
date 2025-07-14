@@ -12,6 +12,8 @@ import { ImagePlus, X } from "lucide-react";
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import Cropper from "react-easy-crop";
 import toast from "react-hot-toast";
+import heic2any from "heic2any";
+import { FILE_TRANFORMATION } from "@/lib/schemas/image";
 
 interface ImageUploadProps {
   id?: string;
@@ -44,6 +46,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const [fileMimeType, setFileMimeType] = useState<string>("image/jpeg");
+  const [isConverting, setIsConverting] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const uploadButtonRef = useRef<HTMLButtonElement>(null);
@@ -53,26 +56,69 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    setIsOpen(true);
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const result = ImageSchema.imageSchema.safeParse(file);
-    if (!result.success) {
-      toast.error(result.error.errors[0].message);
-      setIsOpen(false);
-      return;
+    setIsOpen(true);
+    setIsConverting(true);
+
+    try {
+      const result = ImageSchema.imageSchema.safeParse(file);
+
+      if (!result.success) {
+        toast.error(result.error.errors[0].message);
+        setIsOpen(false);
+        return;
+      }
+
+      let finalFile = file;
+
+      const fileExt = file.name.split(".").pop()?.toLowerCase();
+      const isHeicLike =
+        file.type === "image/heic" ||
+        file.type === "image/heif" ||
+        (!file.type && (fileExt === "heic" || fileExt === "heif"));
+
+      if (isHeicLike) {
+        try {
+          const output = await heic2any({
+            blob: file,
+            toType: "image/jpeg",
+            quality: 0.95,
+          });
+
+          const blob = Array.isArray(output) ? output[0] : output;
+
+          finalFile = new File([blob], file.name.replace(/\.\w+$/, ".jpg"), {
+            type: "image/jpeg",
+          });
+
+          setFileMimeType("image/jpeg");
+        } catch (err) {
+          console.error("Konversi HEIC gagal:", err);
+          toast.error("Gagal mengkonversi gambar HEIC.");
+          setIsOpen(false);
+          return;
+        }
+      } else {
+        setFileMimeType(file.type || "image/jpeg");
+      }
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (reader.result) {
+          setImageSrc(reader.result as string);
+          setUploadProgress(null);
+        } else {
+          toast.error("Gagal menampilkan preview gambar.");
+          setIsOpen(false);
+        }
+      };
+      reader.readAsDataURL(finalFile);
+    } finally {
+      setIsConverting(false);
+      e.target.value = "";
     }
-
-    setFileMimeType(file.type);
-
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImageSrc(reader.result as string);
-      setUploadProgress(null);
-    };
-    reader.readAsDataURL(file);
-    e.target.value = "";
   };
 
   const onCropComplete = useCallback((_cropped: any, pixels: any) => {
@@ -99,10 +145,12 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       );
       const timestamp = Math.floor(Date.now() / 1000);
       const folder = path || "default";
+      const transformation = FILE_TRANFORMATION;
 
       const res = await ImageService.getSignature({
         timestamp: timestamp.toString(),
         folder,
+        transformation,
       });
 
       const { signature } = res.data;
@@ -114,6 +162,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
           timestamp: timestamp.toString(),
           signature,
           folder,
+          transformation,
         },
         (progressEvent) => {
           if (progressEvent.total) {
@@ -132,6 +181,15 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     } finally {
       setUploading(false);
       setIsOpen(false);
+      setImageSrc(null);
+      setCroppedAreaPixels(null);
+      setUploadProgress(null);
+      setZoom(1);
+      setCrop({ x: 0, y: 0 });
+
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
     }
   };
 
@@ -170,49 +228,76 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       <Modal
         title="Upload Foto"
         isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
+        onClose={() => {
+          setIsOpen(false);
+          setImageSrc(null);
+          setCroppedAreaPixels(null);
+          setUploadProgress(null);
+          setIsConverting(false);
+          setZoom(1);
+          setCrop({ x: 0, y: 0 });
+          if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+          }
+        }}
         initialFocusRef={uploadButtonRef}
       >
-        {imageSrc && (
-          <form onSubmit={handleSubmit}>
-            <div className="relative w-full aspect-square bg-gray-200 rounded-sm overflow-hidden">
-              <Cropper
-                key={cropperReady ? "ready" : "not-ready"}
-                image={imageSrc}
-                crop={crop}
-                zoom={zoom}
-                aspect={1}
-                onCropChange={setCrop}
-                onZoomChange={setZoom}
-                onCropComplete={onCropComplete}
-              />
-            </div>
-            {uploadProgress !== null && (
-              <div className="w-full bg-gray-200 rounded h-2 overflow-hidden mt-4 mb-2">
-                <div
-                  className="bg-gradient-pink-purple h-full transition-all duration-300"
-                  style={{ width: `${uploadProgress}%` }}
+        {isConverting ? (
+          <div className="flex flex-col items-center justify-center aspect-square space-y-3">
+            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-green-app-primary" />
+            <p className="text-sm text-muted-foreground">
+              Sedang menyiapkan gambar...
+            </p>
+          </div>
+        ) : (
+          imageSrc && (
+            <form onSubmit={handleSubmit}>
+              <div className="relative w-full aspect-square md:aspect-[6/5] bg-gray-200 rounded-sm overflow-hidden">
+                <Cropper
+                  key={cropperReady ? "ready" : "not-ready"}
+                  image={imageSrc}
+                  crop={crop}
+                  zoom={zoom}
+                  aspect={1}
+                  onCropChange={setCrop}
+                  onZoomChange={setZoom}
+                  onCropComplete={onCropComplete}
                 />
+
+                {uploading && (
+                  <div className="absolute inset-0 bg-white/60 z-50 cursor-not-allowed flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-10 w-10 border-2 border-t-transparent border-green-app-primary" />
+                  </div>
+                )}
               </div>
-            )}
-            <div className="flex gap-2 mt-4 justify-end">
-              <Button
-                variant="secondary"
-                onClick={() => setIsOpen(false)}
-                type="button"
-              >
-                Batal
-              </Button>
-              <Button
-                isLoading={uploading}
-                ref={uploadButtonRef}
-                variant="primary"
-                type="submit"
-              >
-                Upload
-              </Button>
-            </div>
-          </form>
+              {uploadProgress !== null && (
+                <div className="w-full bg-gray-200 rounded h-2 overflow-hidden mt-4 mb-2">
+                  <div
+                    className="bg-gradient-pink-purple h-full transition-all duration-300"
+                    style={{ width: `${uploadProgress}%` }}
+                  />
+                </div>
+              )}
+              <div className="flex gap-2 mt-4 justify-end">
+                <Button
+                  variant="secondary"
+                  onClick={() => setIsOpen(false)}
+                  type="button"
+                  disabled={uploading}
+                >
+                  Batal
+                </Button>
+                <Button
+                  isLoading={uploading}
+                  ref={uploadButtonRef}
+                  variant="primary"
+                  type="submit"
+                >
+                  Upload
+                </Button>
+              </div>
+            </form>
+          )
         )}
       </Modal>
 

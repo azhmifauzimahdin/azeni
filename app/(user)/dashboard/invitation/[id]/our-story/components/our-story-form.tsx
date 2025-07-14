@@ -9,7 +9,6 @@ import Modal from "@/components/ui/modal";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -287,7 +286,6 @@ const OurStoryForm: React.FC<StoryFormsProps> = ({
                       )}`}
                     />
                   </FormControl>
-                  <FormDescription>max 2mb</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
