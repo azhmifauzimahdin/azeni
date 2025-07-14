@@ -62,16 +62,20 @@ const QuoteForm: React.FC<QuoteFormsProps> = ({
 
   const form = useForm<QuoteFormValues>({
     resolver: zodResolver(createQuoteSchema),
-    defaultValues: initialData?.quote
-      ? {
-          name: initialData.quote.name,
-          author: initialData.quote.author,
-        }
-      : {
-          name: "",
-          author: "",
-        },
+    defaultValues: {
+      name: "",
+      author: "",
+    },
   });
+
+  useEffect(() => {
+    if (initialData?.quote) {
+      form.reset({
+        name: initialData.quote.name,
+        author: initialData.quote.author,
+      });
+    }
+  }, [initialData, form]);
 
   useEffect(() => {
     if (initialData?.quote) {

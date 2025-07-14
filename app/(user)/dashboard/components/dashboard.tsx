@@ -44,8 +44,7 @@ const DashboardLayout = ({
                       src="https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751291122/azen-white-b_rzbq1g.png"
                       alt="azen"
                       aspectRatio="aspect-square"
-                      className="h-4"
-                      priority
+                      className="w-4"
                     />
                   </div>
                   <div className="pt-0.5 font-gallery font-medium">AZEN</div>

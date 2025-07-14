@@ -66,3 +66,11 @@ export async function updateLinkByUserId(
   const res = await httpRequest.patch(`/api/invitations/${id}/link`, request);
   return res.data;
 }
+
+export async function updateDateByUserId(
+  id: string,
+  request: { date: Date }
+): Promise<ApiResponse<Invitation>> {
+  const res = await httpRequest.patch(`/api/invitations/${id}/date`, request);
+  return res.data;
+}

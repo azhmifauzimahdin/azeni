@@ -1,5 +1,42 @@
 import { z } from "zod";
 
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+export const updateDateInvitationSchema = z.object({
+  date: z
+    .date({
+      required_error: "Tanggal wajib diisi",
+      invalid_type_error: "Format tanggal tidak valid",
+    })
+    .refine((date) => date >= today, {
+      message: "Tanggal harus hari ini atau lebih",
+    }),
+  useScheduleDate: z.boolean({
+    required_error: "Status wajib diisi",
+    invalid_type_error: "Status  harus berupa boolean (ya/tidak)",
+  }),
+});
+
+export const updateDateInvitationApiSchema = z.object({
+  date: z.preprocess(
+    (val) =>
+      typeof val === "string" || val instanceof Date ? new Date(val) : val,
+    z
+      .date({
+        required_error: "Tanggal wajib diisi",
+        invalid_type_error: "Format tanggal tidak valid",
+      })
+      .refine((date) => date >= today, {
+        message: "Tanggal harus hari ini atau lebih",
+      })
+  ),
+  useScheduleDate: z.boolean({
+    required_error: "Status wajib diisi",
+    invalid_type_error: "Status  harus berupa boolean (ya/tidak)",
+  }),
+});
+
 export const updateLinkInvitationSchema = z.object({
   url: z
     .string()

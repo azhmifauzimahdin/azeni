@@ -24,6 +24,7 @@ model Invitation {
   image         String?
   status        Boolean       @default(true)
   date          DateTime      @default(now())
+  useScheduleDate Boolean     @default(true)
   expiresAt     DateTime      @default(now())
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt

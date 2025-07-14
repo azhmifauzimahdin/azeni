@@ -33,6 +33,7 @@ export interface Invitation {
   musicId: string;
   image: string;
   date: string;
+  useScheduleDate: boolean;
   status: boolean;
   expiresAt: string;
   createdAt: string;

@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
 export const createRSVPSchema = z.object({
   rsvpEnabled: z.boolean({
     required_error: "Status RSVP wajib diisi",
@@ -11,10 +14,14 @@ export const createRSVPSchema = z.object({
       invalid_type_error: "Jumlah tamu maksimal harus berupa angka",
     })
     .min(0, { message: "Jumlah tamu maksimal minimal 0" }),
-  rsvpDeadline: z.date({
-    required_error: "Tanggal wajib diisi",
-    invalid_type_error: "Format tanggal tidak valid",
-  }),
+  rsvpDeadline: z
+    .date({
+      required_error: "Tanggal wajib diisi",
+      invalid_type_error: "Format tanggal tidak valid",
+    })
+    .refine((date) => date >= today, {
+      message: "Tanggal harus hari ini atau lebih",
+    }),
   rsvpAllowNote: z.boolean({
     required_error: "Status catatan tambahan wajib diisi",
     invalid_type_error:
@@ -36,10 +43,14 @@ export const createApiRSVPSchema = z.object({
   rsvpDeadline: z.preprocess(
     (val) =>
       typeof val === "string" || val instanceof Date ? new Date(val) : val,
-    z.date({
-      required_error: "Tanggal wajib diisi",
-      invalid_type_error: "Format tanggal tidak valid",
-    })
+    z
+      .date({
+        required_error: "Tanggal wajib diisi",
+        invalid_type_error: "Format tanggal tidak valid",
+      })
+      .refine((date) => date >= today, {
+        message: "Tanggal harus hari ini atau lebih",
+      })
   ),
   rsvpAllowNote: z.boolean({
     required_error: "Status catatan tambahan wajib diisi",

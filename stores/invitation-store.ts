@@ -14,6 +14,11 @@ interface InvitationState {
   addInvitationAtFirst: (newInvitation: Invitation) => void;
   deleteInvitationById: (invitationId: string) => void;
   updateSlugInInvitation: (invitationId: string, slug: string) => void;
+  updateDateInInvitation: (
+    invitationId: string,
+    date: string,
+    useScheduleDate: boolean
+  ) => void;
   updateCoupleInInvitation: (
     invitationId: string,
     updatedQuote: Partial<Invitation["quote"]>
@@ -97,6 +102,18 @@ const useInvitationStore = create<InvitationState>((set) => ({
           ? {
               ...invitation,
               slug,
+            }
+          : invitation
+      ),
+    })),
+  updateDateInInvitation: (invitationId, date, useScheduleDate) =>
+    set((state) => ({
+      invitations: state.invitations.map((invitation) =>
+        invitation.id === invitationId
+          ? {
+              ...invitation,
+              date,
+              useScheduleDate,
             }
           : invitation
       ),

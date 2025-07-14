@@ -31,6 +31,7 @@ import { ScheduleCard, ScheduleCardSkeleton } from "./schedule-card";
 import { scheduleSchema } from "@/lib/schemas/schedule";
 import { Pagination } from "@/components/ui/pagination";
 import Image from "@/components/ui/image";
+import ScheduleDateForm from "./schedule-date-form";
 
 type ScheduleFormValues = z.infer<typeof scheduleSchema>;
 interface ScheduleFormsProps {
@@ -362,6 +363,11 @@ const ScheduleForm: React.FC<ScheduleFormsProps> = ({
         }}
         onConfirm={onDelete}
         loading={loading}
+      />
+      <ScheduleDateForm
+        params={params}
+        initialData={initialData}
+        isFetching={isFetching}
       />
       <div className="space-y-4 card-dashboard ">
         {isFetching ? (

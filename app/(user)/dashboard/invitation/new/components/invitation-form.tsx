@@ -72,7 +72,7 @@ const InvitationForm: React.FC = () => {
         themeId: "",
         musicId: "",
         image: data.image || "",
-        date: new Date(new Date().setMonth(new Date().getMonth() + 1)),
+        date: new Date(),
         expiresAt: new Date(new Date().setMonth(new Date().getMonth() + 12)),
       };
       const res = await InvitationService.createInvitation(req);
