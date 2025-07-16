@@ -2,7 +2,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import Image from "@/components/ui/image";
 import Modal from "@/components/ui/modal";
 import { ImageSchema } from "@/lib/schemas";
 import { ImageService } from "@/lib/services";
@@ -14,6 +13,7 @@ import Cropper from "react-easy-crop";
 import toast from "react-hot-toast";
 import heic2any from "heic2any";
 import { FILE_TRANFORMATION } from "@/lib/schemas/image";
+import { Img } from "@/components/ui/Img";
 
 interface ImageUploadProps {
   id?: string;
@@ -317,14 +317,14 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
               <X className="h-5 w-5" />
               <span className="sr-only">Hapus foto</span>
             </Button>
-            <Image
+            <Img
               src={
                 value ||
                 "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751019216/default-user_ranqqa.png"
               }
               alt="Foto"
-              aspectRatio="aspect-square"
-              className="rounded-lg mb-1 w-full mx-auto"
+              wrapperClassName="rounded-lg w-full aspect-square mx-auto mb-1"
+              sizes="200px"
               isFetching={isFetching}
             />
           </div>

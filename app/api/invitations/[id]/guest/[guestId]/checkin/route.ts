@@ -48,18 +48,34 @@ export async function PUT(
 
     if (!invitationByUserId) return forbiddenError();
 
+    const defaultGuest = await prisma.guest.findFirst({
+      where: {
+        invitationId: params.id,
+      },
+      orderBy: {
+        createdAt: "asc",
+      },
+    });
+
     const guest = await prisma.guest.findUnique({
       where: {
         id: params.guestId,
       },
     });
 
-    if (!guest) {
+    if (!guest || !defaultGuest) {
       return ResponseJson(
         {
           message: "Tamu tidak ditemukan.",
         },
         { status: 404 }
+      );
+    }
+
+    if (guest.id === defaultGuest.id) {
+      return ResponseJson(
+        { message: "Gagal check-in tamu default" },
+        { status: 400 }
       );
     }
 

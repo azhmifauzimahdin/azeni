@@ -211,13 +211,15 @@ const useInvitationStore = create<InvitationState>((set) => ({
         const existingSetting = invitation.setting ?? {
           id: "",
           invitationId: "",
+          invitationEnabled: true,
           rsvpEnabled: true,
           rsvpMaxGuests: 1,
           rsvpDeadline: new Date(),
           rsvpAllowNote: true,
           whatsappMessageTemplate: "",
-          createdAt: "",
+          scanResetCountdownSeconds: 5,
           updatedAt: "",
+          createdAt: "",
         };
 
         return {

@@ -2,7 +2,7 @@ import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import React from "react";
 import { BankAccount } from "@/types";
-import Image from "@/components/ui/image";
+import { Img } from "@/components/ui/Img";
 
 type BankAccountCardProps = {
   data: BankAccount;
@@ -19,17 +19,17 @@ const GiftCard: React.FC<BankAccountCardProps> = ({
 }) => {
   return (
     <div
-      className="flex items-center justify-between p-4 rounded-xl border shadow-sm bg-white cursor-pointer hover:bg-gray-100 transition-colors"
+      className="flex items-center justify-between h- p-4 rounded-xl border shadow-sm bg-white cursor-pointer hover:bg-gray-100 transition-colors"
       onClick={() => onClick?.(data.id)}
     >
       <div className="flex items-center gap-4">
         {data.bank.icon ? (
-          <Image
+          <Img
             src={data.bank.icon}
             alt="Logo Bank"
-            aspectRatio="aspect-[3/1]"
-            className="h-4"
-            objectFit="h-full object-contain"
+            wrapperClassName="aspect-[3/1] h-4"
+            className="h-full object-contain"
+            sizes="32px"
           />
         ) : (
           <div className="w-10 h-10 bg-gray-200 rounded-sm" />

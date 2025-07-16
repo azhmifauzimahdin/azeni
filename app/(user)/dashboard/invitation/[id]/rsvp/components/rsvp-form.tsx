@@ -132,7 +132,6 @@ const RSVPForm: React.FC<RSVPFormsProps> = ({
         });
 
         updateSettingInInvitation(params.id, res.data);
-        toast.success("RSVP berhasil diperbarui.");
       } catch (error) {
         toast.error("Gagal update RSVP.");
         console.error(error);

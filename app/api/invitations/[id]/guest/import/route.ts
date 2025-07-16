@@ -93,12 +93,21 @@ export async function POST(
       createdGuests.push(guest);
     }
 
-    await prisma.invitationChange.create({
-      data: {
+    const existingInvitationChange = await prisma.invitationChange.findFirst({
+      where: {
         invitationId: params.id,
         type: "guest",
       },
     });
+
+    if (!existingInvitationChange) {
+      await prisma.invitationChange.create({
+        data: {
+          invitationId: params.id,
+          type: "guest",
+        },
+      });
+    }
 
     return ResponseJson(
       {

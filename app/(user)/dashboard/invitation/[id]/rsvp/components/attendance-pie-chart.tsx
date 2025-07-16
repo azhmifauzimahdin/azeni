@@ -174,7 +174,7 @@ const AttendancePieChart: React.FC<AttendancePieChartProps> = ({
                         animationDelay: `${2 + index * 0.5}s`,
                       }}
                     >
-                      {entry.value}
+                      {entry.value > 0 && entry.value}
                     </text>
                   );
                 })}

@@ -14,11 +14,19 @@ interface DateTimeInputProps {
   onChange: (date: Date | null) => void;
   onBlur?: () => void;
   disabled?: boolean;
+  isFetching?: boolean;
 }
 
 const DateTimeInput = forwardRef<HTMLButtonElement, DateTimeInputProps>(
   (
-    { id, value, onChange, onBlur, disabled = false }: DateTimeInputProps,
+    {
+      id,
+      value,
+      onChange,
+      onBlur,
+      disabled = false,
+      isFetching,
+    }: DateTimeInputProps,
     ref: ForwardedRef<HTMLButtonElement>
   ) => {
     const [open, setOpen] = useState<boolean>(false);
@@ -53,9 +61,10 @@ const DateTimeInput = forwardRef<HTMLButtonElement, DateTimeInputProps>(
               ref={ref}
               id={id ? `${id}` : undefined}
               variant="outline"
-              className="col-span-2 w-full justify-start text-left text-base font-normal"
+              className="col-span-2 w-full justify-start text-left text-base font-normal shadow-sm"
               disabled={disabled}
               type="button"
+              isFetching={isFetching}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
               <span className="flex items-center h-full">
@@ -72,6 +81,7 @@ const DateTimeInput = forwardRef<HTMLButtonElement, DateTimeInputProps>(
                 if (d) setOpen(false);
               }}
               disabled={{ before: today }}
+              defaultMonth={date ?? undefined}
               initialFocus
               captionLayout="dropdown"
               fromYear={today.getFullYear()}
@@ -86,6 +96,7 @@ const DateTimeInput = forwardRef<HTMLButtonElement, DateTimeInputProps>(
           value={time}
           onChange={(e) => setTime(e.target.value)}
           disabled={disabled}
+          isFetching={isFetching}
         />
       </div>
     );

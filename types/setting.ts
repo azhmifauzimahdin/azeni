@@ -1,6 +1,10 @@
 export interface SettingWaTemplateRequest {
   whatsappMessageTemplate: string;
 }
+
+export interface SettingInvitationStatusRequest {
+  invitationEnabled: boolean;
+}
 export interface SettingRSVPRequest {
   rsvpEnabled: boolean;
   rsvpMaxGuests: number;
@@ -11,6 +15,7 @@ export interface SettingRSVPRequest {
 export interface Setting {
   id: string;
   invitationId: string;
+  invitationEnabled: boolean;
   rsvpEnabled: boolean;
   rsvpMaxGuests: number;
   rsvpDeadline: Date;
@@ -18,4 +23,5 @@ export interface Setting {
   whatsappMessageTemplate: string;
   createdAt: string;
   updatedAt: string;
+  scanResetCountdownSeconds: number;
 }

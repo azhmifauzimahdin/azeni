@@ -25,12 +25,12 @@ import axios from "axios";
 import Modal from "@/components/ui/modal";
 import Combobox from "@/components/ui/combobox";
 import useUserBanks from "@/hooks/use-user-bank";
-import Image from "@/components/ui/image";
 import { Input } from "@/components/ui/input";
 import GiftCard from "./gift-card";
 import DeleteConfirmationModal from "@/components/ui/delete-confirmation-modal";
 import { createBankAccountSchema } from "@/lib/schemas/bank-account";
 import { Pagination } from "@/components/ui/pagination";
+import { Img } from "@/components/ui/Img";
 
 const formAddressSchema = z.object({
   address: z
@@ -66,12 +66,12 @@ const GiftForm: React.FC<GiftFormsProps> = ({
       label: (
         <span className="flex items-center gap-3">
           {bank.icon && (
-            <Image
+            <Img
               src={bank.icon}
               alt="Logo Bank"
-              aspectRatio="aspect-[3/1]"
-              className="h-3"
-              objectFit="h-full object-contain"
+              wrapperClassName="aspect-[3/1] h-3"
+              className="h-full object-contain"
+              sizes="15px"
             />
           )}
           {bank.name}

@@ -29,10 +29,10 @@ import { createStorySchema } from "@/lib/schemas/story";
 import { Textarea } from "@/components/ui/textarea";
 import { OurStoryCard, OurStoryCardSkeleton } from "./our-story-card";
 import ImageUpload from "./image-upload";
-import Image from "@/components/ui/image";
 import DateInput from "@/components/ui/date-input";
 import { getFolderFromInvitationId } from "@/lib/utils/get-folder-from-invitation-id";
 import CreatableCombobox from "@/components/ui/creatable-combobox";
+import { Img } from "@/components/ui/Img";
 
 type OurStoryFormValues = z.infer<typeof createStorySchema>;
 interface StoryFormsProps {
@@ -257,7 +257,6 @@ const OurStoryForm: React.FC<StoryFormsProps> = ({
                       placeholder="Semua berawal dari sebuah pertemuan sederhana..."
                       disabled={loading}
                       className="h-44"
-                      defaultValue=""
                       {...field}
                     />
                   </FormControl>
@@ -338,11 +337,11 @@ const OurStoryForm: React.FC<StoryFormsProps> = ({
             onClick={() => setIsModalOpen(true)}
             className="flex items-center gap-3 bg-green-app-primary text-white rounded-lg shadow p-4 cursor-pointer hover:bg-green-app-secondary max-w-md"
           >
-            <Image
+            <Img
               src="https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751291123/love-story_rc4kbl.png"
               alt="icon story"
-              aspectRatio="aspect-square"
-              className="w-1/12"
+              wrapperClassName="w-1/12 aspect-square"
+              sizes="35px"
             />
             <span className="font-medium">Tambah Cerita</span>
           </div>

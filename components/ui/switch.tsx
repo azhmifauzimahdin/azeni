@@ -60,7 +60,7 @@ const Switch = React.forwardRef<
         checked={checked}
         onCheckedChange={handleChange}
         className={cn(
-          "relative inline-flex h-6 w-14 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent bg-input px-1 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-green-app-primary",
+          "relative inline-flex h-6 w-[3.8rem] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent bg-input px-1 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-green-app-primary",
           className
         )}
         {...props}

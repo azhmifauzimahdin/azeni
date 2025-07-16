@@ -53,14 +53,14 @@ async function main() {
   const bank1 = await prisma.bank.create({
     data: {
       name: "Mandiri",
-      icon: "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1750689696/bank-mandiri_c2baqu.svg",
+      icon: "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1752682792/bank-mandiri_sjprpl.png",
     },
   });
 
   const bank2 = await prisma.bank.create({
     data: {
       name: "BCA",
-      icon: "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1750689696/bank-bca_v7qdpq.svg",
+      icon: "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1752683060/bank-bca_ao5ayt.png",
     },
   });
 

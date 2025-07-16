@@ -36,7 +36,7 @@ export const columns: ColumnDef<Guest>[] = [
   },
   {
     accessorKey: "isAttending",
-    header: "Status Kehadiran",
+    header: "Status Konfirmasi",
     cell: ({ row }) => {
       const attending = row.getValue("isAttending") as boolean;
       const totalGuests = row.getValue("totalGuests") as number;

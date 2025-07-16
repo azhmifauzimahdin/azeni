@@ -85,7 +85,7 @@ const CreatableCombobox = forwardRef<HTMLButtonElement, CreatableComboboxProps>(
             aria-controls="combobox-popover"
             className={cn(
               buttonVariants({ variant: "outline" }),
-              "w-full relative text-left justify-start text-base font-normal"
+              "w-full relative text-left justify-start text-base font-normal shadow-sm"
             )}
           >
             {selectedOption

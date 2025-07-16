@@ -1,4 +1,9 @@
-import { Setting, SettingRSVPRequest, SettingWaTemplateRequest } from "@/types";
+import {
+  Setting,
+  SettingInvitationStatusRequest,
+  SettingRSVPRequest,
+  SettingWaTemplateRequest,
+} from "@/types";
 import httpRequest, { ApiResponse } from "./api";
 
 export async function updateRSVP(
@@ -19,6 +24,18 @@ export async function updateWaTemplate(
 ): Promise<ApiResponse<Setting>> {
   const res = await httpRequest.patch(
     `/api/invitations/${invitationId}/setting/wa-template`,
+    request
+  );
+
+  return res.data;
+}
+
+export async function updateInvitationStatus(
+  invitationId: string,
+  request: SettingInvitationStatusRequest
+): Promise<ApiResponse<Setting>> {
+  const res = await httpRequest.patch(
+    `/api/invitations/${invitationId}/setting/activation`,
     request
   );
 

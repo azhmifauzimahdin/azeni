@@ -47,11 +47,13 @@ model Invitation {
 model Setting {
   id              String        @id @default(cuid())
   invitationId    String        @unique
+  invitationEnabled Boolean     @default(true)
   rsvpEnabled     Boolean       @default(true)
   rsvpMaxGuests   Int           @default(1)
   rsvpDeadline    DateTime?   
   rsvpAllowNote   Boolean       @default(true)
   whatsappMessageTemplate String? @db.Text
+  scanResetCountdownSeconds Int? @default(5)
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
 

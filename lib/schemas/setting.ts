@@ -101,3 +101,10 @@ export const createWhatsappMessageTemplateSchema = z.object({
       }
     ),
 });
+
+export const enableInvitationStatusSchema = z.object({
+  invitationEnabled: z.boolean({
+    required_error: "Status wajib diisi",
+    invalid_type_error: "Status harus berupa boolean (ya/tidak)",
+  }),
+});

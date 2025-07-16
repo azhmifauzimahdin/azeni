@@ -32,7 +32,7 @@ export async function PUT(
         {
           message: "Validasi gagal",
           errors: {
-            guestId: ["Guest ID wajib diisi"],
+            code: ["Kode tamu wajib diisi"],
           },
         },
         { status: 400 }
@@ -59,7 +59,7 @@ export async function PUT(
 
     const guest = await prisma.guest.findUnique({
       where: {
-        id: params.guestId,
+        code: params.guestId,
       },
     });
 
@@ -80,11 +80,27 @@ export async function PUT(
     }
 
     if (!guest.isCheckedIn || !guest.checkedInAt) {
+      const checkInGuest = await prisma.guest.update({
+        where: {
+          code: params.guestId,
+        },
+        data: {
+          isCheckedIn: true,
+          checkedInAt: new Date(),
+        },
+      });
+
       return ResponseJson(
         {
-          message: "Tamu belum melakukan check-in.",
+          message: "Tamu berhasil melakukan check-in.",
+          data: {
+            id: checkInGuest.id,
+            name: checkInGuest.name,
+            date: checkInGuest.checkedInAt,
+            status: "checkin",
+          },
         },
-        { status: 400 }
+        { status: 200 }
       );
     }
 
@@ -97,9 +113,9 @@ export async function PUT(
       );
     }
 
-    const updatedGuest = await prisma.guest.update({
+    const checkOutGuest = await prisma.guest.update({
       where: {
-        id: params.guestId,
+        code: params.guestId,
       },
       data: {
         checkedOutAt: new Date(),
@@ -110,9 +126,10 @@ export async function PUT(
       {
         message: "Tamu berhasil melakukan check-out.",
         data: {
-          id: updatedGuest.id,
-          name: updatedGuest.name,
-          checkedOutAt: updatedGuest.checkedOutAt,
+          id: checkOutGuest.id,
+          name: checkOutGuest.name,
+          date: checkOutGuest.checkedOutAt,
+          status: "checkout",
         },
       },
       { status: 200 }

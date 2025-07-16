@@ -6,12 +6,12 @@ import NavigationBack from "@/components/ui/navigation-back";
 import useUserInvitations from "@/hooks/use-user-invitation";
 import ThemeCard from "./theme-card";
 import useThemes from "@/hooks/use-theme";
-import Image from "@/components/ui/image";
 import toast from "react-hot-toast";
 import { handleError } from "@/lib/utils/handle-error";
 import { InvitationService } from "@/lib/services";
 import useInvitationStore from "@/stores/invitation-store";
 import { Pagination } from "@/components/ui/pagination";
+import { Img } from "@/components/ui/Img";
 
 interface ThemeContentProps {
   params: {
@@ -77,11 +77,11 @@ const ThemeContent: React.FC<ThemeContentProps> = ({ params }) => {
           </div>
         ) : invitation?.theme ? (
           <div className="flex max-w-md bg-white rounded-lg shadow overflow-hidden">
-            <Image
+            <Img
               src={invitation.theme.thumbnail}
               alt={invitation.theme.name}
-              aspectRatio="aspect-square"
-              className="w-1/5 flex-none"
+              wrapperClassName="w-1/5 aspect-square flex-none"
+              sizes="32px"
             />
             <div className="p-3">
               <h3>Tema Aktif</h3>
@@ -108,7 +108,6 @@ const ThemeContent: React.FC<ThemeContentProps> = ({ params }) => {
                   </div>
                 </div>
 
-                {/* Badge Tema Aktif */}
                 <div className="absolute top-0 right-0 m-3 h-6 w-20 bg-skeleton rounded-full" />
               </div>
             ))
@@ -125,11 +124,11 @@ const ThemeContent: React.FC<ThemeContentProps> = ({ params }) => {
             ))
           ) : (
             <div className="col-span-full flex flex-col items-center justify-center py-10 text-center text-muted-foreground gap-5">
-              <Image
+              <Img
                 src="https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751291610/theme-green_zbl4vc.png"
                 alt="Icon Tema"
-                aspectRatio="aspect-square"
-                className="w-20"
+                wrapperClassName="w-20 aspect-square"
+                sizes="80px"
               />
               <p className="text-sm font-medium">Tema tidak ditemukan</p>
             </div>

@@ -82,7 +82,7 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
             role="combobox"
             aria-expanded={open}
             disabled={disabled}
-            className="w-full relative text-left justify-start text-base font-normal"
+            className="w-full relative text-left justify-start text-base font-normal shadow-sm"
           >
             {selectedOption?.label ?? `Pilih ${placeholder}`}
             <ChevronsUpDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 shrink-0 opacity-50" />

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import Image from "@/components/ui/image";
+import { Img } from "@/components/ui/Img";
 import { LinkButton } from "@/components/ui/link";
 import { Theme } from "@/types";
 import React from "react";
@@ -21,7 +21,12 @@ const ThemeCard: React.FC<ThemeCardProps> = ({
 }) => {
   return (
     <div className="relative bg-white rounded-lg shadow-md overflow-hidden">
-      <Image src={data.thumbnail} alt={data.name} aspectRatio="aspect-square" />
+      <Img
+        src={data.thumbnail}
+        alt={data.name}
+        wrapperClassName="w-full aspect-square"
+        sizes="50vw"
+      />
       <div className="p-3 space-y-3">
         <h3 className="font-semibold capitalize">{data.name}</h3>
         <div className="grid grid-cols-1 gap-3">

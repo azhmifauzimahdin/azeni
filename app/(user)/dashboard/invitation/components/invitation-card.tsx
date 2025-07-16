@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import Image from "@/components/ui/image";
+import { Img } from "@/components/ui/Img";
 import { LinkButton } from "@/components/ui/link";
 import {
   Mail,
@@ -60,14 +60,14 @@ export function StatusBadge({ statusName }: { statusName: StatusName }) {
 
 const InvitationCard: React.FC<InvitationCardProps> = ({ data }) => {
   return (
-    <div className="w-full bg-white rounded-lg shadow-sm p-6 space-y-5">
+    <div className="w-full bg-white rounded-lg shadow p-6 space-y-5">
       <div className="flex gap-3">
         {data.image ? (
-          <Image
+          <Img
             src={data.image}
             alt="Cover"
-            aspectRatio="aspect-square"
-            className="w-16 h-16 rounded overflow-hidden"
+            wrapperClassName="w-16 h-16 rounded"
+            sizes="64px"
           />
         ) : (
           <div className="bg-gradient-pink-purple rounded w-16 h-16 p-4 text-white">

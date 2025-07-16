@@ -38,8 +38,16 @@ export function ResponseJson(
   },
   init?: ResponseInit
 ): NextResponse {
+  const status = init?.status;
+  const isSuccess =
+    data.success !== undefined
+      ? data.success
+      : status !== undefined
+      ? status >= 200 && status < 300
+      : false;
+
   const responseBody = {
-    success: data.success ?? !data.errors,
+    success: isSuccess,
     message: data.message,
     ...(data.data !== undefined ? { data: convertDates(data.data) } : {}),
     ...(data.errors ? { errors: data.errors } : {}),

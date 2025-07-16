@@ -45,7 +45,7 @@ const DateInput = forwardRef<HTMLButtonElement, DateInputProps>(
               id={id}
               variant="outline"
               className={cn(
-                "w-full h-10 justify-start items-center text-left text-base font-normal",
+                "w-full h-10 justify-start items-center text-left text-base font-normal shadow-sm",
                 className
               )}
               disabled={disabled}
@@ -73,6 +73,7 @@ const DateInput = forwardRef<HTMLButtonElement, DateInputProps>(
               captionLayout="dropdown"
               fromYear={today.getFullYear() - 20}
               toYear={today.getFullYear() + 2}
+              defaultMonth={value ?? undefined}
             />
           </PopoverContent>
         </Popover>

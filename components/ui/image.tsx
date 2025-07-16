@@ -84,7 +84,14 @@ const Image: React.FC<ImageProps> = ({
 
   if (aspectRatio) {
     return (
-      <div className={clsx("relative overflow-hidden", aspectRatio, className)}>
+      <div
+        className={clsx(
+          "overflow-hidden",
+          aspectRatio,
+          className?.replace(/\bstatic\b/, ""),
+          "relative"
+        )}
+      >
         {isFetching && (
           <div
             className={clsx(

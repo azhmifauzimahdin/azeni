@@ -22,8 +22,8 @@ import {
 } from "lucide-react";
 import { Guest } from "@/types";
 import * as React from "react";
-import Image from "@/components/ui/image";
 import { cn } from "@/lib/utils";
+import { Img } from "@/components/ui/Img";
 
 export function GuestBookCardSkeleton() {
   return (
@@ -131,11 +131,11 @@ const GuestBookCard: React.FC<GuestBookCardProps> = ({
           size="icon"
           onClick={() => onShareWhatsApp(data.name, data.code)}
         >
-          <Image
+          <Img
             src="https://res.cloudinary.com/dxtqjuvcg/image/upload/v1752064456/whatsapp-green_jhxcom.png"
             alt="icon whatsapp"
-            aspectRatio="aspect-square"
-            className="w-4 h-4"
+            wrapperClassName="w-4 h-4"
+            sizes="16px"
           />
         </Button>
 

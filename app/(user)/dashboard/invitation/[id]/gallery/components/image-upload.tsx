@@ -28,6 +28,7 @@ import { ImageSchema } from "@/lib/schemas";
 import heic2any from "heic2any";
 import { FILE_TRANFORMATION } from "@/lib/schemas/image";
 import { cloudinaryProxyLoader } from "@/lib/cloudinary-loader";
+import { Img } from "@/components/ui/Img";
 
 function CloseModalButton({ onClick }: { onClick: () => void }) {
   return (
@@ -35,7 +36,7 @@ function CloseModalButton({ onClick }: { onClick: () => void }) {
       variant="ghost"
       size="icon"
       onClick={onClick}
-      className="absolute top-4 right-4 z-50 text-black bg-white/80 hover:bg-white backdrop-blur-sm p-1 rounded-full shadow"
+      className="absolute top-3 right-3 z-50 text-black bg-white/80 hover:bg-white backdrop-blur-sm p-1 rounded-full shadow"
     >
       <X className="w-4 h-4" />
     </Button>
@@ -237,7 +238,7 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
     <div>
       <div
         {...getRootProps()}
-        className="mt-4 p-6 border-2 border-dashed rounded-md text-center cursor-pointer hover:bg-gray-100"
+        className="p-6 border-2 border-dashed rounded-md text-center cursor-pointer hover:bg-gray-100"
       >
         <input {...getInputProps()} />
         <div className="flex flex-col items-center justify-center text-gray-600">
@@ -272,12 +273,12 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
                   }}
                   className="border rounded-md overflow-hidden cursor-pointer"
                 >
-                  <Image
+                  <Img
                     src={item.image}
                     alt={`image-${item.id}`}
-                    aspectRatio="aspect-square"
-                    className="object-cover w-full"
+                    wrapperClassName="w-full aspect-square"
                     isFetching={isFetching}
+                    sizes="250px"
                   />
                 </div>
                 <Button
@@ -340,35 +341,44 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
             </DialogDescription>
           </div>
           <div className="relative h-[75vh] md:h-[90vh] flex items-center justify-center bg-black/70 backdrop-blur-sm rounded-xl">
-            <div className="relative max-h-full max-w-full px-12 sm:px-16 py-10">
-              <ImageNext
-                loader={cloudinaryProxyLoader}
-                width={0}
-                height={0}
-                sizes="100vw"
-                style={{ width: "auto", height: "auto" }}
-                src={values[currentIndex]?.image}
-                alt={`image-${values[currentIndex]?.id}`}
-                className="max-h-[55vh] md:max-h-[75vh] max-w-full object-contain rounded-md shadow-xl"
-              />
+            <div className="flex items-center justify-center px-4 py-6 w-full">
+              <div className="relative inline-block">
+                <ImageNext
+                  key={values[currentIndex]?.image}
+                  loader={cloudinaryProxyLoader}
+                  src={values[currentIndex]?.image}
+                  alt={`image-${values[currentIndex]?.id}`}
+                  width={0}
+                  height={0}
+                  sizes="100vw"
+                  style={{
+                    height: "60vh",
+                    width: "auto",
+                    maxWidth: "100%",
+                    minWidth: "50vw",
+                    minHeight: "200px",
+                  }}
+                  className="block object-contain rounded-md shadow-xl"
+                />
 
-              <Button
-                variant="delete"
-                size="icon"
-                type="button"
-                onClick={() => {
-                  const current = values[currentIndex];
-                  if (current) {
-                    handleRemove(current.id, current.image);
-                    setIsModalOpen(false);
-                  }
-                }}
-                isLoading={deletingGalleryId === values[currentIndex]?.id}
-                className="absolute top-7 right-8 md:right-12"
-              >
-                <X className="h-5 w-5" />
-                <span className="sr-only">Hapus foto</span>
-              </Button>
+                {/* <Button
+                  variant="delete"
+                  size="icon"
+                  type="button"
+                  onClick={() => {
+                    const current = values[currentIndex];
+                    if (current) {
+                      handleRemove(current.id, current.image);
+                      setIsModalOpen(false);
+                    }
+                  }}
+                  isLoading={deletingGalleryId === values[currentIndex]?.id}
+                  className="absolute top-1 right-1 sm:top-2 sm:right-2 z-10"
+                >
+                  <X className="h-5 w-5" />
+                  <span className="sr-only">Hapus foto</span>
+                </Button> */}
+              </div>
             </div>
 
             <button
@@ -400,6 +410,23 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
             </button>
 
             <CloseModalButton onClick={() => setIsModalOpen(false)} />
+            <Button
+              variant="delete"
+              type="button"
+              size="sm"
+              onClick={() => {
+                const current = values[currentIndex];
+                if (current) {
+                  handleRemove(current.id, current.image);
+                  setIsModalOpen(false);
+                }
+              }}
+              isLoading={deletingGalleryId === values[currentIndex]?.id}
+              className="absolute bottom-2 right-1/2 translate-x-1/2 z-10 rounded-full"
+            >
+              Hapus
+              <span className="sr-only">Hapus foto</span>
+            </Button>
           </div>
         </DialogContent>
       </Dialog>

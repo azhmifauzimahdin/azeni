@@ -139,6 +139,7 @@ const ScheduleDateForm: React.FC<ScheduleDateFormsProps> = ({
                         <DateTimeInput
                           id={field.name}
                           disabled={loading}
+                          isFetching={isFetching}
                           {...field}
                         />
                       </FormControl>

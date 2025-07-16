@@ -85,6 +85,24 @@ export async function checkOutGuest(
   return res.data;
 }
 
+export async function checkInOutGuest(
+  invitationId: string,
+  code: string
+): Promise<
+  ApiResponse<{
+    id: string;
+    name: string;
+    date: string;
+    status: "checkin" | "checkout" | null;
+  }>
+> {
+  const res = await httpRequest.put(
+    `/api/invitations/${invitationId}/guest/${code}/check`
+  );
+
+  return res.data;
+}
+
 export async function fetchGuestByCode(
   InvitationId: string,
   id: string

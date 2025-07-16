@@ -30,8 +30,8 @@ import DeleteConfirmationModal from "@/components/ui/delete-confirmation-modal";
 import { ScheduleCard, ScheduleCardSkeleton } from "./schedule-card";
 import { scheduleSchema } from "@/lib/schemas/schedule";
 import { Pagination } from "@/components/ui/pagination";
-import Image from "@/components/ui/image";
 import ScheduleDateForm from "./schedule-date-form";
+import { Img } from "@/components/ui/Img";
 
 type ScheduleFormValues = z.infer<typeof scheduleSchema>;
 interface ScheduleFormsProps {
@@ -382,11 +382,11 @@ const ScheduleForm: React.FC<ScheduleFormsProps> = ({
             onClick={() => setIsModalOpen(true)}
             className="flex items-center gap-3 bg-green-app-primary text-white rounded-lg shadow p-4 cursor-pointer hover:bg-green-app-secondary max-w-md"
           >
-            <Image
+            <Img
               src="https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751291124/schedule_mwwixp.png"
               alt="icon schedule"
-              aspectRatio="aspect-square"
-              className="w-1/12"
+              wrapperClassName="w-1/12 aspect-square"
+              sizes="35px"
             />
             <span className="font-medium">Tambah Jadwal Acara</span>
           </div>

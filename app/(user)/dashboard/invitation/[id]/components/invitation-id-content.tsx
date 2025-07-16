@@ -1,6 +1,5 @@
 "use client";
 
-import { Heading } from "@/components/ui/heading";
 import React, { useEffect } from "react";
 import InvitationIdList from "./invitation-id-list";
 import useUserInvitations from "@/hooks/use-user-invitation";
@@ -8,9 +7,12 @@ import NavigationBack from "@/components/ui/navigation-back";
 import useUserMusics from "@/hooks/use-user-music";
 import useUserBanks from "@/hooks/use-user-bank";
 import useThemes from "@/hooks/use-theme";
-import { InvitationService } from "@/lib/services";
+import { InvitationService, SettingService } from "@/lib/services";
 import useUserQuoteTemplates from "@/hooks/use-user-quote-template";
 import { useRouter } from "next/navigation";
+import InvitationOverview from "./invitation-id-overview";
+import toast from "react-hot-toast";
+import useInvitationStore from "@/stores/invitation-store";
 
 interface InvitationIdContentProps {
   params: {
@@ -23,13 +25,17 @@ const InvitationIdContent: React.FC<InvitationIdContentProps> = ({
 }) => {
   const router = useRouter();
 
-  const { getInvitationById } = useUserInvitations();
+  const { getInvitationById, isFetching } = useUserInvitations();
   useUserMusics();
   useUserBanks();
   useUserQuoteTemplates();
   useThemes();
 
   const invitation = getInvitationById(params.id);
+
+  const updateSettingInInvitation = useInvitationStore(
+    (state) => state.updateSettingInInvitation
+  );
 
   useEffect(() => {
     const checkInvitationAvailability = async () => {
@@ -112,19 +118,29 @@ const InvitationIdContent: React.FC<InvitationIdContentProps> = ({
     },
   ];
 
+  const onToggleActive = async (val: boolean) => {
+    try {
+      const res = await SettingService.updateInvitationStatus(params.id, {
+        invitationEnabled: val,
+      });
+      updateSettingInInvitation(params.id, res.data);
+    } catch {
+      toast.error("Gagal update status undangan.");
+    }
+  };
+
   return (
     <>
       <NavigationBack href="/dashboard/invitation" />
       <div>
-        <Heading
-          title={`Undangan ${invitation?.groom || ""} ${
-            invitation?.groom ? "&" : ""
-          } ${invitation?.bride || ""}`}
-          description="Kelola undangan digital Anda dengan mudah dan efisien"
+        <InvitationOverview
+          onToggleActive={(val) => onToggleActive(val)}
+          invitation={invitation}
+          params={params}
+          isFetching={isFetching}
         />
-      </div>
-      <div>
-        <InvitationIdList sections={sections} />
+
+        <InvitationIdList sections={sections} isFetching={isFetching} />
       </div>
     </>
   );
