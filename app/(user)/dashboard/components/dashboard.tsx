@@ -45,6 +45,7 @@ const DashboardLayout = ({
                       alt="sample"
                       wrapperClassName="w-4 h-4"
                       sizes="16px"
+                      priority
                     />
                   </div>
                   <div className="pt-0.5 font-gallery font-medium">AZEN</div>

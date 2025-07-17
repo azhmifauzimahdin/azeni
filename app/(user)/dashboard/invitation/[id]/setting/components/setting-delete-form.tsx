@@ -95,8 +95,8 @@ const Settingform: React.FC<SettingLinkFormsProps> = ({
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <Alert variant="destructive">
               Menghapus undangan ini akan menghapus semua data terkait seperti
-              tamu, cerita, galeri, komentar, dan lainnya. <br />
-              Tindakan ini tidak dapat dibatalkan.
+              tamu, cerita, galeri, komentar, dan lainnya. Tindakan ini tidak
+              dapat dibatalkan.
             </Alert>
 
             <FormField
@@ -132,6 +132,7 @@ const Settingform: React.FC<SettingLinkFormsProps> = ({
                   setIsModalOpen(false);
                   form.reset();
                 }}
+                className="w-full md:w-auto"
               >
                 Batal
               </Button>
@@ -149,12 +150,12 @@ const Settingform: React.FC<SettingLinkFormsProps> = ({
         </Form>
       </Modal>
 
-      <div className="card-dashboard space-y-6">
+      <div className="card-dashboard space-y-4">
         <h2 className="text-xl font-semibold text-slate-800">Hapus Undangan</h2>
-        <Alert>
+        <p>
           Menghapus undangan akan menghapus semua data terkait seperti tamu,
           cerita, galeri, dan lainnya. Tindakan ini tidak dapat dibatalkan.
-        </Alert>
+        </p>
         <div className="w-full md:w-auto flex justify-end">
           <Button
             type="button"

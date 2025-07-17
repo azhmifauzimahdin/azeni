@@ -5,6 +5,10 @@ export interface SettingWaTemplateRequest {
 export interface SettingInvitationStatusRequest {
   invitationEnabled: boolean;
 }
+
+export interface SettingInvitationScanResetCountdownSecondsRequest {
+  scanResetCountdownSeconds: number;
+}
 export interface SettingRSVPRequest {
   rsvpEnabled: boolean;
   rsvpMaxGuests: number;

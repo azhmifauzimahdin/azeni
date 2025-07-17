@@ -117,7 +117,7 @@ const SettingTemplateForm: React.FC<SettingTemplateFormsProps> = ({
   });
 
   return (
-    <div className="space-y-6 card-dashboard">
+    <div className="space-y-4 card-dashboard">
       <h2 className="text-xl font-semibold text-slate-800">
         Format Pesan WhatsApp
       </h2>

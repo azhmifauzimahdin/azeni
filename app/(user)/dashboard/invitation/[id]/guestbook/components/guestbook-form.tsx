@@ -560,12 +560,8 @@ const GuestBookForm: React.FC<StoryFormsProps> = ({
         loading={loading}
       />
       <Alert variant="default" className="mb-4">
-        Sebelum menambahkan tamu undangan, pastikan link undangan sudah benar.
-        Link hanya dapat diubah satu kali, dan tidak bisa diubah lagi setelah
-        tamu ditambahkan. Jika Anda sudah pernah menambahkan tamu dan kemudian
-        menghapusnya, sistem tetap akan mendeteksi bahwa tamu pernah
-        ditambahkan, sehingga link undangan tidak dapat diubah. Untuk mengubah
-        link undangan, buka menu&nbsp;
+        Sebelum menambahkan tamu undangan, pastikan link undangan sudah sesuai.
+        Untuk mengubah link undangan, buka menu&nbsp;
         <Link
           href="setting"
           className="text-pink-500 hover:text-pink-600 transition-colors"

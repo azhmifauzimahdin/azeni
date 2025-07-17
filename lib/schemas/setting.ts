@@ -108,3 +108,10 @@ export const enableInvitationStatusSchema = z.object({
     invalid_type_error: "Status harus berupa boolean (ya/tidak)",
   }),
 });
+
+export const scanResetCountdownSecondsSchema = z.object({
+  scanResetCountdownSeconds: z
+    .number({ invalid_type_error: "Harus berupa angka" })
+    .min(0, { message: "Minimal 0 detik" })
+    .max(300, { message: "Maksimal 300 detik" }),
+});

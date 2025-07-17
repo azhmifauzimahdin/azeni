@@ -133,7 +133,7 @@ const SettingLinkForm: React.FC<SettingLinkFormsProps> = ({
           </form>
         </Form>
       </Modal>
-      <div className="card-dashboard space-y-6">
+      <div className="card-dashboard space-y-4">
         <h2 className="text-xl font-semibold text-slate-800">Link Undangan</h2>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           {isFetching ? (

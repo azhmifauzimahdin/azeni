@@ -79,7 +79,6 @@ const InvitationOverview: React.FC<InvitationOverviewProps> = ({
           <Img
             src={invitation.image}
             alt="Undangan Cover"
-            fill
             wrapperClassName="absolute inset-0 blur-sm brightness-75"
             className="object-cover"
           />

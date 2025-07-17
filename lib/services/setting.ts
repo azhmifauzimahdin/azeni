@@ -1,5 +1,6 @@
 import {
   Setting,
+  SettingInvitationScanResetCountdownSecondsRequest,
   SettingInvitationStatusRequest,
   SettingRSVPRequest,
   SettingWaTemplateRequest,
@@ -36,6 +37,18 @@ export async function updateInvitationStatus(
 ): Promise<ApiResponse<Setting>> {
   const res = await httpRequest.patch(
     `/api/invitations/${invitationId}/setting/activation`,
+    request
+  );
+
+  return res.data;
+}
+
+export async function updateInvitationScanResetCountdownSeconds(
+  invitationId: string,
+  request: SettingInvitationScanResetCountdownSecondsRequest
+): Promise<ApiResponse<Setting>> {
+  const res = await httpRequest.patch(
+    `/api/invitations/${invitationId}/setting/scan`,
     request
   );
 

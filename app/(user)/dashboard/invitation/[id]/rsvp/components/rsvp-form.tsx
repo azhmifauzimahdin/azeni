@@ -225,6 +225,7 @@ const RSVPForm: React.FC<RSVPFormsProps> = ({
                             )
                           }
                           isFetching={isFetching}
+                          className="shadow-sm"
                         >
                           <Minus />
                         </Button>
@@ -249,6 +250,7 @@ const RSVPForm: React.FC<RSVPFormsProps> = ({
                             })
                           }
                           isFetching={isFetching}
+                          className="shadow-sm"
                         >
                           <Plus />
                         </Button>
