@@ -21,9 +21,8 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
         where: { id: params.id },
         include: {
           transaction: {
-            include: {
-              status: true,
-            },
+            where: { isActive: true },
+            include: { status: true },
           },
           music: true,
           theme: true,
@@ -69,9 +68,8 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
         },
         include: {
           transaction: {
-            include: {
-              status: true,
-            },
+            where: { isActive: true },
+            include: { status: true },
           },
           music: true,
           theme: true,

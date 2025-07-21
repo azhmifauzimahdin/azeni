@@ -1,4 +1,6 @@
+import { generateOrderId } from "@/lib/generateOrderId";
 import { generateUniqueSlug } from "@/lib/generateUniqueSlug";
+import snap from "@/lib/midtrans";
 import { prisma } from "@/lib/prisma";
 import { InvitationSchema } from "@/lib/schemas";
 import { defaultWhatsappMessageTemplate } from "@/lib/utils/default";
@@ -9,8 +11,9 @@ import {
   ResponseJson,
   unauthorizedError,
 } from "@/lib/utils/response";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { Decimal } from "@prisma/client/runtime/library";
+import { randomUUID } from "crypto";
 
 function calculateFinalPrice(
   originalPrice: Decimal,
@@ -45,7 +48,7 @@ export async function POST(req: Request) {
         userId,
         transaction: {
           status: {
-            name: "Menunggu Pembayaran",
+            name: "PENDING",
           },
         },
       },
@@ -107,7 +110,7 @@ export async function POST(req: Request) {
 
     const status = await prisma.paymentStatus.findFirst({
       where: {
-        name: "Menunggu Pembayaran",
+        name: "PENDING",
       },
     });
 
@@ -116,7 +119,7 @@ export async function POST(req: Request) {
         {
           message: "Status pembayaran tidak ditemukan",
           errors: {
-            themeId: [
+            statusId: [
               "Status pembayaran dengan ID atau nama tersebut tidak tersedia",
             ],
           },
@@ -124,6 +127,40 @@ export async function POST(req: Request) {
         { status: 404 }
       );
     }
+
+    const finalAmount = calculateFinalPrice(
+      theme.originalPrice,
+      theme.discount,
+      theme.isPercent
+    );
+
+    const user = await currentUser();
+    const orderId = generateOrderId();
+
+    const midtransRes = await snap.createTransaction({
+      transaction_details: {
+        order_id: orderId,
+        gross_amount: Number(finalAmount),
+      },
+      item_details: [
+        {
+          id: randomUUID(),
+          price: Number(finalAmount),
+          quantity: 1,
+          name: "Undangan Pernikahan",
+          brand: "Undangan Digital",
+          merchant_name: "Azeni",
+        },
+      ],
+      customer_details: {
+        first_name: user?.firstName ?? "Tamu",
+        last_name: user?.lastName ?? undefined,
+        email: user?.emailAddresses[0].emailAddress,
+      },
+      callbacks: {
+        finish: `${process.env.NEXT_PUBLIC_BASE_URL}/invitation/payment`,
+      },
+    });
 
     const newSlug = await generateUniqueSlug(slug, "invitation");
 
@@ -144,17 +181,16 @@ export async function POST(req: Request) {
 
     await prisma.transaction.create({
       data: {
+        orderId: orderId,
         invitationId: newInvitation.id,
         invitationSlug: newInvitation.slug,
         groomName: newInvitation.groom,
         brideName: newInvitation.bride,
-        amount: calculateFinalPrice(
-          theme.originalPrice,
-          theme.discount,
-          theme.isPercent
-        ),
+        amount: finalAmount,
         date: new Date(),
         statusId: status.id,
+        redirectUrl: midtransRes.redirect_url,
+        snapToken: midtransRes.token,
       },
     });
 
@@ -185,6 +221,11 @@ export async function POST(req: Request) {
         transaction: {
           include: {
             status: true,
+            webhookLogs: {
+              orderBy: {
+                eventAt: "desc",
+              },
+            },
           },
         },
         music: true,

@@ -1,7 +1,8 @@
-import { Badge } from "@/components/ui/badge";
+import { Badge, BadgeProps } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Img } from "@/components/ui/Img";
 import { LinkButton } from "@/components/ui/link";
+import { Invitation } from "@/types";
 import {
   Mail,
   Link2,
@@ -9,56 +10,67 @@ import {
   Clock,
   CircleCheck,
   XCircle,
+  Ban,
+  RefreshCcw,
+  Wallet,
 } from "lucide-react";
-
-interface InvitationData {
-  id: string;
-  groom: string;
-  bride: string;
-  slug: string;
-  image: string;
-  transaction: {
-    status: {
-      name: string;
-    };
-  };
-}
+import { useRouter } from "next/navigation";
 
 interface InvitationCardProps {
-  data: InvitationData;
+  data: Invitation;
 }
 
-type StatusName = "Menunggu Pembayaran" | "Lunas" | "Batal" | string;
+export type StatusName =
+  | "PENDING"
+  | "SUCCESS"
+  | "FAILED"
+  | "CANCELLED"
+  | "REFUNDED";
 
-export function StatusBadge({ statusName }: { statusName: StatusName }) {
-  const statusVariantMap: Record<
-    string,
-    "payment" | "destructive" | "fullyPaid" | undefined
-  > = {
-    "Menunggu Pembayaran": "payment",
-    Lunas: "fullyPaid",
-    Batal: "destructive",
+interface StatusBadgeProps {
+  statusName: StatusName;
+}
+
+export function StatusBadge({ statusName }: StatusBadgeProps) {
+  const statusVariantMap: Record<StatusName, BadgeProps["variant"]> = {
+    PENDING: "pending",
+    SUCCESS: "success",
+    FAILED: "failed",
+    CANCELLED: "cancelled",
+    REFUNDED: "refunded",
+  };
+
+  const iconMap: Record<StatusName, React.ReactNode> = {
+    PENDING: <Clock size={12} />,
+    SUCCESS: <CircleCheck size={12} />,
+    FAILED: <XCircle size={12} />,
+    CANCELLED: <Ban size={12} />,
+    REFUNDED: <RefreshCcw size={12} />,
+  };
+
+  const labelMap: Record<StatusName, string> = {
+    PENDING: "Menunggu Pembayaran",
+    SUCCESS: "Lunas",
+    FAILED: "Gagal",
+    CANCELLED: "Dibatalkan",
+    REFUNDED: "Dikembalikan",
   };
 
   const variant = statusVariantMap[statusName] ?? "default";
-  const icon =
-    statusName === "Menunggu Pembayaran" ? (
-      <Clock size={12} />
-    ) : statusName === "Lunas" ? (
-      <CircleCheck size={12} />
-    ) : (
-      <XCircle size={12} />
-    );
+  const icon = iconMap[statusName];
+  const label = labelMap[statusName] ?? statusName;
 
   return (
     <Badge variant={variant} className="gap-2">
       {icon}
-      {statusName}
+      {label}
     </Badge>
   );
 }
 
 const InvitationCard: React.FC<InvitationCardProps> = ({ data }) => {
+  const router = useRouter();
+
   return (
     <div className="w-full bg-white rounded-lg shadow p-6 space-y-5">
       <div className="flex gap-3">
@@ -86,7 +98,7 @@ const InvitationCard: React.FC<InvitationCardProps> = ({ data }) => {
           <Settings size={20} />
           Kelola
         </LinkButton>
-        {data.transaction.status.name === "Lunas" ? (
+        {data.transaction.status.name === "SUCCESS" ? (
           <Button
             type="button"
             onClick={() =>
@@ -100,6 +112,15 @@ const InvitationCard: React.FC<InvitationCardProps> = ({ data }) => {
           >
             <Link2 size={20} />
             Lihat Web
+          </Button>
+        ) : data.transaction.status.name === "PENDING" ? (
+          <Button
+            type="button"
+            onClick={() => router.push("/dashboard/payment")}
+            variant="outline"
+          >
+            <Wallet />
+            Bayar
           </Button>
         ) : null}
       </div>

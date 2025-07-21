@@ -31,6 +31,7 @@ import axios from "axios";
 import ImageUpload from "./image-upload";
 import { createInvitationSchema } from "@/lib/schemas/invitation";
 import { Alert } from "@/components/ui/alert";
+import useTransactionStore from "@/stores/transaction-store";
 
 const invitationSchema = createInvitationSchema.pick({
   groom: true,
@@ -45,6 +46,9 @@ const InvitationForm: React.FC = () => {
   useUserInvitations();
   const addInvitationAtFirst = useInvitationStore(
     (state) => state.addInvitationAtFirst
+  );
+  const addTransactionAtFirst = useTransactionStore(
+    (state) => state.addTransactionAtFirst
   );
   const router = useRouter();
 
@@ -77,8 +81,11 @@ const InvitationForm: React.FC = () => {
       };
       const res = await InvitationService.createInvitation(req);
       addInvitationAtFirst(res.data);
-      router.push(`/dashboard/invitation`);
+      addTransactionAtFirst(res.data.transaction);
       toast.success("Undangan berhasil dibuat.");
+      router.push(
+        `/invitation/payment?order_id=${res.data.transaction.orderId}&status_code=201&transaction_status=pending}`
+      );
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 409) {
@@ -134,11 +141,11 @@ const InvitationForm: React.FC = () => {
         description="Buat undanganmu sekarang juga"
       />
       <Alert variant="default">
-        Pastikan nama panggilan untuk mempelai pria dan wanita sudah benar,
-        termasuk penggunaan huruf besar. Nama tidak dapat diubah setelah
-        disimpan dan akan digunakan di beberapa bagian undangan secara otomatis.
-        Undangan aktif selama <span className="font-bold">6 bulan</span> dimulai
-        sejak tanggal dibuat.
+        Pastikan nama panggilan mempelai pria dan wanita sudah benar, termasuk
+        penggunaan huruf besar. Nama tidak dapat diubah setelah disimpan dan
+        akan digunakan di beberapa bagian undangan secara otomatis. Undangan
+        aktif selama <span className="font-bold">6 bulan</span> dimulai sejak
+        tanggal dibuat.
       </Alert>
       <Form {...form}>
         <form

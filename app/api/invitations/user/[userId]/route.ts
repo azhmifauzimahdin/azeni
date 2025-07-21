@@ -21,7 +21,7 @@ export async function GET(
       return forbiddenError();
     }
 
-    const invitation = await prisma.invitation.findMany({
+    const invitations = await prisma.invitation.findMany({
       where: { userId: params.userId },
       include: {
         transaction: {
@@ -76,7 +76,7 @@ export async function GET(
     return ResponseJson(
       {
         message: "Data undangan berhasil diambil",
-        data: invitation,
+        data: invitations,
       },
       { status: 200 }
     );

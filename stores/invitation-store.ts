@@ -13,6 +13,10 @@ interface InvitationState {
   setInvitations: (invitation: Invitation[]) => void;
   addInvitationAtFirst: (newInvitation: Invitation) => void;
   deleteInvitationById: (invitationId: string) => void;
+  updateTransactionStatusName: (
+    invitationId: string,
+    statusName: "PENDING" | "SUCCESS" | "FAILED" | "CANCELLED" | "REFUNDED"
+  ) => void;
   updateSlugInInvitation: (invitationId: string, slug: string) => void;
   updateDateInInvitation: (
     invitationId: string,
@@ -88,6 +92,24 @@ const useInvitationStore = create<InvitationState>((set) => ({
   addInvitationAtFirst: (newInvitation) =>
     set((state) => ({
       invitations: [newInvitation, ...state.invitations],
+    })),
+  updateTransactionStatusName: (invitationId, statusName) =>
+    set((state) => ({
+      invitations: state.invitations.map((invitation) => {
+        if (invitation.id === invitationId && invitation.transaction) {
+          return {
+            ...invitation,
+            transaction: {
+              ...invitation.transaction,
+              status: {
+                ...invitation.transaction.status,
+                name: statusName,
+              },
+            },
+          };
+        }
+        return invitation;
+      }),
     })),
   deleteInvitationById: (invitationId) =>
     set((state) => ({

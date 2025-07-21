@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { randomUUID } from "crypto";
 
 const prisma = new PrismaClient();
 
@@ -73,17 +74,26 @@ async function main() {
 
   const paymentStatus = await prisma.paymentStatus.create({
     data: {
-      name: "Lunas",
+      name: "SUCCESS",
     },
   });
 
   await prisma.paymentStatus.createMany({
     data: [
       {
-        name: "Menunggu Pembayaran",
+        name: "PENDING",
       },
       {
-        name: "Batal",
+        name: "FAILED",
+      },
+      {
+        name: "EXPIRED",
+      },
+      {
+        name: "CANCELLED",
+      },
+      {
+        name: "REFUNDED",
       },
     ],
   });
@@ -128,6 +138,7 @@ async function main() {
   //create Transaction
   await prisma.transaction.create({
     data: {
+      orderId: randomUUID(),
       invitationId: invitation.id,
       invitationSlug: invitation.slug,
       groomName: invitation.groom,

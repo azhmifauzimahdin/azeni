@@ -8,6 +8,7 @@ import { Toaster } from "react-hot-toast";
 import { ClerkProvider } from "@clerk/nextjs";
 import UserSync from "@/components/ui/user-sync";
 import ClientWrapper from "./client-wrapper";
+import Script from "next/script";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -49,6 +50,10 @@ export default function RootLayout({
         lang="id"
         className={`${poppins.variable} ${alexBrush.variable} ${scheherazade.variable} ${gallery.variable}`}
       >
+        <Script
+          src={`${process.env.NEXT_PUBLIC_MIDTRANS_SCRIPT_URL}/snap/snap.js`}
+          data-client-key={process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY}
+        />
         <body>
           <AOSInit />
           <Toaster />

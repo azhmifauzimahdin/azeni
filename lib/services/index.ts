@@ -13,3 +13,4 @@ export * as GalleryService from "./gallery";
 export * as QuoteTemplateService from "./quote-template";
 export * as StoryService from "./story";
 export * as SettingService from "./setting";
+export * as TransactionService from "./transaction";

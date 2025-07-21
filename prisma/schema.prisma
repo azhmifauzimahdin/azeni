@@ -62,6 +62,7 @@ model Setting {
 
 model Transaction {
   id              String        @id @default(uuid())
+  orderId         String        @unique
   invitationId    String?       @unique
   invitationSlug  String?
   groomName       String?
@@ -69,15 +70,41 @@ model Transaction {
   amount          Decimal       @db.Decimal(10, 2)
   date            DateTime
   statusId        String
+  redirectUrl     String?
+  midtransPdfUrl  String?
+  snapToken       String?
+  isActive        Boolean       @default(true)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 
   invitation      Invitation?    @relation("InvitationTransaction", fields: [invitationId], references: [id], onDelete: SetNull)
   status          PaymentStatus  @relation("PaymentStatusTransaction", fields: [statusId], references: [id], onDelete: Cascade)
+  webhookLogs     MidtransWebhookLog[]  @relation("MidtransTransaction")
 }
 
 model PaymentStatus {
   id            String        @id @default(uuid())
-  name          String
+  name          String        @unique
   transactions  Transaction[] @relation("PaymentStatusTransaction")
+}
+
+model MidtransWebhookLog {
+  id            String        @id @default(uuid())
+  orderId       String
+  transactionStatus  String
+  paymentType   String
+  fraudStatus   String?
+  bank          String?
+  vaNumber      String?
+  store         String?
+  paymentCode   String?
+  expiredAt     DateTime?
+  rawBody       Json
+  eventAt       DateTime
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  transaction   Transaction   @relation("MidtransTransaction",fields: [orderId], references: [orderId], onDelete: Cascade)
 }
 
 model Theme{
