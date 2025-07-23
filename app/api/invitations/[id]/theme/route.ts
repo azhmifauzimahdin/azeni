@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { ThemeSchema } from "@/lib/schemas";
+import { calculateFinalPrice } from "@/lib/utils/calculate-final-price";
 import {
   forbiddenError,
   handleError,
@@ -8,6 +9,7 @@ import {
   unauthorizedError,
 } from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
+import { Decimal } from "@prisma/client/runtime/library";
 
 export async function PATCH(
   req: Request,
@@ -43,6 +45,9 @@ export async function PATCH(
         id: params.id,
         userId,
       },
+      include: {
+        transaction: true,
+      },
     });
 
     if (!invitationByUserId) return forbiddenError();
@@ -76,6 +81,28 @@ export async function PATCH(
       );
     }
 
+    const referralDiscount =
+      invitationByUserId.transaction?.referralDiscountAmount ?? new Decimal(0);
+
+    const amount =
+      invitationByUserId.transaction?.amount.add(referralDiscount) ??
+      new Decimal(0);
+
+    const finalPrice = calculateFinalPrice(
+      theme.originalPrice,
+      theme.discount,
+      theme.isPercent
+    );
+
+    if (!finalPrice.equals(amount)) {
+      return ResponseJson(
+        {
+          message: "Tema memiliki harga yang berbeda",
+        },
+        { status: 400 }
+      );
+    }
+
     const invitation = await prisma.invitation.update({
       where: {
         id: params.id,
@@ -95,5 +122,99 @@ export async function PATCH(
     });
   } catch (error) {
     return handleError(error, "Gagal memperbarui tema");
+  }
+}
+
+export async function GET(_: Request, { params }: { params: { id: string } }) {
+  try {
+    const { userId } = await auth();
+    if (!userId) return unauthorizedError();
+
+    const transaction = await prisma.transaction.findFirst({
+      where: {
+        invitationId: params.id,
+        invitation: {
+          userId,
+        },
+      },
+    });
+
+    if (!transaction) {
+      return ResponseJson(
+        {
+          message: "Transaksi tidak ditemukan",
+          errors: {
+            invitationId: ["Transaksi dengan ID tersebut tidak tersedia"],
+          },
+        },
+        { status: 404 }
+      );
+    }
+
+    const themes = await prisma.theme.findMany({
+      include: {
+        category: true,
+        invitations: {
+          include: {
+            guests: {
+              take: 1,
+              where: { name: "tamu" },
+              orderBy: { createdAt: "asc" },
+            },
+          },
+        },
+      },
+    });
+
+    const matchedThemes = themes.filter((theme) => {
+      const finalPrice = calculateFinalPrice(
+        theme.originalPrice,
+        theme.discount,
+        theme.isPercent
+      );
+
+      const referralDiscount =
+        transaction.referralDiscountAmount ?? new Decimal(0);
+
+      const totalAmount = transaction.amount.add(referralDiscount);
+
+      return finalPrice.equals(totalAmount);
+    });
+
+    const result = matchedThemes.map((theme) => {
+      const matchingInvitation = theme.invitations.find(
+        (inv) => inv.slug === theme.name
+      );
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { invitations, ...themeWithoutInvitations } = theme;
+
+      if (!matchingInvitation) {
+        return {
+          ...themeWithoutInvitations,
+          invitation: null,
+        };
+      }
+
+      const { guests, ...invitationWithoutGuests } = matchingInvitation;
+
+      return {
+        ...themeWithoutInvitations,
+        invitation: {
+          ...invitationWithoutGuests,
+          guest: guests?.[0] ?? null,
+        },
+      };
+    });
+
+    return ResponseJson(
+      {
+        message: "Data tema berhasil diambil",
+        data: result,
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    return handleError(error, "Gagal mengambil tema");
   }
 }

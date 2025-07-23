@@ -24,8 +24,8 @@ const InvitationPage = async ({ params }: InvitationPageProps) => {
     handleError(error, "invitation");
   }
 
-  if (!invitation?.data) {
-    return <NotFound message="Undangan tidak ditemukan" />;
+  if (!invitation?.data?.theme) {
+    return <NotFound message="Tema undangan tidak ditemukan" />;
   }
 
   if (!guest) {

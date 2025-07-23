@@ -13,8 +13,8 @@ import { handleError } from "@/lib/utils/handle-error";
 import { useRouter } from "next/navigation";
 import { Alert } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
-import clsx from "clsx";
 import useTransactionStore from "@/stores/transaction-store";
+import { Button } from "@/components/ui/button";
 
 interface InvitationThemeFormProps {
   params: {
@@ -123,21 +123,17 @@ const InvitationThemeForm: React.FC<InvitationThemeFormProps> = ({
 
       <div className="flex gap-2 overflow-x-auto pb-2 mb-4">
         {categoryList.map((cat) => (
-          <button
+          <Button
+            variant={activeCategory === cat ? "primary" : "outline"}
             key={cat}
             onClick={() => {
               setActiveCategory(cat);
               setCurrentPage(1);
             }}
-            className={clsx(
-              "px-4 py-1 text-sm rounded-full border transition whitespace-nowrap",
-              activeCategory === cat
-                ? "bg-teal-600 text-white border-teal-600"
-                : "bg-white text-gray-600 border-gray-300 hover:bg-gray-100"
-            )}
+            className="rounded-full whitespace-nowrap shadow-sm"
           >
             {cat}
-          </button>
+          </Button>
         ))}
       </div>
 

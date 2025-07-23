@@ -3,8 +3,8 @@ import { MailOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import clsx from "clsx";
 import { formatDate } from "@/lib/utils/formatted-date";
-import Image from "@/components/ui/image";
 import { Guest, Invitation } from "@/types";
+import { Img } from "@/components/ui/Img";
 
 interface InvitationModalProps {
   invitation: Invitation & { currentGuest: Guest };
@@ -43,11 +43,10 @@ const InvitationModalPremium: React.FC<InvitationModalProps> = ({
         {/* ====== Start Premium 001 ======*/}
         {variant === "001" ? (
           <>
-            <Image
+            <Img
               src={invitation.image}
               alt="Foto"
-              aspectRatio="aspect-square"
-              className="w-5/12 md:w-2/12 rounded-tr-3xl rounded-br-lg rounded-bl-3xl rounded-tl-lg shadow-md mb-3"
+              wrapperClassName="aspect-square w-5/12 md:w-2/12 rounded-tr-3xl rounded-br-lg rounded-bl-3xl rounded-tl-lg shadow-md mb-3"
               priority
             />
             <h1>The Wedding Of</h1>

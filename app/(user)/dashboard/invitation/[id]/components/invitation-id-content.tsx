@@ -6,13 +6,13 @@ import useUserInvitations from "@/hooks/use-user-invitation";
 import NavigationBack from "@/components/ui/navigation-back";
 import useUserMusics from "@/hooks/use-user-music";
 import useUserBanks from "@/hooks/use-user-bank";
-import useThemes from "@/hooks/use-theme";
 import { InvitationService, SettingService } from "@/lib/services";
 import useUserQuoteTemplates from "@/hooks/use-user-quote-template";
 import { useRouter } from "next/navigation";
 import InvitationOverview from "./invitation-id-overview";
 import toast from "react-hot-toast";
 import useInvitationStore from "@/stores/invitation-store";
+import useUserThemes from "@/hooks/use-user-theme";
 
 interface InvitationIdContentProps {
   params: {
@@ -29,7 +29,7 @@ const InvitationIdContent: React.FC<InvitationIdContentProps> = ({
   useUserMusics();
   useUserBanks();
   useUserQuoteTemplates();
-  useThemes();
+  useUserThemes(params.id);
 
   const invitation = getInvitationById(params.id);
 

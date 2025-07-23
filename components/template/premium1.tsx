@@ -6,7 +6,6 @@ import SpinningDisc from "@/components/ui/spinning-disc";
 import { navLinks } from "@/data/navLinks";
 import { Comment, Guest, Invitation } from "@/types";
 import InvitationModalPremium from "../modals/invitations/invitation-modal-premium";
-import Image from "../ui/image";
 import GoogleCalender from "../ui/google-calender";
 import CountdownTimer from "../ui/countdown-timer";
 import { formatDate } from "@/lib/utils/formatted-date";
@@ -25,6 +24,7 @@ import CommentSection, { CommentFormValues } from "../ui/comment";
 import { CommentService } from "@/lib/services";
 import { handleError } from "@/lib/utils/handle-error";
 import toast from "react-hot-toast";
+import { Img } from "../ui/Img";
 
 const Premium1Page: React.FC<Invitation & { currentGuest: Guest }> = (
   invitation
@@ -95,11 +95,10 @@ const Premium1Page: React.FC<Invitation & { currentGuest: Guest }> = (
         className="flex-section"
       >
         <div>The Wedding Of</div>
-        <Image
+        <Img
           src={invitation.image}
           alt="Foto"
-          aspectRatio="aspect-square"
-          className="w-5/12 md:w-2/12 rounded-tr-3xl rounded-br-lg rounded-bl-3xl rounded-tl-lg shadow-md mb-3"
+          wrapperClassName="aspect-square w-5/12 md:w-2/12 rounded-tr-3xl rounded-br-lg rounded-bl-3xl rounded-tl-lg shadow-md mb-3"
         />
         <div className="mb-3">
           <div className="font-alex text-5xl text-green-primary">
@@ -124,11 +123,10 @@ const Premium1Page: React.FC<Invitation & { currentGuest: Guest }> = (
       </section>
 
       <section className="bg-slate-100 flex-section !px-0">
-        <Image
+        <Img
           src="/assets/img/bismillah.png"
           alt="bismillah"
-          aspectRatio="aspect-[4/1]"
-          className="w-1/2"
+          wrapperClassName="aspect-[4/1] w-1/2"
           data-aos="fade-up"
         />
         <h2 className="mb-6" data-aos="fade-up">
@@ -152,11 +150,10 @@ const Premium1Page: React.FC<Invitation & { currentGuest: Guest }> = (
               {invitation.couple?.brideMother}
             </p>
           </div>
-          <Image
+          <Img
             src={invitation.couple?.brideImage || ""}
             alt="Bridge"
-            aspectRatio="aspect-square"
-            className="rounded-tl-3xl rounded-bl-lg shadow-md"
+            wrapperClassName="aspect-square rounded-tl-3xl rounded-bl-lg shadow-md"
             data-aos="fade-left"
           />
         </div>
@@ -167,11 +164,10 @@ const Premium1Page: React.FC<Invitation & { currentGuest: Guest }> = (
           &
         </div>
         <div className="grid grid-cols-2 gap-3">
-          <Image
+          <Img
             src={invitation.couple?.groomImage || ""}
             alt="Groom"
-            aspectRatio="aspect-square"
-            className="rounded-tr-3xl rounded-br-lg shadow-md"
+            wrapperClassName="aspect-square rounded-tr-3xl rounded-br-lg shadow-md"
             data-aos="fade-right"
           />
           <div className="self-start px-3 text-left">
@@ -301,11 +297,10 @@ const Premium1Page: React.FC<Invitation & { currentGuest: Guest }> = (
                 {formatDate(story.date, "MMMM yyyy")}
               </span>
 
-              <Image
+              <Img
                 src={story.image}
                 alt="Foto"
-                aspectRatio="aspect-video"
-                className="rounded-lg my-3"
+                wrapperClassName="aspect-video rounded-lg my-3"
               />
 
               <p className="mb-3">{story.description}</p>
@@ -331,11 +326,10 @@ const Premium1Page: React.FC<Invitation & { currentGuest: Guest }> = (
           Bapak/Ibu/Saudara/i, berkenan hadir dan memberikan do’a restu kepada
           kami.
         </p>
-        <Image
+        <Img
           src={invitation.image}
           alt="Foto"
-          aspectRatio="aspect-square"
-          className="w-5/12 md:w-2/12 rounded-tr-3xl rounded-br-lg rounded-bl-3xl rounded-tl-lg shadow-md mb-3"
+          wrapperClassName="aspect-square w-5/12 md:w-2/12 rounded-tr-3xl rounded-br-lg rounded-bl-3xl rounded-tl-lg shadow-md mb-3"
           data-aos="zoom-in"
         />
         <div className="mb-3" data-aos="zoom-in">

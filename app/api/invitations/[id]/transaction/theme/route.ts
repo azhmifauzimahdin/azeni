@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { ThemeSchema } from "@/lib/schemas";
+import { calculateFinalPrice } from "@/lib/utils/calculate-final-price";
 import {
   forbiddenError,
   handleError,
@@ -8,19 +9,6 @@ import {
   unauthorizedError,
 } from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
-import { Decimal } from "@prisma/client/runtime/library";
-
-function calculateFinalPrice(
-  originalPrice: Decimal,
-  discount: Decimal,
-  isPercent: boolean
-): Decimal {
-  const finalPrice = isPercent
-    ? originalPrice.sub(originalPrice.mul(discount).div(100))
-    : originalPrice.sub(discount);
-
-  return Decimal.max(new Decimal(0), finalPrice);
-}
 
 export async function POST(
   req: Request,

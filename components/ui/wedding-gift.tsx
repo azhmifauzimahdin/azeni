@@ -1,10 +1,10 @@
 import { Copy, Gift } from "lucide-react";
 import { Button } from "./button";
-import Image from "./image";
 import toast from "react-hot-toast";
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BankAccount } from "@/types";
+import { Img } from "./Img";
 
 interface WeddingGiftProps {
   banks: BankAccount[];
@@ -64,21 +64,17 @@ const WeddingGift: React.FC<WeddingGiftProps> = ({ banks }) => {
                 ) : (
                   <div className="rounded-lg p-5 bg-[url('/assets/img/bg-atm.jpg')] bg-img-default">
                     <div className="flex justify-end">
-                      <Image
+                      <Img
                         src={bank.bank.icon}
                         alt="Logo Bank"
-                        aspectRatio="aspect-[3/1]"
-                        className="w-3/12"
-                        objectFit="h-full object-contain"
+                        wrapperClassName="aspect-[3/1] w-3/12"
                       />
                     </div>
                     <div className="text-left">
-                      <Image
+                      <Img
                         src="/assets/img/chip-atm.png"
                         alt="ATM Chip"
-                        aspectRatio="aspect-square"
-                        className="w-2/12 mb-2"
-                        objectFit="h-full object-contain"
+                        wrapperClassName="aspect-square w-2/12 mb-2"
                       />
                       <div className="flex justify-between">
                         <div className="text-slate-600 text-2xl font-medium mb-5">

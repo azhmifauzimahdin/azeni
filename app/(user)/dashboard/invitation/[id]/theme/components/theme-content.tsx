@@ -1,17 +1,20 @@
 "use client";
 
 import { Heading } from "@/components/ui/heading";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import NavigationBack from "@/components/ui/navigation-back";
 import useUserInvitations from "@/hooks/use-user-invitation";
 import ThemeCard from "./theme-card";
-import useThemes from "@/hooks/use-theme";
 import toast from "react-hot-toast";
 import { handleError } from "@/lib/utils/handle-error";
 import { InvitationService } from "@/lib/services";
 import useInvitationStore from "@/stores/invitation-store";
 import { Pagination } from "@/components/ui/pagination";
 import { Img } from "@/components/ui/Img";
+import useUserThemes from "@/hooks/use-user-theme";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Alert } from "@/components/ui/alert";
 
 interface ThemeContentProps {
   params: {
@@ -22,9 +25,12 @@ interface ThemeContentProps {
 const ThemeContent: React.FC<ThemeContentProps> = ({ params }) => {
   const { getInvitationById, isFetching } = useUserInvitations();
   const invitation = getInvitationById(params.id);
-  const { themes } = useThemes();
+  const { themes } = useUserThemes(params.id);
 
   const [selectedThemeId, setSelectThemeId] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
+  const [activeCategory, setActiveCategory] = useState("Semua");
+
   const updateThemeInInvitation = useInvitationStore(
     (state) => state.updateThemeInInvitation
   );
@@ -44,14 +50,33 @@ const ThemeContent: React.FC<ThemeContentProps> = ({ params }) => {
     }
   };
 
+  const categoryList = useMemo(() => {
+    const categories = themes.map((t) => t.category?.name || "Tanpa Kategori");
+    return ["Semua", ...Array.from(new Set(categories))];
+  }, [themes]);
+
+  const filteredThemes = useMemo(() => {
+    return themes.filter((theme) => {
+      const matchesSearch = theme.name
+        .toLowerCase()
+        .includes(search.toLowerCase());
+      const matchesCategory =
+        activeCategory === "Semua" ||
+        (theme.category?.name || "Tanpa Kategori") === activeCategory;
+      return matchesSearch && matchesCategory;
+    });
+  }, [themes, search, activeCategory]);
+
   const themesPerPage = 12;
-  const totalPages = Math.ceil(themes.length / themesPerPage);
+  const totalPages = Math.ceil(filteredThemes.length / themesPerPage);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const currentthemes = themes.slice(
-    (currentPage - 1) * themesPerPage,
-    currentPage * themesPerPage
-  );
+  const currentThemes = useMemo(() => {
+    return filteredThemes.slice(
+      (currentPage - 1) * themesPerPage,
+      currentPage * themesPerPage
+    );
+  }, [filteredThemes, currentPage]);
 
   function handlePageChange(page: number) {
     setCurrentPage(page);
@@ -66,6 +91,10 @@ const ThemeContent: React.FC<ThemeContentProps> = ({ params }) => {
           description="Temukan desain terbaik yang mencerminkan momen istimewa Anda"
         />
       </div>
+      <Alert>
+        Mengganti tema akan secara otomatis mengubah musik sesuai tema yang
+        dipilih.
+      </Alert>
       <div className="space-y-4">
         {isFetching ? (
           <div className="flex max-w-md bg-white rounded-lg shadow overflow-hidden animate-pulse">
@@ -92,6 +121,37 @@ const ThemeContent: React.FC<ThemeContentProps> = ({ params }) => {
           </div>
         ) : null}
         <h2 className="font-medium text-lg mb-2">Pilih Tema</h2>
+        <div className="my-4">
+          <Input
+            id="search"
+            placeholder="Cari tema..."
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setCurrentPage(1);
+            }}
+            type="search"
+            className="mb-4 max-w-md"
+            isFetching={isFetching}
+            autoComplete="off"
+          />
+        </div>
+
+        <div className="flex gap-2 overflow-x-auto pb-2 mb-4">
+          {categoryList.map((cat) => (
+            <Button
+              variant={activeCategory === cat ? "primary" : "outline"}
+              key={cat}
+              onClick={() => {
+                setActiveCategory(cat);
+                setCurrentPage(1);
+              }}
+              className="rounded-full whitespace-nowrap shadow-sm"
+            >
+              {cat}
+            </Button>
+          ))}
+        </div>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
           {isFetching ? (
             [...Array(5)].map((_, i) => (
@@ -111,8 +171,8 @@ const ThemeContent: React.FC<ThemeContentProps> = ({ params }) => {
                 <div className="absolute top-0 right-0 m-3 h-6 w-20 bg-skeleton rounded-full" />
               </div>
             ))
-          ) : currentthemes.length > 0 ? (
-            currentthemes.map((theme, index) => (
+          ) : currentThemes.length > 0 ? (
+            currentThemes.map((theme, index) => (
               <ThemeCard
                 key={index}
                 data={theme}
