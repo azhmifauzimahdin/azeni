@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { prisma } from "./prisma";
 
 type Options = {
   slug?: string;
@@ -19,15 +20,13 @@ export async function generatePageMetadata({
   }
 
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/invitation/${slug}`,
-      {
-        cache: "no-store",
-      }
-    );
+    const data = await prisma.invitation.findFirst({
+      where: {
+        slug: slug,
+      },
+    });
 
-    if (!res.ok) throw new Error("Not Found");
-    const data = await res.json();
+    if (!data) throw new Error("Not Found");
 
     return {
       title: `${data.groom} & ${data.bride} - Undangan Pernikahan`,
