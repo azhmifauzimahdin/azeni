@@ -125,3 +125,14 @@ export function forbiddenError(message = "Akses ditolak") {
     { status: 403 }
   );
 }
+
+export function unpaidInvitationError(
+  message = "Undangan belum dibayar. Silakan selesaikan pembayaran terlebih dahulu."
+) {
+  return ResponseJson(
+    {
+      message,
+    },
+    { status: 403 }
+  );
+}

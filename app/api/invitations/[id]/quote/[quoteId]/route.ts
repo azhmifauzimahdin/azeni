@@ -4,6 +4,7 @@ import {
   handleError,
   ResponseJson,
   unauthorizedError,
+  unpaidInvitationError,
 } from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest } from "next/server";
@@ -45,9 +46,20 @@ export async function DELETE(
         id: params.id,
         userId,
       },
+      include: {
+        transaction: {
+          include: {
+            status: true,
+          },
+        },
+      },
     });
 
     if (!InvitaionByUserId) return forbiddenError();
+    const transactionStatus = InvitaionByUserId.transaction?.status?.name;
+    if (transactionStatus !== "SUCCESS") {
+      return unpaidInvitationError();
+    }
 
     const quote = await prisma.quote.delete({
       where: {

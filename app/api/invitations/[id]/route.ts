@@ -6,6 +6,7 @@ import {
   handleError,
   ResponseJson,
   unauthorizedError,
+  unpaidInvitationError,
 } from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
 
@@ -155,10 +156,19 @@ export async function DELETE(
         couple: true,
         stories: true,
         galleries: true,
+        transaction: {
+          include: {
+            status: true,
+          },
+        },
       },
     });
 
     if (!invitation) return forbiddenError();
+    const transactionStatus = invitation.transaction?.status?.name;
+    if (transactionStatus !== "SUCCESS") {
+      return unpaidInvitationError();
+    }
 
     const urlsToDelete: string[] = [
       invitation.image,

@@ -8,6 +8,7 @@ import {
   handleZodError,
   ResponseJson,
   unauthorizedError,
+  unpaidInvitationError,
 } from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest } from "next/server";
@@ -64,9 +65,20 @@ export async function PUT(
         id: params.id,
         userId,
       },
+      include: {
+        transaction: {
+          include: {
+            status: true,
+          },
+        },
+      },
     });
 
     if (!invitationByUserId) return forbiddenError();
+    const transactionStatus = invitationByUserId.transaction?.status?.name;
+    if (transactionStatus !== "SUCCESS") {
+      return unpaidInvitationError();
+    }
 
     const storyExists = await prisma.story.findFirst({
       where: {
@@ -159,9 +171,20 @@ export async function DELETE(
         id: params.id,
         userId,
       },
+      include: {
+        transaction: {
+          include: {
+            status: true,
+          },
+        },
+      },
     });
 
     if (!invitationByUserId) return forbiddenError();
+    const transactionStatus = invitationByUserId.transaction?.status?.name;
+    if (transactionStatus !== "SUCCESS") {
+      return unpaidInvitationError();
+    }
 
     const story = await prisma.story.findUnique({
       where: { id: params.storyId },

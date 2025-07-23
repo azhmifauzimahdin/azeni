@@ -7,6 +7,7 @@ import {
   handleZodError,
   ResponseJson,
   unauthorizedError,
+  unpaidInvitationError,
 } from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
 import { Decimal } from "@prisma/client/runtime/library";
@@ -46,11 +47,19 @@ export async function PATCH(
         userId,
       },
       include: {
-        transaction: true,
+        transaction: {
+          include: {
+            status: true,
+          },
+        },
       },
     });
 
     if (!invitationByUserId) return forbiddenError();
+    const transactionStatus = invitationByUserId.transaction?.status?.name;
+    if (transactionStatus !== "SUCCESS") {
+      return unpaidInvitationError();
+    }
 
     const theme = await prisma.theme.findFirst({
       where: {

@@ -6,6 +6,7 @@ import {
   handleError,
   ResponseJson,
   unauthorizedError,
+  unpaidInvitationError,
 } from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
 import { read, utils } from "xlsx";
@@ -50,9 +51,20 @@ export async function POST(
         id: params.id,
         userId,
       },
+      include: {
+        transaction: {
+          include: {
+            status: true,
+          },
+        },
+      },
     });
 
     if (!invitation) return forbiddenError();
+    const transactionStatus = invitation.transaction?.status?.name;
+    if (transactionStatus !== "SUCCESS") {
+      return unpaidInvitationError();
+    }
 
     const buffer = Buffer.from(await file.arrayBuffer());
     const workbook = read(buffer, { type: "buffer" });

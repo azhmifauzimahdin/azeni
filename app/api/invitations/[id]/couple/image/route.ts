@@ -8,6 +8,7 @@ import {
   handleZodError,
   ResponseJson,
   unauthorizedError,
+  unpaidInvitationError,
 } from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
 
@@ -41,10 +42,21 @@ export async function POST(
 
     const invitationByUserId = await prisma.invitation.findFirst({
       where: { id: params.id, userId },
-      include: { couple: true },
+      include: {
+        couple: true,
+        transaction: {
+          include: {
+            status: true,
+          },
+        },
+      },
     });
 
     if (!invitationByUserId) return forbiddenError();
+    const transactionStatus = invitationByUserId.transaction?.status?.name;
+    if (transactionStatus !== "SUCCESS") {
+      return unpaidInvitationError();
+    }
 
     type CoupleImageField = "groomImage" | "brideImage";
     const existingImage =
