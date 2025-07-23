@@ -1,9 +1,10 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { Img } from "@/components/ui/Img";
 import NavLink from "@/components/ui/nav-link";
+import { cn } from "@/lib/utils";
 import { UserButton, useUser } from "@clerk/nextjs";
-import clsx from "clsx";
 import { AlignJustify, LayoutPanelLeft, Mail, Wallet } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -16,6 +17,8 @@ const DashboardLayout = ({
 }>) => {
   const { isLoaded } = useUser();
   const [toggleSidebar, setToggleSidebar] = useState<boolean>(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+
   const pathname = usePathname();
   const location = pathname.split("/")[2] || "";
   const handleCloseSidebar = () => {
@@ -26,15 +29,25 @@ const DashboardLayout = ({
     <>
       <div className="h-[calc(var(--vh)_*_100)] relative">
         <nav className="fixed top-0 bg-green-app-primary text-white w-full h-11 flex-center shadow z-40">
-          <div className="w-full px-3 py-2 md:px-6">
+          <div className="w-full px-3 py-2 md:ps-[0.95rem] md:pe-6 ">
             <div className="flex items-center justify-between">
-              <div
-                className="inline-flex items-center p-1.5 rounded-lg sm:hidden cursor-pointer hover:bg-white text-xl text-white hover:text-green-primary"
+              <Button
+                variant="ghost"
+                size="icon"
+                className="sm:hidden"
                 onClick={() => setToggleSidebar(!toggleSidebar)}
               >
                 <AlignJustify />
-              </div>
-              <div>
+              </Button>
+              <div className="flex items-center gap-4">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="hidden md:flex md:items-center"
+                  onClick={() => setIsSidebarCollapsed((prev) => !prev)}
+                >
+                  <AlignJustify size={32} />
+                </Button>
                 <Link
                   href="/"
                   className="flex items-center gap-1.5 text-lg font-medium tracking-wide"
@@ -66,9 +79,12 @@ const DashboardLayout = ({
 
         <aside
           id="logo-sidebar"
-          className={clsx(
-            "fixed top-11 pt-5 md:pt-3 left-0 z-30 w-64 min-h-screen h-[calc(var(--vh)_*_100)] transition-transform bg-white duration-700 -translate-x-full sm:translate-x-0 shadow",
-            toggleSidebar ? "transform-none" : "-translate-x-full"
+          className={cn(
+            "fixed top-11 pt-5 md:pt-3 left-0 z-30 transition-all duration-300 bg-white shadow h-[calc(var(--vh)_*_100)]",
+            toggleSidebar
+              ? "translate-x-0"
+              : "-translate-x-full sm:translate-x-0",
+            isSidebarCollapsed ? "w-16" : "w-64"
           )}
           aria-label="Sidebar"
           role="dialog"
@@ -79,39 +95,42 @@ const DashboardLayout = ({
               <li>
                 <NavLink
                   href="/dashboard"
+                  icon={<LayoutPanelLeft />}
+                  label="Dashboard"
                   active={location === ""}
+                  collapsed={isSidebarCollapsed}
                   onClick={() => setToggleSidebar(false)}
-                >
-                  <LayoutPanelLeft />
-                  Dashboard
-                </NavLink>
+                />
               </li>
               <li>
                 <NavLink
                   href="/dashboard/invitation"
+                  icon={<Mail />}
+                  label="Undangan"
                   active={location === "invitation"}
+                  collapsed={isSidebarCollapsed}
                   onClick={() => setToggleSidebar(false)}
-                >
-                  <Mail />
-                  Undangan
-                </NavLink>
+                />
               </li>
               <li>
                 <NavLink
                   href="/dashboard/payment"
+                  icon={<Wallet />}
+                  label="Transaksi"
                   active={location === "payment"}
+                  collapsed={isSidebarCollapsed}
                   onClick={() => setToggleSidebar(false)}
-                >
-                  <Wallet />
-                  Transaksi
-                </NavLink>
+                />
               </li>
             </ul>
           </div>
         </aside>
 
         <div
-          className="p-3 pt-14 md:p-6 md:pt-16 sm:ml-64"
+          className={cn(
+            "p-3 pt-14 md:p-6 md:pt-16 transition-all duration-300",
+            isSidebarCollapsed ? "sm:ml-16" : "sm:ml-64"
+          )}
           onClick={handleCloseSidebar}
         >
           {children}
