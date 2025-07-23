@@ -5,12 +5,18 @@ import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import clsx from "clsx";
 import React from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card";
+import { LinkButton } from "@/components/ui/link";
 
-const PaymentStatusSkeleton: React.FC = () => {
+const InvitationPaymentCardSkeleton: React.FC = () => {
   return (
-    <div className="overflow-hidden rounded-2xl shadow-xl border border-gray-200 min-w-96 mx-auto animate-pulse">
+    <Card className="w-full max-w-xl mx-auto border shadow-xl overflow-hidden animate-pulse">
       <div className="px-6 py-4 bg-gray-300">
         <div className="h-4 w-28 bg-gray-200 rounded" />
         <div className="flex items-center justify-between mt-2">
@@ -36,11 +42,11 @@ const PaymentStatusSkeleton: React.FC = () => {
           <div className="h-10 w-full bg-gray-200 rounded-lg" />
         </div>
       </div>
-    </div>
+    </Card>
   );
 };
 
-type PaymentStatusProps = {
+type InvitationPaymentCardProps = {
   invitationId: string;
   groomName: string;
   brideName: string;
@@ -56,7 +62,7 @@ type PaymentStatusProps = {
   isFetching?: boolean;
 };
 
-const statusColorMap: Record<PaymentStatusProps["status"], string> = {
+const statusColorMap: Record<InvitationPaymentCardProps["status"], string> = {
   SUCCESS: "bg-green-600",
   PENDING: "bg-yellow-500",
   FAILED: "bg-red-600",
@@ -64,7 +70,7 @@ const statusColorMap: Record<PaymentStatusProps["status"], string> = {
   REFUNDED: "bg-gray-500",
 };
 
-const PaymentStatus: React.FC<PaymentStatusProps> = ({
+const InvitationPaymentCard: React.FC<InvitationPaymentCardProps> = ({
   invitationId,
   groomName,
   brideName,
@@ -79,23 +85,25 @@ const PaymentStatus: React.FC<PaymentStatusProps> = ({
   isCancelling,
   isFetching,
 }) => {
-  const router = useRouter();
-
-  if (isFetching) return <PaymentStatusSkeleton />;
+  if (isFetching) return <InvitationPaymentCardSkeleton />;
 
   return (
-    <div className="overflow-hidden rounded-2xl shadow-xl border border-gray-200 min-w-96 max-w-xl mx-auto">
-      <div className={clsx("px-6 py-4 text-white", statusColorMap[status])}>
-        <div className="text-sm uppercase tracking-wide font-medium">
+    <Card className="w-full max-w-xl mx-auto border shadow-xl overflow-hidden">
+      <CardHeader
+        className={clsx("text-white", statusColorMap[status], "p-6 pb-4")}
+      >
+        <CardDescription className="text-white uppercase tracking-wide text-sm font-medium">
           Status Transaksi
-        </div>
-        <div className="flex items-center justify-between mt-1">
-          <div className="text-lg font-bold">{status}</div>
+        </CardDescription>
+        <div className="flex items-center justify-between mt-2">
+          <CardTitle className="text-white text-lg font-bold">
+            {status}
+          </CardTitle>
           <StatusBadge statusName={status} />
         </div>
-      </div>
+      </CardHeader>
 
-      <div className="bg-white px-6 py-5 space-y-4">
+      <CardContent className="space-y-4 pt-6">
         <div className="text-center">
           <h2 className="text-xl font-semibold text-gray-800">
             {groomName} & {brideName}
@@ -120,7 +128,7 @@ const PaymentStatus: React.FC<PaymentStatusProps> = ({
             <Button
               variant="primary"
               onClick={onPay}
-              disabled={isCancelling || isFetching || isRetrying}
+              disabled={isLoading || isCancelling || isFetching || isRetrying}
               isLoading={isLoading}
               className="w-full"
             >
@@ -136,7 +144,9 @@ const PaymentStatus: React.FC<PaymentStatusProps> = ({
                 isLoading={isRetrying}
                 className="w-full"
               >
-                {isLoading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                {isRetrying && (
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                )}
                 Ganti Metode Pembayaran
               </Button>
             )}
@@ -146,7 +156,7 @@ const PaymentStatus: React.FC<PaymentStatusProps> = ({
                 variant="outline"
                 onClick={onCancel}
                 isLoading={isCancelling}
-                disabled={isLoading || isFetching || isRetrying}
+                disabled={isCancelling || isLoading || isFetching || isRetrying}
                 className="w-full border-red-300 text-red-600 hover:bg-red-100"
               >
                 {isCancelling && (
@@ -164,29 +174,12 @@ const PaymentStatus: React.FC<PaymentStatusProps> = ({
               Transaksi kamu sudah kedaluwarsa. Jangan khawatir, kamu bisa mulai
               ulang dan buat undangan baru sekarang.
             </p>
-            <Button
-              variant="outline"
-              onClick={() => router.push("/dashboard/invitation/new")}
-              disabled={isLoading || isFetching}
-              className="w-full"
-            >
-              Buat Undangan Baru
-            </Button>
           </div>
         )}
 
         {status === "REFUNDED" && (
           <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 text-sm text-center space-y-2">
             <p>Pembayaran gagal atau dibatalkan. Silakan coba lagi.</p>
-            <Button
-              variant="outline"
-              onClick={onPay}
-              disabled={isLoading || isFetching}
-              className="w-full"
-            >
-              {isLoading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-              Coba Bayar Lagi
-            </Button>
           </div>
         )}
 
@@ -196,16 +189,9 @@ const PaymentStatus: React.FC<PaymentStatusProps> = ({
               Pembayaran telah dibatalkan. Kamu bisa membuat undangan baru kapan
               saja.
             </p>
-            <Button
-              variant="outline"
-              onClick={() => router.push("/dashboard/invitation/new")}
-              disabled={isLoading || isFetching}
-              className="w-full"
-            >
-              Buat Undangan Baru
-            </Button>
           </div>
         )}
+
         {status === "SUCCESS" && (
           <div className="bg-green-50 border border-green-200 text-green-800 rounded-xl px-4 py-3 text-sm text-center space-y-3">
             <p>
@@ -213,29 +199,19 @@ const PaymentStatus: React.FC<PaymentStatusProps> = ({
               Undanganmu sudah aktif dan siap untuk diedit.
             </p>
 
-            <Button
+            <LinkButton
               variant="outline"
               className="w-full"
+              href={`/dashboard/invitation/${invitationId}`}
               disabled={isFetching}
-              onClick={() =>
-                router.push(`/dashboard/invitation/${invitationId}`)
-              }
             >
               Edit Undangan
-            </Button>
+            </LinkButton>
           </div>
         )}
-        <div className="text-xs text-center">
-          <Link
-            href="/dashboard/payment"
-            className="text-green-app-primary underline hover:text-green-app-secondary transition-colors"
-          >
-            Daftar Transaksi
-          </Link>
-        </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 
-export default PaymentStatus;
+export default InvitationPaymentCard;

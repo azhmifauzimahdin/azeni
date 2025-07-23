@@ -159,3 +159,11 @@ body {
 [data-state="open"] > button.absolute.top-4.right-4 {
   display: none;
 }
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

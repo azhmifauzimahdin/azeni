@@ -7,22 +7,30 @@ import axios from "axios";
 function mapMidtransToStatusName(
   transactionStatus: string,
   fraudStatus?: string
-): "PENDING" | "SUCCESS" | "FAILED" | "REFUNDED" | "CANCELLED" {
+): "PENDING" | "SUCCESS" | "FAILED" | "REFUNDED" | "CANCELLED" | "EXPIRED" {
   switch (transactionStatus) {
     case "capture":
       return fraudStatus === "accept" ? "SUCCESS" : "PENDING";
+
     case "settlement":
       return "SUCCESS";
+
     case "pending":
       return "PENDING";
+
     case "deny":
-    case "expire":
       return "FAILED";
+
+    case "expire":
+      return "EXPIRED";
+
     case "cancel":
       return "CANCELLED";
+
     case "refund":
     case "partial_refund":
       return "REFUNDED";
+
     default:
       return "PENDING";
   }
@@ -131,7 +139,6 @@ export async function POST(req: NextRequest) {
 
     let pdfUrl: string | null = null;
 
-    console.log("transaction_status : ", transaction_status);
     if (["settlement", "capture"].includes(transaction_status)) {
       try {
         const invoiceRes = await axios.get(

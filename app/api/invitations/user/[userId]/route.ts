@@ -27,10 +27,20 @@ export async function GET(
         transaction: {
           include: {
             status: true,
+            webhookLogs: {
+              orderBy: {
+                eventAt: "desc",
+              },
+            },
+            referralCode: true,
           },
         },
         music: true,
-        theme: true,
+        theme: {
+          include: {
+            category: true,
+          },
+        },
         quote: true,
         schedules: {
           orderBy: {

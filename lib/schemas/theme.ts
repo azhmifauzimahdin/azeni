@@ -15,6 +15,13 @@ export const createThemeSchema = z.object({
     })
     .url({ message: "Thumbnail harus berupa URL yang valid" }),
 
+  categoryId: z
+    .string({
+      required_error: "Kategori tema wajib dipilih.",
+      invalid_type_error: "Kategori tidak valid.",
+    })
+    .uuid({ message: "ID kategori tidak valid." }),
+
   colorTag: z
     .string({
       required_error: "Tag warna wajib diisi",

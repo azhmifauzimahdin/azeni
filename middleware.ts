@@ -1,5 +1,5 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const isPublicRoute = createRouteMatcher([
   "/",
@@ -12,6 +12,12 @@ const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
 const isUserRoute = createRouteMatcher(["/dashboard(.*)"]);
 
 const allowedOrigins = [`${process.env.NEXT_PUBLIC_BASE_URL}`];
+
+function withPathHeaders(res: NextResponse, req: NextRequest) {
+  res.headers.set("x-invoke-path", req.nextUrl.pathname);
+  res.headers.set("x-invoke-query", req.nextUrl.search);
+  return res;
+}
 
 export default clerkMiddleware(async (auth, req) => {
   const { userId, redirectToSignIn } = await auth();
@@ -81,6 +87,12 @@ export default clerkMiddleware(async (auth, req) => {
     const res = NextResponse.next();
     return addCorsHeaders(res, origin);
   }
+
+  if (!pathname.startsWith("/api")) {
+    return withPathHeaders(NextResponse.next(), req);
+  }
+
+  return NextResponse.next();
 });
 
 export const config = {

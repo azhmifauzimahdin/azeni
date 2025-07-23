@@ -3,7 +3,7 @@ export interface Music {
   name: string;
   src: string;
   origin: string;
-  visibilit: boolean;
+  visibility: boolean;
   createdAt: string;
   updatedAt: string;
 }

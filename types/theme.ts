@@ -5,10 +5,20 @@ export interface Theme {
   name: string;
   thumbnail: string;
   colorTag: string;
-  originalPrice: number;
-  discount: number;
+  originalPrice: string;
+  categoryId: string;
+  discount: string;
   isPercent: boolean;
   createdAt: string;
   updatedAt: string;
   invitation?: Invitation;
+  category: ThemeCategory;
+}
+
+export interface ThemeCategory {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  themes?: Theme[];
 }

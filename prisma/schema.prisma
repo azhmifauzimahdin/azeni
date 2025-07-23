@@ -19,8 +19,8 @@ model Invitation {
   groom         String
   bride         String
   slug          String
-  themeId       String
-  musicId       String
+  themeId       String?
+  musicId       String?
   image         String?
   status        Boolean       @default(true)
   date          DateTime      @default(now())
@@ -30,8 +30,8 @@ model Invitation {
   updatedAt     DateTime      @updatedAt
 
   transaction   Transaction?  @relation("InvitationTransaction")
-  theme         Theme         @relation("ThemecInvitations", fields: [themeId], references: [id], onDelete: Restrict)
-  music         Music         @relation("MusicInvitations",fields: [musicId], references: [id], onDelete: Restrict)
+  theme         Theme?        @relation("ThemecInvitations", fields: [themeId], references: [id], onDelete: Restrict)
+  music         Music?        @relation("MusicInvitations",fields: [musicId], references: [id], onDelete: Restrict)
   quote         Quote?        @relation("InvitationQuote")
   schedules     Schedule[]    @relation("InvitationSchedule")
   couple        Couple?       @relation("InvitationCouple")
@@ -62,17 +62,20 @@ model Setting {
 
 model Transaction {
   id              String        @id @default(uuid())
-  orderId         String        @unique
+  orderId         String?       @unique
   invitationId    String?       @unique
   invitationSlug  String?
   groomName       String?
   brideName       String?
+  originalAmount  Decimal?      @db.Decimal(10, 2)
   amount          Decimal       @db.Decimal(10, 2)
+  referralDiscountAmount Decimal?      @db.Decimal(10, 2)
   date            DateTime
   statusId        String
   redirectUrl     String?
   midtransPdfUrl  String?
   snapToken       String?
+  referralCodeId  String?
   isActive        Boolean       @default(true)
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
@@ -80,6 +83,7 @@ model Transaction {
   invitation      Invitation?    @relation("InvitationTransaction", fields: [invitationId], references: [id], onDelete: SetNull)
   status          PaymentStatus  @relation("PaymentStatusTransaction", fields: [statusId], references: [id], onDelete: Cascade)
   webhookLogs     MidtransWebhookLog[]  @relation("MidtransTransaction")
+  referralCode    ReferralCode?  @relation("ReferralTransaction",fields: [referralCodeId], references: [id], onDelete: SetNull)
 }
 
 model PaymentStatus {
@@ -111,6 +115,7 @@ model Theme{
   id            String        @id @default(uuid())
   name          String
   thumbnail     String
+  categoryId    String
   colorTag      String
   originalPrice Decimal       @db.Decimal(10, 2)
   discount      Decimal       @db.Decimal(10, 2)
@@ -118,7 +123,17 @@ model Theme{
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 
+  category      ThemeCategory @relation("CategoryThemes", fields: [categoryId], references: [id])
   invitations   Invitation[]  @relation("ThemecInvitations")
+}
+
+model ThemeCategory {
+  id            String        @id @default(uuid())
+  name          String        @unique
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  themes        Theme[]       @relation("CategoryThemes")
 }
 
 model Quote {
@@ -277,3 +292,18 @@ model Music {
 
   invitations  Invitation[]   @relation("MusicInvitations")
 }
+
+model ReferralCode {
+  id            String        @id @default(uuid())
+  code          String        @unique
+  description   String?
+  discount      Decimal       @db.Decimal(10, 2)
+  isPercent     Boolean
+  maxDiscount   Decimal?      @db.Decimal(10, 2)
+  isActive      Boolean       @default(true)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  transactions  Transaction[] @relation("ReferralTransaction")
+}
+  

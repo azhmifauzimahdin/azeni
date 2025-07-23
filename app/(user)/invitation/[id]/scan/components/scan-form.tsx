@@ -5,7 +5,6 @@ import { Html5Qrcode } from "html5-qrcode";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { Img } from "@/components/ui/Img";
-import Image from "next/image";
 import { Invitation } from "@/types";
 import toast from "react-hot-toast";
 import { GuestService } from "@/lib/services";
@@ -177,29 +176,19 @@ const ScanForm: React.FC<ScanFormsProps> = ({
         <Img
           src={initialData.image}
           alt="Background"
-          fill
-          style={{ objectFit: "cover" }}
-          className="absolute inset-0 z-0 blur-sm brightness-95"
+          wrapperClassName="absolute inset-0 z-0 blur-sm brightness-95"
+          className="object-cover"
         />
       )}
-      <Image
-        src="/assets/themes/premium-001/img/cover.jpg"
-        alt="Background"
-        layout="fill"
-        objectFit="cover"
-        className="absolute inset-0 z-0 blur-sm brightness-95"
-      />
       <div className="absolute inset-0 z-0 bg-white/35" />
 
       <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-lg">
-        <div className="flex flex-col items-center gap-2 mb-4">
-          <Img
-            src="https://res.cloudinary.com/dxtqjuvcg/image/upload/v1752573270/azen_te7lav.png"
-            alt="Logo"
-            width={48}
-            height={48}
-          />
-        </div>
+        <Img
+          src="https://res.cloudinary.com/dxtqjuvcg/image/upload/v1752573270/azen_te7lav.png"
+          wrapperClassName="w-10 h-10 mb-4"
+          alt="Logo"
+          sizes="48px"
+        />
 
         <h1 className="text-3xl md:text-4xl font-bold text-green-app-primary mb-6 text-center">
           Scan Undangan

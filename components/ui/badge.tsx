@@ -27,6 +27,10 @@ const badgeVariants = cva(
           "border-transparent bg-gray-100 text-gray-700 shadow hover:bg-gray-100/80",
         refunded:
           "border-transparent bg-blue-100 text-blue-800 shadow hover:bg-blue-100/80",
+        created:
+          "border-transparent bg-sky-100 text-sky-800 shadow hover:bg-sky-100/80",
+        expired:
+          "border-transparent bg-zinc-200 text-zinc-600 shadow hover:bg-zinc-200/80",
       },
     },
     defaultVariants: {

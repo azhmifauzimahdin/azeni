@@ -9,6 +9,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { AlertTriangle } from "lucide-react";
 
 interface CancelConfirmationDialogProps {
   isOpen: boolean;
@@ -34,15 +35,22 @@ const CancelConfirmationModal: React.FC<CancelConfirmationDialogProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="sm:max-w-md text-center">
         <DialogHeader>
-          <DialogTitle className="sr-only">Konfirmasi Pembatalan</DialogTitle>
-          <DialogDescription>
-            Pesanan kamu akan dibatalkan dan tidak bisa dikembalikan. Apakah
-            kamu yakin ingin melanjutkan?
+          <div className="flex justify-center text-red-500 mb-2">
+            <AlertTriangle className="h-10 w-10" />
+          </div>
+          <DialogTitle className="text-center">
+            Konfirmasi Pembatalan
+          </DialogTitle>
+          <DialogDescription className="text-sm text-center text-muted-foreground">
+            Pesanan kamu akan{" "}
+            <span className="font-semibold text-red-600">dibatalkan</span> dan
+            tidak bisa dikembalikan. Apakah kamu yakin ingin melanjutkan?
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter className="grid grid-cols-2 gap-3 sm:gap-0">
+
+        <DialogFooter className="grid grid-cols-2 gap-3 mt-4">
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
@@ -51,10 +59,10 @@ const CancelConfirmationModal: React.FC<CancelConfirmationDialogProps> = ({
             Batal
           </Button>
           <Button
-            variant="outline"
+            variant="destructive"
             onClick={handleConfirm}
             isLoading={loading}
-            className="w-full border-red-300 text-red-600 hover:bg-red-100"
+            className="w-full"
           >
             Ya, Batalkan
           </Button>
@@ -63,4 +71,5 @@ const CancelConfirmationModal: React.FC<CancelConfirmationDialogProps> = ({
     </Dialog>
   );
 };
+
 export default CancelConfirmationModal;

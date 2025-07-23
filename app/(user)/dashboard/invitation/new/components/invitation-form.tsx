@@ -31,7 +31,8 @@ import axios from "axios";
 import ImageUpload from "./image-upload";
 import { createInvitationSchema } from "@/lib/schemas/invitation";
 import { Alert } from "@/components/ui/alert";
-import useTransactionStore from "@/stores/transaction-store";
+import Stepper from "@/components/ui/stepper";
+import useThemes from "@/hooks/use-theme";
 
 const invitationSchema = createInvitationSchema.pick({
   groom: true,
@@ -44,11 +45,9 @@ type InvitationFormValues = z.infer<typeof invitationSchema>;
 
 const InvitationForm: React.FC = () => {
   useUserInvitations();
+  useThemes();
   const addInvitationAtFirst = useInvitationStore(
     (state) => state.addInvitationAtFirst
-  );
-  const addTransactionAtFirst = useTransactionStore(
-    (state) => state.addTransactionAtFirst
   );
   const router = useRouter();
 
@@ -81,16 +80,14 @@ const InvitationForm: React.FC = () => {
       };
       const res = await InvitationService.createInvitation(req);
       addInvitationAtFirst(res.data);
-      addTransactionAtFirst(res.data.transaction);
-      toast.success("Undangan berhasil dibuat.");
-      router.push(
-        `/invitation/payment?order_id=${res.data.transaction.orderId}&status_code=201&transaction_status=pending}`
-      );
+      router.push(`new/${res.data.id}/theme`);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 409) {
           router.push(`/dashboard/invitation`);
-          toast.error("Anda masih memiliki undangan yang belum dibayar.");
+          toast.error(
+            "Anda masih memiliki undangan yang belum diselesaikan atau dibayar."
+          );
         } else {
           handleError(error, "invitation");
         }
@@ -140,6 +137,8 @@ const InvitationForm: React.FC = () => {
         title="Buat Undangan"
         description="Buat undanganmu sekarang juga"
       />
+      <Stepper currentStep={0} />
+
       <Alert variant="default">
         Pastikan nama panggilan mempelai pria dan wanita sudah benar, termasuk
         penggunaan huruf besar. Nama tidak dapat diubah setelah disimpan dan

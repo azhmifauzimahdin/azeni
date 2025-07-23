@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { Decimal } from "@prisma/client/runtime/library";
 import { randomUUID } from "crypto";
 
 const prisma = new PrismaClient();
@@ -28,13 +29,25 @@ async function generateUniqueCode(): Promise<string> {
 
 async function main() {
   // Create Theme
+  const themeCategory1 = await prisma.themeCategory.create({
+    data: {
+      name: "Premium",
+    },
+  });
+  const themeCategory2 = await prisma.themeCategory.create({
+    data: {
+      name: "Luxury",
+    },
+  });
   const theme = await prisma.theme.create({
     data: {
       name: "premium-001",
+      categoryId: themeCategory1.id,
       thumbnail:
         "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751205982/thumbnail-premium001_ijf4jj.png",
       originalPrice: 50000,
-      discount: 0,
+      discount: 20,
+      isPercent: true,
       colorTag: "green",
     },
   });
@@ -42,6 +55,7 @@ async function main() {
   await prisma.theme.create({
     data: {
       name: "premium-002",
+      categoryId: themeCategory2.id,
       thumbnail:
         "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751205982/thumbnail-premium001_ijf4jj.png",
       originalPrice: 50000,
@@ -80,6 +94,9 @@ async function main() {
 
   await prisma.paymentStatus.createMany({
     data: [
+      {
+        name: "CREATED",
+      },
       {
         name: "PENDING",
       },
@@ -129,7 +146,8 @@ async function main() {
       slug: "premium-001",
       themeId: theme.id,
       musicId: music.id,
-      image: "/assets/themes/premium-001/img/cover.jpg",
+      image:
+        "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1752590889/cover_fhqza7.jpg",
       date: new Date("2028-07-27T00:00:00Z"),
       expiresAt: new Date("9999-12-31T00:00:00Z"),
     },
@@ -382,6 +400,25 @@ Hormat kami,
         guestId: guest.id,
         message:
           "Semoga Allah SWT menjadikan kalian pasangan yang saling mencintai, saling mendukung, dan saling mengingatkan dalam kebaikan.",
+      },
+    ],
+  });
+
+  await prisma.referralCode.createMany({
+    data: [
+      {
+        code: "NIKAHFLAT20",
+        description: "Diskon langsung Rp20.000",
+        discount: new Decimal(20000),
+        isPercent: false,
+        isActive: true,
+      },
+      {
+        code: "NIKAHFLAT10",
+        description: "Diskon langsung Rp10.000",
+        discount: new Decimal(10000),
+        isPercent: false,
+        isActive: true,
       },
     ],
   });

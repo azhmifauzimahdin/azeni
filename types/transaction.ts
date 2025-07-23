@@ -5,19 +5,29 @@ export interface Transaction {
   invitationSlug: string;
   groomName: string;
   brideName: string;
+  originalAmount: string;
   amount: string;
+  referralDiscountAmount: string;
   date: string;
   snapToken: string;
   redirectUrl: string;
-  midtransPdfUrl:  string;
+  midtransPdfUrl: string;
   isActive: boolean;
   statusId: string;
+  referralCodeId: string;
+  referralCode: ReferralCode;
   updatedAt: string;
   createdAt: string;
   webhookLogs: WebhookLog[];
   status: {
     id: string;
-    name: "PENDING" | "SUCCESS" | "FAILED" | "CANCELLED" | "REFUNDED";
+    name:
+      | "CREATED"
+      | "PENDING"
+      | "SUCCESS"
+      | "FAILED"
+      | "CANCELLED"
+      | "REFUNDED";
   };
 }
 
@@ -35,6 +45,17 @@ export interface WebhookLog {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   rawBody: Record<string, any>;
   eventAt: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ReferralCode {
+  id: string;
+  code: string;
+  discount: string;
+  isPercent: boolean;
+  maxDiscount: string | null;
+  isActive: boolean;
   createdAt: string;
   updatedAt: string;
 }

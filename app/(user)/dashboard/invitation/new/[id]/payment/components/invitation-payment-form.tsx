@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import PaymentStatus from "./payment-status";
 import toast from "react-hot-toast";
 import useUserTransactions from "@/hooks/use-user-transaction";
 import useUserInvitations from "@/hooks/use-user-invitation";
@@ -9,8 +8,10 @@ import useInvitationStore from "@/stores/invitation-store";
 import useTransactionStore from "@/stores/transaction-store";
 import { TransactionService } from "@/lib/services";
 import { handleError } from "@/lib/utils/handle-error";
-import { notFound, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import CancelConfirmationModal from "@/components/ui/cancel-confirmation-modal";
+import InvitationPaymentCard from "./invitation-payment-card";
+import Stepper from "@/components/ui/stepper";
 
 const VALID_STATUSES = [
   "PENDING",
@@ -25,43 +26,55 @@ function isValidStatus(status: string | null): status is TransactionStatus {
   return VALID_STATUSES.includes(status as TransactionStatus);
 }
 
-const PaymentContent: React.FC = () => {
+interface InvitationPaymentFormProps {
+  params: {
+    id: string;
+  };
+}
+
+const InvitationPaymentForm: React.FC<InvitationPaymentFormProps> = ({
+  params,
+}: InvitationPaymentFormProps) => {
   const searchParams = useSearchParams();
 
-  const params = {
+  const param = {
     orderId: searchParams.get("order_id"),
     statusCode: searchParams.get("status_code"),
     transactionStatus: searchParams.get("transaction_status"),
   };
 
-  const { isFetching, getTransactionByOrderId } = useUserTransactions();
-  useUserInvitations();
+  const { getInvitationById, isFetching } = useUserInvitations();
+  useUserTransactions();
 
-  const transaction = getTransactionByOrderId(params.orderId || "");
+  const invitation = getInvitationById(params.id);
+  const transaction = invitation?.transaction;
 
   const [loading, setLoading] = useState(false);
   const [cancelling, setCancelling] = useState(false);
   const [modalCancelOpen, setModalCancelOpen] = useState(false);
 
   const [status, setStatus] = useState<TransactionStatus>(() => {
-    return isValidStatus(params.transactionStatus)
-      ? params.transactionStatus
+    return isValidStatus(param.transactionStatus)
+      ? param.transactionStatus
       : "PENDING";
   });
 
   const router = useRouter();
   useEffect(() => {
-    if (params.transactionStatus?.toUpperCase() !== status) {
+    if (param.transactionStatus?.toUpperCase() !== status) {
       router.push(
-        `/invitation/payment?order_id=${params.orderId}&status_code=${
-          params.statusCode
+        `/dashboard/invitation/new/${params.id}/payment?order_id=${
+          param.orderId
+        }&status_code=${
+          param.statusCode
         }&transaction_status=${status.toLowerCase()}`
       );
     }
   }, [
-    params.orderId,
-    params.statusCode,
-    params.transactionStatus,
+    param.orderId,
+    param.statusCode,
+    param.transactionStatus,
+    params.id,
     router,
     status,
   ]);
@@ -72,22 +85,6 @@ const PaymentContent: React.FC = () => {
     }
   }, [transaction?.status?.name]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (!params.orderId) return;
-        const res = await TransactionService.fetchTransactionByOrderId(
-          params.orderId
-        );
-        if (!res.data) router.push("/invitation/payment/not-found");
-      } catch (error: unknown) {
-        handleError(error, "invitation");
-      }
-    };
-
-    fetchData();
-  }, [params.orderId, router]);
-
   const updateTransactionStatusName = useInvitationStore(
     (state) => state.updateTransactionStatusName
   );
@@ -97,11 +94,6 @@ const PaymentContent: React.FC = () => {
   const addWebhookLogToTransaction = useTransactionStore(
     (state) => state.addWebhookLogToTransaction
   );
-
-  if (!params.orderId) {
-    notFound();
-    return null;
-  }
 
   const onPay = async (e?: React.MouseEvent<HTMLButtonElement>) => {
     e?.preventDefault?.();
@@ -120,7 +112,7 @@ const PaymentContent: React.FC = () => {
           updateTransactionStatusNameTransaction(transaction.id, "SUCCESS");
 
           router.push(
-            `/invitation/payment?order_id=${transaction.orderId}&status_code=200&transaction_status=success`
+            `/dashboard/invitation/new/${params.id}/payment?order_id=${transaction.orderId}&status_code=200&transaction_status=success`
           );
         },
         onPending: (result) => {
@@ -149,7 +141,7 @@ const PaymentContent: React.FC = () => {
           updateTransactionStatusNameTransaction(transaction.id, "FAILED");
 
           router.push(
-            `/invitation/payment?order_id=${transaction.orderId}&status_code=200&transaction_status=failed`
+            `/dashboard/invitation/new/${params.id}/payment?order_id=${transaction.orderId}&status_code=200&transaction_status=failed`
           );
         },
         onClose: () => {
@@ -158,7 +150,7 @@ const PaymentContent: React.FC = () => {
             updateTransactionStatusNameTransaction(transaction.id, "FAILED");
 
             router.push(
-              `/invitation/payment?order_id=${transaction.orderId}&status_code=200&transaction_status=FAILED`
+              `/dashboard/invitation/new/${params.id}/payment?order_id=${transaction.orderId}&status_code=200&transaction_status=FAILED`
             );
           }
         },
@@ -169,9 +161,6 @@ const PaymentContent: React.FC = () => {
       toast.error("Pembayaran belum siap.");
       setLoading(false);
     }
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
   };
 
   const onCancel = async () => {
@@ -183,7 +172,6 @@ const PaymentContent: React.FC = () => {
       );
       updateTransactionStatusName(res.data.invitationId, "CANCELLED");
       updateTransactionStatusNameTransaction(res.data.id, "CANCELLED");
-      toast.success("Transaksi berhasil batalkan.");
     } catch (error: unknown) {
       handleError(error, "cancel transaction");
     } finally {
@@ -193,6 +181,7 @@ const PaymentContent: React.FC = () => {
 
   return (
     <>
+      <Stepper currentStep={3} />
       <CancelConfirmationModal
         isOpen={modalCancelOpen}
         onOpenChange={() => {
@@ -201,20 +190,22 @@ const PaymentContent: React.FC = () => {
         onConfirm={onCancel}
         loading={cancelling}
       />
-      <PaymentStatus
-        invitationId={transaction?.invitationId || ""}
-        groomName={transaction?.groomName || ""}
-        brideName={transaction?.brideName || ""}
-        amount={transaction?.amount || "0"}
-        status={status}
-        onPay={onPay}
-        onCancel={() => setModalCancelOpen(true)}
-        isLoading={loading}
-        isCancelling={cancelling}
-        isFetching={isFetching}
-      />
+      <div className="mt-3">
+        <InvitationPaymentCard
+          invitationId={transaction?.invitationId || ""}
+          groomName={transaction?.groomName || ""}
+          brideName={transaction?.brideName || ""}
+          amount={transaction?.amount || "0"}
+          status={status}
+          onPay={onPay}
+          onCancel={() => setModalCancelOpen(true)}
+          isLoading={loading}
+          isCancelling={cancelling}
+          isFetching={isFetching}
+        />
+      </div>
     </>
   );
 };
 
-export default PaymentContent;
+export default InvitationPaymentForm;

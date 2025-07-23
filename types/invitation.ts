@@ -38,9 +38,9 @@ export interface Invitation {
   expiresAt: string;
   createdAt: string;
   updatedAt: string;
-  music: Music;
+  music: Music | null;
   transaction: Transaction;
-  theme: Theme;
+  theme: Theme | null;
   quote: Quote | null;
   schedules: Schedule[];
   couple: Couple | null;

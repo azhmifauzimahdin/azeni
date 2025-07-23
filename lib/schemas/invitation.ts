@@ -73,16 +73,6 @@ export const createInvitationSchema = z.object({
         "Slug hanya boleh berisi huruf kecil, angka, dan tanda hubung (-)",
     }),
 
-  themeId: z.string({
-    required_error: "ID tema wajib diisi",
-    invalid_type_error: "ID tema harus berupa string",
-  }),
-
-  musicId: z.string({
-    required_error: "ID musik wajib diisi",
-    invalid_type_error: "ID musik harus berupa string",
-  }),
-
   image: z
     .string({
       invalid_type_error: "URL gambar harus berupa string",

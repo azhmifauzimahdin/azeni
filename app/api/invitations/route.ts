@@ -1,32 +1,13 @@
-import { generateOrderId } from "@/lib/generateOrderId";
 import { generateUniqueSlug } from "@/lib/generateUniqueSlug";
-import snap from "@/lib/midtrans";
 import { prisma } from "@/lib/prisma";
 import { InvitationSchema } from "@/lib/schemas";
-import { defaultWhatsappMessageTemplate } from "@/lib/utils/default";
-import { generateUniqueGuestCode } from "@/lib/utils/generate-unique-guest-code";
 import {
   handleError,
   handleZodError,
   ResponseJson,
   unauthorizedError,
 } from "@/lib/utils/response";
-import { auth, currentUser } from "@clerk/nextjs/server";
-import { Decimal } from "@prisma/client/runtime/library";
-import { randomUUID } from "crypto";
-
-function calculateFinalPrice(
-  originalPrice: Decimal,
-  discount: Decimal,
-  isPercent: boolean
-): number {
-  const price = originalPrice.toNumber();
-  const disc = discount.toNumber();
-
-  const finalPrice = isPercent ? price - (price * disc) / 100 : price - disc;
-
-  return Math.max(0, finalPrice);
-}
+import { auth } from "@clerk/nextjs/server";
 
 export async function POST(req: Request) {
   try {
@@ -40,17 +21,25 @@ export async function POST(req: Request) {
       return handleZodError(parsed.error);
     }
 
-    const { groom, bride, slug, themeId, musicId, image, date, expiresAt } =
-      parsed.data;
+    const { groom, bride, slug, image, date, expiresAt } = parsed.data;
 
     const unpaidInvitation = await prisma.invitation.findFirst({
       where: {
         userId,
-        transaction: {
-          status: {
-            name: "PENDING",
+        OR: [
+          {
+            transaction: null,
           },
-        },
+          {
+            transaction: {
+              status: {
+                name: {
+                  in: ["PENDING", "CREATED"],
+                },
+              },
+            },
+          },
+        ],
       },
     });
 
@@ -59,108 +48,14 @@ export async function POST(req: Request) {
         {
           message: "Tidak dapat membuat undangan baru",
           errors: {
-            transaction: ["Anda masih memiliki undangan yang belum dibayar"],
+            transaction: [
+              "Anda masih memiliki undangan yang belum diselesaikan",
+            ],
           },
         },
         { status: 409 }
       );
     }
-
-    let theme;
-    if (!themeId) {
-      theme = await prisma.theme.findFirst({
-        where: {
-          name: "premium-001",
-        },
-      });
-    }
-
-    if (!theme) {
-      return ResponseJson(
-        {
-          message: "Tema tidak ditemukan",
-          errors: {
-            themeId: ["Tema dengan ID atau nama tersebut tidak tersedia"],
-          },
-        },
-        { status: 404 }
-      );
-    }
-
-    let music;
-    if (!musicId) {
-      music = await prisma.music.findFirst({
-        where: {
-          name: "Ketika Cinta Bertasbih - Melly Goeslaw Cover Cindi Cintya Dewi ( Lirik )",
-        },
-      });
-    }
-
-    if (!music) {
-      return ResponseJson(
-        {
-          message: "Musik tidak ditemukan",
-          errors: {
-            themeId: ["Musik dengan ID atau nama tersebut tidak tersedia"],
-          },
-        },
-        { status: 404 }
-      );
-    }
-
-    const status = await prisma.paymentStatus.findFirst({
-      where: {
-        name: "PENDING",
-      },
-    });
-
-    if (!status) {
-      return ResponseJson(
-        {
-          message: "Status pembayaran tidak ditemukan",
-          errors: {
-            statusId: [
-              "Status pembayaran dengan ID atau nama tersebut tidak tersedia",
-            ],
-          },
-        },
-        { status: 404 }
-      );
-    }
-
-    const finalAmount = calculateFinalPrice(
-      theme.originalPrice,
-      theme.discount,
-      theme.isPercent
-    );
-
-    const user = await currentUser();
-    const orderId = generateOrderId();
-
-    const midtransRes = await snap.createTransaction({
-      transaction_details: {
-        order_id: orderId,
-        gross_amount: Number(finalAmount),
-      },
-      item_details: [
-        {
-          id: randomUUID(),
-          price: Number(finalAmount),
-          quantity: 1,
-          name: "Undangan Pernikahan",
-          brand: "Undangan Digital",
-          merchant_name: "Azeni",
-        },
-      ],
-      customer_details: {
-        first_name: user?.firstName ?? "Tamu",
-        last_name: user?.lastName ?? undefined,
-        email: user?.emailAddresses[0].emailAddress,
-      },
-      callbacks: {
-        finish: `${process.env.NEXT_PUBLIC_BASE_URL}/invitation/payment`,
-      },
-    });
 
     const newSlug = await generateUniqueSlug(slug, "invitation");
 
@@ -170,52 +65,10 @@ export async function POST(req: Request) {
         groom,
         bride,
         slug: newSlug,
-        themeId: themeId || theme.id,
-        musicId: musicId || music.id,
         image,
         status: true,
         date,
         expiresAt,
-      },
-    });
-
-    await prisma.transaction.create({
-      data: {
-        orderId: orderId,
-        invitationId: newInvitation.id,
-        invitationSlug: newInvitation.slug,
-        groomName: newInvitation.groom,
-        brideName: newInvitation.bride,
-        amount: finalAmount,
-        date: new Date(),
-        statusId: status.id,
-        redirectUrl: midtransRes.redirect_url,
-        snapToken: midtransRes.token,
-      },
-    });
-
-    await prisma.setting.create({
-      data: {
-        invitationId: newInvitation.id,
-        whatsappMessageTemplate: defaultWhatsappMessageTemplate,
-      },
-    });
-
-    const kode = await generateUniqueGuestCode();
-
-    await prisma.guest.create({
-      data: {
-        code: kode,
-        invitationId: newInvitation.id,
-        name: "tamu",
-        isAttending: false,
-        color: "bg-teal-500",
-      },
-    });
-
-    const invitation = await prisma.invitation.findUnique({
-      where: {
-        id: newInvitation.id,
       },
       include: {
         transaction: {
@@ -226,6 +79,7 @@ export async function POST(req: Request) {
                 eventAt: "desc",
               },
             },
+            referralCode: true,
           },
         },
         music: true,
@@ -272,7 +126,7 @@ export async function POST(req: Request) {
     return ResponseJson(
       {
         message: "Undangan berhasil dibuat",
-        data: invitation,
+        data: newInvitation,
       },
       { status: 201 }
     );

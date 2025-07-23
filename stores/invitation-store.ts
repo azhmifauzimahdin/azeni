@@ -5,6 +5,7 @@ import {
   Invitation,
   Schedule,
   Story,
+  Transaction,
 } from "@/types";
 import { create } from "zustand";
 
@@ -13,6 +14,10 @@ interface InvitationState {
   setInvitations: (invitation: Invitation[]) => void;
   addInvitationAtFirst: (newInvitation: Invitation) => void;
   deleteInvitationById: (invitationId: string) => void;
+  updateTransactionInInvitation: (
+    invitationId: string,
+    updatedTransaction: Partial<Transaction>
+  ) => void;
   updateTransactionStatusName: (
     invitationId: string,
     statusName: "PENDING" | "SUCCESS" | "FAILED" | "CANCELLED" | "REFUNDED"
@@ -92,6 +97,34 @@ const useInvitationStore = create<InvitationState>((set) => ({
   addInvitationAtFirst: (newInvitation) =>
     set((state) => ({
       invitations: [newInvitation, ...state.invitations],
+    })),
+  updateTransactionInInvitation: (invitationId, updatedTransaction) =>
+    set((state) => ({
+      invitations: state.invitations.map((invitation) => {
+        if (invitation.id !== invitationId) return invitation;
+
+        const existingTransaction = invitation.transaction ?? {
+          id: "",
+          orderId: "",
+          status: "PENDING",
+          amount: 0,
+          method: null,
+          paidAt: null,
+          createdAt: "",
+          updatedAt: "",
+          invitationId: invitationId,
+          referralCode: null,
+          referral: null,
+        };
+
+        return {
+          ...invitation,
+          transaction: {
+            ...existingTransaction,
+            ...updatedTransaction,
+          },
+        };
+      }),
     })),
   updateTransactionStatusName: (invitationId, statusName) =>
     set((state) => ({
@@ -287,11 +320,18 @@ const useInvitationStore = create<InvitationState>((set) => ({
           name: "",
           thumbnail: "",
           colorTag: "",
-          originalPrice: 0,
-          discount: 0,
+          originalPrice: "",
+          discount: "",
           isPercent: true,
           createdAt: "",
           updatedAt: "",
+          categoryId: "",
+          category: {
+            id: "",
+            name: "",
+            createdAt: "",
+            updatedAt: "",
+          },
         };
 
         return {

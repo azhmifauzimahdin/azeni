@@ -1,28 +1,8 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Wallet } from "lucide-react";
 import { Transaction } from "@/types";
 import { format } from "date-fns";
+import { id } from "date-fns/locale";
 import { StatusBadge } from "../../invitation/components/invitation-card";
-import { LinkButton } from "@/components/ui/link";
-
-type InternalStatus =
-  | "PENDING"
-  | "SUCCESS"
-  | "FAILED"
-  | "REFUNDED"
-  | "CANCELLED";
-
-const statusCodeMap: Record<InternalStatus, 200 | 201 | 202> = {
-  SUCCESS: 200,
-  REFUNDED: 200,
-  CANCELLED: 200,
-  PENDING: 201,
-  FAILED: 202,
-};
-
-function mapStatusNameToStatusCode(status: InternalStatus): 200 | 201 | 202 {
-  return statusCodeMap[status];
-}
 
 export const columns: ColumnDef<Transaction>[] = [
   {
@@ -49,7 +29,8 @@ export const columns: ColumnDef<Transaction>[] = [
   {
     accessorKey: "date",
     header: "Tanggal",
-    cell: ({ row }) => format(new Date(row.original.date), "dd MMM yyyy HH:mm"),
+    cell: ({ row }) =>
+      format(new Date(row.original.date), "dd MMMM yyyy HH:mm", { locale: id }),
   },
   {
     accessorKey: "status.name",
@@ -59,25 +40,28 @@ export const columns: ColumnDef<Transaction>[] = [
       return <StatusBadge statusName={status} />;
     },
   },
-  {
-    id: "aksi",
-    header: "Aksi",
-    cell: ({ row }) => {
-      const orderId = row.original.orderId;
-      const status = row.original.status.name;
+  // {
+  //   id: "aksi",
+  //   header: "Aksi",
+  //   cell: ({ row }) => {
+  //     const orderId = row.original.orderId;
+  //     const invitationId = row.original.invitationId;
+  //     const status = row.original.status.name;
 
-      return (
-        <LinkButton
-          href={`/invitation/payment?order_id=${orderId}&status_code=${mapStatusNameToStatusCode(
-            status
-          )}&transaction_status=${status.toLowerCase()}`}
-          variant="primary"
-          size="sm"
-        >
-          <Wallet />
-          Detail Pembayaran
-        </LinkButton>
-      );
-    },
-  },
+  //     return (
+  //       <>
+  //         <LinkButton
+  //           href={`/dashboard/invitation/new/${invitationId}/payment?order_id=${orderId}&status_code=${mapStatusNameToStatusCode(
+  //             status
+  //           )}&transaction_status=${status.toLowerCase()}`}
+  //           variant="primary"
+  //           size="sm"
+  //         >
+  //           <Wallet />
+  //           Detail Pembayaran
+  //         </LinkButton>
+  //       </>
+  //     );
+  //   },
+  // },
 ];

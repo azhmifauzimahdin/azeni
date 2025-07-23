@@ -39,25 +39,55 @@ export interface LinkProps
   extends React.AnchorHTMLAttributes<HTMLAnchorElement>,
     VariantProps<typeof linkVariants> {
   href: string;
+  isFetching?: boolean;
+  disabled?: boolean;
 }
 
 const LinkButton = React.forwardRef<HTMLAnchorElement, LinkProps>(
   (
-    { className, variant, size, children, href, target, rel, ...props },
+    {
+      className,
+      variant,
+      size,
+      children,
+      href,
+      target,
+      rel,
+      isFetching,
+      disabled,
+      ...props
+    },
     ref
   ) => {
     const isExternal = target === "_blank";
     const relValue = rel ?? (isExternal ? "noopener noreferrer" : undefined);
+
+    const isDisabled = isFetching || disabled;
+
     return (
-      <Link href={href} passHref legacyBehavior>
+      <Link href={isDisabled ? "#" : href} passHref legacyBehavior>
         <a
           ref={ref}
-          className={cn(linkVariants({ variant, size, className }))}
+          className={cn(
+            "relative",
+            linkVariants({ variant, size }),
+            isFetching && "animate-pulse bg-skeleton",
+            isDisabled && "pointer-events-none opacity-50",
+            className
+          )}
           rel={relValue}
           target={target}
+          aria-disabled={isDisabled}
+          tabIndex={isDisabled ? -1 : undefined}
           {...props}
         >
-          {children}
+          <div
+            className={cn("inline-flex items-center justify-center gap-2", {
+              invisible: isFetching,
+            })}
+          >
+            {children}
+          </div>
         </a>
       </Link>
     );

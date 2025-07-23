@@ -20,11 +20,44 @@ export async function POST(req: Request) {
       return handleZodError(parsed.error);
     }
 
-    const { name, thumbnail, colorTag, originalPrice, discount, isPercent } =
-      parsed.data;
+    const {
+      name,
+      thumbnail,
+      colorTag,
+      originalPrice,
+      categoryId,
+      discount,
+      isPercent,
+    } = parsed.data;
+
+    const themeCategory = await prisma.themeCategory.findFirst({
+      where: {
+        id: categoryId,
+      },
+    });
+
+    if (!themeCategory) {
+      return ResponseJson(
+        {
+          message: "Kategori tema tidak ditemukan",
+          errors: {
+            categoriId: ["Kategori tema dengan ID tersebut tidak tersedia"],
+          },
+        },
+        { status: 404 }
+      );
+    }
 
     const theme = await prisma.theme.create({
-      data: { name, thumbnail, colorTag, originalPrice, discount, isPercent },
+      data: {
+        name,
+        thumbnail,
+        categoryId,
+        colorTag,
+        originalPrice,
+        discount,
+        isPercent,
+      },
     });
 
     return ResponseJson(
@@ -43,6 +76,7 @@ export async function GET() {
   try {
     const themes = await prisma.theme.findMany({
       include: {
+        category: true,
         invitations: {
           include: {
             guests: {

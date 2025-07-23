@@ -2,6 +2,7 @@ import { Badge, BadgeProps } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Img } from "@/components/ui/Img";
 import { LinkButton } from "@/components/ui/link";
+import { mapStatusNameToStatusCode } from "@/lib/utils/status-code-map";
 import { Invitation } from "@/types";
 import {
   Mail,
@@ -12,6 +13,8 @@ import {
   XCircle,
   Ban,
   RefreshCcw,
+  TimerOff,
+  ArrowRightCircle,
   Wallet,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -21,11 +24,13 @@ interface InvitationCardProps {
 }
 
 export type StatusName =
+  | "CREATED"
   | "PENDING"
   | "SUCCESS"
   | "FAILED"
   | "CANCELLED"
-  | "REFUNDED";
+  | "REFUNDED"
+  | "EXPIRED";
 
 interface StatusBadgeProps {
   statusName: StatusName;
@@ -33,27 +38,33 @@ interface StatusBadgeProps {
 
 export function StatusBadge({ statusName }: StatusBadgeProps) {
   const statusVariantMap: Record<StatusName, BadgeProps["variant"]> = {
+    CREATED: "created",
     PENDING: "pending",
     SUCCESS: "success",
     FAILED: "failed",
     CANCELLED: "cancelled",
     REFUNDED: "refunded",
+    EXPIRED: "expired",
   };
 
   const iconMap: Record<StatusName, React.ReactNode> = {
+    CREATED: <Mail size={12} />,
     PENDING: <Clock size={12} />,
     SUCCESS: <CircleCheck size={12} />,
     FAILED: <XCircle size={12} />,
     CANCELLED: <Ban size={12} />,
     REFUNDED: <RefreshCcw size={12} />,
+    EXPIRED: <TimerOff size={12} />,
   };
 
   const labelMap: Record<StatusName, string> = {
+    CREATED: "Dibuat",
     PENDING: "Menunggu Pembayaran",
     SUCCESS: "Lunas",
     FAILED: "Gagal",
     CANCELLED: "Dibatalkan",
     REFUNDED: "Dikembalikan",
+    EXPIRED: "Kedaluwarsa",
   };
 
   const variant = statusVariantMap[statusName] ?? "default";
@@ -70,7 +81,6 @@ export function StatusBadge({ statusName }: StatusBadgeProps) {
 
 const InvitationCard: React.FC<InvitationCardProps> = ({ data }) => {
   const router = useRouter();
-
   return (
     <div className="w-full bg-white rounded-lg shadow p-6 space-y-5">
       <div className="flex gap-3">
@@ -90,20 +100,29 @@ const InvitationCard: React.FC<InvitationCardProps> = ({ data }) => {
           <h2 className="text-xl font-bold text-green-app-primary tracking-tight">
             {data.groom} & {data.bride}
           </h2>
-          <StatusBadge statusName={data.transaction.status.name} />
+          {data.transaction?.status?.name && (
+            <StatusBadge statusName={data.transaction?.status?.name} />
+          )}
         </div>
       </div>
       <div className="grid grid-cols-2 gap-3">
-        <LinkButton href={`/dashboard/invitation/${data.id}`} variant="primary">
-          <Settings size={20} />
-          Kelola
-        </LinkButton>
-        {data.transaction.status.name === "SUCCESS" ? (
+        {data.transaction?.status?.name === "SUCCESS" ? (
+          <LinkButton
+            href={`/dashboard/invitation/${data.id}`}
+            variant="primary"
+          >
+            <Settings size={20} />
+            Kelola
+          </LinkButton>
+        ) : null}
+        {data.transaction?.status?.name === "SUCCESS" ? (
           <Button
             type="button"
             onClick={() =>
               window.open(
-                `${process.env.NEXT_PUBLIC_BASE_URL}/${data.slug}`,
+                `${process.env.NEXT_PUBLIC_BASE_URL}/${data.slug}/${
+                  data?.guests[data?.guests.length - 1].code
+                }`,
                 "_blank",
                 "noopener,noreferrer"
               )
@@ -111,18 +130,43 @@ const InvitationCard: React.FC<InvitationCardProps> = ({ data }) => {
             variant="outline"
           >
             <Link2 size={20} />
-            Lihat Web
+            Undangan
           </Button>
-        ) : data.transaction.status.name === "PENDING" ? (
+        ) : (
           <Button
+            onClick={() => {
+              if (!data.theme?.id) {
+                router.push(`invitation/new/${data.id}/theme`);
+              } else if (data.transaction?.status?.name) {
+                if (data.transaction?.status?.name === "CREATED")
+                  router.push(`invitation/new/${data.id}/checkout`);
+                else
+                  router.push(
+                    `invitation/new/${data.id}/payment?order_id=${
+                      data.transaction.orderId
+                    }&status_code=${mapStatusNameToStatusCode(
+                      data.transaction?.status?.name
+                    )}&transaction_status=${data.transaction?.status?.name.toLowerCase()}`
+                  );
+              }
+            }}
             type="button"
-            onClick={() => router.push("/dashboard/payment")}
+            className="order-2"
             variant="outline"
           >
-            <Wallet />
-            Bayar
+            {["CANCELLED", "EXPIRED"].includes(
+              data.transaction?.status?.name ?? ""
+            ) ? (
+              <>
+                <Wallet /> Detail
+              </>
+            ) : (
+              <>
+                <ArrowRightCircle /> Lanjutkan
+              </>
+            )}
           </Button>
-        ) : null}
+        )}
       </div>
     </div>
   );

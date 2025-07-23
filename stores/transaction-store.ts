@@ -5,6 +5,10 @@ interface TransactionState {
   transactions: Transaction[];
   setTransactions: (transaction: Transaction[]) => void;
   addTransactionAtFirst: (newTransaction: Transaction) => void;
+  updateTransactionById: (
+    transactionId: string,
+    updatedTransaction: Transaction
+  ) => void;
   updateTransactionStatusName: (
     transactionId: string,
     statusName: "PENDING" | "SUCCESS" | "FAILED" | "CANCELLED" | "REFUNDED"
@@ -21,6 +25,12 @@ const useTransactionStore = create<TransactionState>((set) => ({
   addTransactionAtFirst: (newTransaction) =>
     set((state) => ({
       transactions: [newTransaction, ...state.transactions],
+    })),
+  updateTransactionById: (transactionId, updatedTransaction) =>
+    set((state) => ({
+      transactions: state.transactions.map((transaction) =>
+        transaction.id === transactionId ? updatedTransaction : transaction
+      ),
     })),
   updateTransactionStatusName: (transactionId, statusName) =>
     set((state) => ({

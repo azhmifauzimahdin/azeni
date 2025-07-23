@@ -48,7 +48,7 @@ const DashboardLayout = ({
                       priority
                     />
                   </div>
-                  <div className="pt-0.5 font-gallery font-medium">AZEN</div>
+                  <div className="pt-0.5 font-gallery font-medium">AZENI</div>
                 </Link>
               </div>
               <div className="flex-center">
