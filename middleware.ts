@@ -1,4 +1,8 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import {
+  clerkClient,
+  clerkMiddleware,
+  createRouteMatcher,
+} from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
 const isPublicRoute = createRouteMatcher([
@@ -7,6 +11,9 @@ const isPublicRoute = createRouteMatcher([
   "/sign-up(.*)",
   "/api/:path*",
 ]);
+
+const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
+const isUserRoute = createRouteMatcher(["/dashboard(.*)"]);
 
 const allowedOrigins = [`${process.env.NEXT_PUBLIC_BASE_URL}`];
 
@@ -21,6 +28,13 @@ export default clerkMiddleware(async (auth, req) => {
 
   const pathname = req.nextUrl.pathname;
   const origin = req.headers.get("origin") || "";
+
+  const client = await clerkClient();
+  let role = null;
+  if (userId) {
+    const user = await client.users.getUser(userId);
+    role = user.publicMetadata.role;
+  }
 
   function addCorsHeaders(response: NextResponse, origin: string) {
     if (allowedOrigins.includes(origin)) {
@@ -64,6 +78,20 @@ export default clerkMiddleware(async (auth, req) => {
 
   if (!userId && !isPublicRoute(req)) {
     return redirectToSignIn();
+  }
+
+  if (userId && req.nextUrl.pathname === "/") {
+    const redirectUrl = role === "admin" ? "/admin" : "/dashboard";
+    return NextResponse.redirect(new URL(redirectUrl, req.url));
+  }
+
+  if (isAdminRoute(req) && role !== "admin") {
+    const url = new URL("/dashboard", req.url);
+    return NextResponse.redirect(url);
+  }
+  if (isUserRoute(req) && role === "admin") {
+    const url = new URL("/admin", req.url);
+    return NextResponse.redirect(url);
   }
 
   if (pathname.startsWith("/api/public")) {

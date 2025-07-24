@@ -15,12 +15,6 @@ export default async function InvitationLayout({
     redirect("/");
   }
 
-  const role = (user.publicMetadata as { role?: string })?.role;
-
-  if (role === "admin") {
-    redirect("/admin");
-  }
-
   const invitation = await prisma.invitation.findFirst({
     where: {
       id: params.id,

@@ -1,23 +1,10 @@
-import { currentUser } from "@clerk/nextjs/server";
 import DashboardLayout from "./components/dashboard";
-import { redirect } from "next/navigation";
 
-export default async function InvitationLayout({
+export default function InvitationLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const user = await currentUser();
-
-  if (!user) {
-    redirect("/");
-  }
-
-  const role = (user.publicMetadata as { role?: string })?.role;
-
-  if (role === "admin") {
-    redirect("/admin");
-  }
   return (
     <>
       <DashboardLayout>{children}</DashboardLayout>
