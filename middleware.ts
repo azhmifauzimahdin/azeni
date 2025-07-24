@@ -8,9 +8,6 @@ const isPublicRoute = createRouteMatcher([
   "/api/:path*",
 ]);
 
-const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
-const isUserRoute = createRouteMatcher(["/dashboard(.*)"]);
-
 const allowedOrigins = [`${process.env.NEXT_PUBLIC_BASE_URL}`];
 
 function withPathHeaders(res: NextResponse, req: NextRequest) {
@@ -21,7 +18,7 @@ function withPathHeaders(res: NextResponse, req: NextRequest) {
 
 export default clerkMiddleware(async (auth, req) => {
   const { userId, redirectToSignIn } = await auth();
-  const role = (await auth()).sessionClaims?.metadata?.role;
+
   const pathname = req.nextUrl.pathname;
   const origin = req.headers.get("origin") || "";
 
@@ -63,20 +60,6 @@ export default clerkMiddleware(async (auth, req) => {
     }
 
     return NextResponse.next();
-  }
-
-  if (userId && req.nextUrl.pathname === "/") {
-    const redirectUrl = role === "admin" ? "/admin" : "/dashboard";
-    return NextResponse.redirect(new URL(redirectUrl, req.url));
-  }
-
-  if (isAdminRoute(req) && role !== "admin") {
-    const url = new URL("/dashboard", req.url);
-    return NextResponse.redirect(url);
-  }
-  if (isUserRoute(req) && role === "admin") {
-    const url = new URL("/admin", req.url);
-    return NextResponse.redirect(url);
   }
 
   if (!userId && !isPublicRoute(req)) {

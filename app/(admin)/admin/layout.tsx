@@ -1,12 +1,11 @@
 import { currentUser } from "@clerk/nextjs/server";
-import DashboardLayout from "./components/dashboard";
 import { redirect } from "next/navigation";
 
-export default async function InvitationLayout({
+export default async function AdminLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   const user = await currentUser();
 
   if (!user) {
@@ -15,12 +14,9 @@ export default async function InvitationLayout({
 
   const role = (user.publicMetadata as { role?: string })?.role;
 
-  if (role === "admin") {
-    redirect("/admin");
+  if (role !== "admin") {
+    redirect("/dashboard");
   }
-  return (
-    <>
-      <DashboardLayout>{children}</DashboardLayout>
-    </>
-  );
+
+  return <>{children}</>;
 }
