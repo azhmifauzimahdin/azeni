@@ -3,6 +3,10 @@ import { Transaction } from "@/types";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import { StatusBadge } from "../../invitation/components/invitation-card";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import { TransactionReceipt } from "@/components/ui/transaction-receipt";
+import { Button } from "@/components/ui/button";
+import { Wallet } from "lucide-react";
 
 export const columns: ColumnDef<Transaction>[] = [
   {
@@ -46,28 +50,33 @@ export const columns: ColumnDef<Transaction>[] = [
       return <StatusBadge statusName={status} />;
     },
   },
-  // {
-  //   id: "aksi",
-  //   header: "Aksi",
-  //   cell: ({ row }) => {
-  //     const orderId = row.original.orderId;
-  //     const invitationId = row.original.invitationId;
-  //     const status = row.original.status.name;
-
-  //     return (
-  //       <>
-  //         <LinkButton
-  //           href={`/dashboard/invitation/new/${invitationId}/payment?order_id=${orderId}&status_code=${mapStatusNameToStatusCode(
-  //             status
-  //           )}&transaction_status=${status.toLowerCase()}`}
-  //           variant="primary"
-  //           size="sm"
-  //         >
-  //           <Wallet />
-  //           Detail Pembayaran
-  //         </LinkButton>
-  //       </>
-  //     );
-  //   },
-  // },
+  {
+    header: "Aksi",
+    cell: ({ row }) => {
+      if (row.original.status.name !== "SUCCESS") return null;
+      return (
+        <PDFDownloadLink
+          document={
+            <TransactionReceipt
+              data={row.original}
+              logoUrl="/assets/img/azen-green-a.png"
+              signatureUrl={undefined}
+            />
+          }
+          fileName={`${row.original.orderId}.pdf`}
+        >
+          {({ loading }) => (
+            <Button
+              disabled={loading}
+              variant="primary"
+              className="rounded-full"
+              size="sm"
+            >
+              <Wallet /> Bukti Pembayaran
+            </Button>
+          )}
+        </PDFDownloadLink>
+      );
+    },
+  },
 ];
