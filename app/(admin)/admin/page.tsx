@@ -1,11 +1,9 @@
-"use client";
-
-import { UserButton } from "@clerk/nextjs";
+import AdminContent from "./components/admin-content";
 
 export default function DashboardPage() {
   return (
-    <div>
-      Welcome Admin, <UserButton />
-    </div>
+    <>
+      <AdminContent />
+    </>
   );
 }

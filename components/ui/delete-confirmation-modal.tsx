@@ -9,7 +9,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Trash2, X } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
 
 interface DeleteConfirmationDialogProps {
   isOpen: boolean;
@@ -25,7 +25,7 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationDialogProps> = ({
   onOpenChange,
   onConfirm,
   loading = false,
-  title = "Hapus Data",
+  title = "Konfirmasi Hapus Data",
   description = "",
 }) => {
   const handleConfirm = async () => {
@@ -41,26 +41,30 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationDialogProps> = ({
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>
-            Apakah Anda yakin ingin menghapus data {description}? Tindakan ini
-            tidak dapat dibatalkan.
+          <div className="flex justify-center text-red-500 mb-2">
+            <AlertTriangle className="h-10 w-10" />
+          </div>
+          <DialogTitle className="text-center">{title}</DialogTitle>
+          <DialogDescription className="text-sm text-center text-muted-foreground">
+            Apakah Anda yakin ingin menghapus data&nbsp;
+            <span className="font-semibold text-red-600">{description}</span>?
+            Tindakan ini tidak dapat dibatalkan.
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter className="gap-3 sm:gap-0">
+        <DialogFooter className="grid grid-cols-2 gap-3 mt-4">
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
             disabled={loading}
           >
-            <X /> Batal
+            Batal
           </Button>
           <Button
             variant="destructive"
             onClick={handleConfirm}
             isLoading={loading}
           >
-            <Trash2 /> Hapus
+            Ya, Hapus
           </Button>
         </DialogFooter>
       </DialogContent>

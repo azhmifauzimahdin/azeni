@@ -44,7 +44,7 @@ const CancelConfirmationModal: React.FC<CancelConfirmationDialogProps> = ({
             Konfirmasi Pembatalan
           </DialogTitle>
           <DialogDescription className="text-sm text-center text-muted-foreground">
-            Pesanan kamu akan{" "}
+            Pesanan kamu akan&nbsp;
             <span className="font-semibold text-red-600">dibatalkan</span> dan
             tidak bisa dikembalikan. Apakah kamu yakin ingin melanjutkan?
           </DialogDescription>

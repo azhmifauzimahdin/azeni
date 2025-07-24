@@ -5,3 +5,8 @@ export interface Bank {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface BankRequest {
+  name: string;
+  icon: string;
+}

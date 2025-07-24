@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { FC, ReactNode } from "react";
 
@@ -24,7 +24,7 @@ const NavLink: FC<NavLinkProps> = ({
   <Link
     href={href}
     onClick={onClick}
-    className={clsx(
+    className={cn(
       "flex items-center px-3 py-2 rounded-md group transition-colors",
       collapsed ? "justify-center" : "gap-3",
       active
@@ -33,7 +33,14 @@ const NavLink: FC<NavLinkProps> = ({
       className
     )}
   >
-    <span className="text-base">{icon}</span>
+    <span
+      className={cn(
+        "text-base",
+        active ? "text-white" : "text-green-app-primary"
+      )}
+    >
+      {icon}
+    </span>
     {!collapsed && <span>{label}</span>}
   </Link>
 );

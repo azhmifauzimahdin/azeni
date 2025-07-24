@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
@@ -12,67 +12,116 @@ export interface OptionNavlink {
 }
 
 interface NavLinkDropdownProps {
+  icon: ReactNode;
+  label: string;
   options: OptionNavlink[];
-  children: ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
+  onExpandSidebar?: () => void;
   className?: string;
+  collapsed?: boolean;
 }
 
-const NavLinkDropdown: FC<NavLinkDropdownProps> = (props) => {
-  const { children, options, onClick, className } = props;
-  const [toggle, setToogle] = useState<boolean>(
-    options.some((data: OptionNavlink) => data.active === true)
+const NavLinkDropdown: FC<NavLinkDropdownProps> = ({
+  icon,
+  label,
+  options,
+  onClick,
+  onExpandSidebar,
+  className,
+  collapsed = false,
+}) => {
+  const [toggle, setToggle] = useState<boolean>(
+    options.some((data) => data.active)
   );
 
   useEffect(() => {
-    const result = options.some((data: OptionNavlink) => data.active === true);
-    setToogle(result);
-  }, [options]);
+    if (collapsed) {
+      setToggle(false);
+    } else {
+      const result = options.some((data) => data.active);
+      setToggle(result);
+    }
+  }, [collapsed, options]);
+
+  const isAnyOptionActive = options.some((data) => data.active);
+  const showGreen = collapsed && isAnyOptionActive;
+  const showGray = !collapsed && (toggle || isAnyOptionActive);
 
   return (
     <div>
       <div
         onClick={() => {
-          setToogle(!toggle);
-          onClick();
+          if (!collapsed) {
+            setToggle(!toggle);
+            onClick?.();
+          } else {
+            onExpandSidebar?.();
+          }
         }}
-        className={clsx(
-          "text-slate-800 cursor-pointer flex items-center gap-3 p-3 rounded-lg group relative",
-          toggle ? "bg-slate-100" : "",
+        className={cn(
+          "cursor-pointer flex items-center px-3 py-2 rounded-md group relative transition-colors",
+          collapsed ? "justify-center" : "gap-3",
+          showGreen
+            ? "bg-green-app-primary text-white"
+            : showGray
+            ? "bg-slate-100 text-slate-900 hover:text-green-app-primary"
+            : "text-slate-800 hover:text-green-app-primary",
           className
         )}
       >
-        {children}
-        <ChevronLeft
-          size={16}
-          className={clsx(
-            "absolute text-slate-500 right-2 transition-all delay-100 ",
-            toggle ? "-rotate-90" : ""
+        <span
+          className={cn(
+            "text-base",
+            showGreen ? "text-white" : "text-green-app-primary"
           )}
-        />
+        >
+          {icon}
+        </span>
+        {!collapsed && (
+          <span className="truncate transition-all duration-300 ease-in-out min-w-0">
+            {label}
+          </span>
+        )}
+        {!collapsed && (
+          <ChevronLeft
+            size={16}
+            className={cn(
+              "absolute right-2 text-slate-500 transition-transform",
+              toggle ? "-rotate-90" : ""
+            )}
+          />
+        )}
       </div>
+
       <AnimatePresence initial={false}>
-        {toggle && (
+        {!collapsed && toggle && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 1, ease: "easeInOut" }}
-            className="overflow-hidden space-y-1 ps-3 py-2"
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="overflow-hidden space-y-1 py-1"
           >
-            {options.map((data: OptionNavlink, index) => (
+            {options.map((data, index) => (
               <Link
                 key={index}
                 href={data.href}
-                className={clsx(
-                  "flex items-center gap-3 p-2.5 rounded-lg text-slate-800",
+                className={cn(
+                  "flex items-center gap-3 px-3 py-2 rounded-md transition-colors",
                   data.active
                     ? "text-white bg-green-app-primary hover:bg-green-app-secondary"
-                    : "hover:text-green-app-primary"
+                    : "hover:text-green-app-primary text-slate-800"
                 )}
               >
-                {data.icon}
-                {data.label}
+                <span
+                  className={cn(
+                    "text-base",
+                    data.active ? "text-white" : "text-green-app-primary"
+                  )}
+                >
+                  {data.icon}
+                </span>
+                <span>{data.label}</span>
               </Link>
             ))}
           </motion.div>

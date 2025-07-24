@@ -1,5 +1,6 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import AdminPageLayout from "./components/admin-page-layout";
 
 export default async function AdminLayout({
   children,
@@ -18,5 +19,9 @@ export default async function AdminLayout({
     redirect("/dashboard");
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      <AdminPageLayout>{children}</AdminPageLayout>
+    </>
+  );
 }

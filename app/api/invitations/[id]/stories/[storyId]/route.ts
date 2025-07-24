@@ -18,7 +18,12 @@ import { NextRequest } from "next/server";
 async function deleteImageFromCloudinary(url: string) {
   const publicId = extractCloudinaryPublicId(url);
   if (!publicId) return;
-  await cloudinary.uploader.destroy(publicId);
+
+  try {
+    await cloudinary.uploader.destroy(publicId);
+  } catch (err) {
+    console.error("Gagal menghapus gambar dari Cloudinary:", err);
+  }
 }
 
 export async function PUT(

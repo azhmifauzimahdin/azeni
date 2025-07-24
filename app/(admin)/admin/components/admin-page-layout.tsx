@@ -3,14 +3,21 @@
 import { Button } from "@/components/ui/button";
 import { Img } from "@/components/ui/Img";
 import NavLink from "@/components/ui/nav-link";
+import NavLinkDropdown from "@/components/ui/nav-link-dropdown";
 import { cn } from "@/lib/utils";
 import { UserButton, useUser } from "@clerk/nextjs";
-import { AlignJustify, LayoutPanelLeft, Mail, Wallet } from "lucide-react";
+import {
+  AlignJustify,
+  CreditCard,
+  Database,
+  LayoutPanelLeft,
+  Music4,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
-const DashboardLayout = ({
+const AdminPageLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -94,7 +101,7 @@ const DashboardLayout = ({
             <ul className="space-y-1">
               <li>
                 <NavLink
-                  href="/dashboard"
+                  href="/admin"
                   icon={<LayoutPanelLeft />}
                   label="Dashboard"
                   active={location === ""}
@@ -102,26 +109,29 @@ const DashboardLayout = ({
                   onClick={() => setToggleSidebar(false)}
                 />
               </li>
-              <li>
-                <NavLink
-                  href="/dashboard/invitation"
-                  icon={<Mail />}
-                  label="Undangan"
-                  active={location === "invitation"}
-                  collapsed={isSidebarCollapsed}
+              <ul>
+                <NavLinkDropdown
+                  icon={<Database />}
+                  label="Master Data"
                   onClick={() => setToggleSidebar(false)}
-                />
-              </li>
-              <li>
-                <NavLink
-                  href="/dashboard/payment"
-                  icon={<Wallet />}
-                  label="Transaksi"
-                  active={location === "payment"}
+                  onExpandSidebar={() => setIsSidebarCollapsed(false)}
                   collapsed={isSidebarCollapsed}
-                  onClick={() => setToggleSidebar(false)}
+                  options={[
+                    {
+                      href: "admin/master-data/banks",
+                      label: "Bank",
+                      icon: <CreditCard />,
+                      active: pathname === "/admin/master-data/banks",
+                    },
+                    {
+                      href: "admin/master-data/musics",
+                      label: "Musik",
+                      icon: <Music4 />,
+                      active: pathname === "/admin/master-data/musics",
+                    },
+                  ]}
                 />
-              </li>
+              </ul>
             </ul>
           </div>
         </aside>
@@ -140,4 +150,4 @@ const DashboardLayout = ({
   );
 };
 
-export default DashboardLayout;
+export default AdminPageLayout;

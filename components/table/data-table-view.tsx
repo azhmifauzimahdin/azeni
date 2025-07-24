@@ -74,34 +74,36 @@ export function DataTableView<T>({
                           header.column.columnDef.header,
                           header.getContext()
                         )}
-                        <div>
-                          <ChevronUp
-                            strokeWidth={3}
-                            className={cn(
-                              "w-3 h-3",
-                              isSorted === "asc"
-                                ? "opacity-100 text-green-app-primary"
-                                : "opacity-50"
-                            )}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              header.column.toggleSorting(false);
-                            }}
-                          />
-                          <ChevronDown
-                            strokeWidth={3}
-                            className={cn(
-                              "w-3 h-3 -mt-1",
-                              isSorted === "desc"
-                                ? "opacity-100 text-green-app-primary"
-                                : "opacity-50"
-                            )}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              header.column.toggleSorting(true);
-                            }}
-                          />
-                        </div>
+                        {canSort && (
+                          <div>
+                            <ChevronUp
+                              strokeWidth={3}
+                              className={cn(
+                                "w-3 h-3",
+                                isSorted === "asc"
+                                  ? "opacity-100 text-green-app-primary"
+                                  : "opacity-50"
+                              )}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                header.column.toggleSorting(false);
+                              }}
+                            />
+                            <ChevronDown
+                              strokeWidth={3}
+                              className={cn(
+                                "w-3 h-3 -mt-1",
+                                isSorted === "desc"
+                                  ? "opacity-100 text-green-app-primary"
+                                  : "opacity-50"
+                              )}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                header.column.toggleSorting(true);
+                              }}
+                            />
+                          </div>
+                        )}
                       </div>
                     </TableHead>
                   );

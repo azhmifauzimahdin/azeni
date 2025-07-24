@@ -52,6 +52,7 @@ export const columns: ColumnDef<Transaction>[] = [
   },
   {
     header: "Aksi",
+    enableSorting: false,
     cell: ({ row }) => {
       if (row.original.status.name !== "SUCCESS") return null;
       return (
