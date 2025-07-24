@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { GuestSchema } from "@/lib/schemas";
 import {
+  expiredInvitationError,
   forbiddenError,
   handleError,
   handleZodError,
@@ -9,6 +10,7 @@ import {
   unpaidInvitationError,
 } from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
+import { isBefore } from "date-fns";
 
 export async function PUT(
   req: Request,
@@ -70,6 +72,10 @@ export async function PUT(
     if (transactionStatus !== "SUCCESS") {
       return unpaidInvitationError();
     }
+    const now = new Date();
+    if (isBefore(invitationByUserId.expiresAt, now)) {
+      return expiredInvitationError();
+    }
 
     const guest = await prisma.guest.update({
       where: {
@@ -126,7 +132,7 @@ export async function DELETE(
       );
     }
 
-    const InvitaionByUserId = await prisma.invitation.findFirst({
+    const invitationByUserId = await prisma.invitation.findFirst({
       where: {
         id: params.id,
         userId,
@@ -140,10 +146,14 @@ export async function DELETE(
       },
     });
 
-    if (!InvitaionByUserId) return forbiddenError();
-    const transactionStatus = InvitaionByUserId.transaction?.status?.name;
+    if (!invitationByUserId) return forbiddenError();
+    const transactionStatus = invitationByUserId.transaction?.status?.name;
     if (transactionStatus !== "SUCCESS") {
       return unpaidInvitationError();
+    }
+    const now = new Date();
+    if (isBefore(invitationByUserId.expiresAt, now)) {
+      return expiredInvitationError();
     }
 
     const guest = await prisma.guest.delete({

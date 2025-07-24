@@ -2,6 +2,7 @@ import cloudinary from "@/lib/cloudinary";
 import { prisma } from "@/lib/prisma";
 import extractCloudinaryPublicId from "@/lib/utils/extract-cloudinary-public-id";
 import {
+  expiredInvitationError,
   forbiddenError,
   handleError,
   ResponseJson,
@@ -9,6 +10,7 @@ import {
   unpaidInvitationError,
 } from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
+import { isBefore } from "date-fns";
 import { NextRequest } from "next/server";
 
 export async function DELETE(
@@ -61,6 +63,10 @@ export async function DELETE(
     const transactionStatus = invitationByUserId.transaction?.status?.name;
     if (transactionStatus !== "SUCCESS") {
       return unpaidInvitationError();
+    }
+    const now = new Date();
+    if (isBefore(invitationByUserId.expiresAt, now)) {
+      return expiredInvitationError();
     }
 
     type CoupleImageField = "groomImage" | "brideImage";

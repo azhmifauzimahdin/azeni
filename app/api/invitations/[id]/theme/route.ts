@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { ThemeSchema } from "@/lib/schemas";
 import { calculateFinalPrice } from "@/lib/utils/calculate-final-price";
 import {
+  expiredInvitationError,
   forbiddenError,
   handleError,
   handleZodError,
@@ -11,6 +12,7 @@ import {
 } from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
 import { Decimal } from "@prisma/client/runtime/library";
+import { isBefore } from "date-fns";
 
 export async function PATCH(
   req: Request,
@@ -59,6 +61,10 @@ export async function PATCH(
     const transactionStatus = invitationByUserId.transaction?.status?.name;
     if (transactionStatus !== "SUCCESS") {
       return unpaidInvitationError();
+    }
+    const now = new Date();
+    if (isBefore(invitationByUserId.expiresAt, now)) {
+      return expiredInvitationError();
     }
 
     const theme = await prisma.theme.findFirst({

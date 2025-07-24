@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { ImageSchema } from "@/lib/schemas";
 import extractCloudinaryPublicId from "@/lib/utils/extract-cloudinary-public-id";
 import {
+  expiredInvitationError,
   forbiddenError,
   handleError,
   handleZodError,
@@ -11,6 +12,7 @@ import {
   unpaidInvitationError,
 } from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
+import { isBefore } from "date-fns";
 
 export async function POST(
   req: Request,
@@ -56,6 +58,10 @@ export async function POST(
     const transactionStatus = invitationByUserId.transaction?.status?.name;
     if (transactionStatus !== "SUCCESS") {
       return unpaidInvitationError();
+    }
+    const now = new Date();
+    if (isBefore(invitationByUserId.expiresAt, now)) {
+      return expiredInvitationError();
     }
 
     type CoupleImageField = "groomImage" | "brideImage";

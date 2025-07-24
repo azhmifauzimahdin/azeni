@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { InvitationSchema } from "@/lib/schemas";
 import {
+  expiredInvitationError,
   forbiddenError,
   handleError,
   handleZodError,
@@ -9,6 +10,7 @@ import {
   unpaidInvitationError,
 } from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
+import { isBefore } from "date-fns";
 
 export async function PATCH(
   req: Request,
@@ -58,6 +60,10 @@ export async function PATCH(
     const transactionStatus = invitationByUserId.transaction?.status?.name;
     if (transactionStatus !== "SUCCESS") {
       return unpaidInvitationError();
+    }
+    const now = new Date();
+    if (isBefore(invitationByUserId.expiresAt, now)) {
+      return expiredInvitationError();
     }
 
     const invitation = await prisma.invitation.update({

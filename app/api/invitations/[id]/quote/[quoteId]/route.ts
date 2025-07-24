@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import {
+  expiredInvitationError,
   forbiddenError,
   handleError,
   ResponseJson,
@@ -7,6 +8,7 @@ import {
   unpaidInvitationError,
 } from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
+import { isBefore } from "date-fns";
 import { NextRequest } from "next/server";
 
 export async function DELETE(
@@ -41,7 +43,7 @@ export async function DELETE(
       );
     }
 
-    const InvitaionByUserId = await prisma.invitation.findFirst({
+    const invitationByUserId = await prisma.invitation.findFirst({
       where: {
         id: params.id,
         userId,
@@ -55,10 +57,14 @@ export async function DELETE(
       },
     });
 
-    if (!InvitaionByUserId) return forbiddenError();
-    const transactionStatus = InvitaionByUserId.transaction?.status?.name;
+    if (!invitationByUserId) return forbiddenError();
+    const transactionStatus = invitationByUserId.transaction?.status?.name;
     if (transactionStatus !== "SUCCESS") {
       return unpaidInvitationError();
+    }
+    const now = new Date();
+    if (isBefore(invitationByUserId.expiresAt, now)) {
+      return expiredInvitationError();
     }
 
     const quote = await prisma.quote.delete({

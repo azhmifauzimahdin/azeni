@@ -136,3 +136,14 @@ export function unpaidInvitationError(
     { status: 403 }
   );
 }
+
+export function expiredInvitationError(
+  message = "Undangan sudah kedaluwarsa. Silakan hubungi admin untuk informasi lebih lanjut."
+) {
+  return ResponseJson(
+    {
+      message,
+    },
+    { status: 403 }
+  );
+}

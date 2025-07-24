@@ -35,6 +35,7 @@ export async function GET(
             eventAt: "desc",
           },
         },
+        referralCode: true,
       },
       orderBy: {
         createdAt: "desc",

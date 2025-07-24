@@ -121,6 +121,7 @@ export async function PATCH(
           },
         },
       });
+      console.log(alreadyUsed);
 
       if (alreadyUsed) {
         return ResponseJson(
@@ -149,6 +150,11 @@ export async function PATCH(
       },
       include: {
         status: true,
+        webhookLogs: {
+          orderBy: {
+            eventAt: "desc",
+          },
+        },
         referralCode: true,
       },
     });

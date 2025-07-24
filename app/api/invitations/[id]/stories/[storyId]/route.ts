@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { StorySchema } from "@/lib/schemas";
 import extractCloudinaryPublicId from "@/lib/utils/extract-cloudinary-public-id";
 import {
+  expiredInvitationError,
   forbiddenError,
   handleError,
   handleZodError,
@@ -11,6 +12,7 @@ import {
   unpaidInvitationError,
 } from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
+import { isBefore } from "date-fns";
 import { NextRequest } from "next/server";
 
 async function deleteImageFromCloudinary(url: string) {
@@ -78,6 +80,10 @@ export async function PUT(
     const transactionStatus = invitationByUserId.transaction?.status?.name;
     if (transactionStatus !== "SUCCESS") {
       return unpaidInvitationError();
+    }
+    const now = new Date();
+    if (isBefore(invitationByUserId.expiresAt, now)) {
+      return expiredInvitationError();
     }
 
     const storyExists = await prisma.story.findFirst({
@@ -184,6 +190,10 @@ export async function DELETE(
     const transactionStatus = invitationByUserId.transaction?.status?.name;
     if (transactionStatus !== "SUCCESS") {
       return unpaidInvitationError();
+    }
+    const now = new Date();
+    if (isBefore(invitationByUserId.expiresAt, now)) {
+      return expiredInvitationError();
     }
 
     const story = await prisma.story.findUnique({

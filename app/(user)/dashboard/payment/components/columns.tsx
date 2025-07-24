@@ -11,11 +11,17 @@ export const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => row.original.invitationSlug,
   },
   {
+    accessorFn: (row) => `${row.groomName} & ${row.brideName}`,
     header: "Undangan",
     cell: ({ row }) => {
       const { groomName, brideName } = row.original;
       return `${groomName} & ${brideName}`;
     },
+  },
+  {
+    accessorKey: "referralCode.code",
+    header: "Referral",
+    cell: ({ row }) => row.original.referralCode?.code || "-",
   },
   {
     accessorKey: "amount",

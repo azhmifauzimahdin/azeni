@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { GallerySchema } from "@/lib/schemas";
 import extractCloudinaryPublicId from "@/lib/utils/extract-cloudinary-public-id";
 import {
+  expiredInvitationError,
   forbiddenError,
   handleError,
   handleZodError,
@@ -12,6 +13,7 @@ import {
 } from "@/lib/utils/response";
 import { validationError } from "@/lib/utils/validation-error";
 import { auth } from "@clerk/nextjs/server";
+import { isBefore } from "date-fns";
 
 export async function POST(
   req: Request,
@@ -56,6 +58,10 @@ export async function POST(
     const transactionStatus = invitationByUserId.transaction?.status?.name;
     if (transactionStatus !== "SUCCESS") {
       return unpaidInvitationError();
+    }
+    const now = new Date();
+    if (isBefore(invitationByUserId.expiresAt, now)) {
+      return expiredInvitationError();
     }
 
     const gallery = await prisma.gallery.create({

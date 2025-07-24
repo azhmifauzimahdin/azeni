@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import {
+  expiredInvitationError,
   forbiddenError,
   handleError,
   ResponseJson,
@@ -7,6 +8,7 @@ import {
   unpaidInvitationError,
 } from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
+import { isBefore } from "date-fns";
 
 export async function PUT(
   req: Request,
@@ -58,6 +60,10 @@ export async function PUT(
     const transactionStatus = invitationByUserId.transaction?.status?.name;
     if (transactionStatus !== "SUCCESS") {
       return unpaidInvitationError();
+    }
+    const now = new Date();
+    if (isBefore(invitationByUserId.expiresAt, now)) {
+      return expiredInvitationError();
     }
 
     const defaultGuest = await prisma.guest.findFirst({

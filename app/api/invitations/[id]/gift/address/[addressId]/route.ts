@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { BankAccountSchema } from "@/lib/schemas";
 import {
+  expiredInvitationError,
   forbiddenError,
   handleError,
   handleZodError,
@@ -9,6 +10,7 @@ import {
   unpaidInvitationError,
 } from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
+import { isBefore } from "date-fns";
 import { NextRequest } from "next/server";
 
 export async function PUT(
@@ -71,6 +73,10 @@ export async function PUT(
     if (transactionStatus !== "SUCCESS") {
       return unpaidInvitationError();
     }
+    const now = new Date();
+    if (isBefore(invitationByUserId.expiresAt, now)) {
+      return expiredInvitationError();
+    }
 
     const bankAccount = await prisma.bankAccount.update({
       where: {
@@ -122,6 +128,10 @@ export async function DELETE(
     const transactionStatus = invitationByUserId.transaction?.status?.name;
     if (transactionStatus !== "SUCCESS") {
       return unpaidInvitationError();
+    }
+    const now = new Date();
+    if (isBefore(invitationByUserId.expiresAt, now)) {
+      return expiredInvitationError();
     }
 
     const gift = await prisma.bankAccount.delete({

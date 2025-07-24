@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { generateUniqueGuestCode } from "@/lib/utils/generate-unique-guest-code";
 import { getRandomBgColor } from "@/lib/utils/random-bg-color";
 import {
+  expiredInvitationError,
   forbiddenError,
   handleError,
   ResponseJson,
@@ -9,6 +10,7 @@ import {
   unpaidInvitationError,
 } from "@/lib/utils/response";
 import { auth } from "@clerk/nextjs/server";
+import { isBefore } from "date-fns";
 import { read, utils } from "xlsx";
 
 export async function POST(
@@ -64,6 +66,10 @@ export async function POST(
     const transactionStatus = invitation.transaction?.status?.name;
     if (transactionStatus !== "SUCCESS") {
       return unpaidInvitationError();
+    }
+    const now = new Date();
+    if (isBefore(invitation.expiresAt, now)) {
+      return expiredInvitationError();
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());

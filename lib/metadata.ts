@@ -11,8 +11,8 @@ export async function generatePageMetadata({
   slug,
   fallbackTitle = "Azen",
   fallbackDescription = "Undangan pernikahan digital modern dan elegan.",
-}: Options): Promise<Metadata> {
-  if (!slug) {
+}: Options = {}): Promise<Metadata> {
+  if (!slug?.trim()) {
     return {
       title: `AZENI | ${fallbackTitle}`,
       description: fallbackDescription,
@@ -22,7 +22,7 @@ export async function generatePageMetadata({
   try {
     const data = await prisma.invitation.findFirst({
       where: {
-        slug: slug,
+        slug,
       },
     });
 
@@ -34,7 +34,7 @@ export async function generatePageMetadata({
     };
   } catch {
     return {
-      title: fallbackTitle,
+      title: `AZENI | ${fallbackTitle}`,
       description: fallbackDescription,
     };
   }
