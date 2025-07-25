@@ -16,10 +16,8 @@ const useAdminBankStore = create<BankState>((set) => ({
       const existingIndex = state.banks.findIndex((b) => b.id === newBank.id);
 
       if (existingIndex !== -1) {
-        const updatedBanks = [
-          newBank,
-          ...state.banks.filter((b) => b.id !== newBank.id),
-        ];
+        const updatedBanks = [...state.banks];
+        updatedBanks[existingIndex] = newBank;
         return { banks: updatedBanks };
       }
 

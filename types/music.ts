@@ -7,3 +7,10 @@ export interface Music {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface MusicRequest {
+  name: string;
+  src: string;
+  origin: string;
+  visibility: boolean;
+}

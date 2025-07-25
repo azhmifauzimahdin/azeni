@@ -123,6 +123,7 @@ async function main() {
       name: "Ketika Cinta Bertasbih - Melly Goeslaw Cover Cindi Cintya Dewi ( Lirik )",
       src: "https://res.cloudinary.com/dxtqjuvcg/video/upload/v1750521731/music/w0esrtsvn4caiuubjza9.mp3",
       origin: "https://www.youtube.com/watch?v=JAqxrXjodn8",
+      visibility: true,
     },
   });
 
@@ -132,11 +133,13 @@ async function main() {
         name: "Pernikahan Kita - Arsy Widianto & Tiara Andini Saxophone Cover (FHSax)",
         src: "https://res.cloudinary.com/dxtqjuvcg/video/upload/v1750586448/music/w0hxevdwcbicvnicamig.mp3",
         origin: "https://www.youtube.com/watch?v=3bao93imICs",
+        visibility: true,
       },
       {
         name: "Janji Suci Cover Saxophone - Yovie And Nuno",
         src: "https://res.cloudinary.com/dxtqjuvcg/video/upload/v1750601830/music/zighsz0uef03pg2vyptj.mp3",
         origin: "https://www.youtube.com/watch?v=NbCCGvl5AQE",
+        visibility: true,
       },
     ],
   });

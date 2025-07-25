@@ -118,13 +118,13 @@ const AdminPageLayout = ({
                   collapsed={isSidebarCollapsed}
                   options={[
                     {
-                      href: "admin/master-data/banks",
+                      href: "/admin/master-data/banks",
                       label: "Bank",
                       icon: <CreditCard />,
                       active: pathname === "/admin/master-data/banks",
                     },
                     {
-                      href: "admin/master-data/musics",
+                      href: "/admin/master-data/musics",
                       label: "Musik",
                       icon: <Music4 />,
                       active: pathname === "/admin/master-data/musics",

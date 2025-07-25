@@ -9,8 +9,29 @@ export const musicIdSchema = z.object({
     .min(1, { message: "ID musik tidak boleh kosong" }),
 });
 
-export const createMusicSchema = z.object({
-  file: z.custom<File>((val) => val instanceof File && val.size > 0, {
-    message: "File wajib diunggah dan harus bertipe file",
+export const apiMusicSchema = z.object({
+  name: z
+    .string({
+      required_error: "Nama wajib diisi",
+      invalid_type_error: "Nama harus berupa teks",
+    })
+    .min(1, { message: "Nama tidak boleh kosong" }),
+
+  src: z
+    .string({
+      required_error: "File musik wajib diisi",
+    })
+    .min(1, { message: "File musik tidak boleh kosong" }),
+
+  origin: z
+    .string({
+      required_error: "Asal musik wajib diisi",
+      invalid_type_error: "Asal musik harus berupa teks",
+    })
+    .min(1, { message: "Asal musik tidak boleh kosong" }),
+
+  visibility: z.boolean({
+    required_error: "Visibility harus diisi (true/false)",
+    invalid_type_error: "Visibility harus berupa boolean",
   }),
 });
