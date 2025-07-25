@@ -1,7 +1,6 @@
 "use client";
 
 import { Heading } from "@/components/ui/heading";
-import Stepper from "@/components/ui/stepper";
 import React from "react";
 
 const AdminContent: React.FC = () => {
@@ -9,7 +8,6 @@ const AdminContent: React.FC = () => {
     <>
       <div>
         <Heading title="Dashboard" />
-        <Stepper currentStep={3} />
       </div>
     </>
   );
