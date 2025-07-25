@@ -1,7 +1,7 @@
 "use client";
 
+import React, { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
-import React from "react";
 
 interface StepperProps {
   currentStep: number;
@@ -15,6 +15,19 @@ const steps = [
 ];
 
 const Stepper: React.FC<StepperProps> = ({ currentStep }) => {
+  const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const activeStep = stepRefs.current[currentStep];
+    if (activeStep) {
+      activeStep.scrollIntoView({
+        behavior: "smooth",
+        inline: "start",
+        block: "nearest",
+      });
+    }
+  }, [currentStep]);
+
   return (
     <div className="w-full overflow-x-auto hide-scrollbar">
       <div className="flex items-start justify-start gap-6 px-4 py-2 min-w-max">
@@ -23,7 +36,13 @@ const Stepper: React.FC<StepperProps> = ({ currentStep }) => {
           const isActive = index === currentStep;
 
           return (
-            <div key={index} className="relative flex items-start gap-3">
+            <div
+              key={index}
+              ref={(el) => {
+                stepRefs.current[index] = el;
+              }}
+              className="relative flex items-start gap-3"
+            >
               <div className="flex flex-col items-center">
                 <div
                   className={cn(

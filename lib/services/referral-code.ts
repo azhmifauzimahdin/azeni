@@ -1,6 +1,5 @@
-import { ReferralCode } from "@/types";
+import { ReferralCode, ReferralCodeRequest } from "@/types";
 import httpRequest, { ApiResponse } from "./api";
-import { ReferralCodeRequest } from "@/types/referral";
 
 export async function fetchReferralCodes(): Promise<
   ApiResponse<ReferralCode[]>
