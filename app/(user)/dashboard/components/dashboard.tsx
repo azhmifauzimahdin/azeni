@@ -80,7 +80,7 @@ const DashboardLayout = ({
         <aside
           id="logo-sidebar"
           className={cn(
-            "fixed top-11 pt-5 md:pt-3 left-0 z-30 transition-all duration-300 bg-white shadow h-[calc(var(--vh)_*_100)]",
+            "fixed top-11 pt-3 md:pt-3 left-0 z-30 transition-all duration-300 bg-white shadow h-[calc(var(--vh)_*_100)]",
             toggleSidebar
               ? "translate-x-0"
               : "-translate-x-full sm:translate-x-0",

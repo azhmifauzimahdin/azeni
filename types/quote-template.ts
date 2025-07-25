@@ -5,3 +5,8 @@ export interface QuoteTemplate {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface QuoteTemplateRequest {
+  name: string;
+  author: string;
+}

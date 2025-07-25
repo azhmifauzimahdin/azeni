@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronLeft } from "lucide-react";
+import { ChevronUp } from "lucide-react";
 import Link from "next/link";
 import { FC, ReactNode, useEffect, useState } from "react";
 
@@ -53,7 +53,6 @@ const NavLinkDropdown: FC<NavLinkDropdownProps> = ({
         onClick={() => {
           if (!collapsed) {
             setToggle(!toggle);
-            onClick?.();
           } else {
             onExpandSidebar?.();
           }
@@ -83,11 +82,11 @@ const NavLinkDropdown: FC<NavLinkDropdownProps> = ({
           </span>
         )}
         {!collapsed && (
-          <ChevronLeft
+          <ChevronUp
             size={16}
             className={cn(
               "absolute right-2 text-slate-500 transition-transform",
-              toggle ? "-rotate-90" : ""
+              toggle ? "-rotate-180" : ""
             )}
           />
         )}
@@ -106,6 +105,7 @@ const NavLinkDropdown: FC<NavLinkDropdownProps> = ({
               <Link
                 key={index}
                 href={data.href}
+                onClick={() => onClick?.()}
                 className={cn(
                   "flex items-center gap-3 px-3 py-2 rounded-md transition-colors",
                   data.active

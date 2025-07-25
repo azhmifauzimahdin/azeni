@@ -1,6 +1,6 @@
 "use client";
 
-import { Bank } from "@/types";
+import { QuoteTemplate } from "@/types";
 import { Card, CardContent } from "@/components/ui/card";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
@@ -14,129 +14,124 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormLabelText,
   FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Pencil, Save } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { z } from "zod";
-import ImageUpload from "./upload-image";
-import { BankService, ImageService } from "@/lib/services";
+import { QuoteTemplateService } from "@/lib/services";
 import { handleError } from "@/lib/utils/handle-error";
-import { bankSchema } from "@/lib/schemas/bank";
-import useAdminBankStore from "@/stores/admin-bank-store";
 import toast from "react-hot-toast";
 import DeleteConfirmationModal from "@/components/ui/delete-confirmation-modal";
+import useAdminQuoteTemplateStore from "@/stores/admin-quote-template-store";
+import { createQuoteSchema } from "@/lib/schemas/quote";
+import { Textarea } from "@/components/ui/textarea";
 
-type BankFormValues = z.infer<typeof bankSchema>;
+type QuoteTemplateFormValues = z.infer<typeof createQuoteSchema>;
 
-interface BanksFormProps {
-  initialData: Bank[] | undefined;
+interface QuoteTemplateFormProps {
+  initialData: QuoteTemplate[] | undefined;
   isFetching?: boolean;
 }
 
-const BanksForm: React.FC<BanksFormProps> = ({ initialData, isFetching }) => {
+const QuotesForm: React.FC<QuoteTemplateFormProps> = ({
+  initialData,
+  isFetching,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState<boolean>(false);
-  const [updatingBankId, setUpdatingBankId] = useState<string | null>(null);
-  const [deletingBankId, setDeletingBankId] = useState<string | null>(null);
-  const [deletingBankName, setDeletingBankName] = useState<string | null>(null);
+  const [updatingQuoteTemplateId, setUpdatingQuoteTemplateId] = useState<
+    string | null
+  >(null);
+  const [deletingQuoteTemplateId, setDeletingQuoteTemplateId] = useState<
+    string | null
+  >(null);
+  const [deletingQuoteTemplateName, setDeletingQuoteTemplateName] = useState<
+    string | null
+  >(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [imageDelete, setImageDelete] = useState<string[]>([]);
 
-  const upsertBankAtFirst = useAdminBankStore(
-    (state) => state.upsertBankAtFirst
+  const upsertQuoteTemplateAtFirst = useAdminQuoteTemplateStore(
+    (state) => state.upsertQuoteTemplateAtFirst
   );
-  const deleteBankById = useAdminBankStore((state) => state.deleteBankById);
+  const deleteQuoteTemplateById = useAdminQuoteTemplateStore(
+    (state) => state.deleteQuoteTemplateById
+  );
 
-  const form = useForm<BankFormValues>({
-    resolver: zodResolver(bankSchema),
+  const form = useForm<QuoteTemplateFormValues>({
+    resolver: zodResolver(createQuoteSchema),
     defaultValues: {
       name: "",
-      icon: "",
+      author: "",
     },
   });
 
-  const onSubmit = async (data: BankFormValues) => {
+  const onSubmit = async (data: QuoteTemplateFormValues) => {
     try {
       setIsLoading(true);
-      await deleteAllImages();
       let res;
-      if (updatingBankId)
-        res = await BankService.updateBank(updatingBankId, data);
-      else res = await BankService.createBank(data);
-      upsertBankAtFirst(res.data);
-      if (updatingBankId) toast.success("Bank berhasil diubah.");
-      else toast.success("Bank berhasil disimpan.");
+      if (updatingQuoteTemplateId)
+        res = await QuoteTemplateService.updateQuoteTemplates(
+          updatingQuoteTemplateId,
+          data
+        );
+      else res = await QuoteTemplateService.createQuoteTemplates(data);
+      upsertQuoteTemplateAtFirst(res.data);
+      if (updatingQuoteTemplateId) toast.success("Quote berhasil diubah.");
+      else toast.success("Quote berhasil disimpan.");
       setIsModalOpen(false);
       form.reset({
         name: "",
-        icon: "",
+        author: "",
       });
-      setUpdatingBankId(null);
+      setUpdatingQuoteTemplateId(null);
     } catch (error: unknown) {
-      handleError(error, "bank");
+      handleError(error, "quote template");
     } finally {
       setIsLoading(false);
     }
   };
 
   const onOpenModalEdit = (id: string) => {
-    setUpdatingBankId(id);
+    setUpdatingQuoteTemplateId(id);
     setIsModalOpen(true);
-    const bank = initialData?.find((item) => item.id === id);
+    const quoteTemplate = initialData?.find((item) => item.id === id);
     form.reset({
-      name: bank?.name,
-      icon: bank?.icon,
+      name: quoteTemplate?.name,
+      author: quoteTemplate?.author,
     });
-  };
-
-  const onDeleteImage = async (publicId: string) => {
-    try {
-      setIsLoading(true);
-      await ImageService.deleteImageByPublicId(publicId);
-    } catch (error) {
-      handleError(error, "image");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const deleteAllImages = async () => {
-    await Promise.all(imageDelete.map((id) => onDeleteImage(id)));
-    setImageDelete([]);
   };
 
   const onDelete = async () => {
     try {
-      if (!deletingBankId) return;
+      if (!deletingQuoteTemplateId) return;
       setIsLoading(true);
-      await BankService.deleteBank(deletingBankId);
-      toast.success("Bank berhasil dihapus.");
-      deleteBankById(deletingBankId);
+      await QuoteTemplateService.deleteQuoteTemplates(deletingQuoteTemplateId);
+      toast.success("Quote berhasil dihapus.");
+      deleteQuoteTemplateById(deletingQuoteTemplateId);
     } catch (error) {
-      handleError(error, "bank");
+      handleError(error, "quote template");
     } finally {
       setIsLoading(false);
-      setDeletingBankId(null);
-      setDeletingBankName(null);
+      setDeletingQuoteTemplateId(null);
+      setDeletingQuoteTemplateName(null);
     }
   };
 
   return (
     <>
       <Modal
-        title={`${updatingBankId ? "Ubah" : "Tambah"} Bank`}
+        title={`${updatingQuoteTemplateId ? "Ubah" : "Tambah"} Quote`}
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
-          if (updatingBankId) {
+          if (updatingQuoteTemplateId) {
             form.reset({
               name: "",
-              icon: "",
+              author: "",
             });
-            setUpdatingBankId(null);
+            setUpdatingQuoteTemplateId(null);
           }
         }}
       >
@@ -148,13 +143,15 @@ const BanksForm: React.FC<BanksFormProps> = ({ initialData, isFetching }) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel required htmlFor={field.name}>
-                    Nama
+                    Quote
                   </FormLabel>
                   <FormControl>
-                    <Input
+                    <Textarea
                       id={field.name}
-                      placeholder="Bank Syariah Indonesia"
+                      placeholder="Quote"
                       disabled={isLoading}
+                      className="h-44"
+                      isFetching={isFetching}
                       {...field}
                     />
                   </FormControl>
@@ -164,27 +161,25 @@ const BanksForm: React.FC<BanksFormProps> = ({ initialData, isFetching }) => {
             />
             <FormField
               control={form.control}
-              name="icon"
+              name="author"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabelText required>Logo</FormLabelText>
+                  <FormLabel required htmlFor={field.name}>
+                    Author
+                  </FormLabel>
                   <FormControl>
-                    <ImageUpload
+                    <Input
                       id={field.name}
+                      placeholder="Author"
                       disabled={isLoading}
-                      onChange={(url) => field.onChange(url)}
-                      onRemove={(publicId) => {
-                        setImageDelete((prev) => [...prev, publicId]);
-                        field.onChange("");
-                      }}
-                      value={field.value || ""}
-                      path="image/banks"
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             <div className="flex flex-col md:flex-row items-center justify-end gap-3">
               <Button
                 variant="primary"
@@ -192,7 +187,7 @@ const BanksForm: React.FC<BanksFormProps> = ({ initialData, isFetching }) => {
                 className="w-full md:w-auto"
                 type="submit"
               >
-                {updatingBankId ? (
+                {updatingQuoteTemplateId ? (
                   <>
                     <Pencil />
                     Ubah
@@ -209,11 +204,11 @@ const BanksForm: React.FC<BanksFormProps> = ({ initialData, isFetching }) => {
         </Form>
       </Modal>
       <DeleteConfirmationModal
-        description={`bank ${deletingBankName}`}
+        description={`${deletingQuoteTemplateName}`}
         isOpen={isModalDeleteOpen}
         onOpenChange={() => {
-          setDeletingBankId(null);
-          setDeletingBankName(null);
+          setDeletingQuoteTemplateId(null);
+          setDeletingQuoteTemplateName(null);
           setIsModalDeleteOpen(false);
         }}
         onConfirm={onDelete}
@@ -225,8 +220,8 @@ const BanksForm: React.FC<BanksFormProps> = ({ initialData, isFetching }) => {
             columns={columns({
               onEdit: (id) => onOpenModalEdit(id),
               onDelete: (id, name) => {
-                setDeletingBankId(id);
-                setDeletingBankName(name);
+                setDeletingQuoteTemplateId(id);
+                setDeletingQuoteTemplateName(name);
                 setIsModalDeleteOpen(true);
               },
             })}
@@ -240,4 +235,4 @@ const BanksForm: React.FC<BanksFormProps> = ({ initialData, isFetching }) => {
   );
 };
 
-export default BanksForm;
+export default QuotesForm;

@@ -11,13 +11,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { useMemo, useState } from "react";
 import { DataTableView } from "@/components/table/data-table-view";
-import { Bank } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import { QuoteTemplate } from "@/types";
 
 type Props = {
-  data: Bank[];
-  columns: ColumnDef<Bank>[];
+  data: QuoteTemplate[];
+  columns: ColumnDef<QuoteTemplate>[];
   onAddClick: () => void;
   isFetching?: boolean;
 };
@@ -31,13 +31,15 @@ export function DataTable({ data, columns, onAddClick, isFetching }: Props) {
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const filteredData = useMemo(() => {
-    return (data as Bank[]).filter((item) => {
-      const matchName = item.name?.toLowerCase().includes(search.toLowerCase());
-      return matchName;
+    return (data as QuoteTemplate[]).filter((item) => {
+      const query = search.toLowerCase();
+      const matchName = item.name?.toLowerCase().includes(query);
+      const matchAuthor = item.author?.toLowerCase().includes(query);
+      return matchName || matchAuthor;
     });
   }, [data, search]);
 
-  const table = useReactTable<Bank>({
+  const table = useReactTable<QuoteTemplate>({
     data: filteredData,
     columns,
     state: {
@@ -68,7 +70,7 @@ export function DataTable({ data, columns, onAddClick, isFetching }: Props) {
           id="search"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Cari nama bank..."
+          placeholder="Cari..."
           className="w-full sm:max-w-xs order-2"
           autoComplete="off"
           isFetching={isFetching}

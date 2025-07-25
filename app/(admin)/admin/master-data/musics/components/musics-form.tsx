@@ -293,7 +293,7 @@ const MusicsForm: React.FC<MusicsFormProps> = ({ initialData, isFetching }) => {
         loading={isLoading}
       />
       <Card>
-        <CardContent className="p-6">
+        <CardContent className="p-3">
           <DataTable
             columns={columns({
               onEdit: (id) => onOpenModalEdit(id),

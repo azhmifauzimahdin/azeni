@@ -86,9 +86,14 @@ export function DataTableView<T>({
                               )}
                               onClick={(e) => {
                                 e.stopPropagation();
-                                header.column.toggleSorting(false);
+                                if (isSorted === "asc") {
+                                  header.column.clearSorting();
+                                } else {
+                                  header.column.toggleSorting(false);
+                                }
                               }}
                             />
+
                             <ChevronDown
                               strokeWidth={3}
                               className={cn(
@@ -99,7 +104,11 @@ export function DataTableView<T>({
                               )}
                               onClick={(e) => {
                                 e.stopPropagation();
-                                header.column.toggleSorting(true);
+                                if (isSorted === "desc") {
+                                  header.column.clearSorting();
+                                } else {
+                                  header.column.toggleSorting(true);
+                                }
                               }}
                             />
                           </div>
