@@ -23,10 +23,10 @@ import { Transaction } from "@/types";
 type Props = {
   data: Transaction[];
   columns: ColumnDef<Transaction>[];
-  isFecthing?: boolean;
+  isFetching?: boolean;
 };
 
-export function DataTable({ data, columns, isFecthing }: Props) {
+export function DataTable({ data, columns, isFetching }: Props) {
   const [search, setSearch] = useState("");
   const [attendanceFilter, setAttendanceFilter] = useState("ALL");
   const [pagination, setPagination] = useState({
@@ -71,14 +71,14 @@ export function DataTable({ data, columns, isFecthing }: Props) {
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Cari nama undangan..."
           className="w-full sm:max-w-xs"
-          isFetching={isFecthing}
+          isFetching={isFetching}
           autoComplete="false"
         />
 
         <Select value={attendanceFilter} onValueChange={setAttendanceFilter}>
           <SelectTrigger
             className="w-full sm:w-[200px]"
-            isFetching={isFecthing}
+            isFetching={isFetching}
             id="filter"
           >
             <SelectValue placeholder="Filter kehadiran" />
@@ -93,7 +93,7 @@ export function DataTable({ data, columns, isFecthing }: Props) {
         </Select>
       </div>
 
-      <DataTableView table={table} isFetching={isFecthing} />
+      <DataTableView table={table} isFetching={isFetching} />
     </div>
   );
 }

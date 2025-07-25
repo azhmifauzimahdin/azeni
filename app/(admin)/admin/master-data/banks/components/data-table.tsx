@@ -66,6 +66,7 @@ export function DataTable({ data, columns, onAddClick, isFetching }: Props) {
 
         <Input
           id="search"
+          type="search"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Cari nama bank..."

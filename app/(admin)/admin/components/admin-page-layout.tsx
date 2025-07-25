@@ -13,6 +13,7 @@ import {
   LayoutPanelLeft,
   Music4,
   Quote,
+  Wallet,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -28,7 +29,9 @@ const AdminPageLayout = ({
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   const pathname = usePathname();
-  const location = pathname.split("/")[2] || "";
+  const segments = pathname.split("/");
+  const location = [segments[2], segments[3]].filter(Boolean).join("/");
+
   const handleCloseSidebar = () => {
     if (toggleSidebar) setToggleSidebar(false);
   };
@@ -110,6 +113,16 @@ const AdminPageLayout = ({
                   onClick={() => setToggleSidebar(false)}
                 />
               </li>
+              <li>
+                <NavLink
+                  href="/admin/transactions"
+                  icon={<Wallet />}
+                  label="Transaksi"
+                  active={location === "transactions"}
+                  collapsed={isSidebarCollapsed}
+                  onClick={() => setToggleSidebar(false)}
+                />
+              </li>
               <ul>
                 <NavLinkDropdown
                   icon={<Database />}
@@ -122,19 +135,19 @@ const AdminPageLayout = ({
                       href: "/admin/master-data/banks",
                       label: "Bank",
                       icon: <CreditCard />,
-                      active: pathname === "/admin/master-data/banks",
+                      active: location === "master-data/banks",
                     },
                     {
                       href: "/admin/master-data/musics",
                       label: "Musik",
                       icon: <Music4 />,
-                      active: pathname === "/admin/master-data/musics",
+                      active: location === "master-data/musics",
                     },
                     {
                       href: "/admin/master-data/quotes",
                       label: "Quote",
                       icon: <Quote />,
-                      active: pathname === "/admin/master-data/quotes",
+                      active: location === "master-data/quotes",
                     },
                   ]}
                 />

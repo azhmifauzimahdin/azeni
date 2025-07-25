@@ -96,3 +96,8 @@ export async function checkoutByInvitationId(invitationId: string): Promise<
 
   return res.data;
 }
+
+export async function fetchTransactions(): Promise<ApiResponse<Transaction[]>> {
+  const res = await httpRequest.get("/api/transactions");
+  return res.data;
+}

@@ -79,6 +79,7 @@ export function DataTable({ data, columns, onAddClick, isFetching }: Props) {
         <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 order-1 sm:order-none w-full sm:w-auto">
           <Input
             id="search"
+            type="search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Cari nama musik..."

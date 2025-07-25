@@ -72,6 +72,7 @@ export function DataTable({ data, columns, isFecthing }: Props) {
       <div className="flex flex-row sm:items-center sm:justify-between gap-2">
         <Input
           id="seacrh"
+          type="search"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Cari nama tamu..."
