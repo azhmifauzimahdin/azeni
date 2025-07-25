@@ -55,6 +55,17 @@ export async function POST(req: Request) {
 
     const { name, icon } = parsed.data;
 
+    const existing = await prisma.bank.findFirst({
+      where: { name },
+    });
+
+    if (existing) {
+      return ResponseJson(
+        { message: "Nama bank sudah digunakan" },
+        { status: 409 }
+      );
+    }
+
     const bank = await prisma.bank.create({
       data: {
         name,

@@ -1,5 +1,4 @@
 import * as React from "react";
-
 import { cn } from "@/lib/utils";
 import { UploadCloud } from "lucide-react";
 
@@ -8,7 +7,16 @@ interface InputProps extends React.ComponentProps<"input"> {
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, isFetching = false, ...props }, ref) => {
+  ({ className, type, isFetching = false, value, onChange, ...props }, ref) => {
+    const formatCurrency = (num: number) =>
+      new Intl.NumberFormat("id-ID", {
+        style: "decimal",
+        minimumFractionDigits: 0,
+      }).format(num);
+
+    const parseCurrency = (str: string) =>
+      parseInt(str.replace(/[^\d]/g, ""), 10) || 0;
+
     if (isFetching) {
       return (
         <div
@@ -47,6 +55,68 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       );
     }
 
+    if (type === "currency") {
+      return (
+        <div className="relative w-full">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground pointer-events-none">
+            Rp
+          </span>
+          <input
+            type="text"
+            inputMode="numeric"
+            className={cn(
+              "pl-10 pr-3 flex h-10 w-full rounded-md border bg-white/75 border-input text-base shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+              className
+            )}
+            ref={ref}
+            value={formatCurrency(Number(value || 0))}
+            onChange={(e) => {
+              const parsed = parseCurrency(e.target.value);
+              onChange?.({
+                ...e,
+                target: {
+                  ...e.target,
+                  value: parsed.toString(),
+                },
+              } as React.ChangeEvent<HTMLInputElement>);
+            }}
+            {...props}
+          />
+        </div>
+      );
+    }
+
+    if (type === "percent") {
+      return (
+        <div className="relative w-full">
+          <input
+            type="text"
+            inputMode="numeric"
+            className={cn(
+              "pl-3 pr-8 flex h-10 w-full rounded-md border bg-white/75 border-input text-base shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+              className
+            )}
+            ref={ref}
+            value={value}
+            onChange={(e) => {
+              const onlyNumbers = e.target.value.replace(/[^\d]/g, "");
+              onChange?.({
+                ...e,
+                target: {
+                  ...e.target,
+                  value: onlyNumbers,
+                },
+              } as React.ChangeEvent<HTMLInputElement>);
+            }}
+            {...props}
+          />
+          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground pointer-events-none">
+            %
+          </span>
+        </div>
+      );
+    }
+
     return (
       <input
         type={type}
@@ -58,6 +128,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           className
         )}
         ref={ref}
+        value={value}
+        onChange={onChange}
         {...props}
       />
     );

@@ -219,30 +219,38 @@ const InvitationCheckoutCard: React.FC<InvitationCheckoutCardProps> = ({
           </form>
         </Form>
         {hasReferralDiscount && (
-          <div className="flex items-center justify-between text-sm text-green-app-primary">
-            <div>
-              Kode referral&nbsp;
-              <span className="font-semibold">
-                {transaction.referralCode.code}
-              </span>
-              &nbsp;telah diterapkan.
+          <div className="space-y-1 text-sm text-green-app-primary">
+            <div className="flex items-center justify-between">
+              <div>
+                Kode referral&nbsp;
+                <span className="font-semibold">
+                  {transaction.referralCode.code}
+                </span>
+                &nbsp;telah diterapkan.
+              </div>
+              <Button
+                size="sm"
+                variant="ghost"
+                type="button"
+                onClick={() => {
+                  form.reset();
+                  onApplyReferral("");
+                }}
+                isLoading={isDeletingReferral}
+                disabled={
+                  isDeletingReferral || isApplyingReferral || isCheckingOut
+                }
+                className="text-red-500 hover:bg-red-50 px-2"
+              >
+                Hapus
+              </Button>
             </div>
-            <Button
-              size="sm"
-              variant="ghost"
-              type="button"
-              onClick={() => {
-                form.reset();
-                onApplyReferral("");
-              }}
-              isLoading={isDeletingReferral}
-              disabled={
-                isDeletingReferral || isApplyingReferral || isCheckingOut
-              }
-              className="text-red-500 hover:bg-red-50 px-2"
-            >
-              Hapus
-            </Button>
+
+            {transaction.referralCode.description && (
+              <p className="text-xs text-muted-foreground">
+                {transaction.referralCode.description}
+              </p>
+            )}
           </div>
         )}
 

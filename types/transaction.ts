@@ -1,3 +1,5 @@
+import { ReferralCode } from "./referral";
+
 export interface Transaction {
   id: string;
   orderId: string;
@@ -45,17 +47,6 @@ export interface WebhookLog {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   rawBody: Record<string, any>;
   eventAt: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface ReferralCode {
-  id: string;
-  code: string;
-  discount: string;
-  isPercent: boolean;
-  maxDiscount: string | null;
-  isActive: boolean;
   createdAt: string;
   updatedAt: string;
 }

@@ -13,6 +13,7 @@ import {
   LayoutPanelLeft,
   Music4,
   Quote,
+  Ticket,
   Wallet,
 } from "lucide-react";
 import Link from "next/link";
@@ -119,6 +120,16 @@ const AdminPageLayout = ({
                   icon={<Wallet />}
                   label="Transaksi"
                   active={location === "transactions"}
+                  collapsed={isSidebarCollapsed}
+                  onClick={() => setToggleSidebar(false)}
+                />
+              </li>
+              <li>
+                <NavLink
+                  href="/admin/referral-code"
+                  icon={<Ticket />}
+                  label="Referral"
+                  active={location === "referral-code"}
                   collapsed={isSidebarCollapsed}
                   onClick={() => setToggleSidebar(false)}
                 />

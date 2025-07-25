@@ -305,5 +305,23 @@ model ReferralCode {
   updatedAt     DateTime      @updatedAt
 
   transactions  Transaction[] @relation("ReferralTransaction")
+  referralCodeLogs ReferralCodeLog[] @relation("ReferralCodeLog")
 }
-  
+
+model ReferralCodeLog {
+  id              String      @id @default(uuid())
+  userId          String
+  userName       String
+  referralCodeId  String
+  oldDiscount     Decimal?    @db.Decimal(10, 2)
+  newDiscount     Decimal?    @db.Decimal(10, 2)
+  oldIsPercent    Boolean?
+  newIsPercent    Boolean?
+  oldMaxDiscount  Decimal?    @db.Decimal(10, 2)
+  newMaxDiscount  Decimal?    @db.Decimal(10, 2)
+  changedAt       DateTime    @default(now())
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  referralCode    ReferralCode @relation("ReferralCodeLog", fields: [referralCodeId], references: [id], onDelete: Cascade)
+}
