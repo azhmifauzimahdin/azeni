@@ -35,6 +35,7 @@ export interface Invitation {
   date: string;
   useScheduleDate: boolean;
   status: boolean;
+  isDefault: boolean;
   expiresAt: string;
   createdAt: string;
   updatedAt: string;

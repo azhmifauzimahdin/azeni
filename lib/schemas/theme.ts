@@ -14,7 +14,6 @@ export const createThemeSchema = z.object({
       invalid_type_error: "Thumbnail harus berupa string",
     })
     .url({ message: "Thumbnail harus berupa URL yang valid" }),
-
   categoryId: z
     .string({
       required_error: "Kategori tema wajib dipilih.",

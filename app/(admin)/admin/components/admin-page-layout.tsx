@@ -10,6 +10,7 @@ import {
   AlignJustify,
   CreditCard,
   Database,
+  Layers,
   LayoutPanelLeft,
   Music4,
   Quote,
@@ -142,6 +143,12 @@ const AdminPageLayout = ({
                   onExpandSidebar={() => setIsSidebarCollapsed(false)}
                   collapsed={isSidebarCollapsed}
                   options={[
+                    {
+                      href: "/admin/master-data/categories",
+                      label: "Kategori",
+                      icon: <Layers />,
+                      active: location === "master-data/categories",
+                    },
                     {
                       href: "/admin/master-data/banks",
                       label: "Bank",

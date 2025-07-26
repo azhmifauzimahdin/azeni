@@ -14,3 +14,4 @@ export * as SettingSchema from "./setting";
 export * as TransactionSchema from "./transaction";
 export * as BankSchema from "./bank";
 export * as ReferralSchema from "./referral-code";
+export * as ThemeCategorySchema from "./theme-category";

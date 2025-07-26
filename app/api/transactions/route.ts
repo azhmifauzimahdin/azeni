@@ -20,8 +20,8 @@ export async function GET() {
 
     const transaction = await prisma.transaction.findMany({
       where: {
-        originalAmount: {
-          not: null,
+        invitation: {
+          isTemplate: false,
         },
       },
       include: {

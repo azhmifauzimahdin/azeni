@@ -1,4 +1,4 @@
-import { ReferralCode } from "./referral";
+import { ReferralCode } from "./referral-code";
 
 export interface Transaction {
   id: string;

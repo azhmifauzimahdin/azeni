@@ -14,6 +14,18 @@ function generateKode(): string {
   return `${num}${suffix}`;
 }
 
+function calculateFinalPrice(
+  originalPrice: Decimal,
+  discount: Decimal,
+  isPercent: boolean
+): Decimal {
+  const finalPrice = isPercent
+    ? originalPrice.sub(originalPrice.mul(discount).div(100))
+    : originalPrice.sub(discount);
+
+  return Decimal.max(new Decimal(0), finalPrice);
+}
+
 async function generateUniqueCode(): Promise<string> {
   let code = "";
   let unique = false;
@@ -155,6 +167,7 @@ async function main() {
       image:
         "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1752590889/cover_fhqza7.jpg",
       date: new Date("2028-07-27T00:00:00Z"),
+      isTemplate: true,
       expiresAt: new Date("9999-12-31T00:00:00Z"),
     },
   });
@@ -170,10 +183,21 @@ async function main() {
       image:
         "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1752590889/cover_fhqza7.jpg",
       date: new Date("2028-07-27T00:00:00Z"),
+      isTemplate: true,
       expiresAt: new Date("9999-12-31T00:00:00Z"),
     },
   });
 
+  const amountPremium = calculateFinalPrice(
+    themePremium.originalPrice,
+    themePremium.discount,
+    themePremium.isPercent
+  );
+  const amountLuxury = calculateFinalPrice(
+    themeLuxury.originalPrice,
+    themeLuxury.discount,
+    themeLuxury.isPercent
+  );
   //create Transaction
   await prisma.transaction.createMany({
     data: [
@@ -183,7 +207,8 @@ async function main() {
         invitationSlug: invitation1.slug,
         groomName: invitation1.groom,
         brideName: invitation1.bride,
-        amount: 50000,
+        originalAmount: themePremium.originalPrice,
+        amount: amountPremium,
         date: new Date("2025-01-01T12:00:00Z"),
         statusId: paymentStatus.id,
       },
@@ -193,7 +218,8 @@ async function main() {
         invitationSlug: invitation2.slug,
         groomName: invitation2.groom,
         brideName: invitation2.bride,
-        amount: 50000,
+        originalAmount: themeLuxury.originalPrice,
+        amount: amountLuxury,
         date: new Date("2025-01-01T12:00:00Z"),
         statusId: paymentStatus.id,
       },
