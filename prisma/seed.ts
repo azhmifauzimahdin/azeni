@@ -168,7 +168,7 @@ async function main() {
         "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1752590889/cover_fhqza7.jpg",
       date: new Date("2028-07-27T00:00:00Z"),
       isTemplate: true,
-      expiresAt: new Date("9999-12-31T00:00:00Z"),
+      expiresAt: new Date("2030-12-31T00:00:00Z"),
     },
   });
 
@@ -184,7 +184,7 @@ async function main() {
         "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1752590889/cover_fhqza7.jpg",
       date: new Date("2028-07-27T00:00:00Z"),
       isTemplate: true,
-      expiresAt: new Date("9999-12-31T00:00:00Z"),
+      expiresAt: new Date("2030-12-31T00:00:00Z"),
     },
   });
 

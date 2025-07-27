@@ -75,8 +75,8 @@ const InvitationForm: React.FC = () => {
         themeId: "",
         musicId: "",
         image: data.image || "",
-        date: new Date(),
-        expiresAt: new Date(new Date().setMonth(new Date().getMonth() + 12)),
+        date: new Date(new Date().setMonth(new Date().getMonth() + 3)),
+        expiresAt: new Date(new Date().setMonth(new Date().getMonth() + 6)),
       };
       const res = await InvitationService.createInvitation(req);
       addInvitationAtFirst(res.data);

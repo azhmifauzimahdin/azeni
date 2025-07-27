@@ -11,8 +11,26 @@ export interface Theme {
   isPercent: boolean;
   createdAt: string;
   updatedAt: string;
+
   invitation?: Invitation;
   category: ThemeCategory;
+}
+
+export interface ThemeRequest {
+  name: string;
+  thumbnail: string;
+  colorTag: string;
+  originalPrice: string;
+  categoryId: string;
+  discount?: string;
+  isPercent: boolean;
+  groom: string;
+  bride: string;
+  slug: string;
+  image?: string;
+  musicId: string;
+  date: Date;
+  expiresAt: Date;
 }
 
 export interface ThemeCategory {

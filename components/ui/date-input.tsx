@@ -66,8 +66,12 @@ const DateInput = forwardRef<HTMLButtonElement, DateInputProps>(
               mode="single"
               selected={value ?? undefined}
               onSelect={(d) => {
-                onChange(d ?? null);
-                if (d) setOpen(false);
+                if (!d) return;
+
+                if (!value || d.getTime() !== value.getTime()) {
+                  onChange(d);
+                  setOpen(false);
+                }
               }}
               initialFocus
               captionLayout="dropdown"

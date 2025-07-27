@@ -77,8 +77,10 @@ const DateTimeInput = forwardRef<HTMLButtonElement, DateTimeInputProps>(
               mode="single"
               selected={date ?? undefined}
               onSelect={(d) => {
-                setDate(d ?? null);
-                if (d) setOpen(false);
+                if (d && (!date || d.getTime() !== date.getTime())) {
+                  setDate(d);
+                  setOpen(false);
+                }
               }}
               disabled={{ before: today }}
               defaultMonth={date ?? undefined}

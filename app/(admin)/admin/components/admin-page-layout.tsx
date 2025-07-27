@@ -13,6 +13,7 @@ import {
   Layers,
   LayoutPanelLeft,
   Music4,
+  Palette,
   Quote,
   Ticket,
   Wallet,
@@ -166,6 +167,12 @@ const AdminPageLayout = ({
                       label: "Quote",
                       icon: <Quote />,
                       active: location === "master-data/quotes",
+                    },
+                    {
+                      href: "/admin/master-data/themes",
+                      label: "Tema",
+                      icon: <Palette />,
+                      active: location === "master-data/themes",
                     },
                   ]}
                 />

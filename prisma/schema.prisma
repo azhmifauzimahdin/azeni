@@ -126,6 +126,25 @@ model Theme{
 
   category      ThemeCategory @relation("CategoryThemes", fields: [categoryId], references: [id])
   invitations   Invitation[]  @relation("ThemecInvitations")
+  themeLogs     ThemeLog[]    @relation("ThemeLog")
+}
+
+model ThemeLog {
+  id              String      @id @default(uuid())
+  userId          String
+  userName        String
+  themeId         String
+  oldOriginalPrice  Decimal?  @db.Decimal(10, 2)
+  newOriginalPrice  Decimal?  @db.Decimal(10, 2)
+  oldDiscount     Decimal?    @db.Decimal(10, 2)
+  newDiscount     Decimal?    @db.Decimal(10, 2)
+  oldIsPercent    Boolean?
+  newIsPercent    Boolean?
+  changedAt       DateTime    @default(now())
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  theme           Theme       @relation("ThemeLog", fields: [themeId], references: [id], onDelete: Cascade)
 }
 
 model ThemeCategory {
