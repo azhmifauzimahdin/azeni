@@ -3,7 +3,12 @@ import { Transaction } from "@/types";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import StatusBadge from "@/components/ui/status-badge";
-import PdfDownloadButton from "@/components/ui/pdf-download-button";
+import dynamic from "next/dynamic";
+
+const PdfDownloadButton = dynamic(
+  () => import("@/components/ui/pdf-download-button"),
+  { ssr: false }
+);
 
 export const columns: ColumnDef<Transaction>[] = [
   {
