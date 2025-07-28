@@ -16,3 +16,4 @@ export * as SettingService from "./setting";
 export * as TransactionService from "./transaction";
 export * as ReferralCodeService from "./referral-code";
 export * as ThemeCategoryService from "./theme-category";
+export * as CloudinaryService from "./cloudinary";

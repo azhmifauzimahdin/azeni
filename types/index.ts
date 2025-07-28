@@ -16,3 +16,4 @@ export * from "./setting";
 export * from "./invitation-change";
 export * from "./referral-code";
 export * from "./theme-category";
+export * from "./cloudinary";

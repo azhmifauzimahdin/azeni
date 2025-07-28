@@ -10,6 +10,8 @@ export default function PaymentContent() {
   const { transactions, isFetching } = useUserTransactions();
   useUserInvitations();
 
+  console.log(transactions);
+
   return (
     <>
       <div>

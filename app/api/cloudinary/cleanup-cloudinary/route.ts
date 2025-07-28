@@ -51,17 +51,20 @@ export async function GET() {
         .filter((id): id is string => Boolean(id))
     );
 
-    const unusedPublicIds = cloudinaryPublicIds.filter(
-      (id) => !usedPublicIds.has(id)
-    );
+    const unusedResources = cloudinaryResources
+      .filter((res) => !usedPublicIds.has(res.public_id))
+      .map((res) => ({
+        public_id: res.public_id,
+        secure_url: res.secure_url,
+      }));
 
     return NextResponse.json({
       success: true,
       mode: "preview",
-      unusedPublicIds,
-      deletedCount: unusedPublicIds.length,
+      deletedCount: unusedResources.length,
       totalCloudinary: cloudinaryPublicIds.length,
       totalUsedInDB: usedPublicIds.size,
+      unusedResources,
     });
   } catch (error) {
     return handleError(error, "Gagal preview file Cloudinary");

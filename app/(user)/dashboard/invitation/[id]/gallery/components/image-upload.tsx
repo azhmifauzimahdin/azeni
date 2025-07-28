@@ -357,7 +357,7 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
                     minWidth: "50vw",
                     minHeight: "200px",
                   }}
-                  className="block object-contain rounded-md shadow-xl"
+                  className="block object-contain rounded-md"
                 />
               </div>
             </div>

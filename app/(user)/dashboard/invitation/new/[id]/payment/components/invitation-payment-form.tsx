@@ -107,9 +107,29 @@ const InvitationPaymentForm: React.FC<InvitationPaymentFormProps> = ({
     const token = transaction.snapToken;
     if (typeof window !== "undefined" && window.snap) {
       window.snap.pay(token, {
-        onSuccess: () => {
+        onSuccess: (result) => {
           updateTransactionStatusName(transaction.invitationId, "SUCCESS");
           updateTransactionStatusNameTransaction(transaction.id, "SUCCESS");
+
+          const va = result.va_numbers?.[0];
+          addWebhookLogToTransaction(transaction.id, {
+            id: crypto.randomUUID(),
+            orderId: result.order_id,
+            transactionStatus: result.transaction_status,
+            paymentType: result.payment_type,
+            fraudStatus: result.fraud_status || null,
+            bank: va?.bank || result.bank || null,
+            vaNumber: va?.va_number || null,
+            store: result.store || null,
+            paymentCode: result.payment_code || null,
+            expiredAt: result.expiry_time
+              ? new Date(result.expiry_time).toISOString()
+              : null,
+            rawBody: result,
+            eventAt: new Date().toISOString(),
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          });
 
           router.push(
             `/dashboard/invitation/new/${params.id}/payment?order_id=${transaction.orderId}&status_code=200&transaction_status=success`

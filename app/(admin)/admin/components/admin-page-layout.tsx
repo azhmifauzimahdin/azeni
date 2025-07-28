@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { UserButton, useUser } from "@clerk/nextjs";
 import {
   AlignJustify,
+  CloudUpload,
   CreditCard,
   Database,
   Layers,
@@ -132,6 +133,16 @@ const AdminPageLayout = ({
                   icon={<Ticket />}
                   label="Referral"
                   active={location === "referral-code"}
+                  collapsed={isSidebarCollapsed}
+                  onClick={() => setToggleSidebar(false)}
+                />
+              </li>
+              <li>
+                <NavLink
+                  href="/admin/cloudinary"
+                  icon={<CloudUpload />}
+                  label="Cloudinary"
+                  active={location === "cloudinary"}
                   collapsed={isSidebarCollapsed}
                   onClick={() => setToggleSidebar(false)}
                 />
