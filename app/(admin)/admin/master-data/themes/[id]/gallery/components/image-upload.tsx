@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useCallback, useState } from "react";
@@ -13,7 +12,7 @@ import {
 import toast from "react-hot-toast";
 import { uploadImageToCloudinary } from "@/lib/services/image";
 import { ImageService } from "@/lib/services";
-import Image from "@/components/ui/image";
+import ImageUi from "@/components/ui/image";
 import ImageNext from "next/image";
 import type { Gallery } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -25,7 +24,6 @@ import {
 } from "@/components/ui/dialog";
 import { Pagination } from "@/components/ui/pagination";
 import { ImageSchema } from "@/lib/schemas";
-import heic2any from "heic2any";
 import { FILE_TRANFORMATION } from "@/lib/schemas/image";
 import { cloudinaryProxyLoader } from "@/lib/cloudinary-loader";
 import { Img } from "@/components/ui/Img";
@@ -94,6 +92,7 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
 
         if (isHeicLike) {
           try {
+            const heic2any = (await import("heic2any")).default;
             const output = await heic2any({
               blob: file,
               toType: "image/jpeg",
@@ -107,7 +106,7 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
 
             const convertedPreviewUrl = URL.createObjectURL(finalFile);
 
-            const img = new window.Image();
+            const img = new Image();
             img.onload = () => {
               setUploadingFiles((prev) =>
                 prev.map((item) =>
@@ -138,7 +137,7 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
           }
         } else {
           // Untuk non-HEIC langsung preload
-          const img = new window.Image();
+          const img = new Image();
           img.onload = () => {
             setUploadingFiles((prev) =>
               prev.map((item) =>
@@ -305,7 +304,7 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
                 <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-green-app-primary" />
               </div>
             ) : (
-              <Image
+              <ImageUi
                 src={file.previewUrl}
                 alt="Uploading..."
                 aspectRatio="aspect-square"
@@ -360,24 +359,6 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
                   }}
                   className="block object-contain rounded-md shadow-xl"
                 />
-
-                {/* <Button
-                  variant="delete"
-                  size="icon"
-                  type="button"
-                  onClick={() => {
-                    const current = values[currentIndex];
-                    if (current) {
-                      handleRemove(current.id, current.image);
-                      setIsModalOpen(false);
-                    }
-                  }}
-                  isLoading={deletingGalleryId === values[currentIndex]?.id}
-                  className="absolute top-1 right-1 sm:top-2 sm:right-2 z-10"
-                >
-                  <X className="h-5 w-5" />
-                  <span className="sr-only">Hapus foto</span>
-                </Button> */}
               </div>
             </div>
 

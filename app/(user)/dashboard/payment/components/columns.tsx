@@ -2,11 +2,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Transaction } from "@/types";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
-import { StatusBadge } from "../../invitation/components/invitation-card";
-import { PDFDownloadLink } from "@react-pdf/renderer";
-import { TransactionReceipt } from "@/components/ui/transaction-receipt";
-import { Button } from "@/components/ui/button";
-import { Wallet } from "lucide-react";
+import StatusBadge from "@/components/ui/status-badge";
+import PdfDownloadButton from "@/components/ui/pdf-download-button";
 
 export const columns: ColumnDef<Transaction>[] = [
   {
@@ -55,29 +52,7 @@ export const columns: ColumnDef<Transaction>[] = [
     enableSorting: false,
     cell: ({ row }) => {
       if (row.original.status.name !== "SUCCESS") return null;
-      return (
-        <PDFDownloadLink
-          document={
-            <TransactionReceipt
-              data={row.original}
-              logoUrl="/assets/img/azen-green-a.png"
-              signatureUrl={undefined}
-            />
-          }
-          fileName={`${row.original.orderId}.pdf`}
-        >
-          {({ loading }) => (
-            <Button
-              disabled={loading}
-              variant="primary"
-              className="rounded-full"
-              size="sm"
-            >
-              <Wallet /> Bukti Pembayaran
-            </Button>
-          )}
-        </PDFDownloadLink>
-      );
+      return <PdfDownloadButton transaction={row.original} />;
     },
   },
 ];

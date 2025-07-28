@@ -7,6 +7,8 @@ import {
 } from "@/lib/utils/response";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   try {
     const { userId } = await auth();

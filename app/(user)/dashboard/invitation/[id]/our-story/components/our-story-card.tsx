@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import ImageNext from "next/image";
 import { ImageOff, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Story } from "@/types";
@@ -58,7 +58,7 @@ export const OurStoryCard: React.FC<OurStoryCardProps> = ({
 
   useEffect(() => {
     if (!data.image) return;
-    const img = new window.Image();
+    const img = new Image();
     img.src = data.image;
     img.onload = () => {
       setAspectRatio(img.width / img.height);
@@ -80,7 +80,7 @@ export const OurStoryCard: React.FC<OurStoryCardProps> = ({
                   height: 144 / aspectRatio,
                 }}
               >
-                <Image
+                <ImageNext
                   src={data.image}
                   alt={data.title}
                   width={144}

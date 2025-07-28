@@ -9,7 +9,6 @@ import { ImageService } from "@/lib/services";
 import extractCloudinaryPublicId from "@/lib/utils/extract-cloudinary-public-id";
 import ImageComponent from "@/components/ui/image";
 import { ImageSchema } from "@/lib/schemas";
-import heic2any from "heic2any";
 import { FILE_TRANFORMATION } from "@/lib/schemas/image";
 
 interface ImageUploadProps {
@@ -45,7 +44,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 
   useEffect(() => {
     if (value && !previewAspectRatio) {
-      const img = new window.Image();
+      const img = new Image();
       img.onload = () => {
         const ratio = `${img.width} / ${img.height}`;
         setPreviewAspectRatio(ratio);
@@ -76,6 +75,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 
     if (isHeicLike) {
       try {
+        const heic2any = (await import("heic2any")).default;
         const output = await heic2any({
           blob: file,
           toType: "image/jpeg",
@@ -99,7 +99,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       setPreviewUrl(imageUrl);
       setUploadProgress(0);
 
-      const img = new window.Image();
+      const img = new Image();
       img.onload = () => {
         const ratio = `${img.width} / ${img.height}`;
         setPreviewAspectRatio(ratio);

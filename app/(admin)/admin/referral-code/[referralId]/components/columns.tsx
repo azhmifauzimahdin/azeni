@@ -2,7 +2,7 @@ import { ColumnDef, Row } from "@tanstack/react-table";
 import { Transaction } from "@/types";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
-import { StatusBadge } from "@/app/(user)/dashboard/invitation/components/invitation-card";
+import StatusBadge from "@/components/ui/status-badge";
 
 export const columns: ColumnDef<Transaction>[] = [
   {

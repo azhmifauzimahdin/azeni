@@ -12,7 +12,6 @@ import { ImagePlus, Trash2 } from "lucide-react";
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import Cropper from "react-easy-crop";
 import toast from "react-hot-toast";
-import heic2any from "heic2any";
 import { FILE_TRANFORMATION } from "@/lib/schemas/image";
 import { Img } from "@/components/ui/Img";
 
@@ -82,6 +81,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 
       if (isHeicLike) {
         try {
+          const heic2any = (await import("heic2any")).default;
           const output = await heic2any({
             blob: file,
             toType: "image/jpeg",

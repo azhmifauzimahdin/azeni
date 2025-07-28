@@ -1,82 +1,14 @@
-import { Badge, BadgeProps } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Img } from "@/components/ui/Img";
 import { LinkButton } from "@/components/ui/link";
+import StatusBadge from "@/components/ui/status-badge";
 import { mapStatusNameToStatusCode } from "@/lib/utils/status-code-map";
 import { Invitation } from "@/types";
-import {
-  Mail,
-  Link2,
-  Settings,
-  Clock,
-  CircleCheck,
-  XCircle,
-  Ban,
-  RefreshCcw,
-  TimerOff,
-  ArrowRightCircle,
-  Wallet,
-} from "lucide-react";
+import { Mail, Link2, Settings, ArrowRightCircle, Wallet } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 interface InvitationCardProps {
   data: Invitation;
-}
-
-export type StatusName =
-  | "CREATED"
-  | "PENDING"
-  | "SUCCESS"
-  | "FAILED"
-  | "CANCELLED"
-  | "REFUNDED"
-  | "EXPIRED";
-
-interface StatusBadgeProps {
-  statusName: StatusName;
-}
-
-export function StatusBadge({ statusName }: StatusBadgeProps) {
-  const statusVariantMap: Record<StatusName, BadgeProps["variant"]> = {
-    CREATED: "created",
-    PENDING: "pending",
-    SUCCESS: "success",
-    FAILED: "failed",
-    CANCELLED: "cancelled",
-    REFUNDED: "refunded",
-    EXPIRED: "expired",
-  };
-
-  const iconMap: Record<StatusName, React.ReactNode> = {
-    CREATED: <Mail size={12} />,
-    PENDING: <Clock size={12} />,
-    SUCCESS: <CircleCheck size={12} />,
-    FAILED: <XCircle size={12} />,
-    CANCELLED: <Ban size={12} />,
-    REFUNDED: <RefreshCcw size={12} />,
-    EXPIRED: <TimerOff size={12} />,
-  };
-
-  const labelMap: Record<StatusName, string> = {
-    CREATED: "Dibuat",
-    PENDING: "Menunggu Pembayaran",
-    SUCCESS: "Lunas",
-    FAILED: "Gagal",
-    CANCELLED: "Dibatalkan",
-    REFUNDED: "Dikembalikan",
-    EXPIRED: "Kedaluwarsa",
-  };
-
-  const variant = statusVariantMap[statusName] ?? "default";
-  const icon = iconMap[statusName];
-  const label = labelMap[statusName] ?? statusName;
-
-  return (
-    <Badge variant={variant} className="gap-2">
-      {icon}
-      {label}
-    </Badge>
-  );
 }
 
 const InvitationCard: React.FC<InvitationCardProps> = ({ data }) => {

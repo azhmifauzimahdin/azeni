@@ -1,6 +1,5 @@
 "use client";
 
-import { StatusBadge } from "@/app/(user)/dashboard/invitation/components/invitation-card";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import clsx from "clsx";
@@ -13,6 +12,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { LinkButton } from "@/components/ui/link";
+import StatusBadge from "@/components/ui/status-badge";
 
 const InvitationPaymentCardSkeleton: React.FC = () => {
   return (
