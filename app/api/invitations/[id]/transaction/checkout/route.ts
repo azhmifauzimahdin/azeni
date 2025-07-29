@@ -9,13 +9,17 @@ import {
   ResponseJson,
   unauthorizedError,
 } from "@/lib/utils/response";
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { auth, clerkClient, currentUser } from "@clerk/nextjs/server";
 import { randomUUID } from "crypto";
 
 export async function POST(_: Request, { params }: { params: { id: string } }) {
   try {
     const { userId } = await auth();
     if (!userId) return unauthorizedError();
+
+    const client = await clerkClient();
+    const userClient = await client.users.getUser(userId);
+    const role = userClient.publicMetadata.role;
 
     if (!params.id) {
       return ResponseJson(
@@ -32,7 +36,7 @@ export async function POST(_: Request, { params }: { params: { id: string } }) {
     const invitationByUserId = await prisma.invitation.findFirst({
       where: {
         id: params.id,
-        userId,
+        ...(role !== "admin" && { userId }),
       },
       include: {
         theme: true,

@@ -11,7 +11,7 @@ import {
   unauthorizedError,
   unpaidInvitationError,
 } from "@/lib/utils/response";
-import { auth } from "@clerk/nextjs/server";
+import { auth, clerkClient } from "@clerk/nextjs/server";
 import { isBefore } from "date-fns";
 
 export async function POST(
@@ -21,6 +21,10 @@ export async function POST(
   try {
     const { userId } = await auth();
     if (!userId) return unauthorizedError();
+
+    const client = await clerkClient();
+    const user = await client.users.getUser(userId);
+    const role = user.publicMetadata.role;
 
     const body = await req.json();
     const parsed = ImageSchema.imageFieldSchema.safeParse(body);
@@ -43,7 +47,7 @@ export async function POST(
     const { field, url } = parsed.data;
 
     const invitationByUserId = await prisma.invitation.findFirst({
-      where: { id: params.id, userId },
+      where: { id: params.id, ...(role !== "admin" && { userId }) },
       include: {
         couple: true,
         transaction: {

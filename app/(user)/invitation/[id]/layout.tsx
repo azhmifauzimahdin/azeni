@@ -31,5 +31,7 @@ export default async function InvitationLayout({
     notFound();
   }
 
-  return <div className="h-[calc(var(--vh)_*_100)] relative">{children}</div>;
+  return (
+    <div className="min-h-[calc(var(--vh)_*_100)] relative">{children}</div>
+  );
 }

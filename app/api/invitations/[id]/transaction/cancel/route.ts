@@ -6,7 +6,7 @@ import {
   ResponseJson,
   unauthorizedError,
 } from "@/lib/utils/response";
-import { auth } from "@clerk/nextjs/server";
+import { auth, clerkClient } from "@clerk/nextjs/server";
 import axios, { AxiosError } from "axios";
 
 export async function PATCH(
@@ -16,6 +16,10 @@ export async function PATCH(
   try {
     const { userId } = await auth();
     if (!userId) return unauthorizedError();
+
+    const client = await clerkClient();
+    const user = await client.users.getUser(userId);
+    const role = user.publicMetadata.role;
 
     if (!params.id) {
       return ResponseJson(
@@ -32,7 +36,7 @@ export async function PATCH(
     const invitationByUserId = await prisma.invitation.findFirst({
       where: {
         id: params.id,
-        userId,
+        ...(role !== "admin" && { userId }),
       },
       include: {
         transaction: {

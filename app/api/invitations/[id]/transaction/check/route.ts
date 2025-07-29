@@ -4,7 +4,7 @@ import {
   ResponseJson,
   unauthorizedError,
 } from "@/lib/utils/response";
-import { auth } from "@clerk/nextjs/server";
+import { auth, clerkClient } from "@clerk/nextjs/server";
 
 export async function GET(_: Request, { params }: { params: { id: string } }) {
   try {
@@ -12,6 +12,10 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
     if (!userId) {
       return unauthorizedError();
     }
+
+    const client = await clerkClient();
+    const user = await client.users.getUser(userId);
+    const role = user.publicMetadata.role;
 
     if (!params.id) {
       return ResponseJson(
@@ -27,7 +31,7 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
 
     const invitationByUserId = await prisma.invitation.findFirst({
       where: {
-        userId,
+        ...(role !== "admin" && { userId }),
         transaction: {
           orderId: params.id,
         },

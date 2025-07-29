@@ -14,7 +14,7 @@ const useUserMusics = () => {
 
     setIsFetching(true);
     try {
-      const res = await MusicService.fetchMusics();
+      const res = await MusicService.fetchActiveMusics();
       setMusics(res.data);
     } catch (error) {
       console.error("Error fetching musics:", error);

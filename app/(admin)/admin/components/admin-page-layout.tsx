@@ -13,6 +13,7 @@ import {
   Database,
   Layers,
   LayoutPanelLeft,
+  Mail,
   Music4,
   Palette,
   Quote,
@@ -42,7 +43,7 @@ const AdminPageLayout = ({
 
   return (
     <>
-      <div className="h-[calc(var(--vh)_*_100)] relative">
+      <div className="min-h-[calc(var(--vh)_*_100)] relative">
         <nav className="fixed top-0 bg-green-app-primary text-white w-full h-11 flex-center shadow z-40">
           <div className="w-full px-3 py-2 md:ps-[0.95rem] md:pe-6 ">
             <div className="flex items-center justify-between">
@@ -122,7 +123,17 @@ const AdminPageLayout = ({
                   href="/admin/transactions"
                   icon={<Wallet />}
                   label="Transaksi"
-                  active={location === "transactions"}
+                  active={location.includes("transactions")}
+                  collapsed={isSidebarCollapsed}
+                  onClick={() => setToggleSidebar(false)}
+                />
+              </li>
+              <li>
+                <NavLink
+                  href="/admin/invitations"
+                  icon={<Mail />}
+                  label="Undangan"
+                  active={location.includes("invitations")}
                   collapsed={isSidebarCollapsed}
                   onClick={() => setToggleSidebar(false)}
                 />
@@ -132,7 +143,7 @@ const AdminPageLayout = ({
                   href="/admin/referral-code"
                   icon={<Ticket />}
                   label="Referral"
-                  active={location === "referral-code"}
+                  active={location.includes("referral-code")}
                   collapsed={isSidebarCollapsed}
                   onClick={() => setToggleSidebar(false)}
                 />
@@ -142,7 +153,7 @@ const AdminPageLayout = ({
                   href="/admin/cloudinary"
                   icon={<CloudUpload />}
                   label="Cloudinary"
-                  active={location === "cloudinary"}
+                  active={location.includes("cloudinary")}
                   collapsed={isSidebarCollapsed}
                   onClick={() => setToggleSidebar(false)}
                 />
@@ -159,31 +170,31 @@ const AdminPageLayout = ({
                       href: "/admin/master-data/categories",
                       label: "Kategori",
                       icon: <Layers />,
-                      active: location === "master-data/categories",
+                      active: location.includes("master-data/categories"),
                     },
                     {
                       href: "/admin/master-data/banks",
                       label: "Bank",
                       icon: <CreditCard />,
-                      active: location === "master-data/banks",
+                      active: location.includes("master-data/banks"),
                     },
                     {
                       href: "/admin/master-data/musics",
                       label: "Musik",
                       icon: <Music4 />,
-                      active: location === "master-data/musics",
+                      active: location.includes("master-data/musics"),
                     },
                     {
                       href: "/admin/master-data/quotes",
                       label: "Quote",
                       icon: <Quote />,
-                      active: location === "master-data/quotes",
+                      active: location.includes("master-data/quotes"),
                     },
                     {
                       href: "/admin/master-data/themes",
                       label: "Tema",
                       icon: <Palette />,
-                      active: location === "master-data/themes",
+                      active: location.includes("master-data/themes"),
                     },
                   ]}
                 />
@@ -194,7 +205,7 @@ const AdminPageLayout = ({
 
         <div
           className={cn(
-            "p-3 pt-14 md:p-6 md:pt-14 transition-all duration-300",
+            "p-3 pt-14 pb-16 md:p-6 md:pt-14 transition-all duration-300",
             isSidebarCollapsed ? "sm:ml-16" : "sm:ml-64"
           )}
           onClick={handleCloseSidebar}

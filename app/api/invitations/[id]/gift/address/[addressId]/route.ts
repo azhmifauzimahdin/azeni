@@ -9,7 +9,7 @@ import {
   unauthorizedError,
   unpaidInvitationError,
 } from "@/lib/utils/response";
-import { auth } from "@clerk/nextjs/server";
+import { auth, clerkClient } from "@clerk/nextjs/server";
 import { isBefore } from "date-fns";
 import { NextRequest } from "next/server";
 
@@ -20,6 +20,10 @@ export async function PUT(
   try {
     const { userId } = await auth();
     if (!userId) return unauthorizedError();
+
+    const client = await clerkClient();
+    const user = await client.users.getUser(userId);
+    const role = user.publicMetadata.role;
 
     const body = await req.json();
     const parsed = BankAccountSchema.addressSchema.safeParse(body);
@@ -57,7 +61,7 @@ export async function PUT(
     const invitationByUserId = await prisma.invitation.findFirst({
       where: {
         id: params.id,
-        userId,
+        ...(role !== "admin" && { userId }),
       },
       include: {
         transaction: {
@@ -110,10 +114,14 @@ export async function DELETE(
     const { userId } = await auth();
     if (!userId) return unauthorizedError();
 
+    const client = await clerkClient();
+    const user = await client.users.getUser(userId);
+    const role = user.publicMetadata.role;
+
     const invitationByUserId = await prisma.invitation.findFirst({
       where: {
         id: params.id,
-        userId,
+        ...(role !== "admin" && { userId }),
       },
       include: {
         transaction: {

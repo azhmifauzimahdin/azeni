@@ -9,7 +9,7 @@ import {
   unauthorizedError,
   unpaidInvitationError,
 } from "@/lib/utils/response";
-import { auth } from "@clerk/nextjs/server";
+import { auth, clerkClient } from "@clerk/nextjs/server";
 import { isBefore } from "date-fns";
 import { NextRequest } from "next/server";
 
@@ -24,6 +24,10 @@ export async function DELETE(
   try {
     const { userId } = await auth();
     if (!userId) return unauthorizedError();
+
+    const client = await clerkClient();
+    const user = await client.users.getUser(userId);
+    const role = user.publicMetadata.role;
 
     const allowedFields = ["groomImage", "brideImage"];
     const fieldErrors: Record<string, string[]> = {};
@@ -47,7 +51,7 @@ export async function DELETE(
     const invitationByUserId = await prisma.invitation.findFirst({
       where: {
         id: params.id,
-        userId,
+        ...(role !== "admin" && { userId }),
       },
       include: {
         couple: true,

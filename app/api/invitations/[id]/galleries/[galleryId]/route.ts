@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
+import { auth, clerkClient } from "@clerk/nextjs/server";
 import extractCloudinaryPublicId from "@/lib/utils/extract-cloudinary-public-id";
 import cloudinary from "@/lib/cloudinary";
 import {
@@ -18,11 +18,15 @@ export async function DELETE(
     return unauthorizedError();
   }
 
+  const client = await clerkClient();
+  const user = await client.users.getUser(userId);
+  const role = user.publicMetadata.role;
+
   try {
     const InvitaionByUserId = await prisma.invitation.findFirst({
       where: {
         id: params.id,
-        userId,
+        ...(role !== "admin" && { userId }),
       },
     });
 

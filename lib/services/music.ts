@@ -5,6 +5,10 @@ export async function fetchMusics(): Promise<ApiResponse<Music[]>> {
   const res = await httpRequest.get("/api/musics");
   return res.data;
 }
+export async function fetchActiveMusics(): Promise<ApiResponse<Music[]>> {
+  const res = await httpRequest.get("/api/musics/active");
+  return res.data;
+}
 export async function createMusics(
   request: MusicRequest
 ): Promise<ApiResponse<Music>> {

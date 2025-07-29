@@ -27,7 +27,7 @@ const DashboardLayout = ({
 
   return (
     <>
-      <div className="h-[calc(var(--vh)_*_100)] relative">
+      <div className="min-h-[calc(var(--vh)_*_100)] overflow-y-auto overscroll-contain relative">
         <nav className="fixed top-0 bg-green-app-primary text-white w-full h-11 flex-center shadow z-40">
           <div className="w-full px-3 py-2 md:ps-[0.95rem] md:pe-6 ">
             <div className="flex items-center justify-between">
@@ -80,7 +80,7 @@ const DashboardLayout = ({
         <aside
           id="logo-sidebar"
           className={cn(
-            "fixed top-11 pt-3 md:pt-3 left-0 z-30 transition-all duration-300 bg-white shadow h-[calc(var(--vh)_*_100)]",
+            "fixed top-11 pt-3 md:pt-3 left-0 z-30 transition-all duration-300 bg-white shadow min-h-[calc(var(--vh)_*_100)]",
             toggleSidebar
               ? "translate-x-0"
               : "-translate-x-full sm:translate-x-0",
@@ -128,7 +128,7 @@ const DashboardLayout = ({
 
         <div
           className={cn(
-            "p-3 pt-14 md:p-6 md:pt-14 transition-all duration-300",
+            "px-3 pt-14 pb-16 md:p-6 md:pt-14 transition-all duration-300",
             isSidebarCollapsed ? "sm:ml-16" : "sm:ml-64"
           )}
           onClick={handleCloseSidebar}

@@ -9,7 +9,7 @@ import {
   unauthorizedError,
   unpaidInvitationError,
 } from "@/lib/utils/response";
-import { auth } from "@clerk/nextjs/server";
+import { auth, clerkClient } from "@clerk/nextjs/server";
 import { isBefore } from "date-fns";
 import { read, utils } from "xlsx";
 
@@ -20,6 +20,10 @@ export async function POST(
   try {
     const { userId } = await auth();
     if (!userId) return unauthorizedError();
+
+    const client = await clerkClient();
+    const user = await client.users.getUser(userId);
+    const role = user.publicMetadata.role;
 
     if (!params.id) {
       return ResponseJson(
@@ -51,7 +55,7 @@ export async function POST(
     const invitation = await prisma.invitation.findFirst({
       where: {
         id: params.id,
-        userId,
+        ...(role !== "admin" && { userId }),
       },
       include: {
         transaction: {

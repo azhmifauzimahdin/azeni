@@ -10,7 +10,7 @@ import {
   unauthorizedError,
   unpaidInvitationError,
 } from "@/lib/utils/response";
-import { auth } from "@clerk/nextjs/server";
+import { auth, clerkClient } from "@clerk/nextjs/server";
 import { Decimal } from "@prisma/client/runtime/library";
 import { isBefore } from "date-fns";
 
@@ -21,6 +21,10 @@ export async function PATCH(
   try {
     const { userId } = await auth();
     if (!userId) return unauthorizedError();
+
+    const client = await clerkClient();
+    const user = await client.users.getUser(userId);
+    const role = user.publicMetadata.role;
 
     const body = await req.json();
     const parsed = ThemeSchema.patchThemeSchema.safeParse(body);
@@ -46,7 +50,7 @@ export async function PATCH(
     const invitationByUserId = await prisma.invitation.findFirst({
       where: {
         id: params.id,
-        userId,
+        ...(role !== "admin" && { userId }),
       },
       include: {
         transaction: {
@@ -145,11 +149,15 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
     const { userId } = await auth();
     if (!userId) return unauthorizedError();
 
+    const client = await clerkClient();
+    const user = await client.users.getUser(userId);
+    const role = user.publicMetadata.role;
+
     const transaction = await prisma.transaction.findFirst({
       where: {
         invitationId: params.id,
         invitation: {
-          userId,
+          ...(role !== "admin" && { userId }),
         },
       },
     });

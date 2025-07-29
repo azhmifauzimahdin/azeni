@@ -8,7 +8,7 @@ import {
   ResponseJson,
   unauthorizedError,
 } from "@/lib/utils/response";
-import { auth } from "@clerk/nextjs/server";
+import { auth, clerkClient } from "@clerk/nextjs/server";
 
 export async function POST(
   req: Request,
@@ -17,6 +17,10 @@ export async function POST(
   try {
     const { userId } = await auth();
     if (!userId) return unauthorizedError();
+
+    const client = await clerkClient();
+    const user = await client.users.getUser(userId);
+    const role = user.publicMetadata.role;
 
     const body = await req.json();
     const parsed = ThemeSchema.patchThemeSchema.safeParse(body);
@@ -42,7 +46,7 @@ export async function POST(
     const invitationByUserId = await prisma.invitation.findFirst({
       where: {
         id: params.id,
-        userId,
+        ...(role !== "admin" && { userId }),
       },
     });
 

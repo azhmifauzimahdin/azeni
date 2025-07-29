@@ -1,6 +1,12 @@
 import { Invitation, InvitationRequest, Music, Theme } from "@/types";
 import httpRequest, { ApiResponse } from "./api";
 
+export async function fetchInvitation(): Promise<ApiResponse<Invitation[]>> {
+  const res = await httpRequest.get("/api/invitations");
+
+  return res.data;
+}
+
 export async function createInvitation(
   request: InvitationRequest
 ): Promise<ApiResponse<Invitation>> {
