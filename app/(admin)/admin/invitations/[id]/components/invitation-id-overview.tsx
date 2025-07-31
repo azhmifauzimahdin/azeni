@@ -16,12 +16,12 @@ import React, { useEffect, useState } from "react";
 
 function InvitationOverviewSkeleton() {
   return (
-    <div className="relative w-full rounded-xl overflow-hidden shadow-md mb-8">
+    <div className="relative w-full rounded-xl overflow-hidden shadow-sm">
       <div className="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300 animate-pulse" />
 
-      <div className="relative z-10 p-6 sm:p-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="relative z-10 p-6 sm:p-8 flex bg-white  flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="w-full space-y-2">
-          <div className="h-8 w-2/3 bg-white/40 rounded animate-pulse" />
+          <div className="h-8 w-2/3 bg-muted-foreground/20 rounded animate-pulse" />
 
           <div className="flex flex-wrap gap-2 mt-2">
             {Array(3)
@@ -29,17 +29,17 @@ function InvitationOverviewSkeleton() {
               .map((_, i) => (
                 <div
                   key={i}
-                  className="h-6 w-[100px] bg-white/30 backdrop-blur-sm rounded-md animate-pulse"
+                  className="h-6 w-[100px] bg-muted-foreground/20 backdrop-blur-sm rounded-md animate-pulse"
                 />
               ))}
-            <div className="h-6 w-[250px] bg-white/30 backdrop-blur-sm rounded-md animate-pulse" />
+            <div className="h-6 w-[250px] bg-muted-foreground/20 backdrop-blur-sm rounded-md animate-pulse" />
           </div>
         </div>
 
         <div className="flex flex-col gap-2 w-full sm:w-auto items-stretch sm:items-end">
           <div className="flex items-center gap-2">
-            <div className="h-4 w-20 bg-white/40 rounded animate-pulse" />
-            <div className="h-5 w-10 rounded-full bg-white/40 animate-pulse" />
+            <div className="h-4 w-20 bg-muted-foreground/20 rounded animate-pulse" />
+            <div className="h-5 w-10 rounded-full bg-muted-foreground/20 animate-pulse" />
           </div>
           <div className="h-10 w-36 rounded-md bg-white/50 animate-pulse" />
         </div>

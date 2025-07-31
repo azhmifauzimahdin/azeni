@@ -9,6 +9,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import UserSync from "@/components/ui/user-sync";
 import ClientWrapper from "./client-wrapper";
 import Script from "next/script";
+import { idID } from "@clerk/localizations";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -45,7 +46,29 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      localization={idID}
+      appearance={{
+        variables: {
+          colorPrimary: "#008080",
+          colorForeground: "#006666",
+        },
+        elements: {
+          formFieldInput:
+            "flex h-10 w-full rounded-md border bg-white/75 border-input px-3 py-1 text-base shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+          formFieldLabel: "text-sm font-medium text-foreground",
+          formButtonPrimary:
+            "inline-flex h-10 items-center justify-center gap-2 rounded-md bg-green-app-primary text-white text-sm font-medium shadow hover:bg-green-app-secondary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0",
+          formButtonSecondary:
+            "inline-flex h-10 items-center justify-center gap-2 rounded-md border border-input bg-background shadow hover:bg-accent hover:text-accent-foreground disabled:pointer-events-none disabled:opacity-50",
+          socialButtonsBlockButton:
+            "w-full h-10 rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground text-sm font-medium transition-colors",
+          formFieldCheckbox:
+            "border-input text-primary rounded-sm focus-visible:ring-1 focus-visible:ring-ring",
+          footerActionLink: "text-sm text-muted-foreground hover:underline",
+        },
+      }}
+    >
       <html
         lang="id"
         className={`${poppins.variable} ${alexBrush.variable} ${scheherazade.variable} ${gallery.variable}`}

@@ -1,16 +1,12 @@
-import cloudinary from "@/lib/cloudinary";
 import { prisma } from "@/lib/prisma";
-import { MusicSchema } from "@/lib/schemas";
 import {
-  forbiddenError,
   handleError,
-  handleZodError,
   ResponseJson,
   unauthorizedError,
 } from "@/lib/utils/response";
-import { auth, clerkClient } from "@clerk/nextjs/server";
-import { UploadApiResponse } from "cloudinary";
-import { Readable } from "stream";
+import { auth } from "@clerk/nextjs/server";
+
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
