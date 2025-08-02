@@ -116,10 +116,10 @@ const DashboardLayout = ({
               </li>
               <li>
                 <NavLink
-                  href="/dashboard/payment"
+                  href="/dashboard/transaction"
                   icon={<Wallet />}
                   label="Transaksi"
-                  active={location === "payment"}
+                  active={location === "transaction"}
                   collapsed={isSidebarCollapsed}
                   onClick={() => setToggleSidebar(false)}
                 />

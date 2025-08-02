@@ -30,17 +30,20 @@ const WorkflowSection: React.FC = () => {
   return (
     <section
       id="tutorial"
-      className="py-24 bg-background relative overflow-hidden"
+      className="py-16 bg-background relative overflow-hidden"
     >
       <div className="absolute -top-32 -left-32 w-[400px] h-[400px] bg-green-app-primary opacity-10 rounded-full blur-[160px] pointer-events-none" />
       <div className="absolute -bottom-32 -right-32 w-[400px] h-[400px] bg-green-app-primary opacity-10 rounded-full blur-[160px] pointer-events-none" />
 
       <div className="container max-w-6xl mx-auto px-4 text-center">
-        <h2 className="text-4xl font-bold mb-4" data-aos="fade-up">
-          Cara Kerja Aplikasi
-        </h2>
+        <div className="text-center mb-6" data-aos="fade-up">
+          <h2 className="relative inline-block text-3xl font-bold tracking-tight text-green-app-primary">
+            Cara Kerja Aplikasi
+            <span className="absolute left-1/2 -bottom-2 -translate-x-1/2 w-16 h-1 bg-green-app-primary/60 rounded-full" />
+          </h2>
+        </div>
         <p
-          className="text-muted-foreground mb-16 max-w-2xl mx-auto"
+          className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-16"
           data-aos="fade-up"
         >
           Mulai undangan digital impian Anda dalam 5 langkah mudah.

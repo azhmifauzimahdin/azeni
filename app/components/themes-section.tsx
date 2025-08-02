@@ -49,14 +49,14 @@ const ThemesSection: React.FC = () => {
   }
 
   return (
-    <section className="py-24 px-6 bg-white" id="tema">
+    <section className="py-16 px-6 bg-white" id="tema">
       <div className="max-w-6xl mx-auto ">
-        <h2
-          className="text-3xl md:text-4xl font-bold mb-12 text-center"
-          data-aos="fade-up"
-        >
-          Pilih Tema Undangan
-        </h2>
+        <div className="text-center mb-12" data-aos="fade-up">
+          <h2 className="relative inline-block text-3xl font-bold tracking-tight text-green-app-primary">
+            Pilih Tema Undangan
+            <span className="absolute left-1/2 -bottom-2 -translate-x-1/2 w-16 h-1 bg-green-app-primary/60 rounded-full" />
+          </h2>
+        </div>
 
         <div
           className="flex flex-col items-center gap-4 mb-6"
@@ -111,7 +111,7 @@ const ThemesSection: React.FC = () => {
                   <ThemeCard
                     data={theme}
                     onActivate={(id) =>
-                      router.push(`/dashboard/invitation/new?id=${id}`)
+                      router.push(`/dashboard/invitation/new?theme_id=${id}`)
                     }
                     demoHref={`/${theme.invitation?.slug}/${theme.invitation?.guest.code}`}
                   />

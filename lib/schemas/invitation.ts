@@ -49,6 +49,12 @@ export const updateLinkInvitationSchema = z.object({
 });
 
 export const createInvitationSchema = z.object({
+  themeId: z
+    .string({
+      required_error: "ID tema wajib diisi",
+      invalid_type_error: "ID tema harus berupa teks",
+    })
+    .min(1, { message: "ID tema tidak boleh kosong" }),
   groom: z
     .string({
       required_error: "Nama mempelai pria wajib diisi",
@@ -75,11 +81,9 @@ export const createInvitationSchema = z.object({
 
   image: z
     .string({
-      invalid_type_error: "URL gambar harus berupa string",
+      required_error: "Foto wajib diisi",
     })
-    .url({ message: "Gambar harus berupa URL yang valid" })
-    .optional()
-    .or(z.literal("").transform(() => undefined)),
+    .min(1, { message: "Foto tidak boleh kosong" }),
 
   date: z
     .string({

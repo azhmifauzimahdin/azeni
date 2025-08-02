@@ -46,36 +46,12 @@ export default async function NewInvitationLayout({
   const pathname = headersList.get("x-invoke-path") || "";
   const query = headersList.get("x-invoke-query") || "";
 
-  const isThemeRoute = pathname.includes(
-    `/dashboard/invitation/new/${params.id}/theme`
-  );
-
-  if (isThemeRoute) {
-    if (invitation.themeId) {
-      if (invitation.transaction?.status.name === "CREATED") {
-        redirect("checkout");
-      } else {
-        redirect(
-          `/dashboard/invitation/new/${params.id}/payment?order_id=${
-            invitation.transaction?.orderId
-          }&status_code=${
-            statusCodeByStatusName[
-              invitation.transaction?.status.name || "PENDING"
-            ]
-          }&transaction_status=${invitation.transaction?.status.name.toLowerCase()}`
-        );
-      }
-    }
-  }
-
   const isCheckoutRoute = pathname.includes(
     `/dashboard/invitation/new/${params.id}/checkout`
   );
 
   if (isCheckoutRoute) {
-    if (!invitation.themeId) {
-      redirect("theme");
-    } else if (invitation.transaction?.status.name !== "CREATED") {
+    if (invitation.transaction?.status.name !== "CREATED") {
       redirect(
         `/dashboard/invitation/new/${params.id}/payment?order_id=${
           invitation.transaction?.orderId
@@ -93,9 +69,7 @@ export default async function NewInvitationLayout({
   );
 
   if (isPaymentRoute) {
-    if (!invitation.themeId) {
-      redirect("theme");
-    } else if (invitation.transaction?.status.name === "CREATED") {
+    if (invitation.transaction?.status.name === "CREATED") {
       redirect("checkout");
     }
     const searchParams = new URLSearchParams(query);

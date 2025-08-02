@@ -11,11 +11,14 @@ const BenefitsSection: React.FC = () => {
   ];
 
   return (
-    <section className="py-24 px-6 bg-gray-50" id="fitur">
+    <section className="py-16 px-6 bg-gray-50" id="fitur">
       <div className="max-w-4xl mx-auto text-center">
-        <h2 className="text-3xl md:text-4xl font-bold mb-12" data-aos="fade-up">
-          Kenapa Pilih {process.env.NEXT_PUBLIC_BRAND_NAME}?
-        </h2>
+        <div className="text-center mb-12" data-aos="fade-up">
+          <h2 className="relative inline-block text-3xl font-bold tracking-tight text-green-app-primary">
+            Kenapa Pilih {process.env.NEXT_PUBLIC_BRAND_NAME}?
+            <span className="absolute left-1/2 -bottom-2 -translate-x-1/2 w-16 h-1 bg-green-app-primary/60 rounded-full" />
+          </h2>
+        </div>
         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-left">
           {advantages.map((item, i) => (
             <li

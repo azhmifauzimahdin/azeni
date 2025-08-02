@@ -36,11 +36,14 @@ const faqs = [
 
 const FaqsSection: React.FC = () => {
   return (
-    <section className="py-24 px-6 bg-white" id="faq">
+    <section className="py-16 px-6 bg-white" id="faq">
       <div className="max-w-3xl mx-auto text-center">
-        <h2 className="text-3xl md:text-4xl font-bold mb-10" data-aos="fade-up">
-          Pertanyaan Umum
-        </h2>
+        <div className="text-center mb-12" data-aos="fade-up">
+          <h2 className="relative inline-block text-3xl font-bold tracking-tight text-green-app-primary">
+            Pertanyaan Umum
+            <span className="absolute left-1/2 -bottom-2 -translate-x-1/2 w-16 h-1 bg-green-app-primary/60 rounded-full" />
+          </h2>
+        </div>
         <Accordion type="multiple" className="w-full text-left">
           {faqs.map((faq, index) => (
             <AccordionItem
@@ -50,7 +53,7 @@ const FaqsSection: React.FC = () => {
               data-aos-delay={index * 100}
               data-aos-duration="600"
             >
-              <AccordionTrigger className="text-base md:text-lg text-green-app-primary font-medium">
+              <AccordionTrigger className="text-base md:text-lg  font-medium">
                 {faq.q}
               </AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground">

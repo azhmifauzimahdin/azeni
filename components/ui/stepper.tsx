@@ -8,8 +8,8 @@ interface StepperProps {
 }
 
 const steps = [
-  { title: "Informasi", description: "Isi data undangan" },
   { title: "Pilih Tema", description: "Tentukan desain undangan" },
+  { title: "Informasi", description: "Isi data undangan" },
   { title: "Cek Pesanan", description: "Masukkan kode referral jika ada" },
   { title: "Pembayaran", description: "Aktifkan undangan" },
 ];

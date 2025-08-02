@@ -72,7 +72,7 @@ const ThemeCard: React.FC<ThemeCardProps> = ({
         </div>
       )}
 
-      <div className="p-4 space-y-4">
+      <div className="p-3 sm:p-4 space-y-4">
         <div className="space-y-1">
           <span className="inline-block text-xs bg-muted px-2 py-0.5 rounded-full text-muted-foreground">
             {categoryName}
@@ -82,7 +82,7 @@ const ThemeCard: React.FC<ThemeCardProps> = ({
 
           {showPrice &&
             (hasDiscount ? (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center flex-wrap gap-2">
                 <span className="text-sm text-muted-foreground line-through">
                   {formatRupiah(originalPrice)}
                 </span>

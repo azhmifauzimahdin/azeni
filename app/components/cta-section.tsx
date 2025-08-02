@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 
 const CtaSection: React.FC = () => {
   return (
-    <section className="py-24 px-6 bg-green-app-primary text-white text-center">
+    <section className="py-16 px-6 bg-green-app-primary text-white text-center">
       <h2 className="text-3xl md:text-4xl font-bold mb-6" data-aos="fade-up">
         Mulai Buat Undanganmu Hari Ini
       </h2>

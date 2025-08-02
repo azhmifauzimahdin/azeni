@@ -1,69 +1,23 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import useUserInvitations from "@/hooks/use-user-invitation";
 import useThemes from "@/hooks/use-theme";
 import Stepper from "@/components/ui/stepper";
 import { Img } from "@/components/ui/Img";
-import useInvitationStore from "@/stores/invitation-store";
 import { Pagination } from "@/components/ui/pagination";
-import { TransactionService } from "@/lib/services";
-import { handleError } from "@/lib/utils/handle-error";
 import { useRouter } from "next/navigation";
 import { Alert } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
-import useTransactionStore from "@/stores/transaction-store";
 import { Button } from "@/components/ui/button";
 import ThemeCard, { ThemeCardSkeleton } from "@/components/ui/theme-card";
+import NavigationBack from "@/components/ui/navigation-back";
 
-interface InvitationThemeFormProps {
-  params: {
-    id: string;
-  };
-}
-
-const InvitationThemeForm: React.FC<InvitationThemeFormProps> = ({
-  params,
-}) => {
-  const { getInvitationById, isFetching } = useUserInvitations();
-  const invitation = getInvitationById(params.id);
-  const { themes } = useThemes();
+const InvitationThemeForm: React.FC = () => {
+  const { themes, isFetching } = useThemes();
   const router = useRouter();
 
-  const [selectedThemeId, setSelectThemeId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("Semua");
-
-  const updateThemeInInvitation = useInvitationStore(
-    (state) => state.updateThemeInInvitation
-  );
-  const updateTransactionInInvitation = useInvitationStore(
-    (state) => state.updateTransactionInInvitation
-  );
-
-  const caddTransactionAtFirstc = useTransactionStore(
-    (state) => state.addTransactionAtFirst
-  );
-
-  const onActiveTheme = async (themeId: string) => {
-    try {
-      setSelectThemeId(themeId);
-      const res = await TransactionService.selectThemeByInvitationId(
-        params.id,
-        {
-          themeId,
-        }
-      );
-      updateThemeInInvitation(params.id, res.data.theme);
-      updateTransactionInInvitation(params.id, res.data.transaction);
-      caddTransactionAtFirstc(res.data.transaction);
-      router.push("checkout");
-    } catch (error: unknown) {
-      handleError(error, "theme");
-    } finally {
-      setSelectThemeId(null);
-    }
-  };
 
   const categoryList = useMemo(() => {
     const categories = themes.map((t) => t.category?.name || "Tanpa Kategori");
@@ -99,10 +53,11 @@ const InvitationThemeForm: React.FC<InvitationThemeFormProps> = ({
 
   return (
     <>
-      <Stepper currentStep={1} />
+      <NavigationBack href="/dashboard/invitation" />
+      <Stepper currentStep={0} />
       <Alert variant="default">
-        Tema undangan dapat diubah melalui menu Kelola Undangan, selama harga
-        tema sama.
+        Tema undangan dapat diubah melalui menu Kelola Undangan, dengan syarat
+        tema memiliki harga sama.
       </Alert>
 
       <div className="my-4">
@@ -145,10 +100,11 @@ const InvitationThemeForm: React.FC<InvitationThemeFormProps> = ({
             currentThemes.map((theme) => (
               <ThemeCard
                 key={theme.id}
+                buttonText="Pilih"
                 data={theme}
-                loading={theme.id === selectedThemeId}
-                isActive={theme.id === invitation?.theme?.id}
-                onActivate={onActiveTheme}
+                onActivate={(id) =>
+                  router.push(`/dashboard/invitation/new?theme_id=${id}`)
+                }
                 demoHref={`/${theme.invitation?.slug}/${theme.invitation?.guest.code}`}
               />
             ))

@@ -67,9 +67,7 @@ const InvitationCard: React.FC<InvitationCardProps> = ({ data }) => {
         ) : (
           <Button
             onClick={() => {
-              if (!data.theme?.id) {
-                router.push(`invitation/new/${data.id}/theme`);
-              } else if (data.transaction?.status?.name) {
+              if (data.transaction?.status?.name) {
                 if (data.transaction?.status?.name === "CREATED")
                   router.push(`invitation/new/${data.id}/checkout`);
                 else

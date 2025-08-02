@@ -89,11 +89,7 @@ const Premium1Page: React.FC<Invitation & { currentGuest: Guest }> = (
         invitation={invitation}
       />
 
-      <section
-        id="hero"
-        // className="bg-[url('/assets/themes/premium-001/img/bg-001.jpg')] bg-img-default"
-        className="flex-section"
-      >
+      <section id="hero" className="flex-section">
         <div>The Wedding Of</div>
         <Img
           src={invitation.image}

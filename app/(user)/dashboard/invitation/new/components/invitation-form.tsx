@@ -24,7 +24,6 @@ import { handleError } from "@/lib/utils/handle-error";
 import { Heading } from "@/components/ui/heading";
 import { ImageService, InvitationService } from "@/lib/services";
 import { InvitationRequest } from "@/types";
-import NavigationBack from "@/components/ui/navigation-back";
 import useInvitationStore from "@/stores/invitation-store";
 import useUserInvitations from "@/hooks/use-user-invitation";
 import axios from "axios";
@@ -33,6 +32,10 @@ import { createInvitationSchema } from "@/lib/schemas/invitation";
 import { Alert } from "@/components/ui/alert";
 import Stepper from "@/components/ui/stepper";
 import useThemes from "@/hooks/use-theme";
+
+interface InvitationFormProps {
+  searchParams: { theme_id?: string };
+}
 
 const invitationSchema = createInvitationSchema.pick({
   groom: true,
@@ -43,7 +46,7 @@ const invitationSchema = createInvitationSchema.pick({
 
 type InvitationFormValues = z.infer<typeof invitationSchema>;
 
-const InvitationForm: React.FC = () => {
+const InvitationForm: React.FC<InvitationFormProps> = ({ searchParams }) => {
   useUserInvitations();
   useThemes();
   const addInvitationAtFirst = useInvitationStore(
@@ -72,15 +75,14 @@ const InvitationForm: React.FC = () => {
         groom: data.groom,
         bride: data.bride,
         slug: slug,
-        themeId: "",
-        musicId: "",
+        themeId: searchParams.theme_id || "",
         image: data.image || "",
         date: new Date(new Date().setMonth(new Date().getMonth() + 3)),
         expiresAt: new Date(new Date().setMonth(new Date().getMonth() + 6)),
       };
       const res = await InvitationService.createInvitation(req);
       addInvitationAtFirst(res.data);
-      router.push(`new/${res.data.id}/theme`);
+      router.push(`new/${res.data.id}/checkout`);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 409) {
@@ -132,12 +134,11 @@ const InvitationForm: React.FC = () => {
 
   return (
     <>
-      <NavigationBack href="/dashboard/invitation" />
       <Heading
         title="Buat Undangan"
         description="Buat undanganmu sekarang juga"
       />
-      <Stepper currentStep={0} />
+      <Stepper currentStep={1} />
 
       <Alert variant="default">
         Pastikan nama panggilan mempelai pria dan wanita sudah benar, termasuk
@@ -197,7 +198,7 @@ const InvitationForm: React.FC = () => {
               name="image"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabelText>Foto</FormLabelText>
+                  <FormLabelText required>Foto</FormLabelText>
                   <FormControl>
                     <ImageUpload
                       id={field.name}
@@ -211,8 +212,8 @@ const InvitationForm: React.FC = () => {
                       path="users/invitations"
                     />
                   </FormControl>
-                  <FormMessage />
                   <FormDescription>Foto digunakan untuk cover</FormDescription>
+                  <FormMessage />
                 </FormItem>
               )}
             />

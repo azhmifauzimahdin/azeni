@@ -30,7 +30,7 @@ export default function InvitationContent() {
           title="Undangan"
           description="Mulai persiapkan undangan pernikahanmu"
         />
-        <LinkButton href="/dashboard/invitation/new" variant="primary">
+        <LinkButton href="/dashboard/invitation/new/theme" variant="primary">
           <Plus className="mr-2" size={16} />
           Buat Undangan
         </LinkButton>
