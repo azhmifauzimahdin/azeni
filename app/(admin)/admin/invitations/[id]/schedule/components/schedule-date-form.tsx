@@ -23,7 +23,7 @@ import { Save } from "lucide-react";
 import { InvitationService } from "@/lib/services";
 import toast from "react-hot-toast";
 import { handleError } from "@/lib/utils/handle-error";
-import useInvitationStore from "@/stores/invitation-store";
+import useAdminInvitationStore from "@/stores/admin-invitation-store";
 
 type ScheduleDateFormValues = z.infer<typeof updateDateInvitationSchema>;
 
@@ -42,7 +42,7 @@ const ScheduleDateForm: React.FC<ScheduleDateFormsProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
 
-  const updateDateInInvitation = useInvitationStore(
+  const updateDateInInvitation = useAdminInvitationStore(
     (state) => state.updateDateInInvitation
   );
 

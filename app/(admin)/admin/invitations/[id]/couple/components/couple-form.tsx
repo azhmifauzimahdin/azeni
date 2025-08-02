@@ -19,11 +19,11 @@ import toast from "react-hot-toast";
 import { CoupleService } from "@/lib/services";
 import { handleError } from "@/lib/utils/handle-error";
 import { Invitation } from "@/types";
-import useInvitationStore from "@/stores/invitation-store";
 import ImageUpload from "./image-upload";
 import { Input } from "@/components/ui/input";
 import { getFolderFromInvitationId } from "@/lib/utils/get-folder-from-invitation-id";
 import { createCoupleSchema } from "@/lib/schemas/couple";
+import useAdminInvitationStore from "@/stores/admin-invitation-store";
 
 type CoupleFormValues = z.infer<typeof createCoupleSchema>;
 
@@ -48,10 +48,10 @@ const CoupleForm: React.FC<CoupleFormsProps> = ({
   const [groomImage, setGroomImage] = useState<string>("");
   const [brideImage, setBrideImage] = useState<string>("");
 
-  const updateCoupleInInvitation = useInvitationStore(
+  const updateCoupleInInvitation = useAdminInvitationStore(
     (state) => state.updateCoupleInInvitation
   );
-  const updateCoupleImageInInvitation = useInvitationStore(
+  const updateCoupleImageInInvitation = useAdminInvitationStore(
     (state) => state.updateCoupleImageInInvitation
   );
 

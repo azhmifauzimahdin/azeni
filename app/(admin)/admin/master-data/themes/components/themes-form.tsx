@@ -38,6 +38,7 @@ import {
 } from "@/components/ui/select";
 import { generateSlug } from "@/lib/utils/slugify";
 import DateTimeInput from "@/components/ui/date-time-input";
+import useInvitationStore from "@/stores/invitation-store";
 
 type ThemeFormValues = z.infer<typeof createThemeFormSchema>;
 
@@ -58,6 +59,10 @@ const ThemesForm: React.FC<ThemeFormProps> = ({
   const [updatingThemeId, setUpdatingThemeId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [imageDelete, setImageDelete] = useState<string[]>([]);
+
+  const addInvitationAtFirst = useInvitationStore(
+    (state) => state.addInvitationAtFirst
+  );
 
   const CategoryOptions = useMemo(() => {
     if (!filter) return [];
@@ -116,8 +121,8 @@ const ThemesForm: React.FC<ThemeFormProps> = ({
       if (updatingThemeId)
         res = await ThemeService.updateTheme(updatingThemeId, data);
       else res = await ThemeService.createTheme(data);
-      console.log("res.data : ", res.data);
       upsertThemeAtFirst(res.data);
+      if (res.data.invitation) addInvitationAtFirst(res.data.invitation);
       if (updatingThemeId) toast.success("Tema berhasil diubah.");
       else toast.success("Tema berhasil disimpan.");
       setIsModalOpen(false);

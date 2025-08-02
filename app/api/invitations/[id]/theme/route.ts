@@ -187,6 +187,7 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
           },
         },
       },
+      orderBy: { name: "asc" },
     });
 
     const matchedThemes = themes.filter((theme) => {

@@ -1,22 +1,25 @@
-import { UserButton } from "@clerk/nextjs";
-import Link from "next/link";
+import HeroSection from "./components/hero-section";
+import BenefitsSection from "./components/benefits-section";
+import WorkflowSection from "./components/workflow-section";
+import CtaSection from "./components/cta-section";
+import Footer from "./components/footer";
+import ThemesSection from "./components/themes-section";
+import { generatePageMetadata } from "@/lib/metadata";
+import FaqsSection from "./components/faqs-section";
 
-export default async function Home() {
+export const generateMetadata = () =>
+  generatePageMetadata({ fallbackTitle: "Landing Page" });
+
+export default function LandingPage() {
   return (
-    <main style={{ padding: "2rem", textAlign: "center" }}>
-      <h1>Welcome to AZEN Digital Invitation</h1>
-      <p>
-        Please&nbsp;
-        <Link href="/sign-in" className="text-blue-500">
-          Login
-        </Link>
-        &nbsp;or&nbsp;
-        <Link href="/sign-up" className="text-blue-500">
-          Register
-        </Link>
-        &nbsp;to continue.
-      </p>
-      <UserButton />
-    </main>
+    <div className="min-h-screen bg-white text-gray-900">
+      <HeroSection />
+      <BenefitsSection />
+      <ThemesSection />
+      <WorkflowSection />
+      <FaqsSection />
+      <CtaSection />
+      <Footer />
+    </div>
   );
 }

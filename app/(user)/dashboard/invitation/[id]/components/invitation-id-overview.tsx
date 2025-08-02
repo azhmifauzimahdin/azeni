@@ -16,7 +16,7 @@ import React, { useEffect, useState } from "react";
 
 function InvitationOverviewSkeleton() {
   return (
-    <div className="relative w-full rounded-xl overflow-hidden shadow-sm">
+    <div className="relative w-full rounded-xl overflow-hidden shadow-sm mb-8">
       <div className="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300 animate-pulse" />
 
       <div className="relative z-10 p-6 sm:p-8 flex bg-white  flex-col sm:flex-row justify-between items-start sm:items-center gap-4">

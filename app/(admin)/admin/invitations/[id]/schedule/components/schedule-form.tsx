@@ -24,7 +24,6 @@ import { ScheduleService } from "@/lib/services";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { handleError } from "@/lib/utils/handle-error";
-import useInvitationStore from "@/stores/invitation-store";
 import Combobox from "@/components/ui/combobox";
 import DeleteConfirmationModal from "@/components/ui/delete-confirmation-modal";
 import { ScheduleCard, ScheduleCardSkeleton } from "./schedule-card";
@@ -32,6 +31,7 @@ import { scheduleSchema } from "@/lib/schemas/schedule";
 import { Pagination } from "@/components/ui/pagination";
 import ScheduleDateForm from "./schedule-date-form";
 import { Img } from "@/components/ui/Img";
+import useAdminInvitationStore from "@/stores/admin-invitation-store";
 
 type ScheduleFormValues = z.infer<typeof scheduleSchema>;
 interface ScheduleFormsProps {
@@ -60,10 +60,10 @@ const ScheduleForm: React.FC<ScheduleFormsProps> = ({
     string | null
   >(null);
 
-  const addOrUpdateScheduleToInvitation = useInvitationStore(
+  const addOrUpdateScheduleToInvitation = useAdminInvitationStore(
     (state) => state.addOrUpdateScheduleToInvitation
   );
-  const deleteScheduleFromInvitation = useInvitationStore(
+  const deleteScheduleFromInvitation = useAdminInvitationStore(
     (state) => state.deleteScheduleFromInvitation
   );
 

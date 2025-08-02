@@ -5,7 +5,7 @@ import {
   ResponseJson,
   unauthorizedError,
 } from "@/lib/utils/response";
-import { auth } from "@clerk/nextjs/server";
+import { auth, clerkClient } from "@clerk/nextjs/server";
 
 export async function GET(
   _: Request,
@@ -17,71 +17,148 @@ export async function GET(
       return unauthorizedError();
     }
 
+    const client = await clerkClient();
+    const user = await client.users.getUser(userId);
+    const role = user.publicMetadata.role;
+
     if (userId !== params.userId) {
       return forbiddenError();
     }
 
-    const invitations = await prisma.invitation.findMany({
-      where: { userId: params.userId },
-      include: {
-        transaction: {
-          include: {
-            status: true,
-            webhookLogs: {
-              orderBy: {
-                eventAt: "desc",
+    let invitations;
+
+    if (role === "admin") {
+      invitations = await prisma.invitation.findMany({
+        where: { isTemplate: true },
+        include: {
+          transaction: {
+            include: {
+              status: true,
+              webhookLogs: {
+                orderBy: {
+                  eventAt: "desc",
+                },
               },
+              referralCode: true,
             },
-            referralCode: true,
           },
+          music: true,
+          theme: {
+            include: {
+              category: true,
+            },
+          },
+          quote: true,
+          schedules: {
+            orderBy: {
+              startDate: "asc",
+            },
+          },
+          couple: true,
+          stories: {
+            orderBy: {
+              date: "asc",
+            },
+          },
+          galleries: {
+            orderBy: {
+              createdAt: "asc",
+            },
+          },
+          bankaccounts: {
+            include: {
+              bank: true,
+            },
+          },
+          comments: {
+            include: {
+              guest: true,
+            },
+            orderBy: {
+              createdAt: "desc",
+            },
+          },
+          guests: {
+            orderBy: {
+              createdAt: "desc",
+            },
+          },
+          setting: true,
         },
-        music: true,
-        theme: {
-          include: {
-            category: true,
-          },
+        orderBy: {
+          createdAt: "desc",
         },
-        quote: true,
-        schedules: {
-          orderBy: {
-            startDate: "asc",
+      });
+    } else {
+      invitations = await prisma.invitation.findMany({
+        where: { userId: params.userId },
+        include: {
+          transaction: {
+            include: {
+              status: true,
+              webhookLogs: {
+                orderBy: {
+                  eventAt: "desc",
+                },
+              },
+              referralCode: true,
+            },
           },
+          music: true,
+          theme: {
+            include: {
+              category: true,
+            },
+          },
+          quote: true,
+          schedules: {
+            orderBy: {
+              startDate: "asc",
+            },
+          },
+          couple: true,
+          stories: {
+            orderBy: {
+              date: "asc",
+            },
+          },
+          galleries: {
+            orderBy: {
+              createdAt: "asc",
+            },
+          },
+          bankaccounts: {
+            include: {
+              bank: true,
+            },
+          },
+          comments: {
+            include: {
+              guest: true,
+            },
+            orderBy: {
+              createdAt: "desc",
+            },
+          },
+          guests: {
+            orderBy: {
+              createdAt: "desc",
+            },
+          },
+          setting: true,
         },
-        couple: true,
-        stories: {
-          orderBy: {
-            date: "asc",
-          },
+        orderBy: {
+          createdAt: "desc",
         },
-        galleries: {
-          orderBy: {
-            createdAt: "asc",
-          },
-        },
-        bankaccounts: {
-          include: {
-            bank: true,
-          },
-        },
-        comments: {
-          include: {
-            guest: true,
-          },
-          orderBy: {
-            createdAt: "desc",
-          },
-        },
-        guests: {
-          orderBy: {
-            createdAt: "desc",
-          },
-        },
-        setting: true,
-      },
-      orderBy: {
-        updatedAt: "desc",
-      },
-    });
+      });
+    }
+
+    if (!invitations) {
+      return ResponseJson(
+        { message: "Undangan tidak ditemukan" },
+        { status: 404 }
+      );
+    }
 
     return ResponseJson(
       {

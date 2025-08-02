@@ -25,8 +25,8 @@ import {
 } from "@/components/ui/form";
 import DateInput from "@/components/ui/date-input";
 import { createRSVPSchema } from "@/lib/schemas/setting";
-import useInvitationStore from "@/stores/invitation-store";
 import { Alert } from "@/components/ui/alert";
+import useAdminInvitationStore from "@/stores/admin-invitation-store";
 
 type RsvpFormValues = z.infer<typeof createRSVPSchema>;
 
@@ -41,7 +41,7 @@ const RSVPForm: React.FC<RSVPFormsProps> = ({
   initialData,
   isFetching,
 }) => {
-  const updateSettingInInvitation = useInvitationStore(
+  const updateSettingInInvitation = useAdminInvitationStore(
     (state) => state.updateSettingInInvitation
   );
 

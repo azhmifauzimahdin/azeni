@@ -3,11 +3,9 @@
 import { Heading } from "@/components/ui/heading";
 import React, { useMemo, useState } from "react";
 import NavigationBack from "@/components/ui/navigation-back";
-import ThemeCard from "./theme-card";
 import toast from "react-hot-toast";
 import { handleError } from "@/lib/utils/handle-error";
 import { InvitationService } from "@/lib/services";
-import useInvitationStore from "@/stores/invitation-store";
 import { Pagination } from "@/components/ui/pagination";
 import { Img } from "@/components/ui/Img";
 import useUserThemes from "@/hooks/use-user-theme";
@@ -15,6 +13,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
 import useAdminInvitations from "@/hooks/use-admin-invitation";
+import ThemeCard, { ThemeCardSkeleton } from "@/components/ui/theme-card";
+import useAdminInvitationStore from "@/stores/admin-invitation-store";
 
 interface ThemeContentProps {
   params: {
@@ -31,7 +31,7 @@ const ThemeContent: React.FC<ThemeContentProps> = ({ params }) => {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("Semua");
 
-  const updateThemeInInvitation = useInvitationStore(
+  const updateThemeInInvitation = useAdminInvitationStore(
     (state) => state.updateThemeInInvitation
   );
 
@@ -154,27 +154,13 @@ const ThemeContent: React.FC<ThemeContentProps> = ({ params }) => {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
           {isFetching ? (
-            [...Array(5)].map((_, i) => (
-              <div
-                key={i}
-                className="relative bg-white rounded-lg shadow-md overflow-hidden animate-pulse"
-              >
-                <div className="w-full aspect-square bg-skeleton" />
-                <div className="p-3 space-y-3">
-                  <div className="h-5 w-1/2 bg-skeleton rounded" />
-                  <div className="grid grid-cols-1 gap-3">
-                    <div className="h-10 bg-skeleton rounded" />
-                    <div className="h-10 bg-skeleton rounded" />
-                  </div>
-                </div>
-
-                <div className="absolute top-0 right-0 m-3 h-6 w-20 bg-skeleton rounded-full" />
-              </div>
-            ))
+            [...Array(5)].map((_, i) => <ThemeCardSkeleton key={i} />)
           ) : currentThemes.length > 0 ? (
             currentThemes.map((theme, index) => (
               <ThemeCard
                 key={index}
+                showPrice={false}
+                buttonText="Aktifkan"
                 data={theme}
                 loading={theme.id === selectedThemeId}
                 isActive={theme.id === invitation?.theme?.id}

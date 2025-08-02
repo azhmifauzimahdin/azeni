@@ -1,5 +1,4 @@
 export async function GET(req: Request) {
-  console.log("msuk");
   const { searchParams } = new URL(req.url);
   const imageUrl = searchParams.get("url");
 

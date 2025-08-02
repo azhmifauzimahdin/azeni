@@ -5,15 +5,8 @@ import {
 } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
-const isPublicRoute = createRouteMatcher([
-  "/",
-  "/sign-in(.*)",
-  "/sign-up(.*)",
-  "/api/:path*",
-]);
-
 const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
-const isUserRoute = createRouteMatcher(["/dashboard(.*)"]);
+const isUserRoute = createRouteMatcher(["/dashboard(.*)", "/invitation/:id*"]);
 
 const allowedOrigins = [`${process.env.NEXT_PUBLIC_BASE_URL}`];
 
@@ -76,7 +69,7 @@ export default clerkMiddleware(async (auth, req) => {
     return NextResponse.next();
   }
 
-  if (!userId && !isPublicRoute(req)) {
+  if (!userId && (isAdminRoute(req) || isUserRoute(req))) {
     return redirectToSignIn();
   }
 

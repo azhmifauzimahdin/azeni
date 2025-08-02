@@ -61,7 +61,9 @@ const DashboardLayout = ({
                       priority
                     />
                   </div>
-                  <div className="pt-0.5 font-gallery font-medium">AZENI</div>
+                  <div className="pt-0.5 font-gallery font-medium">
+                    {process.env.NEXT_PUBLIC_BRAND_NAME}
+                  </div>
                 </Link>
               </div>
               <div className="flex-center">

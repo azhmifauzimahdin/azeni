@@ -6,7 +6,6 @@ import useThemes from "@/hooks/use-theme";
 import Stepper from "@/components/ui/stepper";
 import { Img } from "@/components/ui/Img";
 import useInvitationStore from "@/stores/invitation-store";
-import ThemeCard from "./invitation-theme-card";
 import { Pagination } from "@/components/ui/pagination";
 import { TransactionService } from "@/lib/services";
 import { handleError } from "@/lib/utils/handle-error";
@@ -15,6 +14,7 @@ import { Alert } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import useTransactionStore from "@/stores/transaction-store";
 import { Button } from "@/components/ui/button";
+import ThemeCard, { ThemeCardSkeleton } from "@/components/ui/theme-card";
 
 interface InvitationThemeFormProps {
   params: {
@@ -140,22 +140,7 @@ const InvitationThemeForm: React.FC<InvitationThemeFormProps> = ({
       <div className="space-y-4">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
           {isFetching ? (
-            [...Array(5)].map((_, i) => (
-              <div
-                key={i}
-                className="relative bg-white rounded-lg shadow-md overflow-hidden animate-pulse"
-              >
-                <div className="w-full aspect-square bg-skeleton" />
-                <div className="p-3 space-y-3">
-                  <div className="h-5 w-1/2 bg-skeleton rounded" />
-                  <div className="grid grid-cols-1 gap-3">
-                    <div className="h-10 bg-skeleton rounded" />
-                    <div className="h-10 bg-skeleton rounded" />
-                  </div>
-                </div>
-                <div className="absolute top-0 right-0 m-3 h-6 w-20 bg-skeleton rounded-full" />
-              </div>
-            ))
+            [...Array(5)].map((_, i) => <ThemeCardSkeleton key={i} />)
           ) : currentThemes.length > 0 ? (
             currentThemes.map((theme) => (
               <ThemeCard

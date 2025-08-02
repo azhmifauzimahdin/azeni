@@ -14,7 +14,7 @@ import Modal from "@/components/ui/modal";
 import { updateLinkInvitationSchema } from "@/lib/schemas/invitation";
 import { InvitationService } from "@/lib/services";
 import { handleError } from "@/lib/utils/handle-error";
-import useInvitationStore from "@/stores/invitation-store";
+import useAdminInvitationStore from "@/stores/admin-invitation-store";
 import { Invitation } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
@@ -42,7 +42,7 @@ const SettingLinkForm: React.FC<SettingLinkFormsProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const updateSlugInInvitation = useInvitationStore(
+  const updateSlugInInvitation = useAdminInvitationStore(
     (state) => state.updateSlugInInvitation
   );
 

@@ -71,13 +71,15 @@ const AdminPageLayout = ({
                   <div className="bg-[#33B3B3] p-1 rounded-tl-lg rounded-bl-sm rounded-br-lg rounded-tr-sm">
                     <Img
                       src="https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751291122/azen-white-b_rzbq1g.png"
-                      alt="sample"
+                      alt="Logo"
                       wrapperClassName="w-4 h-4"
                       sizes="16px"
                       priority
                     />
                   </div>
-                  <div className="pt-0.5 font-gallery font-medium">AZENI</div>
+                  <div className="pt-0.5 font-gallery font-medium">
+                    {process.env.NEXT_PUBLIC_BRAND_NAME}
+                  </div>
                 </Link>
               </div>
               <div className="flex-center">

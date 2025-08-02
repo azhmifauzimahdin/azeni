@@ -7,10 +7,10 @@ import { InvitationService } from "@/lib/services";
 import { useState, useMemo } from "react";
 import toast from "react-hot-toast";
 import { handleError } from "@/lib/utils/handle-error";
-import useInvitationStore from "@/stores/invitation-store";
 import { Pagination } from "@/components/ui/pagination";
 import { Input } from "@/components/ui/input";
 import Image from "@/components/ui/image";
+import useAdminInvitationStore from "@/stores/admin-invitation-store";
 
 interface MusicFormsProps {
   params: {
@@ -31,7 +31,7 @@ const MusicForm: React.FC<MusicFormsProps> = ({
   const [currentPage, setCurrentPage] = useState(1);
   const musicsPerPage = 10;
 
-  const updateMusicInInvitation = useInvitationStore(
+  const updateMusicInInvitation = useAdminInvitationStore(
     (state) => state.updateMusicInInvitation
   );
 

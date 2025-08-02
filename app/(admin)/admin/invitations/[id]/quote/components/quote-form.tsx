@@ -21,11 +21,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { QuoteService } from "@/lib/services";
 import { handleError } from "@/lib/utils/handle-error";
 import { Invitation } from "@/types";
-import useInvitationStore from "@/stores/invitation-store";
 import DeleteConfirmationModal from "@/components/ui/delete-confirmation-modal";
 import { createQuoteSchema } from "@/lib/schemas/quote";
 import Modal from "@/components/ui/modal";
 import useUserQuoteTemplates from "@/hooks/use-user-quote-template";
+import useAdminInvitationStore from "@/stores/admin-invitation-store";
 
 type QuoteFormValues = z.infer<typeof createQuoteSchema>;
 
@@ -44,10 +44,10 @@ const QuoteForm: React.FC<QuoteFormsProps> = ({
 }) => {
   const { quoteTemplates } = useUserQuoteTemplates();
 
-  const updateQuoteInInvitation = useInvitationStore(
+  const updateQuoteInInvitation = useAdminInvitationStore(
     (state) => state.updateQuoteInInvitation
   );
-  const deleteQuoteInInvitation = useInvitationStore(
+  const deleteQuoteInInvitation = useAdminInvitationStore(
     (state) => state.deleteQuoteInInvitation
   );
 

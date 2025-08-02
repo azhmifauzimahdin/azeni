@@ -22,7 +22,6 @@ import { ImageService, StoryService } from "@/lib/services";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { handleError } from "@/lib/utils/handle-error";
-import useInvitationStore from "@/stores/invitation-store";
 import DeleteConfirmationModal from "@/components/ui/delete-confirmation-modal";
 import { Pagination } from "@/components/ui/pagination";
 import { createStorySchema } from "@/lib/schemas/story";
@@ -33,6 +32,7 @@ import DateInput from "@/components/ui/date-input";
 import { getFolderFromInvitationId } from "@/lib/utils/get-folder-from-invitation-id";
 import CreatableCombobox from "@/components/ui/creatable-combobox";
 import { Img } from "@/components/ui/Img";
+import useAdminInvitationStore from "@/stores/admin-invitation-store";
 
 type OurStoryFormValues = z.infer<typeof createStorySchema>;
 interface StoryFormsProps {
@@ -58,10 +58,10 @@ const OurStoryForm: React.FC<StoryFormsProps> = ({
   );
   const [imageDelete, setImageDelete] = useState<string[]>([]);
 
-  const addOrUpdateStoryToInvitation = useInvitationStore(
+  const addOrUpdateStoryToInvitation = useAdminInvitationStore(
     (state) => state.addOrUpdateStoryToInvitation
   );
-  const deleteStoryFromInvitation = useInvitationStore(
+  const deleteStoryFromInvitation = useAdminInvitationStore(
     (state) => state.deleteStoryFromInvitation
   );
 

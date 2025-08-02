@@ -117,7 +117,7 @@ export async function POST(_: Request, { params }: { params: { id: string } }) {
           quantity: 1,
           name: "Undangan Pernikahan",
           brand: "Undangan Digital",
-          merchant_name: "Azeni",
+          merchant_name: process.env.NEXT_PUBLIC_BRAND_NAME,
         },
       ],
       customer_details: {

@@ -10,9 +10,9 @@ import useUserQuoteTemplates from "@/hooks/use-user-quote-template";
 import { useRouter } from "next/navigation";
 import InvitationOverview from "./invitation-id-overview";
 import toast from "react-hot-toast";
-import useInvitationStore from "@/stores/invitation-store";
 import useUserThemes from "@/hooks/use-user-theme";
 import useAdminInvitations from "@/hooks/use-admin-invitation";
+import useAdminInvitationStore from "@/stores/admin-invitation-store";
 
 interface InvitationIdContentProps {
   params: {
@@ -33,7 +33,7 @@ const InvitationIdContent: React.FC<InvitationIdContentProps> = ({
 
   const invitation = getInvitationById(params.id);
 
-  const updateSettingInInvitation = useInvitationStore(
+  const updateSettingInInvitation = useAdminInvitationStore(
     (state) => state.updateSettingInInvitation
   );
 

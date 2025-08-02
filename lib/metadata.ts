@@ -9,12 +9,12 @@ type Options = {
 
 export async function generatePageMetadata({
   slug,
-  fallbackTitle = "Azen",
+  fallbackTitle = process.env.NEXT_PUBLIC_BRAND_NAME,
   fallbackDescription = "Undangan pernikahan digital modern dan elegan.",
 }: Options = {}): Promise<Metadata> {
   if (!slug?.trim()) {
     return {
-      title: `AZENI | ${fallbackTitle}`,
+      title: `${process.env.NEXT_PUBLIC_BRAND_NAME} | ${fallbackTitle}`,
       description: fallbackDescription,
     };
   }
@@ -34,7 +34,7 @@ export async function generatePageMetadata({
     };
   } catch {
     return {
-      title: `AZENI | ${fallbackTitle}`,
+      title: `${process.env.NEXT_PUBLIC_BRAND_NAME} | ${fallbackTitle}`,
       description: fallbackDescription,
     };
   }

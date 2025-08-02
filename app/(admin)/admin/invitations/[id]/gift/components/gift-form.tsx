@@ -20,7 +20,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { GiftService } from "@/lib/services";
 import { handleError } from "@/lib/utils/handle-error";
 import { Invitation } from "@/types";
-import useInvitationStore from "@/stores/invitation-store";
 import axios from "axios";
 import Modal from "@/components/ui/modal";
 import Combobox from "@/components/ui/combobox";
@@ -31,6 +30,7 @@ import DeleteConfirmationModal from "@/components/ui/delete-confirmation-modal";
 import { createBankAccountSchema } from "@/lib/schemas/bank-account";
 import { Pagination } from "@/components/ui/pagination";
 import { Img } from "@/components/ui/Img";
+import useAdminInvitationStore from "@/stores/admin-invitation-store";
 
 const formAddressSchema = z.object({
   address: z
@@ -107,10 +107,10 @@ const GiftForm: React.FC<GiftFormsProps> = ({
   const [isModalDeleteAddressOpen, setIsModalDeleteAddressOpen] =
     useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const addOrUpdateBankAccountToInvitation = useInvitationStore(
+  const addOrUpdateBankAccountToInvitation = useAdminInvitationStore(
     (state) => state.addOrUpdateBankAccountToInvitation
   );
-  const deleteBankAccountFromInvitation = useInvitationStore(
+  const deleteBankAccountFromInvitation = useAdminInvitationStore(
     (state) => state.deleteBankAccountFromInvitation
   );
 

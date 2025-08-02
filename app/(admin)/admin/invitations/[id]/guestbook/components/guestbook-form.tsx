@@ -23,7 +23,6 @@ import DeleteConfirmationModal from "@/components/ui/delete-confirmation-modal";
 import { GuestService } from "@/lib/services";
 import toast from "react-hot-toast";
 import { handleError } from "@/lib/utils/handle-error";
-import useInvitationStore from "@/stores/invitation-store";
 import { Textarea } from "@/components/ui/textarea";
 import Image from "@/components/ui/image";
 import Link from "next/link";
@@ -41,6 +40,7 @@ import {
 } from "@/components/ui/select";
 import { useRouter } from "next/navigation";
 import { Alert } from "@/components/ui/alert";
+import useAdminInvitationStore from "@/stores/admin-invitation-store";
 
 type GuestBookFormValues = z.infer<typeof createGuestSchema>;
 
@@ -82,17 +82,17 @@ const GuestBookForm: React.FC<StoryFormsProps> = ({
     null
   );
 
-  const addOrUpdateGuestToInvitation = useInvitationStore(
+  const addOrUpdateGuestToInvitation = useAdminInvitationStore(
     (state) => state.addOrUpdateGuestToInvitation
   );
-  const deleteGuestFromInvitation = useInvitationStore(
+  const deleteGuestFromInvitation = useAdminInvitationStore(
     (state) => state.deleteGuestFromInvitation
   );
 
-  const checkInGuestInInvitation = useInvitationStore(
+  const checkInGuestInInvitation = useAdminInvitationStore(
     (state) => state.checkInGuestInInvitation
   );
-  const checkOutGuestInInvitation = useInvitationStore(
+  const checkOutGuestInInvitation = useAdminInvitationStore(
     (state) => state.checkOutGuestInInvitation
   );
 

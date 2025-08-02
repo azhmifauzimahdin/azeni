@@ -18,7 +18,6 @@ export default async function NewInvitationLayout({
   const invitation = await prisma.invitation.findFirst({
     where: {
       id: params.id,
-      userId: userId,
       transaction: {
         status: {
           name: "SUCCESS",

@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import Modal from "@/components/ui/modal";
 import { InvitationService } from "@/lib/services";
 import { handleError } from "@/lib/utils/handle-error";
-import useInvitationStore from "@/stores/invitation-store";
+import useAdminInvitationStore from "@/stores/admin-invitation-store";
 import { Invitation } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -55,7 +55,7 @@ const Settingform: React.FC<SettingLinkFormsProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const deleteInvitationById = useInvitationStore(
+  const deleteInvitationById = useAdminInvitationStore(
     (state) => state.deleteInvitationById
   );
 

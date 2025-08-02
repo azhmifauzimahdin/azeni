@@ -4,9 +4,9 @@ import { Gallery, Invitation } from "@/types";
 import { MultipleImageUpload } from "./image-upload";
 import { useEffect, useState } from "react";
 import { GalleryService } from "@/lib/services";
-import useInvitationStore from "@/stores/invitation-store";
 import { getFolderFromInvitationId } from "@/lib/utils/get-folder-from-invitation-id";
 import toast from "react-hot-toast";
+import useAdminInvitationStore from "@/stores/admin-invitation-store";
 
 interface GalleryFormsProps {
   params: {
@@ -23,10 +23,10 @@ const GalleryForm: React.FC<GalleryFormsProps> = ({
 }) => {
   const [galleries, setGalleries] = useState<Gallery[]>([]);
 
-  const addGalleryToInvitation = useInvitationStore(
+  const addGalleryToInvitation = useAdminInvitationStore(
     (state) => state.addGalleryToInvitation
   );
-  const deleteGalleryFromInvitation = useInvitationStore(
+  const deleteGalleryFromInvitation = useAdminInvitationStore(
     (state) => state.deleteGalleryFromInvitation
   );
 

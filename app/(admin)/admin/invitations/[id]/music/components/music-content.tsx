@@ -5,6 +5,7 @@ import React from "react";
 import NavigationBack from "@/components/ui/navigation-back";
 import MusicForm from "./music-form";
 import useAdminInvitations from "@/hooks/use-admin-invitation";
+import { Alert } from "@/components/ui/alert";
 
 interface MusicContentProps {
   params: {
@@ -25,6 +26,10 @@ const MusicContent: React.FC<MusicContentProps> = ({ params }) => {
           description="Dengarkan dan pilih musik yang paling cocok untukmu"
         />
       </div>
+      <Alert>
+        Pastikan tema undangan kamu sudah sesuai, karena mengganti tema akan
+        secara otomatis mengubah musik menjadi bawaan tema tersebut.
+      </Alert>
       <div>
         <MusicForm
           params={params}

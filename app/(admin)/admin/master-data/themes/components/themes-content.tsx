@@ -6,11 +6,13 @@ import ThemesForm from "./themes-form";
 import useAdminThemes from "@/hooks/use-admin-theme";
 import useAdminThemeCategories from "@/hooks/use-admin-theme-category";
 import useAdminMusics from "@/hooks/use-admin-music";
+import useUserInvitations from "@/hooks/use-user-invitation";
 
 const ThemesContent: React.FC = () => {
   const { themes, isFetching } = useAdminThemes();
   const { themeCategories } = useAdminThemeCategories();
   const { musics } = useAdminMusics();
+  useUserInvitations();
 
   return (
     <>
