@@ -62,9 +62,11 @@ const Image: React.FC<ImageProps> = ({
   const optimizedUrl = optimizeCloudinaryUrl(src);
   const [isLoading, setIsLoading] = useState(true);
 
+  const isCloudinary = src.includes("res.cloudinary.com");
+
   const image = (
     <ImageNext
-      loader={cloudinaryProxyLoader}
+      {...(isCloudinary && { loader: cloudinaryProxyLoader })}
       src={optimizedUrl}
       alt={alt}
       fill={!!aspectRatio}

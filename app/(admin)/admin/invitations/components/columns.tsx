@@ -26,7 +26,7 @@ export const columns = ({
   },
   {
     accessorKey: "expiresAt",
-    header: "Kedaluarsa",
+    header: "Kedaluwarsa",
   },
 
   {

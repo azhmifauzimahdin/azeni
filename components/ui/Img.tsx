@@ -27,13 +27,15 @@ export const Img: React.FC<ImgProps> = ({
 }) => {
   if (!src) return null;
 
+  const isCloudinary = src.includes("res.cloudinary.com");
+
   return (
     <div className={cn("relative overflow-hidden", wrapperClassName)} {...rest}>
       {isFetching && (
         <div className="absolute inset-0 bg-muted animate-pulse" />
       )}
       <NextImage
-        loader={cloudinaryProxyLoader}
+        {...(isCloudinary && { loader: cloudinaryProxyLoader })}
         src={src}
         alt={alt}
         fill

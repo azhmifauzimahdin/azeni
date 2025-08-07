@@ -3,6 +3,14 @@ export interface GuestRequest {
   group?: string;
   address?: string;
 }
+
+export interface RSVPRequest {
+  guestId: string;
+  isAttending: boolean;
+  totalGuests: number;
+  notes?: string;
+}
+
 export interface Guest {
   id: string;
   code: string;

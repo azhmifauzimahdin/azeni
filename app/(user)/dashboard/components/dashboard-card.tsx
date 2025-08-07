@@ -142,7 +142,7 @@ const InvitationOverview: React.FC<InvitationOverviewProps> = ({
 
           <div className="flex gap-3">
             <LinkButton
-              href={`/invitation/${invitation?.id}/scan`}
+              href={`/dashboard/invitation/${invitation?.id}`}
               variant="outline"
             >
               <Settings size={18} />

@@ -24,8 +24,13 @@ export interface Setting {
   rsvpMaxGuests: number;
   rsvpDeadline: Date;
   rsvpAllowNote: boolean;
+  commentEnabled: boolean;
   whatsappMessageTemplate: string;
+  scanResetCountdownSeconds: number;
+  checkinCheckoutEnabled: boolean;
+  coupleIntroductionText: string;
+  scheduleIntroductionText: string;
+  giftIntroductionText: string;
   createdAt: string;
   updatedAt: string;
-  scanResetCountdownSeconds: number;
 }

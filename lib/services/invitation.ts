@@ -18,10 +18,11 @@ export async function createInvitation(
   return res.data;
 }
 
-export async function fetchInvitationByslug(
-  slug: string
+export async function fetchInvitationByslugWithGuestByCode(
+  slug: string,
+  code: string
 ): Promise<ApiResponse<Invitation>> {
-  const res = await httpRequest.get(`/api/invitations/${slug}`);
+  const res = await httpRequest.get(`/api/invitations/${slug}/guest/${code}`);
 
   return res.data;
 }

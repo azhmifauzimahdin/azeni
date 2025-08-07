@@ -155,6 +155,11 @@ export async function POST(_: Request, { params }: { params: { id: string } }) {
     const setting = await prisma.setting.create({
       data: {
         invitationId: invitationByUserId.id,
+        rsvpDeadline: (() => {
+          const date = new Date(invitationByUserId.date);
+          date.setDate(date.getDate() - 7);
+          return date;
+        })(),
         whatsappMessageTemplate: defaultWhatsappMessageTemplate,
       },
     });

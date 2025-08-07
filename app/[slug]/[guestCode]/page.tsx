@@ -1,7 +1,7 @@
 import NotFound from "@/components/screens/not-found";
 import { SampleComponents } from "@/components/template";
-import { GuestService, InvitationService } from "@/lib/services";
-import { handleError } from "@/lib/utils/handle-error";
+import { generatePageMetadata } from "@/lib/metadata";
+import { InvitationService } from "@/lib/services";
 
 type InvitationPageProps = {
   params: {
@@ -9,36 +9,46 @@ type InvitationPageProps = {
     guestCode: string;
   };
 };
+
+export const generateMetadata = ({ params }: InvitationPageProps) =>
+  generatePageMetadata({ fallbackTitle: "Undangan", slug: params.slug });
+
 const InvitationPage = async ({ params }: InvitationPageProps) => {
-  const { slug } = params;
   let invitation = null;
-  let guest = null;
 
   try {
-    invitation = await InvitationService.fetchInvitationByslug(slug);
-    guest = await GuestService.fetchGuestByCode(
-      invitation.data.id,
+    invitation = await InvitationService.fetchInvitationByslugWithGuestByCode(
+      params.slug,
       params.guestCode
     );
   } catch (error: unknown) {
-    handleError(error, "invitation");
+    console.log(error);
   }
 
-  if (!invitation?.data?.theme) {
-    return <NotFound message="Tema undangan tidak ditemukan" />;
+  if (!invitation?.data.theme) {
+    return <NotFound type="theme" message="Tema undangan tidak ditemukan" />;
   }
 
-  if (!guest) {
-    return <NotFound message="Tamu tidak ditemukan" />;
+  if (!invitation?.data.guest) {
+    return <NotFound type="guest" message="Tamu tidak ditemukan" />;
   }
 
-  const props = {
-    ...invitation.data,
-    currentGuest: guest.data,
-  };
+  if (!invitation.data.setting?.invitationEnabled) {
+    return (
+      <NotFound
+        type="inactive"
+        message="Undangan Sedang tidak aktif"
+        imageUrl={invitation.data.image}
+      />
+    );
+  }
+
+  if (new Date() > new Date(invitation.data.expiresAt)) {
+    return <NotFound type="expired" message="Undangan kedaluwarsa" />;
+  }
 
   const ThemeComponent = SampleComponents[invitation.data.theme.name];
-  return <ThemeComponent {...props} />;
+  return <ThemeComponent {...invitation.data} />;
 };
 
 export default InvitationPage;

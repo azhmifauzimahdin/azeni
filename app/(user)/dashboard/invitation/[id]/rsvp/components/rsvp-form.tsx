@@ -232,7 +232,6 @@ const RSVPForm: React.FC<RSVPFormsProps> = ({
                         <Input
                           id={field.name}
                           type="number"
-                          min={1}
                           className="text-center w-16"
                           value={field.value}
                           onChange={(e) =>

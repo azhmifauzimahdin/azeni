@@ -1,4 +1,4 @@
-import { Guest, GuestRequest } from "@/types";
+import { Guest, GuestRequest, RSVPRequest } from "@/types";
 import httpRequest, { ApiResponse } from "./api";
 
 export async function createGuest(
@@ -103,12 +103,13 @@ export async function checkInOutGuest(
   return res.data;
 }
 
-export async function fetchGuestByCode(
+export async function updateRSVP(
   InvitationId: string,
-  id: string
+  request: RSVPRequest
 ): Promise<ApiResponse<Guest>> {
-  const res = await httpRequest.get(
-    `/api/invitations/${InvitationId}/guest/${id}`
+  const res = await httpRequest.post(
+    `/api/invitations/${InvitationId}/rsvp`,
+    request
   );
   return res.data;
 }

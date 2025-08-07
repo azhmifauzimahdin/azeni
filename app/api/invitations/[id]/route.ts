@@ -22,26 +22,37 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
         where: { id: params.id },
         include: {
           transaction: {
-            where: { isActive: true },
-            include: { status: true },
+            include: {
+              status: true,
+              webhookLogs: {
+                orderBy: {
+                  eventAt: "desc",
+                },
+              },
+              referralCode: true,
+            },
           },
           music: true,
-          theme: true,
+          theme: {
+            include: {
+              category: true,
+            },
+          },
           quote: true,
           schedules: {
             orderBy: {
-              createdAt: "desc",
+              startDate: "asc",
             },
           },
           couple: true,
           stories: {
             orderBy: {
-              createdAt: "desc",
+              date: "asc",
             },
           },
           galleries: {
             orderBy: {
-              createdAt: "desc",
+              createdAt: "asc",
             },
           },
           bankaccounts: {
@@ -57,6 +68,7 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
               createdAt: "desc",
             },
           },
+          setting: true,
         },
       });
     } else {
@@ -69,26 +81,37 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
         },
         include: {
           transaction: {
-            where: { isActive: true },
-            include: { status: true },
+            include: {
+              status: true,
+              webhookLogs: {
+                orderBy: {
+                  eventAt: "desc",
+                },
+              },
+              referralCode: true,
+            },
           },
           music: true,
-          theme: true,
+          theme: {
+            include: {
+              category: true,
+            },
+          },
           quote: true,
           schedules: {
             orderBy: {
-              createdAt: "desc",
+              startDate: "asc",
             },
           },
           couple: true,
           stories: {
             orderBy: {
-              createdAt: "desc",
+              date: "asc",
             },
           },
           galleries: {
             orderBy: {
-              createdAt: "desc",
+              createdAt: "asc",
             },
           },
           bankaccounts: {
@@ -104,6 +127,7 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
               createdAt: "desc",
             },
           },
+          setting: true,
         },
       });
     }

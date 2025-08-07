@@ -10,9 +10,9 @@ export const createCommentSchema = z.object({
 
   message: z
     .string({
-      required_error: "Pesan wajib diisi",
-      invalid_type_error: "Pesan harus berupa teks",
+      required_error: "Ucapan wajib diisi",
+      invalid_type_error: "Ucapan harus berupa teks",
     })
-    .min(1, { message: "Pesan tidak boleh kosong" })
-    .max(1000, { message: "Pesan tidak boleh lebih dari 1000 karakter" }),
+    .min(1, { message: "Ucapan tidak boleh kosong" })
+    .max(1000, { message: "Ucapan tidak boleh lebih dari 1000 karakter" }),
 });

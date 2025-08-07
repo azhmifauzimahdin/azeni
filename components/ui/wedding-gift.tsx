@@ -8,9 +8,10 @@ import { Img } from "./Img";
 
 interface WeddingGiftProps {
   banks: BankAccount[];
+  introduction: string;
 }
 
-const WeddingGift: React.FC<WeddingGiftProps> = ({ banks }) => {
+const WeddingGift: React.FC<WeddingGiftProps> = ({ introduction, banks }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleCopy = async (nomor: string) => {
@@ -29,9 +30,7 @@ const WeddingGift: React.FC<WeddingGiftProps> = ({ banks }) => {
         Wedding Gift
       </h2>
       <p className="mb-5" data-aos="zoom-in">
-        Doa restu Bapak/Ibu/Saudara/i sudah merupakan hadiah terbaik bagi kami.
-        Dan jika memberi adalah ungkapan tanda kasih Anda, Anda dapat memberi
-        kado secara cashless.
+        {introduction}
       </p>
       <Button
         onClick={() => setIsOpen(!isOpen)}
@@ -58,7 +57,7 @@ const WeddingGift: React.FC<WeddingGiftProps> = ({ banks }) => {
                     key={index}
                   >
                     <Gift size={64} className="mb-3 text-slate-600" />
-                    <p>Anda juga bisa kirim kado fisik ke alamat berikut:</p>
+                    <p>Anda bisa kirim kado fisik ke alamat berikut:</p>
                     <p>{bank.name}</p>
                   </div>
                 ) : (
@@ -67,7 +66,9 @@ const WeddingGift: React.FC<WeddingGiftProps> = ({ banks }) => {
                       <Img
                         src={bank.bank.icon}
                         alt="Logo Bank"
-                        wrapperClassName="aspect-[3/1] w-3/12"
+                        wrapperClassName="aspect-[4/1] w-3/12"
+                        className="object-contain"
+                        sizes="100px"
                       />
                     </div>
                     <div className="text-left">
@@ -75,6 +76,7 @@ const WeddingGift: React.FC<WeddingGiftProps> = ({ banks }) => {
                         src="/assets/img/chip-atm.png"
                         alt="ATM Chip"
                         wrapperClassName="aspect-square w-2/12 mb-2"
+                        sizes="100px"
                       />
                       <div className="flex justify-between">
                         <div className="text-slate-600 text-2xl font-medium mb-5">

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "./button";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "./form";
@@ -12,15 +12,19 @@ import { Separator } from "./separator";
 import clsx from "clsx";
 import { Comment } from "@/types";
 import { z } from "zod";
+import { createCommentSchema } from "@/lib/schemas/comment";
+import { Pagination } from "./pagination";
+import { cn } from "@/lib/utils";
 
 interface commentSectionProps {
   comments: Comment[];
   onSubmit: (data: CommentFormValues) => Promise<void>;
-  loading: boolean;
+  isLoading: boolean;
+  buttonClassName?: string;
 }
 
-export const CommentFormSchema = z.object({
-  message: z.string().min(5),
+const CommentFormSchema = createCommentSchema.pick({
+  message: true,
 });
 
 export type CommentFormValues = z.infer<typeof CommentFormSchema>;
@@ -28,7 +32,8 @@ export type CommentFormValues = z.infer<typeof CommentFormSchema>;
 const CommentSection: React.FC<commentSectionProps> = ({
   comments,
   onSubmit,
-  loading,
+  isLoading,
+  buttonClassName = "bg-green-primary hover:bg-green-secondary",
 }) => {
   const form = useForm<CommentFormValues>({
     resolver: zodResolver(CommentFormSchema),
@@ -41,6 +46,19 @@ const CommentSection: React.FC<commentSectionProps> = ({
     await onSubmit(data);
     form.reset();
   };
+
+  const commentsPerPage = 10;
+  const totalPages = Math.ceil((comments ?? []).length / commentsPerPage);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
+  const currentcomments = comments.slice(
+    (currentPage - 1) * commentsPerPage,
+    currentPage * commentsPerPage
+  );
+
+  function handlePageChange(page: number) {
+    setCurrentPage(page);
+  }
 
   return (
     <div className="bg-slate-50 rounded-md p-5 shadow" data-aos="fade-up">
@@ -57,7 +75,7 @@ const CommentSection: React.FC<commentSectionProps> = ({
                 <FormControl>
                   <Textarea
                     placeholder="Ucapan"
-                    disabled={loading}
+                    disabled={isLoading}
                     className="h-32"
                     {...field}
                   />
@@ -69,16 +87,16 @@ const CommentSection: React.FC<commentSectionProps> = ({
           <Button
             type="submit"
             variant="default"
-            className="bg-green-primary hover:bg-green-secondary text-white w-full"
-            disabled={loading}
+            className={cn("w-full", buttonClassName)}
+            isLoading={isLoading}
           >
             Kirim
           </Button>
         </form>
       </Form>
 
-      <div className="space-y-3 max-h-[70vh] overflow-y-auto">
-        {comments.map((comment, index) => (
+      <div className="space-y-3">
+        {currentcomments.map((comment, index) => (
           <React.Fragment key={index}>
             <div className="flex gap-3">
               <div>
@@ -106,10 +124,20 @@ const CommentSection: React.FC<commentSectionProps> = ({
                 </p>
               </div>
             </div>
-            {index !== comments.length - 1 && <Separator />}
+            {index !== currentcomments.length - 1 && <Separator />}
           </React.Fragment>
         ))}
       </div>
+      {totalPages > 1 && (
+        <div className="mt-8 flex-center">
+          <Pagination
+            totalPages={totalPages}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+            siblingCount={1}
+          />
+        </div>
+      )}
     </div>
   );
 };

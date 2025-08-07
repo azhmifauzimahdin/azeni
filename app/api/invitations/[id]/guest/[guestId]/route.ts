@@ -180,53 +180,145 @@ export async function GET(
   { params }: { params: { id: string; guestId: string } }
 ) {
   try {
-    if (!params.id) {
-      return ResponseJson(
-        {
-          message: "Validasi gagal",
-          errors: {
-            id: ["ID wajib diisi"],
-          },
-        },
-        { status: 400 }
+    const isUUID =
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(
+        params.id
       );
+    let invitation;
+    if (isUUID) {
+      invitation = await prisma.invitation.findUnique({
+        where: { id: params.id },
+        include: {
+          transaction: {
+            include: {
+              status: true,
+              webhookLogs: {
+                orderBy: {
+                  eventAt: "desc",
+                },
+              },
+              referralCode: true,
+            },
+          },
+          music: true,
+          theme: {
+            include: {
+              category: true,
+            },
+          },
+          quote: true,
+          schedules: {
+            orderBy: {
+              startDate: "asc",
+            },
+          },
+          couple: true,
+          stories: {
+            orderBy: {
+              date: "asc",
+            },
+          },
+          galleries: {
+            orderBy: {
+              createdAt: "asc",
+            },
+          },
+          bankaccounts: {
+            include: {
+              bank: true,
+            },
+          },
+          comments: {
+            include: {
+              guest: true,
+            },
+            orderBy: {
+              createdAt: "desc",
+            },
+          },
+          setting: true,
+        },
+      });
+    } else {
+      invitation = await prisma.invitation.findFirst({
+        where: {
+          slug: params.id,
+        },
+        include: {
+          transaction: {
+            include: {
+              status: true,
+              webhookLogs: {
+                orderBy: {
+                  eventAt: "desc",
+                },
+              },
+              referralCode: true,
+            },
+          },
+          music: true,
+          theme: {
+            include: {
+              category: true,
+            },
+          },
+          quote: true,
+          schedules: {
+            orderBy: {
+              startDate: "asc",
+            },
+          },
+          couple: true,
+          stories: {
+            orderBy: {
+              date: "asc",
+            },
+          },
+          galleries: {
+            orderBy: {
+              createdAt: "asc",
+            },
+          },
+          bankaccounts: {
+            include: {
+              bank: true,
+            },
+          },
+          comments: {
+            include: {
+              guest: true,
+            },
+            orderBy: {
+              createdAt: "desc",
+            },
+          },
+          setting: true,
+        },
+      });
     }
 
-    if (!params.guestId) {
-      return ResponseJson(
-        {
-          message: "Validasi gagal",
-          errors: {
-            guestId: ["ID tamu wajib diisi"],
+    const guest = invitation
+      ? await prisma.guest.findFirst({
+          where: {
+            invitationId: invitation.id,
+            code: params.guestId,
           },
-        },
-        { status: 400 }
-      );
-    }
-    const guest = await prisma.guest.findUnique({
-      where: { code: params.guestId, invitationId: params.id },
-    });
+        })
+      : null;
 
-    if (!guest) {
-      return ResponseJson(
-        {
-          message: "Tamu tidak ditemukan",
-          errors: {
-            guestId: ["Tamu tidak ditemukan atau tidak valid"],
-          },
-        },
-        { status: 404 }
-      );
-    }
+    const dataWithGuest = {
+      ...invitation,
+      guest: guest ?? null,
+    };
 
     return ResponseJson(
       {
-        message: "Data tamu berhasil diambil",
-        data: guest,
+        message: "Data undangan berhasil diambil",
+        data: dataWithGuest,
       },
       { status: 200 }
     );
   } catch (error) {
-    return handleError(error, "Gagal mengambil tamu");
+    return handleError(error, "Gagal mengambil undangan");
   }
 }

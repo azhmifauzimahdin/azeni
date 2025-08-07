@@ -2,7 +2,19 @@
 
 import { useEffect, useState } from "react";
 
-const CountdownTimer = ({ targetDate }: { targetDate: string }) => {
+interface CountdownTimerProps {
+  targetDate: string;
+  bgColor?: string;
+  textColor?: string;
+  labelColor?: string;
+}
+
+const CountdownTimer: React.FC<CountdownTimerProps> = ({
+  targetDate,
+  bgColor = "bg-green-primary",
+  textColor = "text-white",
+  labelColor = "text-gray-700",
+}) => {
   const dateISO = new Date(targetDate).toISOString();
 
   const [mounted, setMounted] = useState(false);
@@ -65,10 +77,12 @@ const CountdownTimer = ({ targetDate }: { targetDate: string }) => {
         { label: "Detik", value: String(timeLeft.seconds).padStart(2, "0") },
       ].map(({ label, value }) => (
         <div key={label} className="flex flex-col items-center">
-          <div className="bg-green-primary text-white text-xl font-bold w-12 h-12 flex items-center justify-center rounded-md shadow-md">
+          <div
+            className={`text-xl font-bold w-12 h-12 flex items-center justify-center rounded-md shadow-md ${bgColor} ${textColor}`}
+          >
             {value}
           </div>
-          <span className="text-sm text-gray-700 mt-1">{label}</span>
+          <span className={`text-sm mt-1 ${labelColor}`}>{label}</span>
         </div>
       ))}
     </div>

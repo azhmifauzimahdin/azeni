@@ -44,6 +44,7 @@
     "midtrans-client": "^1.4.3",
     "next": "14.2.25",
     "next-cloudinary": "^6.16.0",
+    "qrcode": "^1.5.4",
     "react": "^18",
     "react-day-picker": "^9.7.0",
     "react-dom": "^18",
@@ -64,6 +65,7 @@
   "devDependencies": {
     "@types/aos": "^3.0.7",
     "@types/node": "^20.19.0",
+    "@types/qrcode": "^1.5.5",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",

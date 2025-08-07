@@ -32,24 +32,6 @@ export async function POST(
 
     const { guestId, message } = parsed.data;
 
-    const invitation = await prisma.invitation.findFirst({
-      where: {
-        id: params.id,
-      },
-    });
-
-    if (!invitation) {
-      return ResponseJson(
-        {
-          message: "Komentar tidak ditemukan",
-          errors: {
-            id: ["ID komentar tidak ditemukan atau tidak valid"],
-          },
-        },
-        { status: 404 }
-      );
-    }
-
     const guest = await prisma.guest.findFirst({
       where: {
         id: guestId,

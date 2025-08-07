@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export function InvitationIdCardSkeleton() {
   return (
-    <div className="aspect-square bg-gray-200 shadow-md rounded-lg p-3 flex flex-col items-center justify-center animate-pulse">
+    <div className="aspect-square bg-gray-100 shadow-md rounded-lg p-3 flex flex-col items-center justify-center animate-pulse">
       <div className="w-1/2 aspect-square bg-gray-300 rounded-md mb-2" />
       <div className="h-4 w-3/4 bg-gray-300 rounded" />
     </div>
