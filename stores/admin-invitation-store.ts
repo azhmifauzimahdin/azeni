@@ -271,8 +271,13 @@ const useAdminInvitationStore = create<InvitationState>((set) => ({
           rsvpMaxGuests: 1,
           rsvpDeadline: new Date(),
           rsvpAllowNote: true,
+          commentEnabled: true,
           whatsappMessageTemplate: "",
           scanResetCountdownSeconds: 5,
+          checkinCheckoutEnabled: true,
+          coupleIntroductionText: "",
+          scheduleIntroductionText: "",
+          giftIntroductionText: "",
           updatedAt: "",
           createdAt: "",
         };
