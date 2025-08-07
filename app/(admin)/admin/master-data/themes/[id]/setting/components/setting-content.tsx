@@ -18,7 +18,7 @@ const SettingContent: React.FC<SettingContentProps> = ({ params }) => {
 
   return (
     <>
-      <NavigationBack href={`/admin/master-data/themes/${params.id}`} />
+      <NavigationBack href={`/dashboard/invitation/${params.id}`} />
       <div>
         <Heading
           title="Pengaturan"

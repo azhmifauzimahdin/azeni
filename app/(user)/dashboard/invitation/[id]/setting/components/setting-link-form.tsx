@@ -18,7 +18,7 @@ import useInvitationStore from "@/stores/invitation-store";
 import { Invitation } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { Save } from "lucide-react";
+import { Link, Save } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -154,6 +154,7 @@ const SettingLinkForm: React.FC<SettingLinkFormsProps> = ({
               isFetching={isFetching}
               onClick={() => setIsModalOpen(true)}
             >
+              <Link />
               Ubah Link
             </Button>
           </div>

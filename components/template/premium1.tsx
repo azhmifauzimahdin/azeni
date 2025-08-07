@@ -424,9 +424,7 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
             Konfirmasi Kehadiran
           </h2>
           <p data-aos="zoom-in">
-            Merupakan suatu kebahagiaan dan kehormatan bagi kami, apabila
-            Bapak/Ibu/Saudara/i, berkenan hadir dan memberikan do&apos;a restu
-            kepada kami.
+            {invitation.setting?.rsvpIntroductionText || ""}
           </p>
           <Img
             src={invitation.image}

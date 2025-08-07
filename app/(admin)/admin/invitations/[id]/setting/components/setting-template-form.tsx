@@ -13,8 +13,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { createWhatsappMessageTemplateSchema } from "@/lib/schemas/setting";
 import { SettingService } from "@/lib/services";
 import { handleError } from "@/lib/utils/handle-error";
+import useAdminInvitationStore from "@/stores/admin-invitation-store";
 import { Invitation } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Save } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -83,9 +85,15 @@ const SettingTemplateForm: React.FC<SettingTemplateFormsProps> = ({
   initialData,
   isFetching,
 }) => {
+  const updateSettingInInvitation = useAdminInvitationStore(
+    (state) => state.updateSettingInInvitation
+  );
+
   const form = useForm<WhatsappMessageTemplateFormValues>({
     resolver: zodResolver(createWhatsappMessageTemplateSchema),
-    defaultValues: { whatsappMessageTemplate: "Masuk" },
+    defaultValues: {
+      whatsappMessageTemplate: "Assalamu'alaikum warahmatullahi wabarakatuh",
+    },
   });
 
   useEffect(() => {
@@ -100,7 +108,8 @@ const SettingTemplateForm: React.FC<SettingTemplateFormsProps> = ({
   const onSubmit = async (data: WhatsappMessageTemplateFormValues) => {
     try {
       setLoading(true);
-      await SettingService.updateWaTemplate(params.id, data);
+      const res = await SettingService.updateWaTemplate(params.id, data);
+      updateSettingInInvitation(params.id, res.data);
       toast.success("Template berhasil diperbarui");
     } catch (error) {
       handleError(error, "wa template");
@@ -180,6 +189,7 @@ const SettingTemplateForm: React.FC<SettingTemplateFormsProps> = ({
                   disabled={loading}
                   isFetching={isFetching}
                 >
+                  <Save />
                   Simpan Template
                 </Button>
               </div>

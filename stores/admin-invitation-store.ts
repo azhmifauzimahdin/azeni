@@ -278,6 +278,7 @@ const useAdminInvitationStore = create<InvitationState>((set) => ({
           coupleIntroductionText: "",
           scheduleIntroductionText: "",
           giftIntroductionText: "",
+          rsvpIntroductionText: "",
           updatedAt: "",
           createdAt: "",
         };

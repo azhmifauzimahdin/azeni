@@ -25,7 +25,7 @@ export async function PATCH(
     const role = user.publicMetadata.role;
 
     const body = await req.json();
-    const parsed = SettingSchema.enableInvitationStatusSchema.safeParse(body);
+    const parsed = SettingSchema.enableCommentCheckSchema.safeParse(body);
 
     if (!parsed.success) {
       return handleZodError(parsed.error);
@@ -43,7 +43,7 @@ export async function PATCH(
       );
     }
 
-    const { invitationEnabled } = parsed.data;
+    const { commentEnabled, checkinCheckoutEnabled } = parsed.data;
 
     const invitationByUserId = await prisma.invitation.findFirst({
       where: {
@@ -74,18 +74,23 @@ export async function PATCH(
         invitationId: params.id,
       },
       data: {
-        invitationEnabled,
+        commentEnabled,
+        checkinCheckoutEnabled,
       },
     });
 
     return ResponseJson(
       {
-        message: "Status undangan berhasil diperbarui",
+        message:
+          "Data pengaturan status komentar dan checkin-out berhasil diperbarui",
         data: setting,
       },
       { status: 200 }
     );
   } catch (error) {
-    return handleError(error, "Gagal memperbarui status undangan");
+    return handleError(
+      error,
+      "Gagal memperbarui pengaturan status komentar dan checkin-out"
+    );
   }
 }

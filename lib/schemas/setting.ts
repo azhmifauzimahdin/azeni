@@ -58,6 +58,7 @@ export const createApiRSVPSchema = z.object({
       "Status catatan tambahan harus berupa boolean (ya/tidak)",
   }),
 });
+
 const allowedPlaceholders = [
   "name",
   "brideName",
@@ -109,9 +110,51 @@ export const enableInvitationStatusSchema = z.object({
   }),
 });
 
+export const enableCommentCheckSchema = z.object({
+  commentEnabled: z.boolean({
+    required_error: "Status wajib diisi",
+    invalid_type_error: "Status harus berupa boolean (ya/tidak)",
+  }),
+  checkinCheckoutEnabled: z.boolean({
+    required_error: "Status wajib diisi",
+    invalid_type_error: "Status harus berupa boolean (ya/tidak)",
+  }),
+});
+
 export const scanResetCountdownSecondsSchema = z.object({
   scanResetCountdownSeconds: z
     .number({ invalid_type_error: "Harus berupa angka" })
     .min(0, { message: "Minimal 0 detik" })
     .max(300, { message: "Maksimal 300 detik" }),
+});
+
+export const introductionSettingSchema = z.object({
+  coupleIntroductionText: z
+    .string({
+      required_error: "Teks pembuka wajib diisi",
+      invalid_type_error: "Teks pembuka harus berupa teks",
+    })
+    .min(1, { message: "Teks pembuka wajib diisi" })
+    .max(255, { message: "Teks pembuka terlalu panjang" }),
+  scheduleIntroductionText: z
+    .string({
+      required_error: "Teks acara wajib diisi",
+      invalid_type_error: "Teks acara harus berupa teks",
+    })
+    .min(1, { message: "Teks acara wajib diisi" })
+    .max(255, { message: "Teks acara terlalu panjang" }),
+  giftIntroductionText: z
+    .string({
+      required_error: "Teks kado wajib diisi",
+      invalid_type_error: "Teks kado harus berupa teks",
+    })
+    .min(1, { message: "Teks kado wajib diisi" })
+    .max(255, { message: "Teks kado terlalu panjang" }),
+  rsvpIntroductionText: z
+    .string({
+      required_error: "Teks kehadiran wajib diisi",
+      invalid_type_error: "Teks kehadiran harus berupa teks",
+    })
+    .min(1, { message: "Teks kehadiran wajib diisi" })
+    .max(255, { message: "Teks kehadiran terlalu panjang" }),
 });

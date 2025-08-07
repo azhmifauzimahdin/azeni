@@ -17,6 +17,7 @@ import { handleError } from "@/lib/utils/handle-error";
 import useInvitationStore from "@/stores/invitation-store";
 import { Invitation } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Trash2, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -134,6 +135,7 @@ const Settingform: React.FC<SettingLinkFormsProps> = ({
                 }}
                 className="w-full md:w-auto"
               >
+                <X />
                 Batal
               </Button>
               <Button
@@ -143,6 +145,7 @@ const Settingform: React.FC<SettingLinkFormsProps> = ({
                 disabled={form.watch("slug") !== initialData?.slug}
                 isLoading={loading}
               >
+                <Trash2 />
                 Hapus Undangan
               </Button>
             </div>
@@ -164,6 +167,7 @@ const Settingform: React.FC<SettingLinkFormsProps> = ({
             isFetching={isFetching}
             onClick={() => setIsModalOpen(true)}
           >
+            <Trash2 />
             Hapus Undangan
           </Button>
         </div>

@@ -60,6 +60,7 @@ model Setting {
   coupleIntroductionText    String     @default("Dengan memohon rahmat dan ridha Allah SWT, Kami bermaksud menyelenggarakan acara pernikahan putra-putri kami")
   scheduleIntroductionText  String     @default("Yang Insyaallah akan diselenggarakan pada")
   giftIntroductionText      String     @default("Doa restu Bapak/Ibu/Saudara/i sudah merupakan hadiah terbaik bagi kami. Dan jika memberi adalah ungkapan tanda kasih Anda, Anda dapat memberi kado secara cashless.")
+  rsvpIntroductionText      String     @default("Merupakan suatu kebahagiaan dan kehormatan bagi kami, apabila Bapak/Ibu/Saudara/i, berkenan hadir dan memberikan doa restu kepada kami.")
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
 

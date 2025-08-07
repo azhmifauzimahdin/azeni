@@ -6,6 +6,18 @@ export interface SettingInvitationStatusRequest {
   invitationEnabled: boolean;
 }
 
+export interface SettingCommentCheckStatusRequest {
+  commentEnabled: boolean;
+  checkinCheckoutEnabled: boolean;
+}
+
+export interface SettingIntroductionTextRequest {
+  coupleIntroductionText: string;
+  scheduleIntroductionText: string;
+  giftIntroductionText: string;
+  rsvpIntroductionText: string;
+}
+
 export interface SettingInvitationScanResetCountdownSecondsRequest {
   scanResetCountdownSeconds: number;
 }
@@ -31,6 +43,7 @@ export interface Setting {
   coupleIntroductionText: string;
   scheduleIntroductionText: string;
   giftIntroductionText: string;
+  rsvpIntroductionText: string;
   createdAt: string;
   updatedAt: string;
 }

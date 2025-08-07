@@ -1,5 +1,7 @@
 import {
   Setting,
+  SettingCommentCheckStatusRequest,
+  SettingIntroductionTextRequest,
   SettingInvitationScanResetCountdownSecondsRequest,
   SettingInvitationStatusRequest,
   SettingRSVPRequest,
@@ -37,6 +39,30 @@ export async function updateInvitationStatus(
 ): Promise<ApiResponse<Setting>> {
   const res = await httpRequest.patch(
     `/api/invitations/${invitationId}/setting/activation`,
+    request
+  );
+
+  return res.data;
+}
+
+export async function updateCommentCheckStatus(
+  invitationId: string,
+  request: SettingCommentCheckStatusRequest
+): Promise<ApiResponse<Setting>> {
+  const res = await httpRequest.patch(
+    `/api/invitations/${invitationId}/setting/enable-comment-check`,
+    request
+  );
+
+  return res.data;
+}
+
+export async function updateIntroductionText(
+  invitationId: string,
+  request: SettingIntroductionTextRequest
+): Promise<ApiResponse<Setting>> {
+  const res = await httpRequest.patch(
+    `/api/invitations/${invitationId}/setting/introduction-text`,
     request
   );
 

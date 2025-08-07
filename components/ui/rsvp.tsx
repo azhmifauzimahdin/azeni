@@ -137,7 +137,11 @@ const RSVP: React.FC<RSVPProps> = ({
             </div>
 
             {isAttending && (
-              <div data-aos="fade-up" data-aos-delay="150">
+              <div
+                className="spacey-y-4"
+                data-aos="fade-up"
+                data-aos-delay="150"
+              >
                 <FormField
                   control={form.control}
                   name="totalGuests"

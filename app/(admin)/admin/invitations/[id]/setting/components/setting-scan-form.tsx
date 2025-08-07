@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { scanResetCountdownSecondsSchema } from "@/lib/schemas/setting";
 import { SettingService } from "@/lib/services";
 import { handleError } from "@/lib/utils/handle-error";
-import useInvitationStore from "@/stores/invitation-store";
+import useAdminInvitationStore from "@/stores/admin-invitation-store";
 import { Invitation } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Minus, Plus } from "lucide-react";
@@ -36,7 +36,7 @@ const SettingScanForm: React.FC<SettingScanFormsProps> = ({
   initialData,
   isFetching,
 }) => {
-  const updateSettingInInvitation = useInvitationStore(
+  const updateSettingInInvitation = useAdminInvitationStore(
     (state) => state.updateSettingInInvitation
   );
 

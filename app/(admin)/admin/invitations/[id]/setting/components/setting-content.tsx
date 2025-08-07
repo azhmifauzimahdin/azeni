@@ -3,8 +3,8 @@
 import { Heading } from "@/components/ui/heading";
 import React from "react";
 import NavigationBack from "@/components/ui/navigation-back";
+import useUserInvitations from "@/hooks/use-user-invitation";
 import SettingForm from "./setting-form";
-import useAdminInvitations from "@/hooks/use-admin-invitation";
 
 interface SettingContentProps {
   params: {
@@ -13,12 +13,12 @@ interface SettingContentProps {
 }
 
 const SettingContent: React.FC<SettingContentProps> = ({ params }) => {
-  const { getInvitationById, isFetching } = useAdminInvitations();
+  const { getInvitationById, isFetching } = useUserInvitations();
   const invitation = getInvitationById(params.id);
 
   return (
     <>
-      <NavigationBack href={`/admin/invitations/${params.id}`} />
+      <NavigationBack href={`/dashboard/invitation/${params.id}`} />
       <div>
         <Heading
           title="Pengaturan"
