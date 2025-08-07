@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import BottomNavbar from "@/components/navigations/BottomNavbar";
 import SpinningDisc from "@/components/ui/spinning-disc";
 import { navLinks } from "@/data/navLinks";
@@ -39,8 +39,15 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
   const [isSubmittingComment, setIsSubmittingComment] =
     useState<boolean>(false);
   const [isSubmittingRSVP, setIsSubmittingRSVP] = useState<boolean>(false);
+  const [isClient, setIsClient] = useState<boolean>(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) return null;
 
   const handleStartAudio = () => {
     if (audioRef.current) {
@@ -116,7 +123,7 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
         invitation={invitation}
       />
 
-      {!invitation.setting?.checkinCheckoutEnabled && (
+      {invitation.setting?.checkinCheckoutEnabled && (
         <QrDownloadDialog codeGuest={invitation.guest.code} />
       )}
 

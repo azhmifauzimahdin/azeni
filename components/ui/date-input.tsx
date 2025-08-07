@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, forwardRef, type ForwardedRef } from "react";
-import { format } from "date-fns";
+import { useState, useEffect, forwardRef, type ForwardedRef } from "react";
+import { format, parse, isMatch, isValid } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
-import { Button } from "./button";
+import { Input } from "./input";
 import { Calendar } from "./calendar";
 import { cn } from "@/lib/utils";
 
@@ -18,7 +18,9 @@ interface DateInputProps {
   isFetching?: boolean;
 }
 
-const DateInput = forwardRef<HTMLButtonElement, DateInputProps>(
+const DATE_FORMAT = "yyyy-MM-dd";
+
+const DateInput = forwardRef<HTMLInputElement, DateInputProps>(
   (
     {
       id,
@@ -29,35 +31,91 @@ const DateInput = forwardRef<HTMLButtonElement, DateInputProps>(
       className,
       isFetching,
     }: DateInputProps,
-    ref: ForwardedRef<HTMLButtonElement>
+    ref: ForwardedRef<HTMLInputElement>
   ) => {
     const [open, setOpen] = useState(false);
+    const [inputValue, setInputValue] = useState("");
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
+    useEffect(() => {
+      if (value) {
+        const formatted = format(value, DATE_FORMAT);
+        if (formatted !== inputValue) {
+          setInputValue(formatted);
+        }
+      } else {
+        setInputValue("");
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [value]);
+
+    const validateInput = (val: string) => {
+      const isValidFormat = isMatch(val, DATE_FORMAT);
+      const parsed = parse(val, DATE_FORMAT, new Date());
+
+      if (isValidFormat && isValid(parsed)) {
+        onChange(parsed);
+      }
+    };
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const val = e.target.value;
+      setInputValue(val);
+
+      if (val.length === DATE_FORMAT.length) {
+        validateInput(val);
+      }
+    };
+
+    const handleInputBlur = () => {
+      if (inputValue.trim() === "") {
+        onChange(null);
+        return;
+      }
+
+      const parsed = parse(inputValue, DATE_FORMAT, new Date());
+      const isValidFormat = isMatch(inputValue, DATE_FORMAT);
+
+      if (isValidFormat && isValid(parsed)) {
+        onChange(parsed);
+      } else {
+        setInputValue(value ? format(value, DATE_FORMAT) : "");
+      }
+
+      onBlur?.();
+    };
+
+    const handleSelectDate = (d: Date | undefined) => {
+      if (!d) return;
+      if (!value || d.getTime() !== value.getTime()) {
+        onChange(d);
+        setInputValue(format(d, DATE_FORMAT));
+        setOpen(false);
+      }
+    };
+
     return (
-      <div onBlur={onBlur} className="w-full">
+      <div className="w-full relative">
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
-            <Button
-              ref={ref}
-              id={id}
-              variant="outline"
-              className={cn(
-                "w-full h-10 justify-start items-center text-left text-base font-normal shadow-sm",
-                className
-              )}
-              disabled={disabled}
-              type="button"
-              isFetching={isFetching}
-            >
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              <span className="flex items-center h-full">
-                {value ? format(value, "yyyy-MM-dd") : "Pilih tanggal"}
-              </span>
-            </Button>
+            <div className="relative col-span-2">
+              <CalendarIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+              <Input
+                ref={ref}
+                id={id}
+                value={inputValue}
+                onChange={handleInputChange}
+                onBlur={handleInputBlur}
+                disabled={disabled}
+                isFetching={isFetching}
+                placeholder="yyyy-mm-dd"
+                className={cn("pl-9", className)}
+              />
+            </div>
           </PopoverTrigger>
+
           <PopoverContent
             className="w-auto rounded-md overflow-hidden p-0"
             align="start"
@@ -65,14 +123,7 @@ const DateInput = forwardRef<HTMLButtonElement, DateInputProps>(
             <Calendar
               mode="single"
               selected={value ?? undefined}
-              onSelect={(d) => {
-                if (!d) return;
-
-                if (!value || d.getTime() !== value.getTime()) {
-                  onChange(d);
-                  setOpen(false);
-                }
-              }}
+              onSelect={handleSelectDate}
               initialFocus
               captionLayout="dropdown"
               fromYear={today.getFullYear() - 20}
