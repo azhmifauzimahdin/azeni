@@ -184,10 +184,10 @@ const ScanForm: React.FC<ScanFormsProps> = ({
 
       <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-lg">
         <Img
-          src="https://res.cloudinary.com/dxtqjuvcg/image/upload/v1752573270/azen_te7lav.png"
-          wrapperClassName="w-10 h-10 mb-4"
+          src="/assets/img/azen-green.png"
+          wrapperClassName="w-16 h-16 mb-4"
           alt="Logo"
-          sizes="48px"
+          sizes="300px"
         />
 
         <h1 className="text-3xl md:text-4xl font-bold text-green-app-primary mb-6 text-center">

@@ -10,9 +10,21 @@ const HeroSection: React.FC = () => {
       <header className="absolute top-0 left-0 w-full z-20">
         <div className="flex justify-between items-center px-6 py-4 max-w-6xl mx-auto">
           <div className="flex items-center gap-2">
-            <span className="font-semibold text-lg text-white">
-              {process.env.NEXT_PUBLIC_BRAND_NAME}
-            </span>
+            <Link
+              href="/"
+              className="flex items-center text-lg font-medium tracking-wide text-white"
+            >
+              <Img
+                src="/assets/img/azen-white.png"
+                alt="sample"
+                wrapperClassName="w-[1.04rem] h-[1.04rem]"
+                sizes="300px"
+                priority
+              />
+              <div className="pt-0.5 font-medium">
+                {(process.env.NEXT_PUBLIC_BRAND_NAME ?? "").slice(1)}
+              </div>
+            </Link>
           </div>
           <nav className="hidden md:flex gap-6 text-white text-sm">
             {[
@@ -47,6 +59,13 @@ const HeroSection: React.FC = () => {
         </div>
 
         <div className="max-w-3xl z-10">
+          <Img
+            src="/assets/img/azen-white.png"
+            alt="sample"
+            wrapperClassName="w-28 h-28 mx-auto"
+            sizes="500px"
+            priority
+          />
           <h1
             className="text-4xl md:text-6xl font-bold leading-tight mb-4 drop-shadow-md"
             data-aos="fade-down"

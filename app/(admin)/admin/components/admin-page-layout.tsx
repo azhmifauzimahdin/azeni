@@ -66,19 +66,17 @@ const AdminPageLayout = ({
                 </Button>
                 <Link
                   href="/"
-                  className="flex items-center gap-1.5 text-lg font-medium tracking-wide"
+                  className="flex items-center text-lg font-medium tracking-wide"
                 >
-                  <div className="bg-[#33B3B3] p-1 rounded-tl-lg rounded-bl-sm rounded-br-lg rounded-tr-sm">
-                    <Img
-                      src="https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751291122/azen-white-b_rzbq1g.png"
-                      alt="Logo"
-                      wrapperClassName="w-4 h-4"
-                      sizes="16px"
-                      priority
-                    />
-                  </div>
-                  <div className="pt-0.5 font-gallery font-medium">
-                    {process.env.NEXT_PUBLIC_BRAND_NAME}
+                  <Img
+                    src="/assets/img/azen-white.png"
+                    alt="sample"
+                    wrapperClassName="w-[1.04rem] h-[1.04rem]"
+                    sizes="300px"
+                    priority
+                  />
+                  <div className="pt-0.5 font-medium">
+                    {(process.env.NEXT_PUBLIC_BRAND_NAME ?? "").slice(1)}
                   </div>
                 </Link>
               </div>

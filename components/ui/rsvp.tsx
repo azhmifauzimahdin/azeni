@@ -138,7 +138,7 @@ const RSVP: React.FC<RSVPProps> = ({
 
             {isAttending && (
               <div
-                className="spacey-y-4"
+                className="space-y-4"
                 data-aos="fade-up"
                 data-aos-delay="150"
               >

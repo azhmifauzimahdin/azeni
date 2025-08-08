@@ -19,7 +19,7 @@ const PdfDownloadButton: React.FC<PdfDownloadButtonProps> = ({
       document={
         <TransactionReceipt
           data={transaction}
-          logoUrl="/assets/img/azen-green-a.png"
+          logoUrl="/assets/img/azen-green.png"
           signatureUrl={undefined}
         />
       }
