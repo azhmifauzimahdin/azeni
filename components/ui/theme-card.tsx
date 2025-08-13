@@ -7,7 +7,7 @@ import React from "react";
 
 export const ThemeCardSkeleton: React.FC = () => {
   return (
-    <div className="relative bg-white rounded-xl shadow-sm overflow-hidden border animate-pulse">
+    <div className="relative bg-white rounded-xl shadow-md overflow-hidden border animate-pulse">
       <div className="w-full aspect-square bg-gray-200" />
 
       <div className="p-4 space-y-4">
@@ -59,7 +59,7 @@ const ThemeCard: React.FC<ThemeCardProps> = ({
   const categoryName = data.category?.name || "Tanpa Kategori";
 
   return (
-    <div className="relative bg-white rounded-xl shadow-sm overflow-hidden border hover:shadow-md transition-all duration-300">
+    <div className="relative bg-white rounded-xl shadow-md overflow-hidden border transition-all duration-300">
       <Img
         src={data.thumbnail}
         alt={data.name}

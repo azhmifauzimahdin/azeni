@@ -6,7 +6,10 @@ export function handleError(error: unknown, contextMessage = "Error occurred") {
     const status = error.response?.status;
     const messageFromApi = error.response?.data?.message;
 
-    if ((status === 403 || status === 409) && messageFromApi) {
+    if (
+      (status === 403 || status === 409 || status === 400) &&
+      messageFromApi
+    ) {
       toast.error(messageFromApi);
     } else {
       toast.error("Cek kembali data dan koneksi internet.");

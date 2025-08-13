@@ -57,8 +57,7 @@ async function main() {
     data: {
       name: "premium-001",
       categoryId: themeCategory1.id,
-      thumbnail:
-        "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751205982/thumbnail-premium001_ijf4jj.png",
+      thumbnail: "/assets/themes/premium-001/img/thumbnail.png",
       originalPrice: 100000,
       discount: 25000,
       isPercent: false,
@@ -642,22 +641,103 @@ Hormat kami,
   await prisma.referralCode.createMany({
     data: [
       {
+        userId: "39efd6e4-0a47-4a39-b4e0-ef1f8756c4f2",
+        userName: "azen",
         code: "NIKAHFLAT20",
-        description: "Diskon langsung Rp20.000",
+        description: "Dapatkan potongan harga langsung sebesar Rp10.000.",
         discount: new Decimal(20000),
         maxDiscount: new Decimal(0),
         isPercent: false,
         isActive: true,
       },
-      {
-        code: "NIKAHFLAT10",
-        description: "Diskon langsung Rp10.000",
-        discount: new Decimal(10000),
-        maxDiscount: new Decimal(0),
-        isPercent: false,
-        isActive: true,
-      },
     ],
+  });
+
+  const referral1 = await prisma.referralCode.create({
+    data: {
+      userId: "user_2yXw1nNz13AvBzTrmDBjVeGWW7Q",
+      userName: "azen",
+      code: "NIKAHFLAT10",
+      description: "Dapatkan potongan harga langsung sebesar Rp10.000.",
+      discount: new Decimal(10000),
+      maxDiscount: new Decimal(0),
+      isPercent: false,
+      isActive: true,
+    },
+  });
+
+  await prisma.referralConfig.create({
+    data: {
+      userId: "39efd6e4-0a47-4a39-b4e0-ef1f8756c4f5",
+      description: "Dapatkan potongan harga langsung sebesar Rp10.000.",
+      discount: 10000,
+      isPercent: false,
+      maxDiscount: 0,
+    },
+  });
+
+  // Contoh Undangan dengan pemakaian referral code
+  const invitationUser1 = await prisma.invitation.create({
+    data: {
+      userId: "39efd6e4-0a47-4a39-b4e0-ef1f8756c4f5",
+      groom: "Azhmi",
+      bride: "Rina",
+      slug: "azhmi-rina",
+      themeId: themePremium.id,
+      musicId: music.id,
+      image:
+        "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1752590889/cover_fhqza7.jpg",
+      date: new Date("2028-07-27T00:00:00Z"),
+      isTemplate: true,
+      expiresAt: new Date("2030-12-31T00:00:00Z"),
+    },
+  });
+
+  await prisma.transaction.create({
+    data: {
+      orderId: randomUUID(),
+      invitationId: invitationUser1.id,
+      invitationSlug: invitationUser1.slug,
+      groomName: invitationUser1.groom,
+      brideName: invitationUser1.bride,
+      originalAmount: themePremium.originalPrice,
+      amount: amountPremium.sub(referral1.discount),
+      referralCodeId: referral1.id,
+      referralDiscountAmount: referral1.discount,
+      date: new Date("2025-01-01T12:00:00Z"),
+      statusId: paymentStatus.id,
+    },
+  });
+  const invitationUser2 = await prisma.invitation.create({
+    data: {
+      userId: "39efd6e4-0a47-4a39-b4e0-ef1f8756c4f5",
+      groom: "Azhmi",
+      bride: "Eni",
+      slug: "azhmi-eni",
+      themeId: themePremium.id,
+      musicId: music.id,
+      image:
+        "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1752590889/cover_fhqza7.jpg",
+      date: new Date("2028-07-27T00:00:00Z"),
+      isTemplate: true,
+      expiresAt: new Date("2030-12-31T00:00:00Z"),
+    },
+  });
+
+  await prisma.transaction.create({
+    data: {
+      orderId: randomUUID(),
+      invitationId: invitationUser2.id,
+      invitationSlug: invitationUser2.slug,
+      groomName: invitationUser2.groom,
+      brideName: invitationUser2.bride,
+      originalAmount: themePremium.originalPrice,
+      amount: amountPremium.sub(referral1.discount),
+      referralCodeId: referral1.id,
+      referralDiscountAmount: referral1.discount,
+      date: new Date("2025-01-01T12:00:00Z"),
+      statusId: paymentStatus.id,
+    },
   });
 }
 

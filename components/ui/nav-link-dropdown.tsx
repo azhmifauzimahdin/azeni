@@ -99,7 +99,7 @@ const NavLinkDropdown: FC<NavLinkDropdownProps> = ({
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="overflow-hidden space-y-1 py-1"
+            className="overflow-hidden space-y-1 py-1 ps-3"
           >
             {options.map((data, index) => (
               <Link

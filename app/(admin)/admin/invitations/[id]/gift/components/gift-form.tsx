@@ -287,26 +287,6 @@ const GiftForm: React.FC<GiftFormsProps> = ({
             />
             <FormField
               control={formbank.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor={field.name} required>
-                    Nama Akun / Rekening
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      id={field.name}
-                      placeholder="Azhmi Fauzi"
-                      disabled={loadingSubmitBank}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={formbank.control}
               name="accountNumber"
               render={({ field }) => (
                 <FormItem>
@@ -319,6 +299,26 @@ const GiftForm: React.FC<GiftFormsProps> = ({
                       placeholder="123456789"
                       disabled={loadingSubmitBank}
                       type="number"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={formbank.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor={field.name} required>
+                    Nama Akun / Rekening
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      id={field.name}
+                      placeholder="Azhmi Fauzi"
+                      disabled={loadingSubmitBank}
                       {...field}
                     />
                   </FormControl>

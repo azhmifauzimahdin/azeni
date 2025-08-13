@@ -142,11 +142,11 @@ const InvitationCheckoutCard: React.FC<InvitationCheckoutCardProps> = ({
       </CardHeader>
 
       <CardContent className="p-6 space-y-6">
-        <div className="flex items-center gap-4">
+        <div className="flex gap-4">
           <Img
             src={theme.thumbnail}
             alt={theme.name}
-            wrapperClassName="relative w-24 h-16 rounded-md overflow-hidden border"
+            wrapperClassName="relative w-24 h-24 rounded-md overflow-hidden border"
             sizes="96px"
             className="object-cover"
           />

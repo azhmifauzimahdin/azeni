@@ -16,7 +16,8 @@ const InvitationThemeForm: React.FC = () => {
   const { themes, isFetching } = useThemes();
   const router = useRouter();
 
-  const [search, setSearch] = useState("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [search, setSearch] = useState<string>("");
   const [activeCategory, setActiveCategory] = useState("Semua");
 
   const categoryList = useMemo(() => {
@@ -102,9 +103,11 @@ const InvitationThemeForm: React.FC = () => {
                 key={theme.id}
                 buttonText="Pilih"
                 data={theme}
-                onActivate={(id) =>
-                  router.push(`/dashboard/invitation/new?theme_id=${id}`)
-                }
+                loading={isLoading}
+                onActivate={(id) => {
+                  setIsLoading(true);
+                  router.push(`/dashboard/invitation/new?theme_id=${id}`);
+                }}
                 demoHref={`/${theme.invitation?.slug}/${theme.invitation?.guest.code}`}
               />
             ))

@@ -18,7 +18,6 @@ const WeddingGift: React.FC<WeddingGiftProps> = ({ introduction, banks }) => {
     try {
       await navigator.clipboard.writeText(nomor);
       toast.success("Nomor rekening berhasil disalin");
-      console.log("Masuk");
     } catch (err) {
       toast.error("Nomor rekening gagal disalin");
       console.error("Failed to copy: ", err);

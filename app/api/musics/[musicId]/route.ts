@@ -18,7 +18,6 @@ async function deleteMusicFromCloudinary(url: string) {
   if (!publicId) return;
 
   try {
-    console.log(publicId);
     await cloudinary.uploader.destroy(publicId, { resource_type: "video" });
   } catch (err) {
     console.error("Gagal menghapus musik dari Cloudinary:", err);

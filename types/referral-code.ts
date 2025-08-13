@@ -1,7 +1,10 @@
+import { Bank } from "./bank";
 import { Transaction } from "./transaction";
 
 export interface ReferralCode {
   id: string;
+  userId: string;
+  userName: string;
   code: string;
   description?: string;
   discount: string;
@@ -13,6 +16,8 @@ export interface ReferralCode {
 
   transactions: Transaction[];
   referralCodeLogs: ReferralCodeLog[];
+  withdrawals: ReferralWithdrawal[];
+  balance: BalanceReferralCode;
 }
 
 export interface ReferralCodeRequest {
@@ -38,4 +43,48 @@ export interface ReferralCodeLog {
   changedAt: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export enum WithdrawalStatus {
+  PENDING = "PENDING",
+  APPROVED = "APPROVED",
+  REJECTED = "REJECTED",
+}
+
+export interface ReferralWithdrawal {
+  id: string;
+  referralCodeId: string;
+  amount: string;
+  status: WithdrawalStatus;
+  requestedAt: string;
+  processedAt: string | null;
+  bankId: string;
+  accountNumber: string;
+  name: string;
+  note: string | null;
+  transferProofUrl: string | null;
+  createdAt: string;
+  updatedAt: string;
+
+  referralCode: ReferralCode;
+  bank: Bank;
+}
+
+export interface BalanceReferralCode {
+  totalReward: string;
+  totalWithdrawn: string;
+  availableBalance: string;
+}
+
+export interface RequestReferralWithdrawal {
+  amount: string;
+  bankId: string;
+  accountNumber: string;
+  name: string;
+  note?: string;
+}
+export interface RequestUpdateStatusReferralWithdrawal {
+  status: "APPROVED" | "REJECTED";
+  transferProofUrl?: string;
+  note?: string;
 }

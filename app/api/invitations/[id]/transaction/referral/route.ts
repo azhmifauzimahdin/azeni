@@ -103,6 +103,13 @@ export async function PATCH(
       );
     }
 
+    if (referral.userId === userId) {
+      return ResponseJson(
+        { message: "Anda tidak bisa menggunakan kode referral milik sendiri." },
+        { status: 400 }
+      );
+    }
+
     if (transaction.referralCode?.code === referralCode) {
       return ResponseJson(
         { message: "Kode referral sudah diterapkan sebelumnya." },
@@ -125,7 +132,6 @@ export async function PATCH(
           },
         },
       });
-      console.log(alreadyUsed);
 
       if (alreadyUsed) {
         return ResponseJson(

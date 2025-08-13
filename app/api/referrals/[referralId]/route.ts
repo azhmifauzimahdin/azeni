@@ -109,6 +109,23 @@ export async function PUT(
             createdAt: "desc",
           },
         },
+        transactions: {
+          include: {
+            status: true,
+            referralCode: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
+        withdrawals: {
+          include: {
+            bank: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
       },
     });
 

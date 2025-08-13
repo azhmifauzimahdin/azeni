@@ -8,7 +8,9 @@ const alertVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-gradient-wedding-green border-green-200 text-green-900/90",
+        default: "bg-gradient-wedding-green border-green-200 text-slate-800",
+        gradientPinkPurple:
+          "bg-gradient-pink-purple border-purple-200 text-slate-800",
         destructive:
           "bg-gradient-destructive border-red-200 text-red-900/90 [&>svg]:text-red-900",
       },

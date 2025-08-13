@@ -1,4 +1,4 @@
-import { ReferralCode } from "@/types";
+import { ReferralCode, ReferralWithdrawal } from "@/types";
 import { create } from "zustand";
 
 interface BankState {
@@ -6,6 +6,10 @@ interface BankState {
   setReferralCodes: (referralCodes: ReferralCode[]) => void;
   upsertReferralCodeAtFirst: (newReferralCode: ReferralCode) => void;
   deleteReferralCodeById: (id: string) => void;
+  upsertWithdrawalToReferralCode: (
+    referralCodeId: string,
+    newWithdrawal: ReferralWithdrawal
+  ) => void;
 }
 
 const useAdminReferralCodeStore = create<BankState>((set) => ({
@@ -28,6 +32,29 @@ const useAdminReferralCodeStore = create<BankState>((set) => ({
   deleteReferralCodeById: (id) =>
     set((state) => ({
       referralCodes: state.referralCodes.filter((b) => b.id !== id),
+    })),
+  upsertWithdrawalToReferralCode: (referralCodeId, newWithdrawal) =>
+    set((state) => ({
+      referralCodes: state.referralCodes.map((code) => {
+        if (code.id !== referralCodeId) return code;
+
+        const existingIndex = code.withdrawals.findIndex(
+          (w) => w.id === newWithdrawal.id
+        );
+
+        let updatedWithdrawals;
+        if (existingIndex !== -1) {
+          updatedWithdrawals = [...code.withdrawals];
+          updatedWithdrawals[existingIndex] = newWithdrawal;
+        } else {
+          updatedWithdrawals = [newWithdrawal, ...code.withdrawals];
+        }
+
+        return {
+          ...code,
+          withdrawals: updatedWithdrawals,
+        };
+      }),
     })),
 }));
 

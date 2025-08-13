@@ -65,6 +65,7 @@ const HeroSection: React.FC = () => {
             wrapperClassName="w-28 h-28 mx-auto"
             sizes="500px"
             priority
+            data-aos="fade-down"
           />
           <h1
             className="text-4xl md:text-6xl font-bold leading-tight mb-4 drop-shadow-md"

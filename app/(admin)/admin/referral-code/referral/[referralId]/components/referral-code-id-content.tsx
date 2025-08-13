@@ -2,31 +2,31 @@
 
 import React from "react";
 import { Heading } from "@/components/ui/heading";
-import ReferralCodeLogForm from "./referral-code-log-form";
+import ReferralCodeIdForm from "./referral-code-id-form";
 import useAdminReferralCode from "@/hooks/use-admin-referral";
 import NavigationBack from "@/components/ui/navigation-back";
 
-interface ReferralCodeLogContentProps {
+interface ReferralCodeIdContentProps {
   params: {
     referralId: string;
   };
 }
 
-const ReferralCodeLogContent: React.FC<ReferralCodeLogContentProps> = ({
+const ReferralCodeIdContent: React.FC<ReferralCodeIdContentProps> = ({
   params,
 }) => {
   const { getReferralCodeByCode, isFetching } = useAdminReferralCode();
-  const transaction = getReferralCodeByCode(params.referralId);
+  const transactions = getReferralCodeByCode(params.referralId);
 
   return (
     <>
-      <NavigationBack href="/admin/referral-code" />
+      <NavigationBack href="/admin/referral-code/referral" />
       <div>
-        <Heading title={`Histori - ${params.referralId}`} />
+        <Heading title={`Transaksi - ${params.referralId}`} />
       </div>
       <div>
-        <ReferralCodeLogForm
-          initialData={transaction?.referralCodeLogs}
+        <ReferralCodeIdForm
+          initialData={transactions?.transactions}
           isFetching={isFetching}
         />
       </div>
@@ -34,4 +34,4 @@ const ReferralCodeLogContent: React.FC<ReferralCodeLogContentProps> = ({
   );
 };
 
-export default ReferralCodeLogContent;
+export default ReferralCodeIdContent;

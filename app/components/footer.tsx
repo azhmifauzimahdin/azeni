@@ -72,7 +72,7 @@ const Footer: React.FC = () => {
                 rel="noopener noreferrer"
                 className="hover:text-foreground transition"
               >
-                @AZENI.INV
+                @azen.inv
               </Link>
             </li>
           </ul>

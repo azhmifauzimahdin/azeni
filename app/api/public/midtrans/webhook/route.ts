@@ -152,7 +152,6 @@ export async function POST(req: NextRequest) {
           }
         );
 
-        console.log(invoiceRes);
         pdfUrl = invoiceRes.data?.pdf_url || null;
       } catch (err) {
         console.error("Gagal mengambil pdf_url dari Midtrans:", err);

@@ -5,7 +5,13 @@ import { Img } from "@/components/ui/Img";
 import NavLink from "@/components/ui/nav-link";
 import { cn } from "@/lib/utils";
 import { UserButton, useUser } from "@clerk/nextjs";
-import { AlignJustify, LayoutPanelLeft, Mail, Wallet } from "lucide-react";
+import {
+  AlignJustify,
+  LayoutPanelLeft,
+  Mail,
+  Ticket,
+  Wallet,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -35,7 +41,10 @@ const DashboardLayout = ({
                 variant="ghost"
                 size="icon"
                 className="sm:hidden"
-                onClick={() => setToggleSidebar(!toggleSidebar)}
+                onClick={() => {
+                  setToggleSidebar(!toggleSidebar);
+                  setIsSidebarCollapsed(false);
+                }}
               >
                 <AlignJustify />
               </Button>
@@ -43,7 +52,7 @@ const DashboardLayout = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="hidden md:flex md:items-center"
+                  className="hidden sm:flex sm:items-center"
                   onClick={() => setIsSidebarCollapsed((prev) => !prev)}
                 >
                   <AlignJustify size={32} />
@@ -99,7 +108,10 @@ const DashboardLayout = ({
                   label="Dashboard"
                   active={location === ""}
                   collapsed={isSidebarCollapsed}
-                  onClick={() => setToggleSidebar(false)}
+                  onClick={() => {
+                    setToggleSidebar(false);
+                    setIsSidebarCollapsed(true);
+                  }}
                 />
               </li>
               <li>
@@ -109,7 +121,10 @@ const DashboardLayout = ({
                   label="Undangan"
                   active={location === "invitation"}
                   collapsed={isSidebarCollapsed}
-                  onClick={() => setToggleSidebar(false)}
+                  onClick={() => {
+                    setToggleSidebar(false);
+                    setIsSidebarCollapsed(true);
+                  }}
                 />
               </li>
               <li>
@@ -119,7 +134,23 @@ const DashboardLayout = ({
                   label="Transaksi"
                   active={location === "transaction"}
                   collapsed={isSidebarCollapsed}
-                  onClick={() => setToggleSidebar(false)}
+                  onClick={() => {
+                    setToggleSidebar(false);
+                    setIsSidebarCollapsed(true);
+                  }}
+                />
+              </li>
+              <li>
+                <NavLink
+                  href="/dashboard/referral-code"
+                  icon={<Ticket />}
+                  label="Referral"
+                  active={location.includes("referral-code")}
+                  collapsed={isSidebarCollapsed}
+                  onClick={() => {
+                    setToggleSidebar(false);
+                    setIsSidebarCollapsed(true);
+                  }}
                 />
               </li>
             </ul>

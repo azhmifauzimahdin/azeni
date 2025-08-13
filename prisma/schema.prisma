@@ -270,7 +270,8 @@ model Bank {
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 
-  bankAccount   BankAccount[] @relation("BankAccount")
+  bankAccounts         BankAccount[]       @relation("BankAccount")
+  referralWithdrawals  ReferralWithdrawal[] @relation("ReferralBank")
 }
 
 model Comment{
@@ -321,6 +322,8 @@ model Music {
 
 model ReferralCode {
   id            String        @id @default(uuid())
+  userId        String        @unique
+  userName      String
   code          String        @unique
   description   String?
   discount      Decimal       @db.Decimal(10, 2)
@@ -332,12 +335,13 @@ model ReferralCode {
 
   transactions  Transaction[] @relation("ReferralTransaction")
   referralCodeLogs ReferralCodeLog[] @relation("ReferralCodeLog")
+  withdrawals   ReferralWithdrawal[] @relation("ReferralWithdrawal")
 }
 
 model ReferralCodeLog {
   id              String      @id @default(uuid())
-  userId          String
-  userName       String
+  userId          String  
+  userName        String
   referralCodeId  String
   oldDiscount     Decimal?    @db.Decimal(10, 2)
   newDiscount     Decimal?    @db.Decimal(10, 2)
@@ -350,4 +354,40 @@ model ReferralCodeLog {
   updatedAt       DateTime    @updatedAt
 
   referralCode    ReferralCode @relation("ReferralCodeLog", fields: [referralCodeId], references: [id], onDelete: Cascade)
+}
+
+enum WithdrawalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model ReferralWithdrawal {
+  id                String      @id @default(uuid())
+  referralCodeId    String
+  amount            Decimal     @db.Decimal(10, 2)
+  status            WithdrawalStatus @default(PENDING)
+  requestedAt       DateTime    @default(now())
+  processedAt       DateTime?
+  bankId            String
+  accountNumber     String
+  name              String
+  note              String?
+  transferProofUrl  String?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+  
+  referralCode      ReferralCode @relation("ReferralWithdrawal", fields: [referralCodeId], references: [id])
+  bank              Bank         @relation("ReferralBank", fields: [bankId], references: [id], onDelete: Cascade)
+}
+
+model ReferralConfig {
+  id          Int      @id @default(autoincrement())
+  userId      String
+  description String
+  discount    Int
+  isPercent   Boolean
+  maxDiscount Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

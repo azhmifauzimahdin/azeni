@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { UserButton, useUser } from "@clerk/nextjs";
 import {
   AlignJustify,
+  ClipboardCheck,
   CloudUpload,
   CreditCard,
   Database,
@@ -17,6 +18,7 @@ import {
   Music4,
   Palette,
   Quote,
+  Tag,
   Ticket,
   Wallet,
 } from "lucide-react";
@@ -59,7 +61,7 @@ const AdminPageLayout = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="hidden md:flex md:items-center"
+                  className="hidden sm:flex sm:items-center"
                   onClick={() => setIsSidebarCollapsed((prev) => !prev)}
                 >
                   <AlignJustify size={32} />
@@ -115,7 +117,10 @@ const AdminPageLayout = ({
                   label="Dashboard"
                   active={location === ""}
                   collapsed={isSidebarCollapsed}
-                  onClick={() => setToggleSidebar(false)}
+                  onClick={() => {
+                    setToggleSidebar(false);
+                    setIsSidebarCollapsed(true);
+                  }}
                 />
               </li>
               <li>
@@ -125,7 +130,10 @@ const AdminPageLayout = ({
                   label="Transaksi"
                   active={location.includes("transactions")}
                   collapsed={isSidebarCollapsed}
-                  onClick={() => setToggleSidebar(false)}
+                  onClick={() => {
+                    setToggleSidebar(false);
+                    setIsSidebarCollapsed(true);
+                  }}
                 />
               </li>
               <li>
@@ -135,34 +143,46 @@ const AdminPageLayout = ({
                   label="Undangan"
                   active={location.includes("invitations")}
                   collapsed={isSidebarCollapsed}
-                  onClick={() => setToggleSidebar(false)}
+                  onClick={() => {
+                    setToggleSidebar(false);
+                    setIsSidebarCollapsed(true);
+                  }}
                 />
               </li>
               <li>
-                <NavLink
-                  href="/admin/referral-code"
+                <NavLinkDropdown
                   icon={<Ticket />}
                   label="Referral"
-                  active={location.includes("referral-code")}
+                  onClick={() => {
+                    setToggleSidebar(false);
+                    setIsSidebarCollapsed(true);
+                  }}
+                  onExpandSidebar={() => setIsSidebarCollapsed(false)}
                   collapsed={isSidebarCollapsed}
-                  onClick={() => setToggleSidebar(false)}
+                  options={[
+                    {
+                      href: "/admin/referral-code/referral",
+                      label: "Kode Referral",
+                      icon: <Tag />,
+                      active: location.includes("referral-code/referral"),
+                    },
+                    {
+                      href: "/admin/referral-code/withdrawal",
+                      label: "Penarikan Dana",
+                      icon: <ClipboardCheck />,
+                      active: location.includes("referral-code/withdrawal"),
+                    },
+                  ]}
                 />
               </li>
               <li>
-                <NavLink
-                  href="/admin/cloudinary"
-                  icon={<CloudUpload />}
-                  label="Cloudinary"
-                  active={location.includes("cloudinary")}
-                  collapsed={isSidebarCollapsed}
-                  onClick={() => setToggleSidebar(false)}
-                />
-              </li>
-              <ul>
                 <NavLinkDropdown
                   icon={<Database />}
                   label="Master Data"
-                  onClick={() => setToggleSidebar(false)}
+                  onClick={() => {
+                    setToggleSidebar(false);
+                    setIsSidebarCollapsed(true);
+                  }}
                   onExpandSidebar={() => setIsSidebarCollapsed(false)}
                   collapsed={isSidebarCollapsed}
                   options={[
@@ -198,7 +218,20 @@ const AdminPageLayout = ({
                     },
                   ]}
                 />
-              </ul>
+              </li>
+              <li>
+                <NavLink
+                  href="/admin/cloudinary"
+                  icon={<CloudUpload />}
+                  label="Cloudinary"
+                  active={location.includes("cloudinary")}
+                  collapsed={isSidebarCollapsed}
+                  onClick={() => {
+                    setToggleSidebar(false);
+                    setIsSidebarCollapsed(true);
+                  }}
+                />
+              </li>
             </ul>
           </div>
         </aside>

@@ -20,7 +20,25 @@ export async function GET() {
 
     if (role !== "admin") return forbiddenError();
 
-    const referralCode = await prisma.referralCode.findMany({
+    const status = await prisma.paymentStatus.findFirst({
+      where: { name: "SUCCESS" },
+    });
+
+    if (!status) {
+      return ResponseJson(
+        {
+          message: "Status pembayaran tidak ditemukan",
+          errors: {
+            statusId: [
+              "Status pembayaran dengan ID atau nama tersebut tidak tersedia",
+            ],
+          },
+        },
+        { status: 404 }
+      );
+    }
+
+    const referralCodes = await prisma.referralCode.findMany({
       orderBy: {
         createdAt: "desc",
       },
@@ -28,6 +46,14 @@ export async function GET() {
         transactions: {
           include: {
             status: true,
+          },
+        },
+        withdrawals: {
+          include: {
+            bank: true,
+          },
+          orderBy: {
+            createdAt: "desc",
           },
         },
         referralCodeLogs: {
@@ -38,10 +64,34 @@ export async function GET() {
       },
     });
 
+    const referralCodesWithBalance = referralCodes.map((ref) => {
+      const totalReward = ref.transactions.reduce((acc, trx) => {
+        if (trx.status?.id === status.id) {
+          return acc + (trx.referralDiscountAmount?.toNumber() ?? 0);
+        }
+        return acc;
+      }, 0);
+
+      const totalWithdrawn = ref.withdrawals
+        .filter((wd) => wd.status === "APPROVED")
+        .reduce((acc, wd) => acc + wd.amount.toNumber(), 0);
+
+      const availableBalance = totalReward - totalWithdrawn;
+
+      return {
+        ...ref,
+        balance: {
+          totalReward,
+          totalWithdrawn,
+          availableBalance,
+        },
+      };
+    });
+
     return ResponseJson(
       {
         message: "Data kode referral berhasil diambil",
-        data: referralCode,
+        data: referralCodesWithBalance,
       },
       { status: 200 }
     );
@@ -68,8 +118,15 @@ export async function POST(req: Request) {
       return handleZodError(parsed.error);
     }
 
-    const { code, description, discount, isPercent, maxDiscount, isActive } =
-      parsed.data;
+    const {
+      userName,
+      code,
+      description,
+      discount,
+      isPercent,
+      maxDiscount,
+      isActive,
+    } = parsed.data;
 
     const existing = await prisma.referralCode.findFirst({
       where: { code },
@@ -84,12 +141,38 @@ export async function POST(req: Request) {
 
     const referralCode = await prisma.referralCode.create({
       data: {
+        userId: code,
+        userName,
         code,
         description,
         discount,
         isPercent,
         maxDiscount,
         isActive,
+      },
+      include: {
+        referralCodeLogs: {
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
+        transactions: {
+          include: {
+            status: true,
+            referralCode: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
+        withdrawals: {
+          include: {
+            bank: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
       },
     });
 
