@@ -30,7 +30,7 @@ export async function POST(
       );
     }
 
-    const { guestId, message } = parsed.data;
+    const { guestId, message, parentId, isReply, replyToName } = parsed.data;
 
     const guest = await prisma.guest.findFirst({
       where: {
@@ -42,7 +42,14 @@ export async function POST(
     if (!guest) return forbiddenError();
 
     const comment = await prisma.comment.create({
-      data: { guestId, message, invitationId: params.id },
+      data: {
+        guestId,
+        message,
+        invitationId: params.id,
+        parentId: parentId || null,
+        isReply,
+        replyToName,
+      },
       include: {
         guest: true,
       },

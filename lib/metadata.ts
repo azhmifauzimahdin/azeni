@@ -28,6 +28,15 @@ export async function generatePageMetadata({
 
     if (!data) throw new Error("Not Found");
 
+    if (data.isTemplate) {
+      return {
+        title: `${
+          data.slug.charAt(0).toUpperCase() + data.slug.slice(1)
+        } | Undangan Pernikahan`,
+        description: `Undangan pernikahan dari ${data.groom} dan ${data.bride}.`,
+      };
+    }
+
     return {
       title: `${data.groom} & ${data.bride} - Undangan Pernikahan`,
       description: `Undangan pernikahan dari ${data.groom} dan ${data.bride}.`,

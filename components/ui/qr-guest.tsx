@@ -43,7 +43,6 @@ export const QrDownloadDialog = ({ codeGuest }: QrDownloadDialogProps) => {
           variant="ghost"
           className={cn(
             "fixed bottom-[33%] -right-1 z-40",
-            "sm:right-[calc((100vw-390px)/2-0.59rem)]",
             "rounded-l-xl rounded-r-none flex items-center gap-2 shadow-lg backdrop-blur-md bg-white/30 text-primary hover:bg-white/40 transition-all px-3 py-2"
           )}
           aria-label="Tampilkan QR Undangan"

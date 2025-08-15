@@ -12,3 +12,13 @@ export async function postComment(
   );
   return res.data;
 }
+
+export async function deleteComment(
+  invitationId: string,
+  commentId: string
+): Promise<ApiResponse<Comment>> {
+  const res = await httpRequest.delete(
+    `/api/invitations/${invitationId}/comments/${commentId}`
+  );
+  return res.data;
+}

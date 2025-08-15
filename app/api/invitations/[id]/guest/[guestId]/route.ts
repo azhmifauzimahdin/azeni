@@ -229,8 +229,19 @@ export async function GET(
             },
           },
           comments: {
+            where: {
+              parentId: null,
+            },
             include: {
               guest: true,
+              replies: {
+                include: {
+                  guest: true,
+                },
+                orderBy: {
+                  createdAt: "asc",
+                },
+              },
             },
             orderBy: {
               createdAt: "desc",
@@ -285,8 +296,19 @@ export async function GET(
             },
           },
           comments: {
+            where: {
+              parentId: null,
+            },
             include: {
               guest: true,
+              replies: {
+                include: {
+                  guest: true,
+                },
+                orderBy: {
+                  createdAt: "asc",
+                },
+              },
             },
             orderBy: {
               createdAt: "desc",

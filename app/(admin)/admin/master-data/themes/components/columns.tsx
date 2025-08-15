@@ -27,7 +27,7 @@ export const columns = ({
         alt="Thumbnail"
         wrapperClassName="aspect-square h-20"
         className="h-full object-contain"
-        sizes="15px"
+        sizes="300px"
       />
     ),
   },
@@ -96,7 +96,7 @@ export const columns = ({
           alt="Image invitation"
           wrapperClassName="aspect-square h-20"
           className="h-full object-contain"
-          sizes="15px"
+          sizes="300px"
         />
       );
     },

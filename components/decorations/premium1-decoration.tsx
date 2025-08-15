@@ -14,7 +14,7 @@ const Premium1Decoration: React.FC<Premium1DecorationProps> = ({
 
   return (
     <>
-      <div className="absolute top-8 -left-32" {...aosAttr("fade-down-left")}>
+      <div className="absolute top-8 -left-40" {...aosAttr("fade-down-left")}>
         <div>
           <Img
             src="/assets/themes/premium-001/img/leaf_green_01.png"
@@ -27,7 +27,7 @@ const Premium1Decoration: React.FC<Premium1DecorationProps> = ({
       </div>
 
       <div
-        className="absolute -top-10 -left-20"
+        className="absolute -top-10 -left-28"
         {...aosAttr("fade-down-right")}
       >
         <div className="rotate-[65deg]">
@@ -41,7 +41,7 @@ const Premium1Decoration: React.FC<Premium1DecorationProps> = ({
         </div>
       </div>
 
-      <div className="absolute top-16 -left-28" {...aosAttr("zoom-in")}>
+      <div className="absolute top-12 -left-40" {...aosAttr("zoom-in")}>
         <div className="rotate-[75deg]">
           <Img
             src="/assets/themes/premium-001/img/leaf_gold_01.png"
@@ -65,7 +65,7 @@ const Premium1Decoration: React.FC<Premium1DecorationProps> = ({
 
       {/* BOTTOM DECORATIONS */}
       <div
-        className="absolute -bottom-16 right-0"
+        className="absolute -bottom-28 -right-8"
         {...aosAttr("fade-up-right")}
       >
         <div className="-rotate-[30deg]">
@@ -79,8 +79,20 @@ const Premium1Decoration: React.FC<Premium1DecorationProps> = ({
         </div>
       </div>
 
+      <div className="absolute -bottom-28 -right-36" {...aosAttr("zoom-in-up")}>
+        <div className="rotate-12">
+          <Img
+            src="/assets/themes/premium-001/img/leaf_gold_01.png"
+            alt="Leaf Gold"
+            wrapperClassName="w-72 aspect-square animate-leaf-wiggle"
+            sizes="300px"
+            priority
+          />
+        </div>
+      </div>
+
       <div
-        className="absolute -bottom-10 -right-1"
+        className="absolute -bottom-20 -right-8"
         {...aosAttr("fade-up-left")}
       >
         <div className="rotate-[60deg]">
@@ -88,18 +100,6 @@ const Premium1Decoration: React.FC<Premium1DecorationProps> = ({
             src="/assets/themes/premium-001/img/leaf_green_02.png"
             alt="Leaf Green"
             wrapperClassName="w-56 aspect-square animate-leaf-wiggle"
-            sizes="300px"
-            priority
-          />
-        </div>
-      </div>
-
-      <div className="absolute -bottom-20 -right-20" {...aosAttr("zoom-in-up")}>
-        <div className="rotate-12">
-          <Img
-            src="/assets/themes/premium-001/img/leaf_gold_01.png"
-            alt="Leaf Gold"
-            wrapperClassName="w-72 aspect-square animate-leaf-wiggle"
             sizes="300px"
             priority
           />

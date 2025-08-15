@@ -6,6 +6,11 @@ export interface Comment {
   guestId: string;
   guest: Guest;
   message: string;
+  parentId?: string;
+  isReply: boolean;
+  replyToName?: string;
+  parent?: Comment;
+  replies?: Comment[];
   createdAt: string;
   updatedAt: string;
 }

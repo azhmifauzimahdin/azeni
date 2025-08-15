@@ -9,8 +9,8 @@ interface BottomNavbarProps {
 const BottomNavbar: React.FC<BottomNavbarProps> = ({ navLinks }) => {
   return (
     <>
-      <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2 w-auto bg-slate-100 rounded-lg shadow-xl z-40">
-        <div className="flex justify-center gap-3 px-3 py-2">
+      <div className="fixed bottom-5 right-1/2 sm:right-0 transform translate-x-1/2 sm:translate-x-0 z-40 w-auto sm:w-[390px] flex justify-center">
+        <div className="flex justify-center gap-3 px-3 py-2 w-auto bg-slate-100 rounded-lg shadow-xl">
           {navLinks.map(({ href, icon, label }) => (
             <a
               key={href}

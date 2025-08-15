@@ -222,7 +222,7 @@ const RSVP: React.FC<RSVPProps> = ({
             )}
 
             <div
-              className="text-center pt-4"
+              className="text-center"
               data-aos="fade-up"
               data-aos-delay="200"
             >

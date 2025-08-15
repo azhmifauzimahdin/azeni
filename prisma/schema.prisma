@@ -274,17 +274,24 @@ model Bank {
   referralWithdrawals  ReferralWithdrawal[] @relation("ReferralBank")
 }
 
-model Comment{
+model Comment {
   id            String        @id @default(uuid())
   invitationId  String
   guestId       String
   message       String        @db.Text
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
-  
-  invitation    Invitation    @relation("InvitationComment",fields: [invitationId], references: [id], onDelete: Cascade)
-  guest         Guest         @relation("GuestComment",fields: [guestId], references: [id], onDelete: Cascade)
+
+  parentId      String?    
+  isReply       Boolean       @default(false)
+  replyToName   String?
+  parent        Comment?      @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies       Comment[]     @relation("CommentReplies")
+
+  invitation    Invitation    @relation("InvitationComment", fields: [invitationId], references: [id], onDelete: Cascade)
+  guest         Guest         @relation("GuestComment", fields: [guestId], references: [id], onDelete: Cascade)
 }
+
 
 model Guest {
   id            String        @id @default(uuid())

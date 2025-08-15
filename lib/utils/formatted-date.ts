@@ -7,7 +7,7 @@ export function formatDate(
 ): string {
   if (!date) return "";
 
-  const isoString = date.replace(" ", "T"); // ubah ke ISO yang valid
+  const isoString = date.replace(" ", "T");
   const parsedDate = parseISO(isoString);
 
   return format(parsedDate, formatString, { locale: id });

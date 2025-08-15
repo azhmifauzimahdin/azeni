@@ -157,14 +157,13 @@ async function main() {
   // Create Invitation
   const invitation1 = await prisma.invitation.create({
     data: {
-      userId: "39efd6e4-0a47-4a39-b4e0-ef1f8756c4f5",
+      userId: "user_30JNC1ArV5rsaCSXTv3dncovRuN",
       groom: "Rey",
       bride: "Dinda",
       slug: "premium-001",
       themeId: themePremium.id,
       musicId: music.id,
-      image:
-        "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1752590889/cover_fhqza7.jpg",
+      image: "/assets/img/rey-dinda/cover.jpg",
       date: new Date("2028-07-27T00:00:00Z"),
       isTemplate: true,
       expiresAt: new Date("2030-12-31T00:00:00Z"),
@@ -173,7 +172,7 @@ async function main() {
 
   // const invitation2 = await prisma.invitation.create({
   //   data: {
-  //     userId: "39efd6e4-0a47-4a39-b4e0-ef1f8756c4f5",
+  //     userId: "user_30JNC1ArV5rsaCSXTv3dncovRuN",
   //     groom: "Rey",
   //     bride: "Dinda",
   //     slug: "luxury-001",
@@ -376,11 +375,11 @@ Hormat kami,
         groomName: "Reynaldi Aditya Wisnu Hasidi Putra Atmaja Mbayang",
         groomFather: "Achmad Benny Mbayang",
         groomMother: "Lam Baghdadi",
-        groomImage: "/assets/themes/premium-001/img/rey.jpg",
+        groomImage: "/assets/img/rey-dinda/rey.jpg",
         brideName: "Nyimas Khodijah Nasthiti Adinda",
         brideFather: "Kemas Herman",
         brideMother: "Hulwati Husna",
-        brideImage: "/assets/themes/premium-001/img/dinda.jpg",
+        brideImage: "/assets/img/rey-dinda/dinda.jpg",
       },
       // {
       //   invitationId: invitation2.id,
@@ -405,7 +404,7 @@ Hormat kami,
         date: new Date("2020-01-01T00:00:00Z"),
         description:
           "Semua berawal dari sebuah pertemuan sederhana. Kami dipertemukan dalam satu kegiatan di komunitas, tanpa pernah menyangka bahwa pertemuan itu akan menjadi awal dari kisah yang lebih indah. Dari obrolan ringan, tumbuh rasa nyaman. Dari pertemanan yang tulus, perlahan hadir rasa yang lebih mendalam.",
-        image: "/assets/themes/premium-001/img/story-pertemuan.jpeg",
+        image: "/assets/img/rey-dinda/story-pertemuan.jpeg",
       },
       {
         invitationId: invitation1.id,
@@ -413,7 +412,7 @@ Hormat kami,
         date: new Date("2025-05-25T00:00:00Z"),
         description:
           "Hingga akhirnya, pada 25 April 2025, ia menyatakan niat tulus untuk membawa hubungan ini ke jenjang yang lebih serius. Dengan restu keluarga dan niat yang mantap, kami bertunangan dan mulai mempersiapkan langkah besar berikutnya.",
-        image: "/assets/themes/premium-001/img/story-lamaran.jpg",
+        image: "/assets/img/rey-dinda/story-lamaran.jpg",
       },
       {
         invitationId: invitation1.id,
@@ -421,7 +420,7 @@ Hormat kami,
         date: new Date("2028-07-27T00:00:00Z"),
         description:
           "Dan kini, dengan penuh rasa syukur, kami mengundang keluarga dan sahabat terkasih untuk menjadi bagian dari hari bahagia kami, sebuah momen sakral di mana kami mengikat janji suci untuk sehidup semati.",
-        image: "/assets/themes/premium-001/img/story-pernikahan.jpg",
+        image: "/assets/img/rey-dinda/story-pernikahan.jpg",
       },
       // {
       //   invitationId: invitation2.id,
@@ -455,104 +454,54 @@ Hormat kami,
     data: [
       {
         invitationId: invitation1.id,
-        image: "/assets/themes/premium-001/img/gallery-001.jpg",
+        image: "/assets/img/rey-dinda/gallery-001.jpg",
         description: "Gallery 1",
       },
       {
         invitationId: invitation1.id,
-        image: "/assets/themes/premium-001/img/gallery-002.jpg",
+        image: "/assets/img/rey-dinda/gallery-002.jpg",
         description: "Gallery 2",
       },
       {
         invitationId: invitation1.id,
-        image: "/assets/themes/premium-001/img/gallery-003.jpg",
+        image: "/assets/img/rey-dinda/gallery-003.jpg",
         description: "Gallery 3",
       },
       {
         invitationId: invitation1.id,
-        image: "/assets/themes/premium-001/img/gallery-004.jpg",
+        image: "/assets/img/rey-dinda/gallery-004.jpg",
         description: "Gallery 4",
       },
       {
         invitationId: invitation1.id,
-        image: "/assets/themes/premium-001/img/gallery-005.jpg",
+        image: "/assets/img/rey-dinda/gallery-005.jpg",
         description: "Gallery 5",
       },
       {
         invitationId: invitation1.id,
-        image: "/assets/themes/premium-001/img/gallery-006.jpg",
+        image: "/assets/img/rey-dinda/gallery-006.jpg",
         description: "Gallery 6",
       },
       {
         invitationId: invitation1.id,
-        image: "/assets/themes/premium-001/img/gallery-007.jpg",
+        image: "/assets/img/rey-dinda/gallery-007.jpg",
         description: "Gallery 7",
       },
       {
         invitationId: invitation1.id,
-        image: "/assets/themes/premium-001/img/gallery-008.jpg",
+        image: "/assets/img/rey-dinda/gallery-008.jpg",
         description: "Gallery 8",
       },
       {
         invitationId: invitation1.id,
-        image: "/assets/themes/premium-001/img/gallery-009.jpg",
+        image: "/assets/img/rey-dinda/gallery-009.jpg",
         description: "Gallery 9",
       },
       {
         invitationId: invitation1.id,
-        image: "/assets/themes/premium-001/img/gallery-010.jpg",
+        image: "/assets/img/rey-dinda/gallery-010.jpg",
         description: "Gallery 10",
       },
-      // {
-      //   invitationId: invitation2.id,
-      //   image: "/assets/themes/premium-001/img/gallery-001.jpg",
-      //   description: "Gallery 1",
-      // },
-      // {
-      //   invitationId: invitation2.id,
-      //   image: "/assets/themes/premium-001/img/gallery-002.jpg",
-      //   description: "Gallery 2",
-      // },
-      // {
-      //   invitationId: invitation2.id,
-      //   image: "/assets/themes/premium-001/img/gallery-003.jpg",
-      //   description: "Gallery 3",
-      // },
-      // {
-      //   invitationId: invitation2.id,
-      //   image: "/assets/themes/premium-001/img/gallery-004.jpg",
-      //   description: "Gallery 4",
-      // },
-      // {
-      //   invitationId: invitation2.id,
-      //   image: "/assets/themes/premium-001/img/gallery-005.jpg",
-      //   description: "Gallery 5",
-      // },
-      // {
-      //   invitationId: invitation2.id,
-      //   image: "/assets/themes/premium-001/img/gallery-006.jpg",
-      //   description: "Gallery 6",
-      // },
-      // {
-      //   invitationId: invitation2.id,
-      //   image: "/assets/themes/premium-001/img/gallery-007.jpg",
-      //   description: "Gallery 7",
-      // },
-      // {
-      //   invitationId: invitation2.id,
-      //   image: "/assets/themes/premium-001/img/gallery-008.jpg",
-      //   description: "Gallery 8",
-      // },
-      // {
-      //   invitationId: invitation2.id,
-      //   image: "/assets/themes/premium-001/img/gallery-009.jpg",
-      //   description: "Gallery 9",
-      // },
-      // {
-      //   invitationId: invitation2.id,
-      //   image: "/assets/themes/premium-001/img/gallery-010.jpg",
-      //   description: "Gallery 10",
-      // },
     ],
   });
 
@@ -621,6 +570,15 @@ Hormat kami,
   //   },
   // });
 
+  const comment1 = await prisma.comment.create({
+    data: {
+      invitationId: invitation1.id,
+      guestId: guest1.id,
+      message:
+        "Semoga Allah SWT menjadikan kalian pasangan yang saling mencintai, saling mendukung, dan saling mengingatkan dalam kebaikan.",
+    },
+  });
+
   await prisma.comment.createMany({
     data: [
       {
@@ -629,12 +587,12 @@ Hormat kami,
         message:
           "Semoga Allah SWT menjadikan kalian pasangan yang saling mencintai, saling mendukung, dan saling mengingatkan dalam kebaikan.",
       },
-      // {
-      //   invitationId: invitation2.id,
-      //   guestId: guest2.id,
-      //   message:
-      //     "Semoga Allah SWT menjadikan kalian pasangan yang saling mencintai, saling mendukung, dan saling mengingatkan dalam kebaikan.",
-      // },
+      {
+        invitationId: invitation1.id,
+        guestId: guest1.id,
+        message: "Selamat menempuh hidup baru!",
+        parentId: comment1.id,
+      },
     ],
   });
 
@@ -653,7 +611,7 @@ Hormat kami,
     ],
   });
 
-  const referral1 = await prisma.referralCode.create({
+  await prisma.referralCode.create({
     data: {
       userId: "user_2yXw1nNz13AvBzTrmDBjVeGWW7Q",
       userName: "azen",
@@ -677,68 +635,68 @@ Hormat kami,
   });
 
   // Contoh Undangan dengan pemakaian referral code
-  const invitationUser1 = await prisma.invitation.create({
-    data: {
-      userId: "39efd6e4-0a47-4a39-b4e0-ef1f8756c4f5",
-      groom: "Azhmi",
-      bride: "Rina",
-      slug: "azhmi-rina",
-      themeId: themePremium.id,
-      musicId: music.id,
-      image:
-        "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1752590889/cover_fhqza7.jpg",
-      date: new Date("2028-07-27T00:00:00Z"),
-      isTemplate: true,
-      expiresAt: new Date("2030-12-31T00:00:00Z"),
-    },
-  });
+  // const invitationUser1 = await prisma.invitation.create({
+  //   data: {
+  //     userId: "39efd6e4-0a47-4a39-b4e0-ef1f8756c4f5",
+  //     groom: "Azhmi",
+  //     bride: "Rina",
+  //     slug: "azhmi-rina",
+  //     themeId: themePremium.id,
+  //     musicId: music.id,
+  //     image:
+  //       "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1752590889/cover_fhqza7.jpg",
+  //     date: new Date("2028-07-27T00:00:00Z"),
+  //     isTemplate: true,
+  //     expiresAt: new Date("2030-12-31T00:00:00Z"),
+  //   },
+  // });
 
-  await prisma.transaction.create({
-    data: {
-      orderId: randomUUID(),
-      invitationId: invitationUser1.id,
-      invitationSlug: invitationUser1.slug,
-      groomName: invitationUser1.groom,
-      brideName: invitationUser1.bride,
-      originalAmount: themePremium.originalPrice,
-      amount: amountPremium.sub(referral1.discount),
-      referralCodeId: referral1.id,
-      referralDiscountAmount: referral1.discount,
-      date: new Date("2025-01-01T12:00:00Z"),
-      statusId: paymentStatus.id,
-    },
-  });
-  const invitationUser2 = await prisma.invitation.create({
-    data: {
-      userId: "39efd6e4-0a47-4a39-b4e0-ef1f8756c4f5",
-      groom: "Azhmi",
-      bride: "Eni",
-      slug: "azhmi-eni",
-      themeId: themePremium.id,
-      musicId: music.id,
-      image:
-        "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1752590889/cover_fhqza7.jpg",
-      date: new Date("2028-07-27T00:00:00Z"),
-      isTemplate: true,
-      expiresAt: new Date("2030-12-31T00:00:00Z"),
-    },
-  });
+  // await prisma.transaction.create({
+  //   data: {
+  //     orderId: randomUUID(),
+  //     invitationId: invitationUser1.id,
+  //     invitationSlug: invitationUser1.slug,
+  //     groomName: invitationUser1.groom,
+  //     brideName: invitationUser1.bride,
+  //     originalAmount: themePremium.originalPrice,
+  //     amount: amountPremium.sub(referral1.discount),
+  //     referralCodeId: referral1.id,
+  //     referralDiscountAmount: referral1.discount,
+  //     date: new Date("2025-01-01T12:00:00Z"),
+  //     statusId: paymentStatus.id,
+  //   },
+  // });
+  // const invitationUser2 = await prisma.invitation.create({
+  //   data: {
+  //     userId: "39efd6e4-0a47-4a39-b4e0-ef1f8756c4f5",
+  //     groom: "Azhmi",
+  //     bride: "Eni",
+  //     slug: "azhmi-eni",
+  //     themeId: themePremium.id,
+  //     musicId: music.id,
+  //     image:
+  //       "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1752590889/cover_fhqza7.jpg",
+  //     date: new Date("2028-07-27T00:00:00Z"),
+  //     isTemplate: true,
+  //     expiresAt: new Date("2030-12-31T00:00:00Z"),
+  //   },
+  // });
 
-  await prisma.transaction.create({
-    data: {
-      orderId: randomUUID(),
-      invitationId: invitationUser2.id,
-      invitationSlug: invitationUser2.slug,
-      groomName: invitationUser2.groom,
-      brideName: invitationUser2.bride,
-      originalAmount: themePremium.originalPrice,
-      amount: amountPremium.sub(referral1.discount),
-      referralCodeId: referral1.id,
-      referralDiscountAmount: referral1.discount,
-      date: new Date("2025-01-01T12:00:00Z"),
-      statusId: paymentStatus.id,
-    },
-  });
+  // await prisma.transaction.create({
+  //   data: {
+  //     orderId: randomUUID(),
+  //     invitationId: invitationUser2.id,
+  //     invitationSlug: invitationUser2.slug,
+  //     groomName: invitationUser2.groom,
+  //     brideName: invitationUser2.bride,
+  //     originalAmount: themePremium.originalPrice,
+  //     amount: amountPremium.sub(referral1.discount),
+  //     referralCodeId: referral1.id,
+  //     referralDiscountAmount: referral1.discount,
+  //     date: new Date("2025-01-01T12:00:00Z"),
+  //     statusId: paymentStatus.id,
+  //   },
+  // });
 }
 
 main()

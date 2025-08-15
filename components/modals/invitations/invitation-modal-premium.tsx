@@ -8,6 +8,7 @@ import { formatDate } from "@/lib/utils/formatted-date";
 import { Invitation } from "@/types";
 import { Img } from "@/components/ui/Img";
 import Premium1Decoration from "@/components/decorations/premium1-decoration";
+import { getEffectiveDate } from "@/lib/utils/get-effective-date";
 
 interface InvitationModalProps {
   invitation: Invitation;
@@ -22,7 +23,10 @@ const InvitationModalPremium: React.FC<InvitationModalProps> = ({
   onClose,
   variant = "001",
 }) => {
-  const dateParts = formatDate(invitation.date, "EEEE dd MMMM yyyy").split(" ");
+  const dateParts = formatDate(
+    getEffectiveDate(invitation),
+    "EEEE dd MMMM yyyy"
+  ).split(" ");
 
   return (
     <div

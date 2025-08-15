@@ -1,5 +1,6 @@
 "use client";
 
+import { Alert } from "@/components/ui/alert";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -86,14 +87,17 @@ const SettingEnableForm: React.FC<SettingEnableFormsProps> = ({
         className="card-dashboard space-y-4"
         onSubmit={(e) => e.preventDefault()}
       >
+        <Alert variant="default">
+          Hapus komentar / ucapan & doa hanya tersedia untuk pemilik undangan.
+        </Alert>
         <div className="flex items-center justify-between">
           <div className="space-y-1 pr-4">
             <Label htmlFor="auto-date" className="text-base font-medium">
-              Komentar di undangan
+              Komentar / ucapan & doa di undangan
             </Label>
             <p className="text-xs text-muted-foreground">
-              Aktifkan fitur ini agar tamu bisa menulis komentar di undangan.
-              Nonaktifkan jika tidak ingin menampilkan kolom komentar.
+              Aktifkan fitur ini agar tamu bisa menulis komentar / ucapan & doa
+              di undangan. Nonaktifkan jika tidak ingin ditampilkan.
             </p>
           </div>
           <FormField
