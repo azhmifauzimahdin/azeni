@@ -62,17 +62,21 @@ const CoupleForm: React.FC<CoupleFormsProps> = ({
           groomName: initialData.couple.groomName,
           groomFather: initialData.couple.groomFather,
           groomMother: initialData.couple.groomMother,
+          groomInstagram: initialData.couple.groomInstagram,
           brideName: initialData.couple.brideName,
           brideFather: initialData.couple.brideFather,
           brideMother: initialData.couple.brideMother,
+          brideInstagram: initialData.couple.brideInstagram,
         }
       : {
           groomName: "",
           groomFather: "",
           groomMother: "",
+          groomInstagram: "",
           brideName: "",
           brideFather: "",
           brideMother: "",
+          brideInstagram: "",
         },
   });
 
@@ -82,9 +86,11 @@ const CoupleForm: React.FC<CoupleFormsProps> = ({
         groomName: initialData.couple.groomName,
         groomFather: initialData.couple.groomFather,
         groomMother: initialData.couple.groomMother,
+        groomInstagram: initialData.couple.groomMother,
         brideName: initialData.couple.brideName,
         brideFather: initialData.couple.brideFather,
         brideMother: initialData.couple.brideMother,
+        brideInstagram: initialData.couple.brideInstagram,
       });
       setGroomImage(initialData.couple.groomImage);
       setBrideImage(initialData.couple.brideImage);
@@ -235,6 +241,25 @@ const CoupleForm: React.FC<CoupleFormsProps> = ({
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="groomInstagram"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel htmlFor={field.name}>Link Instagram</FormLabel>
+                    <FormControl>
+                      <Input
+                        id={field.name}
+                        placeholder="https://www.instagram.com/azen.inv/"
+                        disabled={loading}
+                        isFetching={isFetching}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -309,6 +334,25 @@ const CoupleForm: React.FC<CoupleFormsProps> = ({
                       <Input
                         id={field.name}
                         placeholder="Hj. Nur Aini"
+                        disabled={loading}
+                        isFetching={isFetching}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="brideInstagram"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel htmlFor={field.name}>Link Instagram</FormLabel>
+                    <FormControl>
+                      <Input
+                        id={field.name}
+                        placeholder="https://www.instagram.com/azen.inv/"
                         disabled={loading}
                         isFetching={isFetching}
                         {...field}

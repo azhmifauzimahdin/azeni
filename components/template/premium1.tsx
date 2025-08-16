@@ -14,6 +14,7 @@ import {
   CalendarDays,
   Croissant,
   Heart,
+  Instagram,
   MapPinCheckInside,
 } from "lucide-react";
 import { formatTime } from "@/lib/utils/formatted-time";
@@ -32,6 +33,7 @@ import Premium1Decoration from "../decorations/premium1-decoration";
 import { getEffectiveDate } from "@/lib/utils/get-effective-date";
 import Image from "../ui/image";
 import LeftSidebar from "../ui/left-sidebar";
+import Link from "next/link";
 
 const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
   const [invitation, setInvitation] = useState<Invitation>(initialInvitation);
@@ -200,7 +202,7 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
                     sizes="200px"
                     data-aos="fade-right"
                   />
-                  <div className="self-start px-3 text-left">
+                  <div className="self-start px-3 text-left space-y-2">
                     <h2
                       className="font-alex text-2xl font-bold text-green-primary"
                       data-aos="fade-down"
@@ -215,6 +217,18 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
                       Putra dari Bapak {invitation.couple?.brideFather} &&nbsp;
                       {invitation.couple?.brideMother}
                     </p>
+                    <p
+                      className="text-slate-600 text-sm"
+                      data-aos="fade-left"
+                      data-aos-delay="700"
+                    >
+                      <Link
+                        href={invitation.couple?.groomInstagram}
+                        target="_blank"
+                      >
+                        <Instagram />
+                      </Link>
+                    </p>
                   </div>
                 </div>
                 <div
@@ -224,7 +238,7 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
                   &
                 </div>
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="px-3 text-right">
+                  <div className="px-3 text-right space-y-2">
                     <h2
                       className="font-alex text-2xl font-bold text-green-primary mb-3"
                       data-aos="fade-down"
@@ -238,6 +252,19 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
                     >
                       Putri dari Bapak {invitation.couple?.brideFather} &&nbsp;
                       {invitation.couple?.brideMother}
+                    </p>
+                    <p
+                      className="text-slate-600 text-sm text-right"
+                      data-aos="fade-left"
+                      data-aos-delay="700"
+                    >
+                      <Link
+                        href={invitation.couple?.brideInstagram}
+                        target="_blank"
+                        className="inline-block"
+                      >
+                        <Instagram />
+                      </Link>
                     </p>
                   </div>
                   <Img

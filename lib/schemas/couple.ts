@@ -22,6 +22,15 @@ export const createCoupleSchema = z.object({
     })
     .min(1, { message: "Nama ibu mempelai pria tidak boleh kosong" }),
 
+  groomInstagram: z
+    .string({
+      invalid_type_error: "Instagram mempelai pria harus berupa teks",
+    })
+    .url({
+      message: "Link Instagram mempelai pria harus berupa URL yang valid",
+    })
+    .optional(),
+
   brideName: z
     .string({
       required_error: "Nama mempelai wanita wajib diisi",
@@ -42,4 +51,13 @@ export const createCoupleSchema = z.object({
       invalid_type_error: "Nama ibu mempelai wanita harus berupa teks",
     })
     .min(1, { message: "Nama ibu mempelai wanita tidak boleh kosong" }),
+
+  brideInstagram: z
+    .string({
+      invalid_type_error: "Instagram mempelai wanita harus berupa teks",
+    })
+    .url({
+      message: "Link Instagram mempelai wanita harus berupa URL yang valid",
+    })
+    .optional(),
 });

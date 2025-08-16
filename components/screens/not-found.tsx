@@ -43,7 +43,7 @@ const NotFound: React.FC<NotFoundProps> = ({
       <div className="absolute inset-0 bg-black/25 backdrop-blur-sm z-10" />
 
       <div
-        className="relative z-20 w-full mx-auto p-6 rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md shadow-xl text-center text-white space-y-4"
+        className="relative z-20 max-w-xl mx-auto p-6 rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md shadow-xl text-center text-white space-y-4"
         data-aos="fade-up"
       >
         <div className="flex justify-center">

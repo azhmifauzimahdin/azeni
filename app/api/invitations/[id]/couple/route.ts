@@ -46,9 +46,11 @@ export async function POST(
       groomName,
       groomFather,
       groomMother,
+      groomInstagram,
       brideName,
       brideFather,
       brideMother,
+      brideInstagram,
     } = parsed.data;
 
     const invitationByUserId = await prisma.invitation.findFirst({
@@ -87,9 +89,11 @@ export async function POST(
         groomName,
         groomFather,
         groomMother,
+        groomInstagram: groomInstagram ?? null,
         brideName,
         brideFather,
         brideMother,
+        brideInstagram: brideInstagram ?? null,
       },
       create: {
         invitationId: params.id,
@@ -97,10 +101,12 @@ export async function POST(
         groomName,
         groomFather,
         groomMother,
+        groomInstagram: groomInstagram ?? null,
         brideImage: "",
         brideName,
         brideFather,
         brideMother,
+        brideInstagram: brideInstagram ?? null,
       },
     });
 
