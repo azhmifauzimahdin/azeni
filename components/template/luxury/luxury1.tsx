@@ -150,7 +150,7 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
           {/* ====== Hero Section ======*/}
           <section
             id="hero"
-            className="flex-center h-[calc(var(--vh)_*_100)] overflow-hidden relative"
+            className="flex-center min-h-[calc(var(--vh)_*_100)] overflow-hidden relative"
           >
             {/* Konten utama */}
             <div className="flex-section relative z-20 w-full">
@@ -598,7 +598,7 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
           )}
 
           {/* ====== Footer Section ======*/}
-          <div className="flex flex-col items-center justify-center h-[calc(var(--vh)_*_100)] space-y-16 overflow-hidden relative">
+          <div className="flex flex-col items-center justify-center min-h-[calc(var(--vh)_*_100)] space-y-16 overflow-hidden relative">
             <div
               className="flex flex-col items-center justify-center text-center relative z-20 w-full"
               data-aos="fade-up"
