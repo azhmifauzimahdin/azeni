@@ -22,6 +22,12 @@ const buttonVariants = cva(
           "bg-green-app-primary text-white shadow hover:bg-green-app-secondary",
         delete:
           "text-white hover:text-red-500 bg-red-600/80 hover:bg-red-700/80 backdrop-blur-sm rounded-full",
+        "outline-white":
+          "bg-white text-gray-800 border border-transparent transition-colors duration-300 hover:bg-transparent hover:border-white hover:text-white",
+        "white-outline":
+          "bg-transparent text-white border border-white transition-colors duration-300 hover:bg-white hover:text-gray-800",
+        "green-outline":
+          "bg-green-primary border border-slate-50 hover:bg-slate-50 hover:text-green-primary",
       },
       size: {
         default: "h-10 px-4 py-2",

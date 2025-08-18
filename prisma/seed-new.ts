@@ -1,35 +1,29 @@
 import { PrismaClient } from "@prisma/client";
-
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.setting.createMany({
-    data: {
-      invitationId: "f189f78e-2b84-462d-90d8-f312ba49060b",
-      whatsappMessageTemplate: `
-Assalamu'alaikum warahmatullahi wabarakatuh,
-
-Segala puji bagi Allah SWT yang telah mempertemukan dua insan dalam ikatan suci pernikahan.
-
-Dengan penuh syukur, kami bermaksud mengabarkan kabar bahagia bahwa kami akan melangsungkan akad nikah dan walimatul 'urs dalam waktu dekat.
-
-InsyaAllah akan menikah:
-
-*{{brideName}} & {{groomName}}*  
-
-Kami mengundang Bapak/Ibu/Saudara/i untuk turut hadir dan berbagi doa restu dalam momen istimewa ini. Doa dan kehadiran Anda sangat berarti bagi kami dan keluarga besar.
-
-Informasi lengkap mengenai waktu dan tempat pelaksanaan acara dapat dilihat melalui undangan digital berikut:
-
-{{invitationLink}}
-
-Semoga Allah SWT memberkahi langkah kami, dan semoga Bapak/Ibu/Saudara/i senantiasa diberi kesehatan dan kemudahan dalam segala urusan.
-
-Wassalamu'alaikum warahmatullahi wabarakatuh.  
-Hormat kami,  
-*{{brideName}} & {{groomName}}*
-      `.trim(),
+  const invitation = await prisma.invitation.findFirst({
+    where: {
+      slug: "luxury-001",
     },
+  });
+
+  await prisma.couple.createMany({
+    data: [
+      {
+        invitationId: invitation?.id || "",
+        groomName: "Rizky Pratama",
+        groomFather: "Bambang Supriyanto",
+        groomMother: "Siti Aminah",
+        groomImage: "/assets/img/rizky-putri/rikzy.jpg",
+        groomInstagram: "https://www.instagram.com/",
+        brideName: "Putri Ayu Lestari",
+        brideFather: "Ahmad Syafrudin",
+        brideMother: "Dewi Hartati",
+        brideImage: "/assets/img/rizky-putri/putri.jpg",
+        brideInstagram: "https://www.instagram.com/",
+      },
+    ],
   });
 }
 

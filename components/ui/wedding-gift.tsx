@@ -5,13 +5,14 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BankAccount } from "@/types";
 import { Img } from "./Img";
+import { cn } from "@/lib/utils";
 
 interface WeddingGiftProps {
   banks: BankAccount[];
-  introduction: string;
+  btnClassName: string;
 }
 
-const WeddingGift: React.FC<WeddingGiftProps> = ({ introduction, banks }) => {
+const WeddingGift: React.FC<WeddingGiftProps> = ({ banks, btnClassName }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleCopy = async (nomor: string) => {
@@ -24,17 +25,10 @@ const WeddingGift: React.FC<WeddingGiftProps> = ({ introduction, banks }) => {
     }
   };
   return (
-    <div className="text-white text-center">
-      <h2 className="section-title !text-white" data-aos="zoom-in">
-        Wedding Gift
-      </h2>
-      <p className="mb-5" data-aos="zoom-in">
-        {introduction}
-      </p>
+    <div className="text-center">
       <Button
         onClick={() => setIsOpen(!isOpen)}
-        variant="default"
-        className="bg-green-primary border border-slate-50 hover:bg-slate-50 hover:text-green-primary mb-10"
+        className={cn("mb-10", btnClassName)}
         data-aos="zoom-in"
       >
         <Gift size={16} /> Kirim Hadiah
@@ -46,7 +40,7 @@ const WeddingGift: React.FC<WeddingGiftProps> = ({ introduction, banks }) => {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 1, ease: "easeInOut" }}
-            className="grid grid-cols-1 gap-5 h-0 overflow-hidden"
+            className="grid grid-cols-1 text-white gap-5 h-0 overflow-hidden"
           >
             {banks.map((bank, index) => (
               <React.Fragment key={index}>

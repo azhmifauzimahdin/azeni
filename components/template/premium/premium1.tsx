@@ -5,34 +5,27 @@ import BottomNavbar from "@/components/navigations/BottomNavbar";
 import SpinningDisc from "@/components/ui/spinning-disc";
 import { navLinks } from "@/data/navLinks";
 import { Invitation } from "@/types";
-import InvitationModalPremium from "../modals/invitations/invitation-modal-premium";
-import GoogleCalender from "../ui/google-calender";
-import CountdownTimer from "../ui/countdown-timer";
+import InvitationModalPremium from "../../modals/invitations/invitation-modal-premium";
+import GoogleCalender from "../../ui/google-calender";
+import CountdownTimer from "../../ui/countdown-timer";
 import { formatDate } from "@/lib/utils/formatted-date";
-import {
-  Calendar,
-  CalendarDays,
-  Croissant,
-  Heart,
-  Instagram,
-  MapPinCheckInside,
-} from "lucide-react";
+import { Heart, Instagram, MapPinCheckInside } from "lucide-react";
 import { formatTime } from "@/lib/utils/formatted-time";
-import { Button } from "../ui/button";
-import GalleryGrid from "../ui/gallery-grid";
-import WeddingGift from "../ui/wedding-gift";
-import CommentSection from "../ui/comment";
+import { Button, buttonVariants } from "../../ui/button";
+import GalleryGrid from "../../ui/gallery-grid";
+import WeddingGift from "../../ui/wedding-gift";
+import CommentSection from "../../ui/comment";
 import { GuestService } from "@/lib/services";
 import { handleError } from "@/lib/utils/handle-error";
 import toast from "react-hot-toast";
-import { Img } from "../ui/Img";
-import RSVP, { RSVPFormValues } from "../ui/rsvp";
-import { QrDownloadDialog } from "../ui/qr-guest";
+import { Img } from "../../ui/Img";
+import RSVP, { RSVPFormValues } from "../../ui/rsvp";
+import { QrDownloadDialog } from "../../ui/qr-guest";
 import { cn } from "@/lib/utils";
-import Premium1Decoration from "../decorations/premium1-decoration";
+import Premium1Decoration from "../../decorations/premium1-decoration";
 import { getEffectiveDate } from "@/lib/utils/get-effective-date";
-import Image from "../ui/image";
-import LeftSidebar from "../ui/left-sidebar";
+import Image from "../../ui/image";
+import LeftSidebar from "../../ui/left-sidebar";
 import Link from "next/link";
 
 const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
@@ -58,7 +51,7 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
   };
 
   const formattedMarriageDate = formatDate(
-    invitation.date,
+    getEffectiveDate(invitation),
     "EEEE, dd MMMM yyyy"
   );
   const marriageEvent = invitation.schedules.find(
@@ -146,8 +139,13 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
               </div>
               <GoogleCalender
                 title={`Pernikahan ${invitation.groom} & ${invitation.bride}`}
-                startTime={marriageEvent?.startDate || invitation.date}
-                endTime={marriageEvent?.endDate || invitation.date}
+                startTime={
+                  marriageEvent?.startDate || getEffectiveDate(invitation)
+                }
+                endTime={marriageEvent?.endDate || getEffectiveDate(invitation)}
+                className={buttonVariants({
+                  className: "bg-green-primary hover:bg-green-primary/90",
+                })}
               />
               <div className="mt-5">
                 <CountdownTimer targetDate={getEffectiveDate(invitation)} />
@@ -195,7 +193,7 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
                   <Img
                     src={
                       invitation.couple?.groomImage ||
-                      "/assets/img/default-groom.png"
+                      "/assets/img/default-groom-invitation.png"
                     }
                     alt="Groom"
                     wrapperClassName="aspect-square rounded-tr-3xl rounded-br-lg shadow-md border-4 border-l-0 border-white"
@@ -204,7 +202,7 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
                   />
                   <div className="self-start px-3 text-left space-y-2">
                     <h2
-                      className="font-alex text-2xl font-bold text-green-primary"
+                      className="text-2xl font-semibold text-green-primary"
                       data-aos="fade-down"
                     >
                       {invitation.couple?.groomName}
@@ -215,7 +213,7 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
                       data-aos-delay="700"
                     >
                       Putra dari Bapak {invitation.couple?.brideFather} &&nbsp;
-                      {invitation.couple?.brideMother}
+                      Ibu {invitation.couple?.brideMother}
                     </p>
                     <p
                       className="text-slate-600 text-sm"
@@ -240,7 +238,7 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
                 <div className="grid grid-cols-2 gap-3">
                   <div className="px-3 text-right space-y-2">
                     <h2
-                      className="font-alex text-2xl font-bold text-green-primary mb-3"
+                      className="text-2xl font-semibold text-green-primary mb-3"
                       data-aos="fade-down"
                     >
                       {invitation.couple?.brideName}
@@ -251,7 +249,7 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
                       data-aos-delay="700"
                     >
                       Putri dari Bapak {invitation.couple?.brideFather} &&nbsp;
-                      {invitation.couple?.brideMother}
+                      Ibu {invitation.couple?.brideMother}
                     </p>
                     <p
                       className="text-slate-600 text-sm text-right"
@@ -270,10 +268,10 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
                   <Img
                     src={
                       invitation.couple?.brideImage ||
-                      "/assets/img/default-bride.png"
+                      "/assets/img/default-bride-invitation.png"
                     }
                     alt="Bridge"
-                    wrapperClassName="aspect-square rounded-tl-3xl rounded-bl-lg shadow-md border-4 border-l-0 border-white"
+                    wrapperClassName="aspect-square rounded-tl-3xl rounded-bl-lg shadow-md border-4 border-r-0 border-white"
                     sizes="200px"
                     data-aos="fade-left"
                   />
@@ -312,19 +310,22 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
                       >
                         <div data-aos="flip-left">
                           {schedule.type === "marriage" ? (
-                            <CalendarDays
-                              size={64}
-                              className="text-green-primary mx-auto mb-5"
+                            <Img
+                              src="/assets/svg/marriage-green.svg"
+                              alt="Wedding"
+                              wrapperClassName="w-16 h-16 mx-auto mb-5"
                             />
                           ) : schedule.type === "reception" ? (
-                            <Croissant
-                              size={64}
-                              className="text-green-primary mx-auto mb-5"
+                            <Img
+                              src="/assets/svg/reception-green.svg"
+                              alt="Reception"
+                              wrapperClassName="w-16 h-16 mx-auto mb-5"
                             />
                           ) : (
-                            <Calendar
-                              size={64}
-                              className="text-green-primary mx-auto mb-5"
+                            <Img
+                              src="/assets/svg/schedule-green.svg"
+                              alt="Schedule"
+                              wrapperClassName="w-16 h-16 mx-auto mb-5"
                             />
                           )}
                         </div>
@@ -385,7 +386,7 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
               <Premium1Decoration withAOS={false} />
               <div className="relative z-20 w-full py-16">
                 <h2 className="section-title" data-aos="fade-up">
-                  Our Story
+                  Cerita Kita
                 </h2>
                 <div
                   className="flex flex-col bg-white/10 px-8 py-3 rounded-lg border border-white/30 backdrop-blur-md shadow-md"
@@ -434,7 +435,7 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
               <Premium1Decoration withAOS={false} />
               <div className="relative z-20 w-full py-16">
                 <h2 className="section-title" data-aos="fade-up">
-                  Wedding Gallery
+                  Galeri
                 </h2>
                 <GalleryGrid galleries={invitation.galleries} />
               </div>
@@ -443,10 +444,18 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
 
           {/* ====== Gift Section ======*/}
           {invitation.bankaccounts.length > 0 && (
-            <section className="bg-green-primary py-16">
+            <section className="bg-green-primary py-16 text-white text-center">
+              <h2 className="section-title !text-white" data-aos="zoom-in">
+                Hadiah Pernikahan
+              </h2>
+              <p className="mb-5" data-aos="zoom-in">
+                {invitation.setting?.giftIntroductionText || ""}
+              </p>
               <WeddingGift
-                introduction={invitation.setting?.giftIntroductionText || ""}
                 banks={invitation.bankaccounts}
+                btnClassName={buttonVariants({
+                  variant: "white-outline",
+                })}
               />
             </section>
           )}

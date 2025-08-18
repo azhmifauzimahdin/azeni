@@ -9,8 +9,7 @@ type CalendarEvent = {
   location?: string;
   startTime: string;
   endTime: string;
-  bgColor?: string;
-  textColor?: string;
+  className?: string;
 };
 const GoogleCalender: React.FC<CalendarEvent> = ({
   title,
@@ -18,8 +17,7 @@ const GoogleCalender: React.FC<CalendarEvent> = ({
   location,
   startTime,
   endTime,
-  bgColor,
-  textColor,
+  className,
 }) => {
   const fixDateFormat = (str: string) => str.replace(" ", "T");
 
@@ -43,11 +41,7 @@ const GoogleCalender: React.FC<CalendarEvent> = ({
       href={url.toString()}
       target="_blank"
       rel="noopener noreferrer"
-      className={cn(
-        "flex items-center gap-2 text-sm px-4 py-2 rounded-lg hover:opacity-90 transition",
-        bgColor ?? "bg-green-primary",
-        textColor ?? "text-white"
-      )}
+      className={cn(className)}
     >
       <CalendarCheck size={16} /> Simpan ke kalender
     </Link>

@@ -193,7 +193,7 @@ const CommentSection: React.FC<commentSectionProps> = ({
   };
 
   return (
-    <div className="bg-slate-50 rounded-md p-5 shadow" data-aos="fade-up">
+    <div className="bg-white rounded-md p-5 shadow" data-aos="fade-up">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleFormSubmit)}
@@ -326,7 +326,7 @@ const CommentSection: React.FC<commentSectionProps> = ({
                 {comment.replies.map((reply) => (
                   <div
                     key={reply.id}
-                    className="bg-white p-3 rounded-xl shadow-sm max-w-lg  hover:bg-gray-50 transition-colors"
+                    className="bg-slate-50 p-3 rounded-xl shadow-sm max-w-lg  hover:bg-slate-100 transition-colors"
                   >
                     <div className="flex items-center justify-between mb-1">
                       <h4 className="font-semibold text-green-app-primary truncate capitalize">

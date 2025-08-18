@@ -1,6 +1,6 @@
 "use client";
 
-import { MessageCircle } from "lucide-react";
+import { IoLogoWhatsapp } from "react-icons/io5";
 
 export default function WhatsAppFloating() {
   const handleClick = () => {
@@ -16,7 +16,7 @@ export default function WhatsAppFloating() {
       className="fixed bottom-4 right-4 z-50 rounded-full bg-green-500 p-3 shadow-md hover:bg-green-600 transition-colors"
       aria-label="Chat via WhatsApp"
     >
-      <MessageCircle className="h-5 w-5 text-white" />
+      <IoLogoWhatsapp className="h-5 w-5 text-white" />
     </button>
   );
 }

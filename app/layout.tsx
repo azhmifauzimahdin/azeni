@@ -1,7 +1,13 @@
 import "./globals.css";
 import "aos/dist/aos.css";
 
-import { Poppins, Alex_Brush, Scheherazade_New } from "next/font/google";
+import {
+  Poppins,
+  Alex_Brush,
+  Scheherazade_New,
+  Lora,
+  Italiana,
+} from "next/font/google";
 import AOSInit from "@/components/AOSInit";
 import localFont from "next/font/local";
 import { Toaster } from "react-hot-toast";
@@ -32,6 +38,18 @@ const scheherazade = Scheherazade_New({
 const gallery = localFont({
   src: "./fonts/Gallery.ttf",
   variable: "--font-gallery",
+});
+
+const lora = Lora({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-lora",
+});
+
+const italiana = Italiana({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-italiana",
 });
 
 export const metadata = {
@@ -71,7 +89,7 @@ export default function RootLayout({
     >
       <html
         lang="id"
-        className={`${poppins.variable} ${alexBrush.variable} ${scheherazade.variable} ${gallery.variable}`}
+        className={`${poppins.variable} ${alexBrush.variable} ${scheherazade.variable} ${gallery.variable} ${lora.variable} ${italiana.variable}`}
       >
         <Script
           src={`${process.env.NEXT_PUBLIC_MIDTRANS_SCRIPT_URL}/snap/snap.js`}

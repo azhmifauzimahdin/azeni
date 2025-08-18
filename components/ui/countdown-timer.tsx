@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 
 interface CountdownTimerProps {
@@ -7,6 +8,7 @@ interface CountdownTimerProps {
   bgColor?: string;
   textColor?: string;
   labelColor?: string;
+  borderColor?: string;
 }
 
 const CountdownTimer: React.FC<CountdownTimerProps> = ({
@@ -14,6 +16,7 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
   bgColor = "bg-green-primary",
   textColor = "text-white",
   labelColor = "text-gray-700",
+  borderColor,
 }) => {
   const dateISO = new Date(targetDate).toISOString();
 
@@ -58,7 +61,7 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
       <div className="flex gap-4 justify-center text-center">
         {["Hari", "Jam", "Menit", "Detik"].map((label) => (
           <div key={label} className="flex flex-col items-center">
-            <div className="bg-green-primary text-white text-xl font-bold w-12 h-12 flex items-center justify-center rounded-md shadow-md">
+            <div className="bg-green-primary text-white text-xl font-bold w-12 h-12 flex items-center justify-center rounded-md">
               --
             </div>
             <span className="text-sm text-gray-700 mt-1">{label}</span>
@@ -78,7 +81,12 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
       ].map(({ label, value }) => (
         <div key={label} className="flex flex-col items-center">
           <div
-            className={`text-xl font-bold w-12 h-12 flex items-center justify-center rounded-md shadow-md ${bgColor} ${textColor}`}
+            className={cn(
+              "text-xl font-bold w-12 h-12 flex items-center justify-center rounded-md",
+              bgColor,
+              textColor,
+              borderColor && `border ${borderColor} shadow-md`
+            )}
           >
             {value}
           </div>

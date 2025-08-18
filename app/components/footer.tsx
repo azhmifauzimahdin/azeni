@@ -1,5 +1,9 @@
 import Link from "next/link";
-import { Mail, Instagram } from "lucide-react";
+import {
+  IoMailOutline,
+  IoLogoInstagram,
+  IoLogoWhatsapp,
+} from "react-icons/io5";
 
 const Footer: React.FC = () => {
   return (
@@ -56,7 +60,7 @@ const Footer: React.FC = () => {
           <h3 className="font-semibold text-foreground mb-2">Kontak</h3>
           <ul className="space-y-2 text-sm">
             <li className="flex items-center gap-2">
-              <Mail className="w-4 h-4" />
+              <IoMailOutline size={20} />
               <Link
                 href="mailto:azen.invitation@gmail.com"
                 className="hover:text-foreground transition"
@@ -65,7 +69,7 @@ const Footer: React.FC = () => {
               </Link>
             </li>
             <li className="flex items-center gap-2">
-              <Instagram className="w-4 h-4" />
+              <IoLogoInstagram size={20} />
               <Link
                 href="https://www.instagram.com/azen.inv?igsh=Nmp6djVucWNzejdm&utm_source=qr"
                 target="_blank"
@@ -75,12 +79,23 @@ const Footer: React.FC = () => {
                 @azen.inv
               </Link>
             </li>
+            <li className="flex items-center gap-2">
+              <IoLogoWhatsapp size={20} />
+              <Link
+                href="https://api.whatsapp.com/send/?phone=628895276116&text=Halo%2C+saya+tertarik+dengan+undangan+digitalnya.%0ABisa+saya+dapatkan+informasi+lebih+lanjut%3F&type=phone_number&app_absent=0"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-foreground transition"
+              >
+                Azen.inv
+              </Link>
+            </li>
           </ul>
         </div>
       </div>
 
       <div className="border-t py-4 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()}{" "}
+        © 2025 - {new Date().getFullYear()}&nbsp;
         <strong>{process.env.NEXT_PUBLIC_BRAND_NAME}</strong>. All rights
         reserved.
       </div>

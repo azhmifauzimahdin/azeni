@@ -23,6 +23,8 @@ interface RSVPProps {
   invitation: Invitation;
   onSubmit: (data: RSVPFormValues) => Promise<void>;
   isLoading: boolean;
+  textColor?: string;
+  borderColor?: string;
   buttonClassName?: string;
 }
 
@@ -32,6 +34,8 @@ const RSVP: React.FC<RSVPProps> = ({
   invitation,
   onSubmit,
   isLoading,
+  textColor = "text-slate-900",
+  borderColor = "border-muted",
   buttonClassName = "bg-green-primary hover:bg-green-secondary",
 }) => {
   const form = useForm<RSVPFormValues>({
@@ -63,7 +67,7 @@ const RSVP: React.FC<RSVPProps> = ({
     invitation.guest.isAttending || invitation.guest.totalGuests > 1;
 
   return (
-    <section>
+    <div>
       {rsvpDeadline && !hasRSVPed && (
         <p
           className="text-center text-sm text-muted-foreground mb-4"
@@ -101,7 +105,7 @@ const RSVP: React.FC<RSVPProps> = ({
             data-aos="fade-up"
           >
             <div
-              className="flex justify-center gap-6"
+              className={cn("flex justify-center gap-6", textColor)}
               data-aos="zoom-in"
               data-aos-delay="100"
             >
@@ -109,11 +113,11 @@ const RSVP: React.FC<RSVPProps> = ({
                 type="button"
                 onClick={() => form.setValue("isAttending", true)}
                 className={cn(
-                  "group w-full sm:w-44 h-36 border rounded-xl shadow transition-all duration-200",
-                  "flex flex-col items-center justify-center gap-2 text-center bg-white dark:bg-background",
+                  "group w-full aspect-square border rounded-xl shadow transition-all duration-200",
+                  "flex flex-col items-center justify-center gap-2 text-center",
                   isAttending
                     ? "border-green-500 ring-2 ring-green-500 text-green-600"
-                    : "border-muted hover:ring-1 hover:ring-green-500 "
+                    : `${borderColor} hover:ring-1 hover:ring-green-500 `
                 )}
               >
                 <CheckCircle2 className="w-8 h-8 mb-1 group-hover:scale-110 transition-transform" />
@@ -124,11 +128,11 @@ const RSVP: React.FC<RSVPProps> = ({
                 type="button"
                 onClick={() => form.setValue("isAttending", false)}
                 className={cn(
-                  "group w-full sm:w-44 h-36 border rounded-xl shadow transition-all duration-200",
-                  "flex flex-col items-center justify-center gap-2 text-center bg-white dark:bg-background",
+                  "group w-full aspect-square border rounded-xl shadow transition-all duration-200",
+                  "flex flex-col items-center justify-center gap-2 text-center dark:bg-background",
                   !isAttending
                     ? "border-red-500 ring-2 ring-red-500 text-red-600"
-                    : "border-muted hover:ring-1 hover:ring-red-500 "
+                    : `${borderColor} hover:ring-1 hover:ring-red-500`
                 )}
               >
                 <XCircle className="w-8 h-8 mb-1 group-hover:scale-110 transition-transform" />
@@ -208,7 +212,7 @@ const RSVP: React.FC<RSVPProps> = ({
                         </FormLabel>
                         <FormControl>
                           <Textarea
-                            placeholder="Contoh: Saya akan datang lebih malam..."
+                            placeholder="Saya akan datang lebih malam..."
                             className="h-32 bg-white"
                             {...field}
                           />
@@ -258,7 +262,7 @@ const RSVP: React.FC<RSVPProps> = ({
           )}
         </div>
       )}
-    </section>
+    </div>
   );
 };
 

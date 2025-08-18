@@ -11,6 +11,7 @@
     "type-check": "tsc --noEmit",
     "seed": "node --loader ts-node/esm prisma/seed.ts",
     "seednew": "node --loader ts-node/esm prisma/seed-new.ts",
+    "seednewtheme": "node --loader ts-node/esm prisma/seed-new-theme.ts",
     "check": "npm run lint && npm run type-check"
   },
   "dependencies": {
@@ -53,6 +54,7 @@
     "react-easy-crop": "^5.4.2",
     "react-hook-form": "^7.57.0",
     "react-hot-toast": "^2.5.2",
+    "react-icons": "^5.5.0",
     "recharts": "^3.1.0",
     "slugify": "^1.6.6",
     "tailwind-merge": "^3.3.0",

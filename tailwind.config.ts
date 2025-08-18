@@ -75,6 +75,8 @@ const config: Config = {
         alex: ["var(--font-alexbrush)", "sans-serif"],
         scheherazade: ["var(--font-scheherazade)", "sans-serif"],
         gallery: ["var(--font-gallery)", "sans-serif"],
+        lora: ["var(--font-lora)", "sans-serif"],
+        italiana: ["var(--font-italiana)", "sans-serif"],
       },
       borderRadius: {
         lg: "var(--radius)",

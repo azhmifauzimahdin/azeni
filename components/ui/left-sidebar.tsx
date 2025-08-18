@@ -27,7 +27,7 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({
   return (
     <div
       className={cn(
-        "fixed left-0 top-0 bottom-0 right-[390px] border-r-2 border-white/30 hidden sm:flex items-end justify-center overflow-hidden",
+        "fixed left-0 top-0 bottom-0 right-[390px] border-r-2 border-white/30 hidden sm:flex items-end justify-center overflow-hidden z-10",
         wrapperClassName
       )}
       {...rest}
@@ -73,7 +73,7 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({
       })}
 
       <div className="relative p-6 w-full space-y-3 z-10">
-        <div className="bg-white/1 backdrop-blur-[1px] rounded-2xl p-2">
+        <div className="bg-white/1 backdrop-blur-[3px] rounded-2xl p-2">
           <div className="text-white animate-fade-in">{children}</div>
         </div>
       </div>
