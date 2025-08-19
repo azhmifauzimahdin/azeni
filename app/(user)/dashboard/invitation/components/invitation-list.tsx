@@ -45,7 +45,7 @@ const InvitationList: React.FC<InvitationListProps> = ({
       ) : (
         <div className="col-span-full flex flex-col items-center justify-center py-10 text-center text-muted-foreground">
           <Img
-            src="https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751777657/invitation-green_xlm6eq.png"
+            src="/assets/img/invitation-green.png"
             alt="Icon undangan"
             wrapperClassName="relative w-20 h-20 mb-5"
             sizes="80px"

@@ -41,6 +41,7 @@ import {
 import { useRouter } from "next/navigation";
 import { Alert } from "@/components/ui/alert";
 import useAdminInvitationStore from "@/stores/admin-invitation-store";
+import { IoLogoWhatsapp } from "react-icons/io5";
 
 type GuestBookFormValues = z.infer<typeof createGuestSchema>;
 
@@ -468,12 +469,7 @@ const GuestBookForm: React.FC<StoryFormsProps> = ({
                 type="button"
                 onClick={form.handleSubmit(onSubmitWhatsApp)}
               >
-                <Image
-                  src="https://res.cloudinary.com/dxtqjuvcg/image/upload/v1752064456/whatsapp_xxph20.png"
-                  alt="icon whatsapp"
-                  aspectRatio="aspect-square"
-                  className="w-4 h-4"
-                />
+                <IoLogoWhatsapp size={20} />
                 {updatingGuestId ? <>Ubah</> : <>Simpan</>} & Kirim
               </Button>
               <Button
@@ -680,7 +676,7 @@ const GuestBookForm: React.FC<StoryFormsProps> = ({
           (initialData?.guests || []).length > 0 ? (
           <div className="col-span-full flex flex-col items-center justify-center py-10 text-center text-muted-foreground">
             <Image
-              src="https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751902187/guestbook-green_l8mphz.png"
+              src="/assets/img//guestbook-green.png"
               alt="Icon guest book"
               aspectRatio="aspect-square"
               className="w-20 mb-5"
@@ -691,7 +687,7 @@ const GuestBookForm: React.FC<StoryFormsProps> = ({
         ) : (
           <div className="col-span-full flex flex-col items-center justify-center py-10 text-center text-muted-foreground">
             <Image
-              src="https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751902187/guestbook-green_l8mphz.png"
+              src="/assets/img/guestbook-green.png"
               alt="Icon guest book"
               aspectRatio="aspect-square"
               className="w-20 mb-5"

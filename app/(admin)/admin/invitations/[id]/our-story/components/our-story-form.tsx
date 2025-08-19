@@ -338,7 +338,7 @@ const OurStoryForm: React.FC<StoryFormsProps> = ({
             className="flex items-center gap-3 bg-green-app-primary text-white rounded-lg shadow p-4 cursor-pointer hover:bg-green-app-secondary max-w-md"
           >
             <Img
-              src="https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751291123/love-story_rc4kbl.png"
+              src="/assets/img/love-story.png"
               alt="icon story"
               wrapperClassName="w-1/12 aspect-square"
               sizes="35px"

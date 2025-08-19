@@ -2,7 +2,7 @@ import { LinkButton } from "@/components/ui/link";
 
 export default function NotFound() {
   return (
-    <main className="h-[calc(var(--vh)_*_80)] flex items-center justify-center px-4">
+    <main className="h-screen-dvh flex items-center justify-center px-4">
       <div className="max-w-md text-center">
         <h1 className="text-5xl font-semibold text-green-app-primary mb-2">
           404

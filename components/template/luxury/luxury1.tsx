@@ -99,7 +99,7 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
   };
 
   return (
-    <div className="flex justify-end min-h-screen bg-gray-100 text-sm font-lora">
+    <div className="flex justify-end h-screen bg-gray-100 text-sm font-lora">
       <LeftSidebar imageSrc={invitation.image}>
         <h1 className="text-3xl font">The Wedding Of</h1>
         <div className="font-italiana text-8xl">
@@ -110,7 +110,7 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
 
       <div className="relative w-full sm:w-[390px] min-h-screen text-white shadow-lg overflow-hidden">
         {/* Background fixed */}
-        <div className="fixed top-0 bottom-0 right-0 left-0 sm:left-auto z-0">
+        <div className="fixed top-0 bottom-0 right-0 left-0 sm:left-auto z-0 h-screen-lvh">
           <Img
             src={images[index]}
             alt="Background"
@@ -121,11 +121,7 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
           />
           <div className="absolute inset-0 bg-black/50" />
         </div>
-        <div
-          className={cn(
-            isModalOpen && "h-[calc(var(--vh)_*_100)] overflow-hidden"
-          )}
-        >
+        <div className={cn(isModalOpen && "h-screen-dvh overflow-hidden")}>
           <audio ref={audioRef} src={invitation.music?.src} loop />
           <SpinningDisc play={musicPlaying} />
           <BottomNavbar

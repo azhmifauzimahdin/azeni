@@ -113,11 +113,37 @@ body {
 }
 
 @layer utilities {
+  .h-screen-dvh {
+    height: 100vh;
+    height: 100dvh;
+  }
+  .h-screen-lvh {
+    height: 100vh;
+    height: 100lvh;
+  }
+  .h-screen-svh {
+    height: 100vh;
+    height: 100svh;
+  }
+
+  .min-h-screen-dvh {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+  .min-h-screen-lvh {
+    min-height: 100vh;
+    min-height: 100lvh;
+  }
+  .min-h-screen-svh {
+    min-height: 100vh;
+    min-height: 100svh;
+  }
+
   .bg-img-default {
     @apply bg-cover bg-center bg-no-repeat;
   }
   .flex-section {
-    @apply flex flex-col items-center justify-center text-center min-h-[calc(var(--vh)_*_100)] gap-3 overflow-hidden;
+    @apply flex flex-col items-center justify-center text-center min-h-screen-dvh gap-3 overflow-hidden;
   }
   .section-title {
     @apply font-gallery text-3xl font-bold text-green-primary text-center mb-5;

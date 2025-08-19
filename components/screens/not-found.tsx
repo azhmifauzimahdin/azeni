@@ -18,8 +18,7 @@ const ICONS = {
   inactive: Ban,
 };
 
-const DEFAULT_BACKGROUND =
-  "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1754051526/pattern_qhwe3b.jpg";
+const DEFAULT_BACKGROUND = "/assets/img/bg-hero.jpg";
 
 const NotFound: React.FC<NotFoundProps> = ({
   message,

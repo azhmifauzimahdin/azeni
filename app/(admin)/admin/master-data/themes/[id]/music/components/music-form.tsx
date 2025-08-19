@@ -124,7 +124,7 @@ const MusicForm: React.FC<MusicFormsProps> = ({
         ) : (
           <div className="col-span-full flex flex-col items-center justify-center py-10 text-center text-muted-foreground">
             <Image
-              src="https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751291610/music-green_lu3d0w.png"
+              src="/assets/img/music-green.png"
               alt="Icon Tema"
               aspectRatio="aspect-square"
               className="w-20 mb-5"

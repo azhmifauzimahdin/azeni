@@ -171,7 +171,7 @@ const ThemeContent: React.FC<ThemeContentProps> = ({ params }) => {
           ) : (
             <div className="col-span-full flex flex-col items-center justify-center py-10 text-center text-muted-foreground gap-5">
               <Img
-                src="https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751291610/theme-green_zbl4vc.png"
+                src="/assets/img/theme-green.png"
                 alt="Icon Tema"
                 wrapperClassName="w-20 aspect-square"
                 sizes="80px"

@@ -318,10 +318,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
               <span className="sr-only">Hapus foto</span>
             </Button>
             <Img
-              src={
-                value ||
-                "https://res.cloudinary.com/dxtqjuvcg/image/upload/v1751019216/default-user_ranqqa.png"
-              }
+              src={value || "/assets/img/default-groom.png"}
               alt="Foto"
               wrapperClassName="rounded-lg w-full aspect-square mx-auto mb-1"
               sizes="200px"

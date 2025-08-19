@@ -50,7 +50,7 @@ const HeroSection: React.FC = () => {
       <section className="relative flex flex-col items-center justify-center px-6 min-h-[calc(var(--vh)_*_100)] text-center bg-gradient-to-br from-green-app-primary to-green-600 text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <Img
-            src="https://res.cloudinary.com/dxtqjuvcg/image/upload/v1754051526/pattern_qhwe3b.jpg"
+            src="/assets/img/bg-hero.jpg"
             alt="pattern"
             wrapperClassName="w-full h-full"
             className="object-cover"

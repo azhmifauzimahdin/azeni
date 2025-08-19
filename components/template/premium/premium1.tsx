@@ -91,11 +91,7 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
       </LeftSidebar>
 
       <div className="relative w-full sm:w-[390px] min-h-screen bg-white text-gray-800 shadow-lg overflow-hidden">
-        <div
-          className={cn(
-            isModalOpen && "h-[calc(var(--vh)_*_100)] overflow-hidden"
-          )}
-        >
+        <div className={cn(isModalOpen && "h-screen-dvh overflow-hidden")}>
           <audio ref={audioRef} src={invitation.music?.src} loop />
           <SpinningDisc play={musicPlaying} />
           <BottomNavbar navLinks={navLinks} />

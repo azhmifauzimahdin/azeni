@@ -24,6 +24,7 @@ import { Guest } from "@/types";
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Img } from "@/components/ui/Img";
+import { IoLogoWhatsapp } from "react-icons/io5";
 
 export function GuestBookCardSkeleton() {
   return (
@@ -131,12 +132,7 @@ const GuestBookCard: React.FC<GuestBookCardProps> = ({
           size="icon"
           onClick={() => onShareWhatsApp(data.name, data.code)}
         >
-          <Img
-            src="https://res.cloudinary.com/dxtqjuvcg/image/upload/v1752064456/whatsapp-green_jhxcom.png"
-            alt="icon whatsapp"
-            wrapperClassName="w-4 h-4"
-            sizes="16px"
-          />
+          <IoLogoWhatsapp size={20} />
         </Button>
 
         <Button variant="outline" size="icon" onClick={() => onShareLink(data)}>

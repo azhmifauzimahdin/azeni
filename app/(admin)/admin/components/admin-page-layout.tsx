@@ -45,7 +45,7 @@ const AdminPageLayout = ({
 
   return (
     <>
-      <div className="min-h-[calc(var(--vh)_*_100)] relative">
+      <div className="min-h-screen-dvh relative">
         <nav className="fixed top-0 bg-green-app-primary text-white w-full h-11 flex-center shadow z-40">
           <div className="w-full px-3 py-2 md:ps-[0.95rem] md:pe-6 ">
             <div className="flex items-center justify-between">
@@ -98,7 +98,7 @@ const AdminPageLayout = ({
         <aside
           id="logo-sidebar"
           className={cn(
-            "fixed top-11 pt-3 md:pt-3 left-0 z-30 transition-all duration-300 bg-white shadow h-[calc(var(--vh)_*_100)]",
+            "fixed top-11 pt-3 md:pt-3 left-0 z-30 transition-all duration-300 bg-white shadow h-screen-dvh",
             toggleSidebar
               ? "translate-x-0"
               : "-translate-x-full sm:translate-x-0",
