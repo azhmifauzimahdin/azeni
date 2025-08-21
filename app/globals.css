@@ -147,7 +147,7 @@ body {
     @apply bg-cover bg-center bg-no-repeat;
   }
   .flex-section {
-    @apply flex flex-col items-center justify-center text-center min-h-screen-dvh gap-3 overflow-hidden;
+    @apply flex flex-col items-center justify-center text-center min-h-screen-svh gap-3 overflow-hidden;
   }
   .section-title {
     @apply font-gallery text-3xl font-bold text-green-primary text-center mb-5;
