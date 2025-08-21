@@ -146,7 +146,7 @@ const Luxury2Page: React.FC<Invitation> = (initialInvitation) => {
           {/* ====== Hero Section ======*/}
           <section
             id="hero"
-            className="flex-center min-h-screen-svh overflow-hidden relative"
+            className="flex-center h-screen-svh overflow-hidden relative"
           >
             {/* Konten utama */}
             <div className="flex flex-col items-center justify-center text-center gap-3 relative z-20 w-full">
