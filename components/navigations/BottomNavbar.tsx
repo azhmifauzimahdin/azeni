@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { cn } from "@/lib/utils"; // helper untuk merge class (opsional)
+import { cn } from "@/lib/utils";
 
 interface NavLink {
   href: string;
@@ -9,8 +9,8 @@ interface NavLink {
 
 interface BottomNavbarProps {
   navLinks: NavLink[];
-  wrapperClassName?: string; // custom wrapper style
-  linkClassName?: string; // custom link style
+  wrapperClassName?: string;
+  linkClassName?: string;
 }
 
 const BottomNavbar: React.FC<BottomNavbarProps> = ({

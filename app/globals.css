@@ -139,6 +139,10 @@ body {
     min-height: 100svh;
   }
 
+  .vertical-rl {
+    writing-mode: vertical-rl;
+  }
+
   .bg-img-default {
     @apply bg-cover bg-center bg-no-repeat;
   }

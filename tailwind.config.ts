@@ -68,6 +68,7 @@ const config: Config = {
         "green-secondary": "##2a5349",
         "green-app-primary": "#008080",
         "green-app-secondary": "#006666",
+        "gold-luxury-002": "#cda266",
         skeleton: "#e6e9ed",
       },
       fontFamily: {
@@ -77,6 +78,8 @@ const config: Config = {
         gallery: ["var(--font-gallery)", "sans-serif"],
         lora: ["var(--font-lora)", "sans-serif"],
         italiana: ["var(--font-italiana)", "sans-serif"],
+        raleway: ["var(--font-raleway)", "sans-serif"],
+        cormorant: ["var(--font-cormorant)", "sans-serif"],
       },
       borderRadius: {
         lg: "var(--radius)",

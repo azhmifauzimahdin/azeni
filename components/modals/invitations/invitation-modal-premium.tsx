@@ -56,7 +56,7 @@ const InvitationModalPremium: React.FC<InvitationModalProps> = ({
 
           <h1 data-aos="fade-up">The Wedding Of</h1>
           <div
-            className="font-alex text-5xl text-green-primary"
+            className="font-alex text-4xl text-green-primary"
             data-aos="fade-up"
             data-aos-delay="200"
           >
@@ -86,7 +86,7 @@ const InvitationModalPremium: React.FC<InvitationModalProps> = ({
             <div>Kepada:</div>
             <div>Yth. Bapak/Ibu/Saudara/i</div>
             <div className="font-bold capitalize">{invitation.guest.name}</div>
-            <div>{invitation.guest.address}</div>
+            <div className="text-xs">{invitation.guest.address}</div>
           </div>
 
           <Button

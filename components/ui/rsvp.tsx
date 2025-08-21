@@ -26,6 +26,7 @@ interface RSVPProps {
   textColor?: string;
   borderColor?: string;
   buttonClassName?: string;
+  inputClassName?: string;
 }
 
 export type RSVPFormValues = z.infer<ReturnType<typeof createRsvpSchema>>;
@@ -37,6 +38,7 @@ const RSVP: React.FC<RSVPProps> = ({
   textColor = "text-slate-900",
   borderColor = "border-muted",
   buttonClassName = "bg-green-primary hover:bg-green-secondary",
+  inputClassName,
 }) => {
   const form = useForm<RSVPFormValues>({
     resolver: zodResolver(
@@ -64,7 +66,9 @@ const RSVP: React.FC<RSVPProps> = ({
 
   const isDeadlinePassed = rsvpDeadline && now > rsvpDeadline;
   const hasRSVPed =
-    invitation.guest.isAttending || invitation.guest.totalGuests > 1;
+    invitation.guest.isAttending ||
+    invitation.guest.totalGuests > 1 ||
+    (!invitation.guest.isAttending && invitation.guest.totalGuests === 0);
 
   return (
     <div>
@@ -169,14 +173,14 @@ const RSVP: React.FC<RSVPProps> = ({
                               }
                             )
                           }
-                          className="shadow-sm"
+                          className={cn("shadow-sm", inputClassName)}
                         >
                           <Minus />
                         </Button>
                         <Input
                           id={field.name}
                           type="number"
-                          className="text-center w-16"
+                          className={cn("text-center w-16", inputClassName)}
                           value={field.value}
                           onChange={(e) =>
                             field.onChange(Math.max(1, Number(e.target.value)))
@@ -191,7 +195,7 @@ const RSVP: React.FC<RSVPProps> = ({
                               shouldDirty: true,
                             })
                           }
-                          className="shadow-sm"
+                          className={cn("shadow-sm", inputClassName)}
                         >
                           <Plus />
                         </Button>
@@ -213,7 +217,7 @@ const RSVP: React.FC<RSVPProps> = ({
                         <FormControl>
                           <Textarea
                             placeholder="Saya akan datang lebih malam..."
-                            className="h-32 bg-white"
+                            className={cn("h-32 bg-white", inputClassName)}
                             {...field}
                           />
                         </FormControl>

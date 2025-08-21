@@ -8,7 +8,7 @@ import { Gallery, Invitation } from "@/types";
 import GoogleCalender from "../../ui/google-calender";
 import CountdownTimer from "../../ui/countdown-timer";
 import { formatDate } from "@/lib/utils/formatted-date";
-import { MapPinCheckInside } from "lucide-react";
+import { Clock, MapPinCheckInside } from "lucide-react";
 import {
   IoMailOutline,
   IoLogoInstagram,
@@ -32,7 +32,7 @@ import LeftSidebar from "../../ui/left-sidebar";
 import Link from "next/link";
 import InvitationModalLuxury from "@/components/modals/invitations/invitation-modal-luxury";
 
-const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
+const Luxury2Page: React.FC<Invitation> = (initialInvitation) => {
   const [invitation, setInvitation] = useState<Invitation>(initialInvitation);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(true);
   const [musicPlaying, setMusicPlaying] = useState<boolean>(true);
@@ -71,7 +71,7 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
 
   const formattedMarriageDate = formatDate(
     getEffectiveDate(invitation),
-    "dd . MM . yyyy"
+    "dd · MM · yyyy"
   );
 
   const marriageEvent = invitation.schedules.find(
@@ -99,17 +99,16 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
   };
 
   return (
-    <div className="flex justify-end min-h-screen bg-gray-100 text-sm font-lora">
+    <div className="flex justify-end min-h-screen bg-gray-100 text-sm font-raleway">
       <LeftSidebar imageSrc={invitation.image}>
-        <h1 className="text-3xl font">The Wedding Of</h1>
-        <div className="font-italiana text-8xl">
+        <h1 className="text-3xl">The Wedding Of</h1>
+        <div className="font-cormorant text-8xl text-gold-luxury-002">
           {invitation.groom} & {invitation.bride}
         </div>
-        <div>{formatDate(getEffectiveDate(invitation), "dd.MM.yyyy")}</div>
+        <div>{formatDate(getEffectiveDate(invitation), "dd · MM · yyyy")}</div>
       </LeftSidebar>
 
-      <div className="relative w-full sm:w-[390px] min-h-screen text-white shadow-lg overflow-hidden">
-        {/* Background fixed */}
+      <div className="relative w-full sm:w-[390px] min-h-screen text-white overflow-hidden">
         <div className="fixed top-0 bottom-0 right-0 left-0 sm:left-auto z-0 h-screen-lvh">
           <Img
             src={images[index]}
@@ -119,7 +118,7 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
             sizes="500px"
             priority
           />
-          <div className="absolute inset-0 bg-black/50" />
+          <div className="absolute inset-0 bg-black/70" />
         </div>
         <div className={cn(isModalOpen && "h-screen-dvh overflow-hidden")}>
           <audio ref={audioRef} src={invitation.music?.src} loop />
@@ -127,7 +126,7 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
           <BottomNavbar
             navLinks={navLinks}
             wrapperClassName="bg-white/10 backdrop-blur-md border border-white/20"
-            linkClassName="bg-white text-gray-800 hover:bg-gray-200 shadow-md"
+            linkClassName="bg-gold-luxury-002 hover:bg-white text-slate-800 shadow-md"
           />
 
           <InvitationModalLuxury
@@ -136,6 +135,7 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
               handleStartAudio();
               setIsModalOpen(false);
             }}
+            variant="002"
             invitation={invitation}
           />
 
@@ -153,7 +153,7 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
               <h1 className="font-medium">The Wedding Of</h1>
 
               <div className="mb-3 space-y-3">
-                <div className="font-italiana text-4xl">
+                <div className="font-cormorant text-4xl text-gold-luxury-002">
                   {invitation.groom} & {invitation.bride}
                 </div>
                 <div className="text-lg">{formattedMarriageDate}</div>
@@ -162,34 +162,35 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
           </section>
 
           {(invitation.quote || invitation.couple) && (
-            <div
-              className="w-full bg-[url('/assets/themes/luxury-001/img/geometric-white.png')] 
-            bg-repeat-y bg-center [background-size:100%_auto] relative"
-            >
-              {/* ====== Quote Section ======*/}
+            <div className="w-full bg-slate-100 relative">
+              {/* ====== Quote Section ====== */}
               {invitation.quote && (
-                <section className="text-slate-600 pt-16 px-6 relative">
+                <section className="text-gold-luxury-002 pt-16 px-6 relative">
                   <blockquote
-                    className="relative bg-white text-center px-8 pt-8 pb-0 max-w-3xl mx-auto rounded-xl border border-white/20 shadow-lg backdrop-blur-sm space-y-4"
+                    className="relative text-center pt-8 pb-0 max-w-3xl mx-auto space-y-4"
                     data-aos="fade-up"
                   >
+                    <p className="text-center text-7xl opacity-50 absolute top-1 right-1/2 translate-x-1/2">
+                      “
+                    </p>
                     <p className="font-semibold">
                       &quot;{invitation.quote?.name}&quot;
                     </p>
                     <cite className="block mt-4 ">
                       - {invitation.quote?.author} -
                     </cite>
-                    <p className="text-center text-7xl opacity-50">“</p>
                   </blockquote>
                 </section>
               )}
-
-              {/* ====== Couple Section ======*/}
+              {/* ====== Couple Section ====== */}
               {invitation.couple && (
                 <section className="text-slate-700 relative">
                   <div className="flex-section w-full">
-                    <h1 className="relative z-10 text-3xl tracking-wider">
-                      Pasangan
+                    <h1
+                      className="relative z-10 text-3xl tracking-wider text-gold-luxury-002 font-cormorant font-semibold"
+                      data-aos="fade-up"
+                    >
+                      PASANGAN
                     </h1>
                     <h2 className="mb-6 px-3" data-aos="fade-up">
                       {invitation.setting?.coupleIntroductionText}
@@ -202,13 +203,13 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
                             "/assets/img/default-groom-invitation.png"
                           }
                           alt="Groom"
-                          wrapperClassName="aspect-[3/4] w-10/12 mx-auto shadow-md border-4 border-white rounded-b-3xl rounded-t-[200px] overflow-hidden"
+                          wrapperClassName="aspect-[3/4] w-10/12 mx-auto shadow-md border-2 border-gold-luxury-002 rounded-t-[200px] rounded-b-[200px] overflow-hidden"
                           sizes="300px"
                           priority
                           data-aos="fade-down"
                         />
                         <h2
-                          className="text-xl font-semibold"
+                          className="text-xl font-semibold text-gold-luxury-002"
                           data-aos="zoom-in"
                         >
                           {invitation.couple?.groomName}
@@ -225,7 +226,7 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
                           <Link
                             href={invitation.couple?.groomInstagram}
                             target="_blank"
-                            className="inline-block"
+                            className="inline-block text-gold-luxury-002"
                           >
                             <IoLogoInstagram size={20} />
                           </Link>
@@ -233,7 +234,7 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
                       </div>
                       <div className="flex items-center justify-center">
                         <div
-                          className="text-2xl font-semibold text-slate-600 font-italiana"
+                          className="text-4xl font-semibold text-slate-600 font-cormorant"
                           data-aos="flip-left"
                         >
                           &
@@ -246,31 +247,30 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
                             "/assets/img/default-bride-invitation.png"
                           }
                           alt="Bride"
-                          wrapperClassName="aspect-[3/4] w-10/12 mx-auto shadow-md border-4 border-white rounded-b-3xl rounded-t-[200px] overflow-hidden"
+                          wrapperClassName="aspect-[3/4] w-10/12 mx-auto shadow-md border-2 border-gold-luxury-002 rounded-t-[200px] rounded-b-[200px] overflow-hidden"
                           sizes="300px"
                           priority
                           data-aos="fade-down"
                         />
                         <h2
-                          className="text-xl font-semibold"
+                          className="text-xl font-semibold text-gold-luxury-002"
                           data-aos="zoom-in"
                         >
                           {invitation.couple?.brideName}
                         </h2>
                         <p
-                          className="text-sm"
+                          className=" text-sm"
                           data-aos="fade-up"
                           data-aos-delay="700"
                         >
-                          Putri dari Bapak {invitation.couple?.brideFather}
-                          &nbsp;&&nbsp;
-                          {invitation.couple?.brideMother}
+                          Putra dari Bapak {invitation.couple?.brideFather}
+                          &nbsp;&&nbsp; Ibu {invitation.couple?.brideMother}
                         </p>
                         <p data-aos="fade-up" data-aos-delay="700">
                           <Link
                             href={invitation.couple?.brideInstagram}
                             target="_blank"
-                            className="inline-block"
+                            className="inline-block text-gold-luxury-002"
                           >
                             <IoLogoInstagram size={20} />
                           </Link>
@@ -283,15 +283,15 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
             </div>
           )}
 
-          {/* ====== Schdule Section ======  */}
+          {/* ====== Schdule Section ======   */}
           {invitation.schedules.length > 0 && (
             <section
               id="schedule"
-              className="relative flex justify-center items-center overflow-hidden bg-gradient-to-b from-transparent to-neutral-500/95"
+              className="relative flex justify-center items-center overflow-hidden bg-black/80"
             >
               <div className="relative z-20 w-full py-20 px-3 space-y-8">
                 <div
-                  className="w-full p-8 text-center rounded-t-[200px] rounded-b-3xl bg-white/10 backdrop-blur-md border border-white/20 space-y-5"
+                  className="w-full p-8 text-center space-y-5"
                   data-aos="fade-up"
                 >
                   <div data-aos="zoom-in">
@@ -304,7 +304,7 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
                   </div>
 
                   <div
-                    className="text-lg"
+                    className="text-2xl font-bold text-gold-luxury-002"
                     data-aos="fade-up"
                     data-aos-delay="100"
                   >
@@ -332,109 +332,112 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
                         marriageEvent?.endDate || getEffectiveDate(invitation)
                       }
                       className={buttonVariants({
-                        variant: "white-outline",
+                        className:
+                          "bg-gold-luxury-002 text-slate-800 hover:bg-white",
                       })}
                     />
                   </div>
                 </div>
 
-                <div
-                  className="relative rounded-xl overflow-hidden text-center text-white py-16"
-                  data-aos="fade-up"
-                >
-                  <Img
-                    src={invitation.image}
-                    alt="Background"
-                    wrapperClassName="absolute inset-0 w-full h-full"
-                    className="object-cover"
-                    data-aos="zoom-in"
-                  />
-                  <div className="absolute inset-0 bg-black/50" />
-                  <div className="text-center space-y-3">
-                    <h1 className="relative z-10 text-3xl tracking-wider">
-                      Waktu & Tempat
-                    </h1>
-                    <h2 data-aos="fade-up">
-                      {invitation.setting?.scheduleIntroductionText}
-                    </h2>
-                  </div>
+                <div className="text-center space-y-3">
+                  <h1
+                    className="relative z-10 text-3xl tracking-wider text-gold-luxury-002 font-cormorant font-semibold"
+                    data-aos="fade-up"
+                  >
+                    WAKTU & TEMPAT
+                  </h1>
+                  <h2 data-aos="fade-up">
+                    {invitation.setting?.scheduleIntroductionText}
+                  </h2>
                 </div>
 
                 <div className="grid grid-cols-1 gap-8">
                   {invitation.schedules.map((schedule, index) => (
                     <div
                       key={index}
-                      className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm hover:shadow-md transition duration-300"
+                      className="flex rounded-xl overflow-hidden shadow-sm hover:shadow-md"
                       data-aos="fade-up"
                     >
-                      <div
-                        className="flex justify-center mb-6"
-                        data-aos="zoom-in"
-                      >
-                        {schedule.type === "marriage" ? (
-                          <Img
-                            src="/assets/svg/marriage-gray.svg"
-                            alt="Wedding"
-                            wrapperClassName="w-16 h-16 mx-auto"
-                          />
-                        ) : schedule.type === "reception" ? (
-                          <Img
-                            src="/assets/svg/reception-gray.svg"
-                            alt="Reception"
-                            wrapperClassName="w-16 h-16 mx-auto"
-                          />
-                        ) : (
-                          <Img
-                            src="/assets/svg/schedule-gray.svg"
-                            alt="Schedule"
-                            wrapperClassName="w-16 h-16 mx-auto"
-                          />
-                        )}
-                      </div>
-
-                      <h3
-                        className="text-lg font-semibold text-center text-slate-900 mb-2"
-                        data-aos="zoom-in"
-                      >
-                        {schedule.name}
-                      </h3>
-
-                      <div
-                        className="text-xl font-bold text-center text-slate-800 mb-2"
-                        data-aos="zoom-in"
-                      >
-                        {formatDate(schedule.startDate, "dd . MM . yyyy")}
-                      </div>
-
-                      <p
-                        className="text-center text-slate-600 mb-4"
-                        data-aos="zoom-in"
-                      >
-                        {formatTime(schedule.startDate)} –{" "}
-                        {formatTime(schedule.endDate)} WIB
-                      </p>
-
-                      <div className="text-center" data-aos="zoom-in">
-                        <p className="text-sm font-medium text-slate-500 uppercase tracking-wide mb-1">
-                          Lokasi
-                        </p>
-                        <p className="text-slate-700">{schedule.location}</p>
-                      </div>
-
-                      <div className="mt-6 flex justify-center">
-                        <Button
-                          onClick={() =>
-                            window.open(
-                              schedule.locationMaps,
-                              "_blank",
-                              "noopener,noreferrer"
-                            )
-                          }
-                          className="bg-stone-500 hover:bg-stone-600 text-white transition-colors"
+                      <div className="flex flex-col items-center bg-white w-16 p-3">
+                        <div
+                          className="flex justify-center mt-3"
                           data-aos="zoom-in"
                         >
-                          <MapPinCheckInside size={16} /> Lihat Lokasi
-                        </Button>
+                          {schedule.type === "marriage" ? (
+                            <Img
+                              src="/assets/svg/marriage-gray.svg"
+                              alt="Wedding"
+                              wrapperClassName="w-10 h-10"
+                            />
+                          ) : schedule.type === "reception" ? (
+                            <Img
+                              src="/assets/svg/reception-gray.svg"
+                              alt="Reception"
+                              wrapperClassName="w-10 h-10"
+                            />
+                          ) : (
+                            <Img
+                              src="/assets/svg/schedule-gray.svg"
+                              alt="Schedule"
+                              wrapperClassName="w-10 h-10"
+                            />
+                          )}
+                        </div>
+
+                        <div className="flex-1 flex justify-center items-center h-32">
+                          <h3 className="inline-block -rotate-90 origin-center whitespace-nowrap text-lg text-right font-semibold font-cormorant text-slate-900">
+                            {schedule.name.toUpperCase()}
+                          </h3>
+                        </div>
+                      </div>
+                      <div className="flex-1 bg-gold-luxury-002 text-slate-800 p-6">
+                        <div
+                          className="flex items-center gap-3"
+                          data-aos="zoom-in"
+                        >
+                          <div className="text-5xl font-bold pb-3 px-3">
+                            {formatDate(schedule.startDate, "dd")}
+                          </div>
+                          <div className="text-lg font-bold  leading-none">
+                            <div>{formatDate(schedule.startDate, "EEEE")}</div>
+                            <div>
+                              {formatDate(schedule.startDate, "MMMM yyyy")}
+                            </div>
+                          </div>
+                        </div>
+
+                        <p
+                          className="font-bold text-lg mb-1"
+                          data-aos="zoom-in"
+                        >
+                          <Clock className="w-4 h-4 inline-block mr-2" />
+                          {formatTime(schedule.startDate)} –{" "}
+                          {formatTime(schedule.endDate)} WIB
+                        </p>
+
+                        <div
+                          className="flex gap-2 font-semibold"
+                          data-aos="zoom-in"
+                        >
+                          <MapPinCheckInside className="w-4 h-4" />
+                          <div>{schedule.location}</div>
+                        </div>
+
+                        <div className="mt-6 flex justify-end">
+                          <Button
+                            onClick={() =>
+                              window.open(
+                                schedule.locationMaps,
+                                "_blank",
+                                "noopener,noreferrer"
+                              )
+                            }
+                            className="bg-black hover:bg-white text-white hover:text-slate-800"
+                            data-aos="zoom-in"
+                          >
+                            <MapPinCheckInside size={16} /> Lihat Lokasi
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -443,49 +446,52 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
             </section>
           )}
 
-          {/* ====== Our Story Section ====== */}
+          {/* ====== Our Story Section ======  */}
           {invitation.stories.length > 0 && (
             <section
               id="story"
-              className="flex-center relative overflow-hidden bg-neutral-500/95 px-6 pb-16"
+              className="flex-center relative overflow-hidden bg-black/80 px-6 py-16"
             >
-              <div
-                className="w-full rounded-xl border border-gray-200 bg-white p-8 shadow-sm hover:shadow-md transition duration-300"
-                data-aos="fade-up"
-              >
+              <div className="w-full" data-aos="fade-up">
                 <Img
-                  src="/assets/svg/love-story-stone-500.svg"
+                  src="/assets/svg/love-story-gold-luxury-002.svg"
                   alt="Wedding"
                   wrapperClassName="w-20 h-20 mb-8 mx-auto"
                   data-aos="zoom-in"
                 />
                 <h1
-                  className="text-3xl tracking-wider text-center text-stone-500 mb-8"
+                  className="text-3xl tracking-wider text-gold-luxury-002 font-cormorant font-semibold text-center mb-8"
                   data-aos="zoom-in"
                 >
-                  Cerita Kita
+                  CERITA KITA
                 </h1>
 
-                <div className="space-y-8">
+                <div className="space-y-20 px-3">
                   {invitation.stories.map((story, index) => (
                     <div key={index} data-aos="fade-up">
-                      <h3 className="text-lg font-semibold text-slate-800 mb-1">
+                      {story.image && (
+                        <div
+                          className={cn(
+                            "w-full bg-white p-3 pb-10 mb-3",
+                            index % 2 === 0 ? "rotate-3" : "-rotate-3"
+                          )}
+                        >
+                          <Image
+                            src={story.image}
+                            alt="Foto"
+                            className="w-full h-auto object-contain"
+                            priority
+                          />
+                        </div>
+                      )}
+                      <h3 className="text-2xl font-semibold text-gold-luxury-002 font-cormorant">
                         {story.title}
                       </h3>
-                      <span className="block text-sm text-slate-500 mb-3">
+                      <span className="block text-sm text-gold-luxury-002/80 mb-3">
                         {formatDate(story.date, "MMMM yyyy")}
                       </span>
 
-                      {story.image && (
-                        <Image
-                          src={story.image}
-                          alt="Foto"
-                          className="w-full h-auto object-contain rounded-lg overflow-hidden mb-3"
-                          priority
-                        />
-                      )}
-
-                      <p className="text-slate-700">{story.description}</p>
+                      <p className="text-white">{story.description}</p>
                     </div>
                   ))}
                 </div>
@@ -493,15 +499,18 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
             </section>
           )}
 
-          {/* ====== Galleries Section ====== */}
+          {/* ====== Galleries Section ======  */}
           {invitation.galleries.length > 0 && (
             <section
               id="galleries"
-              className="flex-center bg-gradient-to-b from-neutral-500/95 from-0% via-neutral-500/95 via-83% to-transparent to-100% relative overflow-hidden px-6"
+              className="flex-center bg-black/80 relative overflow-hidden px-6"
             >
               <div className="relative z-20 w-full text-center py-16 space-y-3">
-                <h2 className="text-3xl tracking-wider" data-aos="fade-up">
-                  Galeri
+                <h2
+                  className="text-3xl tracking-wider text-gold-luxury-002 font-cormorant font-semibold"
+                  data-aos="fade-up"
+                >
+                  GALERI
                 </h2>
                 <p className="mb-8" data-aos="fade-up">
                   Photo By {invitation.groom} & {invitation.bride}
@@ -514,9 +523,9 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
             </section>
           )}
 
-          {/* ====== Gift Section ====== */}
+          {/* ====== Gift Section ======  */}
           {invitation.bankaccounts.length > 0 && (
-            <section className="py-20 px-6 text-center relative">
+            <section className="py-20 px-6 text-center bg-black/80 relative">
               <div>
                 <Img
                   src="/assets/img/gift.png"
@@ -525,8 +534,11 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
                   wrapperClassName="w-20 h-20 mb-8 mx-auto"
                   data-aos="zoom-in"
                 />
-                <h2 className="text-3xl tracking-wider mb-5" data-aos="fade-up">
-                  Hadiah Pernikahan
+                <h2
+                  className="text-3xl tracking-wider text-gold-luxury-002 font-cormorant font-semibold mb-5"
+                  data-aos="fade-up"
+                >
+                  HADIAH PERNIKAHAN
                 </h2>
                 <p className="mb-5" data-aos="zoom-in">
                   {invitation.setting?.giftIntroductionText || ""}
@@ -534,27 +546,28 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
                 <WeddingGift
                   banks={invitation.bankaccounts}
                   btnClassName={buttonVariants({
-                    variant: "white-outline",
+                    className:
+                      "bg-gold-luxury-002 text-slate-800 hover:bg-white",
                   })}
                 />
               </div>
             </section>
           )}
 
-          {/* ====== RSVP Section ====== */}
-          <section className="flex-center px-6 py-16 relative overflow-hidden">
-            <div className="flex-center text-slate-900 flex-col text-center gap-3 relative z-20 w-full  border border-gray-200 bg-white p-8 rounded-lg">
+          {/* ====== RSVP Section ======  */}
+          <section className="flex-center px-6 py-16 relative bg-black/80 overflow-hidden">
+            <div className="flex-center flex-col text-center gap-3 relative z-20 w-full">
               <Img
-                src="/assets/svg/rsvp-stone-500.svg"
+                src="/assets/svg/rsvp-gold-luxury-002.svg"
                 alt="Wedding"
                 wrapperClassName="w-20 h-20 mb-8 mx-auto"
                 data-aos="zoom-in"
               />
               <h2
-                className="text-3xl tracking-wider text-stone-500"
+                className="text-3xl tracking-wider text-gold-luxury-002 font-cormorant font-semibold"
                 data-aos="fade-up"
               >
-                Konfirmasi Kehadiran
+                KONFIRMASI KEHADIRAN
               </h2>
               <p data-aos="zoom-in" className="mb-8">
                 {invitation.setting?.rsvpIntroductionText || ""}
@@ -565,37 +578,37 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
                     invitation={invitation}
                     onSubmit={handleSubmitRSVP}
                     isLoading={isSubmittingRSVP}
-                    buttonClassName="bg-stone-500 hover:bg-stone-600 text-white transition-colors"
+                    textColor="text-gold-luxury-002"
+                    borderColor="border-gold-luxury-002"
+                    inputClassName="bg-transparent text-white"
+                    buttonClassName="bg-gold-luxury-002 text-slate-800 hover:bg-white"
                   />
                 </div>
               )}
             </div>
           </section>
 
-          {/* ====== Comment Section ====== */}
+          {/* ====== Comment Section ======  */}
           {invitation.setting?.commentEnabled && (
-            <section
-              className="w-full bg-[url('/assets/themes/luxury-001/img/geometric-white.png')] 
-            bg-repeat-y bg-center [background-size:100%_auto] relative pt-16 pb-24"
-            >
+            <section className="w-full bg-slate-100 relative pt-16 pb-24">
               <h2
-                className="text-3xl tracking-wider text-stone-500 text-center mb-8"
+                className="text-3xl tracking-wider text-gold-luxury-002 font-cormorant font-semibold text-center mb-8"
                 data-aos="fade-up"
               >
-                Ucapan & Doa
+                UCAPAN & DOA
               </h2>
               <CommentSection
                 invitation={invitation}
                 setInvitation={setInvitation}
                 comments={invitation.comments || []}
-                buttonClassName="bg-stone-500 hover:bg-stone-600 text-white transition-colors"
-                textColor="text-stone-500"
-                replyWrapperClassName="border border-stone-500"
+                buttonClassName="bg-gold-luxury-002 text-slate-800 hover:bg-white"
+                textColor="text-gold-luxury-002"
+                replyWrapperClassName="border border-gold-luxury-002"
               />
             </section>
           )}
 
-          {/* ====== Footer Section ======*/}
+          {/* ====== Footer Section ====== */}
           <div className="flex flex-col items-center justify-center min-h-screen-dvh space-y-16 overflow-hidden relative">
             <div
               className="flex flex-col items-center justify-center text-center relative z-20 w-full"
@@ -624,7 +637,7 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
                 data-aos-duration="1200"
                 data-aos-delay="500"
               >
-                <div className="font-italiana text-5xl">
+                <div className="font-cormorant text-gold-luxury-002 text-5xl">
                   {invitation.groom} & {invitation.bride}
                 </div>
               </div>
@@ -656,7 +669,7 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
                 <li>
                   <Link
                     href="mailto:azen.invitation@gmail.com"
-                    className="hover:text-stone-500 transition"
+                    className="hover:text-gold-luxury-002 transition"
                   >
                     <IoMailOutline size={20} />
                   </Link>
@@ -666,7 +679,7 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
                     href="https://www.instagram.com/azen.inv?igsh=Nmp6djVucWNzejdm&utm_source=qr"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-stone-500 transition"
+                    className="hover:text-gold-luxury-002 transition"
                   >
                     <IoLogoInstagram size={20} />
                   </Link>
@@ -676,7 +689,7 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
                     href="https://api.whatsapp.com/send/?phone=628895276116&text=Halo%2C+saya+tertarik+dengan+undangan+digitalnya.%0ABisa+saya+dapatkan+informasi+lebih+lanjut%3F&type=phone_number&app_absent=0"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-stone-500 transition"
+                    className="hover:text-gold-luxury-002 transition"
                   >
                     <IoLogoWhatsapp size={20} />
                   </Link>
@@ -690,4 +703,4 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
   );
 };
 
-export default Luxury1Page;
+export default Luxury2Page;

@@ -128,7 +128,7 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
                 priority
               />
               <div className="mb-3">
-                <div className="font-alex text-5xl text-green-primary">
+                <div className="font-alex text-4xl text-green-primary">
                   {invitation.groom} & {invitation.bride}
                 </div>
                 <div>{formattedMarriageDate}</div>

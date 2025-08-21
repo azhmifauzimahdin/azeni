@@ -70,6 +70,8 @@ interface commentSectionProps {
   comments: Comment[];
   setInvitation: React.Dispatch<React.SetStateAction<Invitation>>;
   buttonClassName?: string;
+  textColor?: string;
+  replyWrapperClassName?: string;
 }
 
 const CommentFormSchema = createCommentSchema.pick({
@@ -86,6 +88,8 @@ const CommentSection: React.FC<commentSectionProps> = ({
   comments,
   setInvitation,
   buttonClassName = "bg-green-primary hover:bg-green-secondary text-white",
+  textColor = "text-green-app-primary",
+  replyWrapperClassName = "bg-green-app-primary/10",
 }) => {
   const { user } = useUser();
 
@@ -205,7 +209,13 @@ const CommentSection: React.FC<commentSectionProps> = ({
             render={({ field }) => (
               <FormItem>
                 {replyTo && replyToName && (
-                  <div className="mb-2 flex items-center justify-between px-4 py-2 bg-green-app-primary/10 text-green-app-primary text-sm rounded-md shadow-sm">
+                  <div
+                    className={cn(
+                      "mb-2 flex items-center justify-between px-4 py-2 text-sm rounded-md shadow-sm",
+                      textColor,
+                      replyWrapperClassName
+                    )}
+                  >
                     <div className="flex items-center gap-2">
                       <CornerUpLeft className="w-4 h-4" />
                       <span className="truncate">
@@ -218,7 +228,7 @@ const CommentSection: React.FC<commentSectionProps> = ({
 
                     <button
                       type="button"
-                      className="hover:text-green-app-primary/80 ml-2"
+                      className="hover:text-slate-800 ml-2"
                       onClick={cancelReply}
                       aria-label="Batal membalas"
                     >
@@ -231,7 +241,7 @@ const CommentSection: React.FC<commentSectionProps> = ({
                     <Textarea
                       placeholder="Ucapan"
                       disabled={isSubmitting}
-                      className="h-44 flex-1"
+                      className="h-44 flex-1 text-slate-800"
                       {...field}
                       ref={(e) => {
                         field.ref(e);
@@ -267,7 +277,9 @@ const CommentSection: React.FC<commentSectionProps> = ({
           <div key={comment.id} className="flex flex-col space-y-2">
             <div className="bg-gray-50 p-4 rounded-2xl shadow-sm max-w-xl hover:bg-gray-100 transition-colors">
               <div className="flex items-center justify-between mb-1">
-                <h4 className="font-semibold text-green-app-primary truncate capitalize">
+                <h4
+                  className={cn("font-semibold truncate capitalize", textColor)}
+                >
                   {comment.guest.name}
                 </h4>
 
@@ -311,7 +323,10 @@ const CommentSection: React.FC<commentSectionProps> = ({
 
               <button
                 type="button"
-                className="mt-2 text-xs text-green-app-primary hover:underline focus:outline-none focus:ring-2 focus:ring-green-app-primary rounded"
+                className={cn(
+                  "mt-2 text-xs hover:underline focus:outline-none focus:ring-2 focus:ring-green-app-primary rounded",
+                  textColor
+                )}
                 onClick={() =>
                   handleReply(comment.id, comment.guest.name, false)
                 }
@@ -329,7 +344,12 @@ const CommentSection: React.FC<commentSectionProps> = ({
                     className="bg-slate-50 p-3 rounded-xl shadow-sm max-w-lg  hover:bg-slate-100 transition-colors"
                   >
                     <div className="flex items-center justify-between mb-1">
-                      <h4 className="font-semibold text-green-app-primary truncate capitalize">
+                      <h4
+                        className={cn(
+                          "font-semibold truncate capitalize",
+                          textColor
+                        )}
+                      >
                         {reply.guest.name}
                         {reply.isReply && ` ▸ ${reply.replyToName}`}
                       </h4>
@@ -373,7 +393,10 @@ const CommentSection: React.FC<commentSectionProps> = ({
                     </p>
                     <button
                       type="button"
-                      className="mt-2 text-xs text-green-app-primary hover:underline focus:outline-none focus:ring-2 focus:ring-green-app-primary rounded"
+                      className={cn(
+                        "mt-2 text-xs hover:underline focus:outline-none rounded",
+                        textColor
+                      )}
                       onClick={() =>
                         handleReply(comment.id, reply.guest.name, true)
                       }

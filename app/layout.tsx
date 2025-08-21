@@ -7,6 +7,8 @@ import {
   Scheherazade_New,
   Lora,
   Italiana,
+  Raleway,
+  Cormorant_Unicase,
 } from "next/font/google";
 import AOSInit from "@/components/AOSInit";
 import localFont from "next/font/local";
@@ -16,6 +18,7 @@ import UserSync from "@/components/ui/user-sync";
 import ClientWrapper from "./client-wrapper";
 import Script from "next/script";
 import { idID } from "@clerk/localizations";
+import { cn } from "@/lib/utils";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -50,6 +53,18 @@ const italiana = Italiana({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-italiana",
+});
+
+const raleway = Raleway({
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+  variable: "--font-raleway",
+});
+
+const cormorantUnicase = Cormorant_Unicase({
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+  variable: "--font-cormorant",
 });
 
 export const metadata = {
@@ -89,7 +104,16 @@ export default function RootLayout({
     >
       <html
         lang="id"
-        className={`${poppins.variable} ${alexBrush.variable} ${scheherazade.variable} ${gallery.variable} ${lora.variable} ${italiana.variable}`}
+        className={cn(
+          poppins.variable,
+          alexBrush.variable,
+          scheherazade.variable,
+          gallery.variable,
+          lora.variable,
+          italiana.variable,
+          raleway.variable,
+          cormorantUnicase.variable
+        )}
       >
         <Script
           src={`${process.env.NEXT_PUBLIC_MIDTRANS_SCRIPT_URL}/snap/snap.js`}
