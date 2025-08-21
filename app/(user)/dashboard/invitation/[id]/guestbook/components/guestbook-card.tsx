@@ -23,7 +23,6 @@ import {
 import { Guest } from "@/types";
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { Img } from "@/components/ui/Img";
 import { IoLogoWhatsapp } from "react-icons/io5";
 
 export function GuestBookCardSkeleton() {
