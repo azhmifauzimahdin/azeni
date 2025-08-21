@@ -149,7 +149,7 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
             className="flex-center min-h-screen-svh overflow-hidden relative"
           >
             {/* Konten utama */}
-            <div className="flex-section relative z-20 w-full">
+            <div className="flex flex-col items-center justify-center text-center gap-3 relative z-20 w-full">
               <h1 className="font-medium">The Wedding Of</h1>
 
               <div className="mb-3 space-y-3">
@@ -187,7 +187,7 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
               {/* ====== Couple Section ======*/}
               {invitation.couple && (
                 <section className="text-slate-700 relative">
-                  <div className="flex-section w-full">
+                  <div className="flex flex-col items-center justify-center text-center py-16 gap-3 w-full">
                     <h1 className="relative z-10 text-3xl tracking-wider">
                       Pasangan
                     </h1>
