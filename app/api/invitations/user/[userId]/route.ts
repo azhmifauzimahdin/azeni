@@ -84,6 +84,7 @@ export async function GET(
             },
           },
           setting: true,
+          liveStream: true,
         },
         orderBy: {
           createdAt: "desc",
@@ -146,6 +147,7 @@ export async function GET(
             },
           },
           setting: true,
+          liveStream: true,
         },
         orderBy: {
           createdAt: "desc",

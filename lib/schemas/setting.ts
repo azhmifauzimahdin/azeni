@@ -157,4 +157,11 @@ export const introductionSettingSchema = z.object({
     })
     .min(1, { message: "Teks kehadiran wajib diisi" })
     .max(255, { message: "Teks kehadiran terlalu panjang" }),
+  liveStreamIntroductionText: z
+    .string({
+      required_error: "Teks live streaming wajib diisi",
+      invalid_type_error: "Teks live streaming harus berupa teks",
+    })
+    .min(1, { message: "Teks live streaming wajib diisi" })
+    .max(255, { message: "Teks live streaming terlalu panjang" }),
 });

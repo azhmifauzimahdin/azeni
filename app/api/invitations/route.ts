@@ -80,6 +80,7 @@ export async function GET() {
           },
         },
         setting: true,
+        liveStream: true,
       },
       orderBy: {
         updatedAt: "desc",
@@ -294,6 +295,7 @@ export async function POST(req: Request) {
           },
         },
         setting: true,
+        liveStream: true,
       },
     });
 

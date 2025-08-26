@@ -248,6 +248,7 @@ export async function GET(
             },
           },
           setting: true,
+          liveStream: true,
         },
       });
     } else {
@@ -315,6 +316,7 @@ export async function GET(
             },
           },
           setting: true,
+          liveStream: true,
         },
       });
     }

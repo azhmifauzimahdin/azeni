@@ -48,6 +48,7 @@ export async function PATCH(
       scheduleIntroductionText,
       giftIntroductionText,
       rsvpIntroductionText,
+      liveStreamIntroductionText,
     } = parsed.data;
 
     const invitationByUserId = await prisma.invitation.findFirst({
@@ -83,6 +84,7 @@ export async function PATCH(
         scheduleIntroductionText,
         giftIntroductionText,
         rsvpIntroductionText,
+        liveStreamIntroductionText,
       },
     });
 

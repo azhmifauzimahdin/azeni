@@ -16,6 +16,7 @@ export interface SettingIntroductionTextRequest {
   scheduleIntroductionText: string;
   giftIntroductionText: string;
   rsvpIntroductionText: string;
+  liveStreamIntroductionText: string;
 }
 
 export interface SettingInvitationScanResetCountdownSecondsRequest {
@@ -44,6 +45,7 @@ export interface Setting {
   scheduleIntroductionText: string;
   giftIntroductionText: string;
   rsvpIntroductionText: string;
+  liveStreamIntroductionText: string;
   createdAt: string;
   updatedAt: string;
 }

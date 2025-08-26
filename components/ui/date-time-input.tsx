@@ -100,7 +100,9 @@ const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <div className="relative col-span-2">
-              <CalendarIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+              {!isFetching && (
+                <CalendarIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+              )}
               <Input
                 ref={ref}
                 id={id}

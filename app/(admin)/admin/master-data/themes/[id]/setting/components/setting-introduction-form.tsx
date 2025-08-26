@@ -49,6 +49,8 @@ const SettingIntroductionForm: React.FC<SettingIntroductionFormsProps> = ({
         "Doa restu Bapak/Ibu/Saudara/i sudah merupakan hadiah terbaik bagi kami. Dan jika memberi adalah ungkapan tanda kasih Anda, Anda dapat memberi kado secara cashless.",
       rsvpIntroductionText:
         "Merupakan suatu kebahagiaan dan kehormatan bagi kami, apabila Bapak/Ibu/Saudara/i, berkenan hadir dan memberikan doa restu kepada kami.",
+      liveStreamIntroductionText:
+        "Bagi tamu undangan yang berhalangan hadir tetapi ingin menyaksikan acara pernikahan kami silahkan akses live streaming melalui link di bawah:",
     },
   });
 
@@ -60,6 +62,8 @@ const SettingIntroductionForm: React.FC<SettingIntroductionFormsProps> = ({
         initialData?.setting?.scheduleIntroductionText ?? "",
       giftIntroductionText: initialData?.setting?.giftIntroductionText ?? "",
       rsvpIntroductionText: initialData?.setting?.rsvpIntroductionText ?? "",
+      liveStreamIntroductionText:
+        initialData?.setting?.liveStreamIntroductionText ?? "",
     });
   }, [initialData, form]);
 
@@ -158,6 +162,28 @@ const SettingIntroductionForm: React.FC<SettingIntroductionFormsProps> = ({
                       isFetching={isFetching}
                       className="h-44"
                       placeholder="Merupakan suatu kebahagiaan dan kehormatan bagi kami, apabila Bapak/Ibu/Saudara/i, berkenan hadir dan memberikan doa restu kepada kami."
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="liveStreamIntroductionText"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor={field.name}>
+                    Teks Live Streaming
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea
+                      id={field.name}
+                      disabled={loading}
+                      isFetching={isFetching}
+                      className="h-44"
+                      placeholder="Bagi tamu undangan yang berhalangan hadir tetapi ingin menyaksikan acara pernikahan kami silahkan akses live streaming melalui link di bawah:"
                       {...field}
                     />
                   </FormControl>
