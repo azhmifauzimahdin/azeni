@@ -32,6 +32,10 @@ interface InvitationState {
     invitationId: string,
     updatedQuote: Partial<Invitation["quote"]>
   ) => void;
+  updateLiveStreamInInvitation: (
+    invitationId: string,
+    updatedLiveStream: Partial<Invitation["liveStream"]>
+  ) => void;
   updateCoupleImageInInvitation(
     invitationId: string,
     field: "groomImage" | "brideImage",
@@ -200,6 +204,36 @@ const useAdminInvitationStore = create<InvitationState>((set) => ({
           couple: {
             ...existingCouple,
             ...updatedCouple,
+          },
+        };
+      }),
+    })),
+  updateLiveStreamInInvitation: (invitationId, updatedLiveStream) =>
+    set((state) => ({
+      invitations: state.invitations.map((invitation) => {
+        if (invitation.id !== invitationId) return invitation;
+
+        const existingLiveStream = invitation.liveStream ?? {
+          id: "",
+          invitationId: "",
+          startDate: "",
+          endDate: "",
+          urlYoutube: "",
+          urlInstagram: "",
+          urlFacebook: "",
+          urlTiktok: "",
+          urlZoom: "",
+          urlCustom: "",
+          description: "",
+          createdAt: "",
+          updatedAt: "",
+        };
+
+        return {
+          ...invitation,
+          liveStream: {
+            ...existingLiveStream,
+            ...updatedLiveStream,
           },
         };
       }),

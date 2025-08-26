@@ -92,6 +92,12 @@ const InvitationIdContent: React.FC<InvitationIdContentProps> = ({
     },
     {
       id: "8",
+      label: "Streaming",
+      icon: "/assets/img/streaming.png",
+      href: `${params.id}/live-stream`,
+    },
+    {
+      id: "9",
       label: "Pengaturan",
       icon: "/assets/img/settings.png",
       href: `${params.id}/setting`,

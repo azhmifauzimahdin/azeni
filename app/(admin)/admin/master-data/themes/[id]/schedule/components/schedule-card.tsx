@@ -1,6 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { formatDate } from "@/lib/utils/formatted-date";
+import { formatTime } from "@/lib/utils/formatted-time";
 import { Schedule } from "@/types";
 import { CalendarDays, MapPin, X } from "lucide-react";
 import React from "react";
@@ -50,17 +52,6 @@ export const ScheduleCard: React.FC<ScheduleCardProps> = ({
   onDelete,
   isLoadingDelete,
 }) => {
-  const formatTime = (date: Date) =>
-    date.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
-
-  const formatDate = (date: Date) =>
-    date.toLocaleDateString("id-ID", {
-      weekday: "long",
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
-
   return (
     <div className="relative pl-6" onClick={() => onClick(data.id)}>
       <div className="absolute -left-2 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-green-app-primary border-2 border-white shadow-md z-10" />
@@ -75,10 +66,10 @@ export const ScheduleCard: React.FC<ScheduleCardProps> = ({
             <div className="flex items-start gap-2">
               <CalendarDays className="w-4 h-4 text-slate-500 mt-0.5" />
               <div>
-                <p>{formatDate(new Date(data.startDate))}</p>
+                <p>{formatDate(data.startDate)}</p>
                 <p className="text-xs text-slate-400">
-                  {formatTime(new Date(data.startDate))} -{" "}
-                  {formatTime(new Date(data.endDate))} {data.timezone}
+                  {formatTime(data.startDate)} - {formatTime(data.endDate)}{" "}
+                  {data.timezone}
                 </p>
               </div>
             </div>

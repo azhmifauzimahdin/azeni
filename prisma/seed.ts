@@ -637,6 +637,18 @@ Hormat kami,
     },
   });
 
+  await prisma.liveStream.create({
+    data: {
+      invitationId: invitation1.id,
+      urlYoutube: "https://youtube.com/",
+      urlInstagram: "https://instagram.com/",
+      urlTiktok: "https://tiktok.com/",
+      startDate: new Date("2028-07-27T08:30:00.000Z"),
+      endDate: new Date("2028-07-27T11:00:00.000Z"),
+      description: "Live streaming acara akad nikah Andi & Bunga",
+    },
+  });
+
   // Contoh Undangan dengan pemakaian referral code
   // const invitationUser1 = await prisma.invitation.create({
   //   data: {
@@ -980,6 +992,18 @@ Hormat kami,
     },
   });
 
+  await prisma.liveStream.create({
+    data: {
+      invitationId: invitationLuxury1.id,
+      urlYoutube: "https://youtube.com/",
+      urlInstagram: "https://instagram.com/",
+      urlTiktok: "https://tiktok.com/",
+      startDate: new Date("2028-07-27T08:30:00.000Z"),
+      endDate: new Date("2028-07-27T11:00:00.000Z"),
+      description: "Live streaming acara akad nikah Andi & Bunga",
+    },
+  });
+
   // ======== Luxury 002 =========
   const themeLuxury2 = await prisma.theme.create({
     data: {
@@ -1262,6 +1286,18 @@ Hormat kami,
       guestId: guestLuxuri2.id,
       message:
         "Semoga Allah SWT menjadikan kalian pasangan yang saling mencintai, saling mendukung, dan saling mengingatkan dalam kebaikan.",
+    },
+  });
+
+  await prisma.liveStream.create({
+    data: {
+      invitationId: invitationLuxury2.id,
+      urlYoutube: "https://youtube.com/",
+      urlInstagram: "https://instagram.com/",
+      urlTiktok: "https://tiktok.com/",
+      startDate: new Date("2028-07-27T08:30:00.000Z"),
+      endDate: new Date("2028-07-27T11:00:00.000Z"),
+      description: "Live streaming acara akad nikah Andi & Bunga",
     },
   });
 }

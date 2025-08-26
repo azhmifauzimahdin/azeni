@@ -17,3 +17,4 @@ export * as TransactionService from "./transaction";
 export * as ReferralCodeService from "./referral-code";
 export * as ThemeCategoryService from "./theme-category";
 export * as CloudinaryService from "./cloudinary";
+export * as LiveStreamService from "./live-stream";

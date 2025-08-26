@@ -1,6 +1,6 @@
 "use client";
 
-import { HTMLAttributes, ReactNode, useEffect, useState } from "react";
+import { HTMLAttributes, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Img } from "./Img";
 
@@ -16,13 +16,13 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({
   wrapperClassName,
   ...rest
 }) => {
-  const [petals, setPetals] = useState<number[]>([]);
+  // const [petals, setPetals] = useState<number[]>([]);
 
-  useEffect(() => {
-    setPetals(Array.from({ length: 15 }, (_, i) => i));
-  }, []);
+  // useEffect(() => {
+  //   setPetals(Array.from({ length: 15 }, (_, i) => i));
+  // }, []);
 
-  const pastelColors = ["#FFDDEE", "#FFF0F5", "#FFE4E1", "#FFEFD5"]; // warna kelopak pastel
+  // const pastelColors = ["#FFDDEE", "#FFF0F5", "#FFE4E1", "#FFEFD5"]; // warna kelopak pastel
 
   return (
     <div
@@ -44,7 +44,7 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({
         <div className="absolute inset-0 bg-black/40 z-10" />
       </div>
 
-      {petals.map((petal) => {
+      {/* {petals.map((petal) => {
         const size = 6 + Math.random() * 8;
         const left = Math.random() * 100;
         const delay = Math.random() * 5;
@@ -71,7 +71,7 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({
             }}
           />
         );
-      })}
+      })} */}
 
       <div className="relative p-6 w-full space-y-3 z-10">
         <div className="bg-white/1 backdrop-blur-[0px] rounded-2xl p-2">

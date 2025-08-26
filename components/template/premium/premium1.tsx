@@ -27,6 +27,7 @@ import { getEffectiveDate } from "@/lib/utils/get-effective-date";
 import Image from "../../ui/image";
 import LeftSidebar from "../../ui/left-sidebar";
 import Link from "next/link";
+import { isSameDate } from "@/lib/utils/convert-date";
 
 const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
   const [invitation, setInvitation] = useState<Invitation>(initialInvitation);
@@ -292,6 +293,10 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
                     schedule.startDate,
                     "EEEE dd MMMM yyyy"
                   ).split(" ");
+                  const datePartsEndDate = formatDate(
+                    schedule.endDate,
+                    "EEEE dd MMMM yyyy"
+                  ).split(" ");
                   return (
                     <React.Fragment key={index}>
                       <h3
@@ -341,9 +346,30 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
                           </div>
                           <div>{dateParts[3] || "-"}</div>
                         </div>
+                        {!isSameDate(schedule.startDate, schedule.endDate) && (
+                          <>
+                            <div className="text-center">-</div>
+                            <div
+                              className="mb-3 text-xl font-medium font-gallery"
+                              data-aos="zoom-in"
+                            >
+                              {datePartsEndDate[0] || "-"}
+                            </div>
+                            <div
+                              className="flex gap-x-3 font-gallery text-3xl text-green-primary font-bold justify-center mb-2"
+                              data-aos="zoom-in"
+                            >
+                              <div>{datePartsEndDate[1] || "-"}</div>
+                              <div className="border-r border-l border-green-primary px-3">
+                                {datePartsEndDate[2] || "-"}
+                              </div>
+                              <div>{datePartsEndDate[3] || "-"}</div>
+                            </div>
+                          </>
+                        )}
                         <div className="mb-3" data-aos="zoom-in">
                           Pukul : {formatTime(schedule.startDate)} -&nbsp;
-                          {formatTime(schedule.endDate)} WIB
+                          {formatTime(schedule.endDate)} {schedule.timezone}
                         </div>
                         <div className="font-bold" data-aos="zoom-in">
                           Lokasi

@@ -31,6 +31,7 @@ import Image from "../../ui/image";
 import LeftSidebar from "../../ui/left-sidebar";
 import Link from "next/link";
 import InvitationModalLuxury from "@/components/modals/invitations/invitation-modal-luxury";
+import { isSameDate } from "@/lib/utils/convert-date";
 
 const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
   const [invitation, setInvitation] = useState<Invitation>(initialInvitation);
@@ -52,9 +53,9 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
     if (!images.length) return;
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % images.length);
-    }, 5000); // ganti tiap 5 detik
+    }, 5000);
     return () => clearInterval(interval);
-  }, [images]);
+  }, [images.length]);
 
   useEffect(() => {
     setIsClient(true);
@@ -400,18 +401,29 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
                       </h3>
 
                       <div
-                        className="text-xl font-bold text-center text-slate-800 mb-2"
+                        className="text-xl font-bold text-center text-slate-800"
                         data-aos="zoom-in"
                       >
                         {formatDate(schedule.startDate, "dd . MM . yyyy")}
                       </div>
+                      {!isSameDate(schedule.startDate, schedule.endDate) && (
+                        <>
+                          <div className="text-center text-slate-800">-</div>
+                          <div
+                            className="text-xl font-bold text-center text-slate-800"
+                            data-aos="zoom-in"
+                          >
+                            {formatDate(schedule.endDate, "dd . MM . yyyy")}
+                          </div>
+                        </>
+                      )}
 
                       <p
-                        className="text-center text-slate-600 mb-4"
+                        className="text-center text-slate-600 mb-4 mt-2"
                         data-aos="zoom-in"
                       >
-                        {formatTime(schedule.startDate)} –{" "}
-                        {formatTime(schedule.endDate)} WIB
+                        {formatTime(schedule.startDate)} -&nbsp;
+                        {formatTime(schedule.endDate)} {schedule.timezone}
                       </p>
 
                       <div className="text-center" data-aos="zoom-in">

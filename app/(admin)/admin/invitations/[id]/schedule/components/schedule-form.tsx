@@ -24,7 +24,6 @@ import { ScheduleService } from "@/lib/services";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { handleError } from "@/lib/utils/handle-error";
-import Combobox from "@/components/ui/combobox";
 import DeleteConfirmationModal from "@/components/ui/delete-confirmation-modal";
 import { ScheduleCard, ScheduleCardSkeleton } from "./schedule-card";
 import { scheduleSchema } from "@/lib/schemas/schedule";
@@ -73,7 +72,7 @@ const ScheduleForm: React.FC<ScheduleFormsProps> = ({
       name: "",
       startDate: new Date(),
       endDate: new Date(Date.now() + 60 * 60 * 1000),
-      timezone: "",
+      timezone: "WIB",
       location: "",
       locationMaps: "",
     },
@@ -97,7 +96,7 @@ const ScheduleForm: React.FC<ScheduleFormsProps> = ({
         name: "",
         startDate: new Date(),
         endDate: new Date(new Date().getTime() + 1 * 60 * 60 * 1000),
-        timezone: "",
+        timezone: "WIB",
         location: "",
         locationMaps: "",
       });
@@ -172,7 +171,7 @@ const ScheduleForm: React.FC<ScheduleFormsProps> = ({
               name: "",
               startDate: new Date(),
               endDate: new Date(new Date().getTime() + 1 * 60 * 60 * 1000),
-              timezone: "",
+              timezone: "WIB",
               location: "",
               locationMaps: "",
             });
@@ -244,43 +243,6 @@ const ScheduleForm: React.FC<ScheduleFormsProps> = ({
                   <FormControl>
                     <DateTimeInput
                       id={field.name}
-                      disabled={loading}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="timezone"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor={field.name} required>
-                    Zona Waktu
-                  </FormLabel>
-                  <FormControl>
-                    <Combobox
-                      id={field.name}
-                      options={[
-                        {
-                          value: "WIT",
-                          label: "WIT",
-                          searchText: "WIT",
-                        },
-                        {
-                          value: "WITA",
-                          label: "WITA",
-                          searchText: "WITA",
-                        },
-                        {
-                          value: "WIB",
-                          label: "WIB",
-                          searchText: "WIB",
-                        },
-                      ]}
-                      placeholder="Zona Waktu"
                       disabled={loading}
                       {...field}
                     />

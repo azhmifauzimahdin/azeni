@@ -1,3 +1,5 @@
+type Timezone = "WIB" | "WITA" | "WIT";
+
 export interface ScheduleRequest {
   name: string;
   startDate: Date;
@@ -16,7 +18,7 @@ export interface Schedule {
   endDate: string;
   location: string;
   locationMaps: string;
-  timezone: string;
+  timezone: Timezone;
   createdAt: string;
   updatedAt: string;
 }

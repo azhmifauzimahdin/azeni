@@ -31,6 +31,7 @@ import Image from "../../ui/image";
 import LeftSidebar from "../../ui/left-sidebar";
 import Link from "next/link";
 import InvitationModalLuxury from "@/components/modals/invitations/invitation-modal-luxury";
+import { isSameDate } from "@/lib/utils/convert-date";
 
 const Luxury2Page: React.FC<Invitation> = (initialInvitation) => {
   const [invitation, setInvitation] = useState<Invitation>(initialInvitation);
@@ -52,9 +53,9 @@ const Luxury2Page: React.FC<Invitation> = (initialInvitation) => {
     if (!images.length) return;
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % images.length);
-    }, 5000); // ganti tiap 5 detik
+    }, 5000);
     return () => clearInterval(interval);
-  }, [images]);
+  }, [images.length]);
 
   useEffect(() => {
     setIsClient(true);
@@ -405,14 +406,33 @@ const Luxury2Page: React.FC<Invitation> = (initialInvitation) => {
                             </div>
                           </div>
                         </div>
+                        {!isSameDate(schedule.startDate, schedule.endDate) && (
+                          <div
+                            className="flex items-center gap-3"
+                            data-aos="zoom-in"
+                          >
+                            <div className="text-center font-bold text-2xl pl-5 pr-3">
+                              -
+                            </div>
+                            <div className="text-5xl font-bold pb-3 px-3">
+                              {formatDate(schedule.endDate, "dd")}
+                            </div>
+                            <div className="text-lg font-bold  leading-none">
+                              <div>{formatDate(schedule.endDate, "EEEE")}</div>
+                              <div>
+                                {formatDate(schedule.endDate, "MMMM yyyy")}
+                              </div>
+                            </div>
+                          </div>
+                        )}
 
                         <p
                           className="font-bold text-lg mb-1"
                           data-aos="zoom-in"
                         >
                           <Clock className="w-4 h-4 inline-block mr-2" />
-                          {formatTime(schedule.startDate)} –{" "}
-                          {formatTime(schedule.endDate)} WIB
+                          {formatTime(schedule.startDate)} -&nbsp;
+                          {formatTime(schedule.endDate)} {schedule.timezone}
                         </p>
 
                         <div
