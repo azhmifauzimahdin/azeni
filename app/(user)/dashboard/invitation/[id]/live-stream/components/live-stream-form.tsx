@@ -23,6 +23,7 @@ import useInvitationStore from "@/stores/invitation-store";
 import { createLiveStreamSchema } from "@/lib/schemas/live-stream";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Alert } from "@/components/ui/alert";
 
 type LiveStreamFormValues = z.infer<typeof createLiveStreamSchema>;
 
@@ -95,91 +96,96 @@ const LiveStreamForm: React.FC<LiveStreamFormsProps> = ({
   };
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="grid grid-cols-1 md:grid-cols-2 gap-4 card-dashboard"
-      >
-        <div className="space-y-4">
-          <FormField
-            control={form.control}
-            name="startDate"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel required htmlFor={field.name}>
-                  Tanggal Mulai
-                </FormLabel>
-                <FormControl>
-                  <DateTimeInput
-                    id={field.name}
-                    disabled={loading}
-                    isFetching={isFetching}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="endDate"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel required htmlFor={field.name}>
-                  Tanggal Selesai
-                </FormLabel>
-                <FormControl>
-                  <DateTimeInput
-                    id={field.name}
-                    disabled={loading}
-                    isFetching={isFetching}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="urlYoutube"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel htmlFor={field.name}>Link Youtube</FormLabel>
-                <FormControl>
-                  <Input
-                    id={field.name}
-                    placeholder="https://www.youtube.com/watch?v=example"
-                    disabled={loading}
-                    isFetching={isFetching}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="urlInstagram"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel htmlFor={field.name}>Link Instagram</FormLabel>
-                <FormControl>
-                  <Input
-                    id={field.name}
-                    placeholder="https://www.facebook.com/example"
-                    disabled={loading}
-                    isFetching={isFetching}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          {/* <FormField
+    <>
+      <Alert className="mb-4">
+        Fitur Live Streaming pada undangan akan otomatis muncul apabila salah
+        satu link terisi.
+      </Alert>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="grid grid-cols-1 md:grid-cols-2 gap-4 card-dashboard"
+        >
+          <div className="space-y-4">
+            <FormField
+              control={form.control}
+              name="startDate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel required htmlFor={field.name}>
+                    Tanggal Mulai
+                  </FormLabel>
+                  <FormControl>
+                    <DateTimeInput
+                      id={field.name}
+                      disabled={loading}
+                      isFetching={isFetching}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="endDate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel required htmlFor={field.name}>
+                    Tanggal Selesai
+                  </FormLabel>
+                  <FormControl>
+                    <DateTimeInput
+                      id={field.name}
+                      disabled={loading}
+                      isFetching={isFetching}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="urlYoutube"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor={field.name}>Link Youtube</FormLabel>
+                  <FormControl>
+                    <Input
+                      id={field.name}
+                      placeholder="https://www.youtube.com/watch?v=example"
+                      disabled={loading}
+                      isFetching={isFetching}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="urlInstagram"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor={field.name}>Link Instagram</FormLabel>
+                  <FormControl>
+                    <Input
+                      id={field.name}
+                      placeholder="https://www.facebook.com/example"
+                      disabled={loading}
+                      isFetching={isFetching}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* <FormField
             control={form.control}
             name="description"
             render={({ field }) => (
@@ -198,99 +204,100 @@ const LiveStreamForm: React.FC<LiveStreamFormsProps> = ({
               </FormItem>
             )}
           /> */}
-        </div>
-        <div className="space-y-4">
-          <FormField
-            control={form.control}
-            name="urlTiktok"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel htmlFor={field.name}>Link Tiktok</FormLabel>
-                <FormControl>
-                  <Input
-                    id={field.name}
-                    placeholder="https://www.tiktok.com/@example"
-                    disabled={loading}
-                    isFetching={isFetching}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="urlZoom"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel htmlFor={field.name}>Link Zoom</FormLabel>
-                <FormControl>
-                  <Input
-                    id={field.name}
-                    placeholder="https://zoom.us/j/1234567890"
-                    disabled={loading}
-                    isFetching={isFetching}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="urlFacebook"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel htmlFor={field.name}>Link Facebook</FormLabel>
-                <FormControl>
-                  <Input
-                    id={field.name}
-                    placeholder="https://www.facebook.com/live"
-                    disabled={loading}
-                    isFetching={isFetching}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="urlCustom"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel htmlFor={field.name}>Link Custom</FormLabel>
-                <FormControl>
-                  <Textarea
-                    id={field.name}
-                    placeholder="https://www.example.com/live"
-                    disabled={loading}
-                    isFetching={isFetching}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        <div className="md:col-span-2 flex justify-end">
-          <Button
-            variant="primary"
-            isLoading={loading}
-            disabled={loading}
-            className="w-full md:w-auto md:order-2"
-            type="submit"
-            isFetching={isFetching}
-          >
-            <Save /> Simpan
-          </Button>
-        </div>
-      </form>
-    </Form>
+          </div>
+          <div className="space-y-4">
+            <FormField
+              control={form.control}
+              name="urlTiktok"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor={field.name}>Link Tiktok</FormLabel>
+                  <FormControl>
+                    <Input
+                      id={field.name}
+                      placeholder="https://www.tiktok.com/@example"
+                      disabled={loading}
+                      isFetching={isFetching}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="urlZoom"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor={field.name}>Link Zoom</FormLabel>
+                  <FormControl>
+                    <Input
+                      id={field.name}
+                      placeholder="https://zoom.us/j/1234567890"
+                      disabled={loading}
+                      isFetching={isFetching}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="urlFacebook"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor={field.name}>Link Facebook</FormLabel>
+                  <FormControl>
+                    <Input
+                      id={field.name}
+                      placeholder="https://www.facebook.com/live"
+                      disabled={loading}
+                      isFetching={isFetching}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="urlCustom"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor={field.name}>Link Custom</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      id={field.name}
+                      placeholder="https://www.example.com/live"
+                      disabled={loading}
+                      isFetching={isFetching}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="md:col-span-2 flex justify-end">
+            <Button
+              variant="primary"
+              isLoading={loading}
+              disabled={loading}
+              className="w-full md:w-auto md:order-2"
+              type="submit"
+              isFetching={isFetching}
+            >
+              <Save /> Simpan
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </>
   );
 };
 

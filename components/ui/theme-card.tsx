@@ -100,7 +100,7 @@ const ThemeCard: React.FC<ThemeCardProps> = ({
         <div className="grid grid-cols-1 gap-2">
           <Button
             variant="primary"
-            disabled={isActive}
+            disabled={isActive || loading}
             isLoading={loading}
             type="button"
             onClick={() => onActivate?.(data.id)}

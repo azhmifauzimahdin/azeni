@@ -32,6 +32,7 @@ import LeftSidebar from "../../ui/left-sidebar";
 import Link from "next/link";
 import InvitationModalLuxury from "@/components/modals/invitations/invitation-modal-luxury";
 import { isSameDate } from "@/lib/utils/convert-date";
+import LiveStream from "@/components/ui/live-stream";
 
 const Luxury2Page: React.FC<Invitation> = (initialInvitation) => {
   const [invitation, setInvitation] = useState<Invitation>(initialInvitation);
@@ -432,7 +433,8 @@ const Luxury2Page: React.FC<Invitation> = (initialInvitation) => {
                         >
                           <Clock className="w-4 h-4 inline-block mr-2" />
                           {formatTime(schedule.startDate)} -&nbsp;
-                          {formatTime(schedule.endDate)} {schedule.timezone}
+                          {formatTime(schedule.endDate)}{" "}
+                          {invitation.setting?.timezone}
                         </p>
 
                         <div
@@ -463,6 +465,21 @@ const Luxury2Page: React.FC<Invitation> = (initialInvitation) => {
                   ))}
                 </div>
               </div>
+            </section>
+          )}
+
+          {/* ====== Live Stream Section ====== */}
+          {invitation.setting?.liveStreamEnabled && (
+            <section className="relative flex justify-center items-center overflow-hidden bg-black/80 px-6 py-16">
+              <LiveStream
+                invitation={invitation}
+                wrapperClassName="rounded-xl bg-white text-slate-800"
+                titleClassName="text-3xl tracking-wider text-gold-luxury-002 font-cormorant font-semibold text-center uppercase mb-3"
+                buttonVariant={buttonVariants({
+                  className:
+                    "bg-gold-luxury-002 text-slate-800 hover:bg-black hover:text-white",
+                })}
+              />
             </section>
           )}
 

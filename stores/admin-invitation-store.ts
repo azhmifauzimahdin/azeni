@@ -310,6 +310,7 @@ const useAdminInvitationStore = create<InvitationState>((set) => ({
           rsvpDeadline: new Date(),
           rsvpAllowNote: true,
           commentEnabled: true,
+          liveStreamEnabled: true,
           whatsappMessageTemplate: "",
           scanResetCountdownSeconds: 5,
           checkinCheckoutEnabled: true,
@@ -317,6 +318,8 @@ const useAdminInvitationStore = create<InvitationState>((set) => ({
           scheduleIntroductionText: "",
           giftIntroductionText: "",
           rsvpIntroductionText: "",
+          liveStreamIntroductionText: "",
+          timezone: "",
           updatedAt: "",
           createdAt: "",
         };

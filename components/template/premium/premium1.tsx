@@ -28,6 +28,7 @@ import Image from "../../ui/image";
 import LeftSidebar from "../../ui/left-sidebar";
 import Link from "next/link";
 import { isSameDate } from "@/lib/utils/convert-date";
+import LiveStream from "@/components/ui/live-stream";
 
 const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
   const [invitation, setInvitation] = useState<Invitation>(initialInvitation);
@@ -369,7 +370,8 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
                         )}
                         <div className="mb-3" data-aos="zoom-in">
                           Pukul : {formatTime(schedule.startDate)} -&nbsp;
-                          {formatTime(schedule.endDate)} {schedule.timezone}
+                          {formatTime(schedule.endDate)}&nbsp;
+                          {invitation.setting?.timezone}
                         </div>
                         <div className="font-bold" data-aos="zoom-in">
                           Lokasi
@@ -396,6 +398,16 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
                   );
                 })}
               </div>
+            </section>
+          )}
+
+          {/* ====== Live Stream Section ======*/}
+          {invitation.setting?.liveStreamEnabled && (
+            <section className="bg-green-primary text-white py-16 relative">
+              <LiveStream
+                invitation={invitation}
+                buttonVariant={buttonVariants({ variant: "white-outline" })}
+              />
             </section>
           )}
 

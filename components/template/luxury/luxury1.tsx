@@ -32,6 +32,7 @@ import LeftSidebar from "../../ui/left-sidebar";
 import Link from "next/link";
 import InvitationModalLuxury from "@/components/modals/invitations/invitation-modal-luxury";
 import { isSameDate } from "@/lib/utils/convert-date";
+import LiveStream from "@/components/ui/live-stream";
 
 const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
   const [invitation, setInvitation] = useState<Invitation>(initialInvitation);
@@ -423,7 +424,8 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
                         data-aos="zoom-in"
                       >
                         {formatTime(schedule.startDate)} -&nbsp;
-                        {formatTime(schedule.endDate)} {schedule.timezone}
+                        {formatTime(schedule.endDate)}{" "}
+                        {invitation.setting?.timezone}
                       </p>
 
                       <div className="text-center" data-aos="zoom-in">
@@ -455,6 +457,19 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
             </section>
           )}
 
+          {/* ====== Live Stream Section ====== */}
+          {invitation.setting?.liveStreamEnabled && (
+            <section className="relative flex justify-center items-center overflow-hidden bg-neutral-500/95 px-6 pb-16">
+              <LiveStream
+                invitation={invitation}
+                wrapperClassName="rounded-xl bg-white text-slate-800 px-6"
+                titleClassName="text-3xl tracking-wider text-slate-700 mb-3"
+                buttonVariant={buttonVariants({
+                  className: "bg-stone-500 hover:bg-stone-600 text-white",
+                })}
+              />
+            </section>
+          )}
           {/* ====== Our Story Section ====== */}
           {invitation.stories.length > 0 && (
             <section
@@ -462,7 +477,7 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
               className="flex-center relative overflow-hidden bg-neutral-500/95 px-6 pb-16"
             >
               <div
-                className="w-full rounded-xl border border-gray-200 bg-white p-8 shadow-sm hover:shadow-md transition duration-300"
+                className="w-full rounded-xl border border-gray-200 bg-white p-6 shadow-sm hover:shadow-md transition duration-300"
                 data-aos="fade-up"
               >
                 <Img

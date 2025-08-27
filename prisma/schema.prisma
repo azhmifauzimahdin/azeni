@@ -55,6 +55,7 @@ model Setting {
   rsvpDeadline    DateTime?   
   rsvpAllowNote   Boolean       @default(true)
   commentEnabled  Boolean       @default(true)
+  liveStreamEnabled Boolean     @default(false)
   whatsappMessageTemplate String? @db.Text
   scanResetCountdownSeconds Int? @default(5)
   checkinCheckoutEnabled    Boolean    @default(true)
@@ -63,6 +64,7 @@ model Setting {
   giftIntroductionText      String     @default("Doa restu Bapak/Ibu/Saudara/i sudah merupakan hadiah terbaik bagi kami. Dan jika memberi adalah ungkapan tanda kasih Anda, Anda dapat memberi kado secara cashless.")
   rsvpIntroductionText      String     @default("Merupakan suatu kebahagiaan dan kehormatan bagi kami, apabila Bapak/Ibu/Saudara/i, berkenan hadir dan memberikan doa restu kepada kami.")
   liveStreamIntroductionText String     @default("Bagi tamu undangan yang berhalangan hadir tetapi ingin menyaksikan acara pernikahan kami silahkan akses live streaming melalui link di bawah:")
+  timezone        String        @default("WIB")
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
 

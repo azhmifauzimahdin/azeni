@@ -110,6 +110,24 @@ export async function POST(
       },
     });
 
+    const liveStreamEnabled = Boolean(
+      urlYoutube ||
+        urlInstagram ||
+        urlFacebook ||
+        urlTiktok ||
+        urlZoom ||
+        urlCustom
+    );
+
+    await prisma.setting.update({
+      where: {
+        invitationId: params.id,
+      },
+      data: {
+        liveStreamEnabled,
+      },
+    });
+
     const isCreate = !existing;
 
     return ResponseJson(

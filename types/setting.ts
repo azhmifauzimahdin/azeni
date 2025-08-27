@@ -38,6 +38,7 @@ export interface Setting {
   rsvpDeadline: Date;
   rsvpAllowNote: boolean;
   commentEnabled: boolean;
+  liveStreamEnabled: boolean;
   whatsappMessageTemplate: string;
   scanResetCountdownSeconds: number;
   checkinCheckoutEnabled: boolean;
@@ -46,6 +47,7 @@ export interface Setting {
   giftIntroductionText: string;
   rsvpIntroductionText: string;
   liveStreamIntroductionText: string;
+  timezone: string;
   createdAt: string;
   updatedAt: string;
 }
