@@ -32,7 +32,7 @@ const InvitationModalPremium: React.FC<InvitationModalProps> = ({
   return (
     <div
       className={clsx(
-        "fixed md:absolute h-[calc(var(--vh)_*_100)] z-50 inset-0 bg-slate-50 transition-all duration-1000 ease-in-out transform",
+        "fixed md:absolute h-screen-dvh z-50 inset-0 bg-slate-50 transition-all duration-1000 ease-in-out transform",
         {
           "translate-y-0 opacity-100": isOpen,
           "-translate-y-full opacity-0 pointer-events-none": !isOpen,

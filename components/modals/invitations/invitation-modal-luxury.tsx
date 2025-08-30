@@ -25,7 +25,7 @@ const InvitationModalLuxury: React.FC<InvitationModalProps> = ({
   return (
     <div
       className={clsx(
-        "fixed md:absolute h-[calc(var(--vh)_*_100)] z-50 inset-0 bg-slate-50 transition-all duration-1000 ease-in-out transform",
+        "fixed md:absolute h-screen-dvh z-50 inset-0 bg-slate-50 transition-all duration-1000 ease-in-out transform",
         {
           "translate-y-0 opacity-100": isOpen,
           "-translate-y-full opacity-0 pointer-events-none": !isOpen,
@@ -33,7 +33,7 @@ const InvitationModalLuxury: React.FC<InvitationModalProps> = ({
       )}
     >
       {variant === "001" ? (
-        <div className="relative h-[calc(var(--vh)_*_100)] w-full ">
+        <div className="relative h-screen-dvh w-full ">
           {/* Background pakai Img */}
           {invitation.galleries.length > 0 && (
             <Img
@@ -102,7 +102,7 @@ const InvitationModalLuxury: React.FC<InvitationModalProps> = ({
           </div>
         </div>
       ) : variant === "002" ? (
-        <div className="relative h-[calc(var(--vh)_*_100)] w-full ">
+        <div className="relative h-screen-dvh w-full ">
           {/* Background pakai Img */}
           {invitation.galleries.length > 0 && (
             <Img
