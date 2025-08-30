@@ -115,7 +115,7 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
           {/* ====== Hero Section ======*/}
           <section
             id="hero"
-            className="flex-center h-screen-dvh overflow-hidden relative"
+            className="flex-center h-screen-fixed overflow-hidden relative"
           >
             {/* DECORATIONS */}
             <Premium1Decoration withAOS={false} />

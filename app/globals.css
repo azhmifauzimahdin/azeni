@@ -4,6 +4,7 @@
 
 :root {
   --font-poppins: "Poppins", sans-serif;
+  --vh: 1vh;
 }
 
 html {
@@ -113,6 +114,10 @@ body {
 }
 
 @layer utilities {
+  .h-screen-fixed {
+    height: calc(var(--vh, 1) * 100);
+  }
+
   .h-screen-dvh {
     height: 100vh;
     height: 100dvh;
