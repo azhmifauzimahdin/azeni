@@ -148,7 +148,7 @@ const Luxury2Page: React.FC<Invitation> = (initialInvitation) => {
           {/* ====== Hero Section ======*/}
           <section
             id="hero"
-            className="flex-center h-screen overflow-hidden relative"
+            className="flex-center h-screen-svh overflow-hidden relative"
           >
             {/* Konten utama */}
             <div className="flex flex-col items-center justify-center text-center gap-3 relative z-20 w-full">
@@ -516,7 +516,7 @@ const Luxury2Page: React.FC<Invitation> = (initialInvitation) => {
                           <Image
                             src={story.image}
                             alt="Foto"
-                            className="w-full h-auto object-contain"
+                            className="w-full h-auto object-contain hover:scale-105 transition duration-500"
                             priority
                           />
                         </div>

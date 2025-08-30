@@ -9,6 +9,7 @@ import {
   Italiana,
   Raleway,
   Cormorant_Unicase,
+  Playfair_Display,
 } from "next/font/google";
 import AOSInit from "@/components/AOSInit";
 import localFont from "next/font/local";
@@ -67,6 +68,12 @@ const cormorantUnicase = Cormorant_Unicase({
   variable: "--font-cormorant",
 });
 
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-playfair",
+});
+
 export const metadata = {
   icons: {
     icon: "/favicon.png",
@@ -112,7 +119,8 @@ export default function RootLayout({
           lora.variable,
           italiana.variable,
           raleway.variable,
-          cormorantUnicase.variable
+          cormorantUnicase.variable,
+          playfair.variable
         )}
       >
         <Script

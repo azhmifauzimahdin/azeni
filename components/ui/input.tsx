@@ -34,10 +34,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       return (
         <div className="relative w-full">
           <input
+            id={props.id || "file-input"}
+            ref={ref}
             type="file"
             className="hidden"
-            ref={ref}
-            id={props.id || "file-input"}
+            onChange={onChange}
             {...props}
           />
           <label htmlFor={props.id || "file-input"}>

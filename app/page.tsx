@@ -9,7 +9,7 @@ import FaqsSection from "./components/faqs-section";
 import WhatsAppFloating from "./components/whatsapp-floating";
 
 export const generateMetadata = () =>
-  generatePageMetadata({ fallbackTitle: "Landing Page" });
+  generatePageMetadata({ fallbackTitle: "Undangan Digital" });
 
 export default function LandingPage() {
   return (

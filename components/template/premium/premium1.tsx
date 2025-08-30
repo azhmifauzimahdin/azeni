@@ -9,7 +9,7 @@ import InvitationModalPremium from "../../modals/invitations/invitation-modal-pr
 import GoogleCalender from "../../ui/google-calender";
 import CountdownTimer from "../../ui/countdown-timer";
 import { formatDate } from "@/lib/utils/formatted-date";
-import { Heart, Instagram, MapPinCheckInside } from "lucide-react";
+import { Heart, MapPinCheckInside } from "lucide-react";
 import { formatTime } from "@/lib/utils/formatted-time";
 import { Button, buttonVariants } from "../../ui/button";
 import GalleryGrid from "../../ui/gallery-grid";
@@ -29,6 +29,7 @@ import LeftSidebar from "../../ui/left-sidebar";
 import Link from "next/link";
 import { isSameDate } from "@/lib/utils/convert-date";
 import LiveStream from "@/components/ui/live-stream";
+import { IoLogoInstagram } from "react-icons/io5";
 
 const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
   const [invitation, setInvitation] = useState<Invitation>(initialInvitation);
@@ -114,7 +115,7 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
           {/* ====== Hero Section ======*/}
           <section
             id="hero"
-            className="flex-center h-[calc(var(--vh)_*_100)] overflow-hidden relative"
+            className="flex-center h-screen-svh overflow-hidden relative"
           >
             {/* DECORATIONS */}
             <Premium1Decoration withAOS={false} />
@@ -222,7 +223,7 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
                         href={invitation.couple?.groomInstagram}
                         target="_blank"
                       >
-                        <Instagram />
+                        <IoLogoInstagram size={20} />
                       </Link>
                     </p>
                   </div>
@@ -259,7 +260,7 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
                         target="_blank"
                         className="inline-block"
                       >
-                        <Instagram />
+                        <IoLogoInstagram size={20} />
                       </Link>
                     </p>
                   </div>
@@ -447,7 +448,7 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
                           src={story.image}
                           alt="Foto"
                           objectFit="object-contain"
-                          className="w-full h-full object-contain rounded-lg overflow-hidden my-3"
+                          className="w-full h-full object-contain rounded-lg overflow-hidden hover:scale-105 transition duration-500 my-3"
                           priority
                         />
                       )}

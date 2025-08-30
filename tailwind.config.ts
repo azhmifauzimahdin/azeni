@@ -80,6 +80,7 @@ const config: Config = {
         italiana: ["var(--font-italiana)", "sans-serif"],
         raleway: ["var(--font-raleway)", "sans-serif"],
         cormorant: ["var(--font-cormorant)", "sans-serif"],
+        playfair: ["var(--font-playfair)", "sans-serif"],
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -109,7 +110,7 @@ const config: Config = {
         },
         "leaf-float": {
           "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-5px)" },
+          "50%": { transform: "translateY(-3px)" },
         },
         "fade-in-up": {
           "0%": { opacity: "0", transform: "translateY(20px)" },
