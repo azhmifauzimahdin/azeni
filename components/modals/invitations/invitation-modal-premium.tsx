@@ -41,7 +41,7 @@ const InvitationModalPremium: React.FC<InvitationModalProps> = ({
     >
       {/* ====== Start Premium 001 ======*/}
       {variant === "001" ? (
-        <div className="bg-green-100/15 relative flex flex-col items-center justify-center h-full gap-3">
+        <div className="bg-green-100/15 relative flex flex-col items-center justify-center h-screen-fixed gap-3">
           {/* DECORATIONS */}
           <Premium1Decoration />
 
@@ -101,7 +101,7 @@ const InvitationModalPremium: React.FC<InvitationModalProps> = ({
           </Button>
         </div>
       ) : variant === "002" ? (
-        <div className="bg-green-100/15 h-screen p-5 relative">
+        <div className="bg-green-100/15 h-screen-fixed p-5 relative">
           {/* DECORATIONS */}
           <Premium2Decoration />
           <div className="flex flex-col items-center justify-center bg-white rounded-3xl gap-3 h-full z-10 relative">
