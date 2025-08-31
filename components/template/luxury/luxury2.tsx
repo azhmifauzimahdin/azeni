@@ -433,7 +433,7 @@ const Luxury2Page: React.FC<Invitation> = (initialInvitation) => {
                         >
                           <Clock className="w-4 h-4 inline-block mr-2" />
                           {formatTime(schedule.startDate)} -&nbsp;
-                          {formatTime(schedule.endDate)}{" "}
+                          {formatTime(schedule.endDate)}&nbsp;
                           {invitation.setting?.timezone}
                         </p>
 

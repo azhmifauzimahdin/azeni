@@ -219,11 +219,13 @@ model Couple {
   groomName     String
   groomFather   String
   groomMother   String
+  groomAddress  String?
   groomImage    String?
   groomInstagram String?
   brideName     String
   brideFather   String
   brideMother   String
+  brideAddress  String?
   brideImage    String?
   brideInstagram String?
   createdAt     DateTime      @default(now())

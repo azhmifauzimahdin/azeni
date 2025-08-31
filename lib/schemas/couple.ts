@@ -21,6 +21,11 @@ export const createCoupleSchema = z.object({
       invalid_type_error: "Nama ibu mempelai pria harus berupa teks",
     })
     .min(1, { message: "Nama ibu mempelai pria tidak boleh kosong" }),
+  groomAddress: z
+    .string({
+      invalid_type_error: "Alamat mempelai pria harus berupa teks",
+    })
+    .optional(),
 
   groomInstagram: z
     .string({
@@ -29,6 +34,7 @@ export const createCoupleSchema = z.object({
     .url({
       message: "Link Instagram mempelai pria harus berupa URL yang valid",
     })
+    .or(z.literal(""))
     .optional(),
 
   brideName: z
@@ -52,6 +58,12 @@ export const createCoupleSchema = z.object({
     })
     .min(1, { message: "Nama ibu mempelai wanita tidak boleh kosong" }),
 
+  brideAddress: z
+    .string({
+      invalid_type_error: "Alamat mempelai wanita harus berupa teks",
+    })
+    .optional(),
+
   brideInstagram: z
     .string({
       invalid_type_error: "Instagram mempelai wanita harus berupa teks",
@@ -59,5 +71,6 @@ export const createCoupleSchema = z.object({
     .url({
       message: "Link Instagram mempelai wanita harus berupa URL yang valid",
     })
+    .or(z.literal(""))
     .optional(),
 });

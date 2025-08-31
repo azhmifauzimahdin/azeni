@@ -43,7 +43,7 @@ const InvitationList: React.FC<InvitationListProps> = ({
       {invitations.length > 0 ? (
         invitations.map((data) => <InvitationCard key={data.id} data={data} />)
       ) : (
-        <div className="col-span-full flex flex-col items-center justify-center py-10 text-center text-muted-foreground">
+        <div className="col-span-full flex flex-col items-center justify-center py-10 text-center text-muted-foreground h-[50vh]">
           <Img
             src="/assets/img/invitation-green.png"
             alt="Icon undangan"

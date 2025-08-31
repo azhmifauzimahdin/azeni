@@ -25,6 +25,7 @@ import { Input } from "@/components/ui/input";
 import { getFolderFromInvitationId } from "@/lib/utils/get-folder-from-invitation-id";
 import { createCoupleSchema } from "@/lib/schemas/couple";
 import { cn } from "@/lib/utils";
+import { Textarea } from "@/components/ui/textarea";
 
 type CoupleFormValues = z.infer<typeof createCoupleSchema>;
 
@@ -64,20 +65,24 @@ const CoupleForm: React.FC<CoupleFormsProps> = ({
           groomName: initialData.couple.groomName,
           groomFather: initialData.couple.groomFather,
           groomMother: initialData.couple.groomMother,
+          groomAddress: initialData.couple.groomAddress,
           groomInstagram: initialData.couple.groomInstagram,
           brideName: initialData.couple.brideName,
           brideFather: initialData.couple.brideFather,
           brideMother: initialData.couple.brideMother,
+          brideAddress: initialData.couple.brideAddress,
           brideInstagram: initialData.couple.brideInstagram,
         }
       : {
           groomName: "",
           groomFather: "",
           groomMother: "",
+          groomAddress: "",
           groomInstagram: "",
           brideName: "",
           brideFather: "",
           brideMother: "",
+          brideAddress: "",
           brideInstagram: "",
         },
   });
@@ -88,10 +93,12 @@ const CoupleForm: React.FC<CoupleFormsProps> = ({
         groomName: initialData.couple.groomName,
         groomFather: initialData.couple.groomFather,
         groomMother: initialData.couple.groomMother,
+        groomAddress: initialData.couple.groomAddress,
         groomInstagram: initialData.couple.groomMother,
         brideName: initialData.couple.brideName,
         brideFather: initialData.couple.brideFather,
         brideMother: initialData.couple.brideMother,
+        brideAddress: initialData.couple.brideAddress,
         brideInstagram: initialData.couple.brideInstagram,
       });
       setGroomImage(initialData.couple.groomImage);
@@ -252,6 +259,24 @@ const CoupleForm: React.FC<CoupleFormsProps> = ({
               />
               <FormField
                 control={form.control}
+                name="groomAddress"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel htmlFor={field.name}>Alamat</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Jl. Melati No. 25, Sukamaju, Cibinong, Bogor, Jawa Barat"
+                        disabled={loading}
+                        isFetching={isFetching}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="groomInstagram"
                 render={({ field }) => (
                   <FormItem>
@@ -350,6 +375,24 @@ const CoupleForm: React.FC<CoupleFormsProps> = ({
                       <Input
                         id={field.name}
                         placeholder="Hj. Nur Aini"
+                        disabled={loading}
+                        isFetching={isFetching}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="brideAddress"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel htmlFor={field.name}>Alamat</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Jl. Kenanga Raya Blok B-12, Sukahati, Cibinong, Bogor, Jawa Barat"
                         disabled={loading}
                         isFetching={isFetching}
                         {...field}

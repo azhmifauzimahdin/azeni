@@ -424,7 +424,7 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
                         data-aos="zoom-in"
                       >
                         {formatTime(schedule.startDate)} -&nbsp;
-                        {formatTime(schedule.endDate)}{" "}
+                        {formatTime(schedule.endDate)}&nbsp;
                         {invitation.setting?.timezone}
                       </p>
 
