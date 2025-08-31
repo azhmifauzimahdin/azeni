@@ -3,15 +3,17 @@ import { CheckCircle } from "lucide-react";
 const BenefitsSection: React.FC = () => {
   const advantages = [
     "Check-in & Check-out tamu digital",
-    "Isi data undangan sendiri tanpa batas",
+    "Isi data undangan sendiri atau dibantu admin",
     "Ganti tema kapan saja",
     "Bisa ganti musik tanpa batas",
     "Tersedia menu RSVP interaktif",
     "Undang tamu tanpa batas",
+    "Proses lebih cepat tanpa antri",
+    "Tema favorit belum tersedia? Bisa request khusus sesuai keinginan",
   ];
 
   return (
-    <section className="py-16 px-6 bg-gray-50" id="fitur">
+    <section className="py-16 px-6" id="fitur">
       <div className="max-w-4xl mx-auto text-center">
         <div className="text-center mb-12" data-aos="fade-up">
           <h2 className="relative inline-block text-3xl font-bold tracking-tight text-green-app-primary">

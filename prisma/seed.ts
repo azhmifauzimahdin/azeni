@@ -94,6 +94,8 @@ async function main() {
       discount: 5000,
       isPercent: false,
       maxDiscount: 0,
+      startDate: new Date(),
+      endDate: new Date("2025-10-31T23:59:59.999Z"),
     },
   });
 

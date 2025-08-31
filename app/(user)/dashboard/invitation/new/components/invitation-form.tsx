@@ -85,7 +85,9 @@ const InvitationForm: React.FC<InvitationFormProps> = ({
         themeId: searchParams.theme_id || "",
         image: data.image || "",
         date: new Date(new Date().setMonth(new Date().getMonth() + 3)),
-        expiresAt: new Date(new Date().setMonth(new Date().getMonth() + 6)),
+        expiresAt: new Date(
+          new Date().setFullYear(new Date().getFullYear() + 1)
+        ),
       };
       const res = await InvitationService.createInvitation(req);
       addInvitationAtFirst(res.data);
@@ -150,7 +152,7 @@ const InvitationForm: React.FC<InvitationFormProps> = ({
         Pastikan nama panggilan mempelai pria dan wanita sudah benar, termasuk
         penggunaan huruf besar. Nama tidak dapat diubah setelah disimpan dan
         akan digunakan di beberapa bagian undangan secara otomatis. Undangan
-        aktif selama <span className="font-bold">6 bulan</span> dimulai sejak
+        aktif selama <span className="font-bold">1 tahun</span> dimulai sejak
         tanggal dibuat.
       </Alert>
       <Form {...form}>

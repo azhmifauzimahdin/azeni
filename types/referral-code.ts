@@ -88,3 +88,16 @@ export interface RequestUpdateStatusReferralWithdrawal {
   transferProofUrl?: string;
   note?: string;
 }
+
+export interface ReferralConfig {
+  id: string;
+  userId: string;
+  description: string;
+  discount: string;
+  isPercent: string;
+  maxDiscount: string;
+  startDate: string;
+  endDate: string;
+  createdAt: string;
+  updatedAt: string;
+}

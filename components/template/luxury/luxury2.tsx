@@ -216,13 +216,22 @@ const Luxury2Page: React.FC<Invitation> = (initialInvitation) => {
                         >
                           {invitation.couple?.groomName}
                         </h2>
+                        {invitation.couple?.groomAddress && (
+                          <p
+                            className="text-sm"
+                            data-aos="fade-up"
+                            data-aos-delay="700"
+                          >
+                            {invitation.couple?.groomAddress}
+                          </p>
+                        )}
                         <p
                           className=" text-sm"
                           data-aos="fade-up"
                           data-aos-delay="700"
                         >
                           Putra dari Bapak {invitation.couple?.brideFather}
-                          &nbsp;&&nbsp; Ibu {invitation.couple?.brideMother}
+                          &nbsp;& Ibu {invitation.couple?.brideMother}
                         </p>
                         <p data-aos="fade-up" data-aos-delay="700">
                           <Link
@@ -260,13 +269,22 @@ const Luxury2Page: React.FC<Invitation> = (initialInvitation) => {
                         >
                           {invitation.couple?.brideName}
                         </h2>
+                        {invitation.couple?.brideAddress && (
+                          <p
+                            className="text-sm"
+                            data-aos="fade-up"
+                            data-aos-delay="700"
+                          >
+                            {invitation.couple?.brideAddress}
+                          </p>
+                        )}
                         <p
                           className=" text-sm"
                           data-aos="fade-up"
                           data-aos-delay="700"
                         >
                           Putra dari Bapak {invitation.couple?.brideFather}
-                          &nbsp;&&nbsp; Ibu {invitation.couple?.brideMother}
+                          &nbsp;& Ibu {invitation.couple?.brideMother}
                         </p>
                         <p data-aos="fade-up" data-aos-delay="700">
                           <Link

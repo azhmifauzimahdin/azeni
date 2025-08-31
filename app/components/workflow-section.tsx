@@ -1,5 +1,10 @@
 const WorkflowSection: React.FC = () => {
-  const steps = [
+  const stepsOne = [
+    {
+      title: "Login ke Aplikasi",
+      description:
+        "Masuk menggunakan akun yang sudah terdaftar atau daftar baru untuk mulai membuat undangan.",
+    },
     {
       title: "Pilih Tema Favorit",
       description:
@@ -38,7 +43,7 @@ const WorkflowSection: React.FC = () => {
       <div className="container max-w-6xl mx-auto px-4 text-center">
         <div className="text-center mb-6" data-aos="fade-up">
           <h2 className="relative inline-block text-3xl font-bold tracking-tight text-green-app-primary">
-            Cara Kerja Aplikasi
+            Alur Membuat Undangan
             <span className="absolute left-1/2 -bottom-2 -translate-x-1/2 w-16 h-1 bg-green-app-primary/60 rounded-full" />
           </h2>
         </div>
@@ -46,11 +51,11 @@ const WorkflowSection: React.FC = () => {
           className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-16"
           data-aos="fade-up"
         >
-          Mulai undangan digital impian Anda dalam 5 langkah mudah.
+          Mulai undangan digital impian Anda dalam 6 langkah mudah.
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 relative z-10">
-          {steps.map((step, i) => (
+          {stepsOne.map((step, i) => (
             <div
               key={i}
               data-aos="fade-up"

@@ -6,6 +6,7 @@ import {
   unauthorizedError,
 } from "@/lib/utils/response";
 import { auth, clerkClient } from "@clerk/nextjs/server";
+import { isBefore } from "date-fns";
 
 export async function GET() {
   try {
@@ -77,6 +78,17 @@ export async function POST(_: Request) {
     const config = await prisma.referralConfig.findFirst({
       orderBy: { updatedAt: "desc" },
     });
+
+    const now = new Date();
+    if (isBefore(config?.endDate || now, now)) {
+      return ResponseJson(
+        {
+          message:
+            "Tidak dapat membuat kode referral karena periode telah berakhir.",
+        },
+        { status: 403 }
+      );
+    }
 
     const uniqueCode = await generateUniqueReferralCode();
 

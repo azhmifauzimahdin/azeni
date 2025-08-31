@@ -7,6 +7,7 @@ import ThemesSection from "./components/themes-section";
 import { generatePageMetadata } from "@/lib/metadata";
 import FaqsSection from "./components/faqs-section";
 import WhatsAppFloating from "./components/whatsapp-floating";
+import FeaturesSection from "./components/features-section";
 
 export const generateMetadata = () =>
   generatePageMetadata({ fallbackTitle: "Undangan Digital" });
@@ -17,6 +18,7 @@ export default function LandingPage() {
       <WhatsAppFloating />
       <HeroSection />
       <BenefitsSection />
+      <FeaturesSection />
       <ThemesSection />
       <WorkflowSection />
       <FaqsSection />

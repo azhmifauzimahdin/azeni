@@ -200,7 +200,15 @@ const Premium2Page: React.FC<Invitation> = (initialInvitation) => {
                   >
                     {invitation.couple?.groomName}
                   </h2>
-
+                  {invitation.couple?.brideAddress && (
+                    <p
+                      className="text-sm font-medium"
+                      data-aos="fade-up"
+                      data-aos-delay="700"
+                    >
+                      {invitation.couple?.brideAddress}
+                    </p>
+                  )}
                   <p
                     className="text-slate-600 text-sm"
                     data-aos="fade-up"
@@ -254,6 +262,15 @@ const Premium2Page: React.FC<Invitation> = (initialInvitation) => {
                     {invitation.couple?.brideName}
                   </h2>
 
+                  {invitation.couple?.groomAddress && (
+                    <p
+                      className="text-sm font-medium"
+                      data-aos="fade-up"
+                      data-aos-delay="700"
+                    >
+                      {invitation.couple?.groomAddress}
+                    </p>
+                  )}
                   <p
                     className="text-slate-600 text-sm"
                     data-aos="fade-up"
