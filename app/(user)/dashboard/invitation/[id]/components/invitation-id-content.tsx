@@ -32,6 +32,7 @@ const InvitationIdContent: React.FC<InvitationIdContentProps> = ({
   useUserThemes(params.id);
 
   const invitation = getInvitationById(params.id);
+  const needsPhoto = !invitation?.theme?.category.name.includes("Tanpa Foto");
 
   const updateSettingInInvitation = useInvitationStore(
     (state) => state.updateSettingInInvitation
@@ -73,12 +74,6 @@ const InvitationIdContent: React.FC<InvitationIdContentProps> = ({
       label: "Cerita Kita",
       icon: "/assets/img/love-story.png",
       href: `${params.id}/our-story`,
-    },
-    {
-      id: "5",
-      label: "Galeri",
-      icon: "/assets/img/gallery.png",
-      href: `${params.id}/gallery`,
     },
     {
       id: "6",
@@ -124,6 +119,15 @@ const InvitationIdContent: React.FC<InvitationIdContentProps> = ({
     },
   ];
 
+  if (needsPhoto) {
+    sections.push({
+      id: "5",
+      label: "Galeri",
+      icon: "/assets/img/gallery.png",
+      href: `${params.id}/gallery`,
+    });
+  }
+
   const onToggleActive = async (val: boolean) => {
     try {
       const res = await SettingService.updateInvitationStatus(params.id, {
@@ -146,7 +150,10 @@ const InvitationIdContent: React.FC<InvitationIdContentProps> = ({
           isFetching={isFetching}
         />
 
-        <InvitationIdList sections={sections} isFetching={isFetching} />
+        <InvitationIdList
+          sections={[...sections].sort((a, b) => Number(a.id) - Number(b.id))}
+          isFetching={isFetching}
+        />
       </div>
     </>
   );

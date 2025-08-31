@@ -5,7 +5,7 @@ import { Mail } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <main className="h-screen-dvh flex items-center justify-center px-4">
+    <main className="h-[80vh] flex items-center justify-center px-4">
       <div className="max-w-md text-center">
         <Mail className="mx-auto w-20 h-20 text-green-app-primary mb-4" />
         <p className="text-gray-600 text-base mb-6">

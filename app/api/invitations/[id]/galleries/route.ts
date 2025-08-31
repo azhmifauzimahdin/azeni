@@ -55,6 +55,11 @@ export async function POST(
             status: true,
           },
         },
+        theme: {
+          include: {
+            category: true,
+          },
+        },
       },
     });
 
@@ -66,6 +71,17 @@ export async function POST(
     const now = new Date();
     if (isBefore(invitationByUserId.expiresAt, now)) {
       return expiredInvitationError();
+    }
+
+    const themeCategoryName =
+      invitationByUserId.theme?.category?.name?.toLowerCase() || "";
+    if (themeCategoryName.includes("tanpa foto")) {
+      return ResponseJson(
+        {
+          message: "Tema ini tidak mendukung upload foto.",
+        },
+        { status: 403 }
+      );
     }
 
     const gallery = await prisma.gallery.create({

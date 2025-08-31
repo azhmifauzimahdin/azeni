@@ -48,7 +48,7 @@ export const updateLinkInvitationSchema = z.object({
     }),
 });
 
-export const createInvitationSchema = z.object({
+export const createApiInvitationSchema = z.object({
   themeId: z
     .string({
       required_error: "ID tema wajib diisi",
@@ -80,10 +80,9 @@ export const createInvitationSchema = z.object({
     }),
 
   image: z
-    .string({
-      required_error: "Foto wajib diisi",
-    })
-    .min(1, { message: "Foto tidak boleh kosong" }),
+    .string()
+    .min(1, { message: "Foto tidak boleh kosong" })
+    .or(z.literal("")),
 
   date: z
     .string({
@@ -103,3 +102,62 @@ export const createInvitationSchema = z.object({
       message: "Tanggal kedaluwarsa tidak valid",
     }),
 });
+
+export const createInvitationSchema = (withPhoto: boolean) =>
+  z.object({
+    themeId: z
+      .string({
+        required_error: "ID tema wajib diisi",
+        invalid_type_error: "ID tema harus berupa teks",
+      })
+      .min(1, { message: "ID tema tidak boleh kosong" }),
+    groom: z
+      .string({
+        required_error: "Nama mempelai pria wajib diisi",
+        invalid_type_error: "Nama mempelai pria harus berupa teks",
+      })
+      .min(1, { message: "Nama mempelai pria tidak boleh kosong" }),
+
+    bride: z
+      .string({
+        required_error: "Nama mempelai wanita wajib diisi",
+        invalid_type_error: "Nama mempelai wanita harus berupa teks",
+      })
+      .min(1, { message: "Nama mempelai wanita tidak boleh kosong" }),
+
+    slug: z
+      .string({
+        required_error: "Slug wajib diisi",
+        invalid_type_error: "Slug harus berupa teks",
+      })
+      .regex(/^[a-z0-9-]+$/, {
+        message:
+          "Slug hanya boleh berisi huruf kecil, angka, dan tanda hubung (-)",
+      }),
+
+    image: withPhoto
+      ? z
+          .string({
+            required_error: "Foto wajib diisi",
+          })
+          .min(1, { message: "Foto tidak boleh kosong" })
+      : z.string().optional(),
+
+    date: z
+      .string({
+        required_error: "Tanggal acara wajib diisi",
+        invalid_type_error: "Tanggal acara harus berupa string ISO",
+      })
+      .refine((val) => !isNaN(Date.parse(val)), {
+        message: "Tanggal acara tidak valid",
+      }),
+
+    expiresAt: z
+      .string({
+        required_error: "Tanggal kedaluwarsa wajib diisi",
+        invalid_type_error: "Tanggal kedaluwarsa harus berupa string ISO",
+      })
+      .refine((val) => !isNaN(Date.parse(val)), {
+        message: "Tanggal kedaluwarsa tidak valid",
+      }),
+  });

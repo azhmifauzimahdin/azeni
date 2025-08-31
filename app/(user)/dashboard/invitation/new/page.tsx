@@ -14,7 +14,10 @@ export default async function InvitationPage({
   searchParams,
 }: InvitationFormProps) {
   const theme = searchParams.theme_id
-    ? await prisma.theme.findUnique({ where: { id: searchParams.theme_id } })
+    ? await prisma.theme.findUnique({
+        where: { id: searchParams.theme_id },
+        include: { category: true },
+      })
     : null;
 
   if (!theme) {
@@ -22,7 +25,10 @@ export default async function InvitationPage({
   }
   return (
     <div className="space-y-4">
-      <InvitationForm searchParams={searchParams} />
+      <InvitationForm
+        searchParams={searchParams}
+        theme={JSON.parse(JSON.stringify(theme))}
+      />
     </div>
   );
 }

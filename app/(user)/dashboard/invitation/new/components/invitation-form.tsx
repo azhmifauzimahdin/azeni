@@ -23,7 +23,7 @@ import { useRouter } from "next/navigation";
 import { handleError } from "@/lib/utils/handle-error";
 import { Heading } from "@/components/ui/heading";
 import { ImageService, InvitationService } from "@/lib/services";
-import { InvitationRequest } from "@/types";
+import { InvitationRequest, Theme } from "@/types";
 import useInvitationStore from "@/stores/invitation-store";
 import useUserInvitations from "@/hooks/use-user-invitation";
 import axios from "axios";
@@ -35,18 +35,25 @@ import useThemes from "@/hooks/use-theme";
 
 interface InvitationFormProps {
   searchParams: { theme_id?: string };
+  theme: Theme;
 }
 
-const invitationSchema = createInvitationSchema.pick({
-  groom: true,
-  bride: true,
-  slug: true,
-  image: true,
-});
+const InvitationForm: React.FC<InvitationFormProps> = ({
+  searchParams,
+  theme,
+}) => {
+  const needsPhoto = !theme.category.name.includes("Tanpa Foto");
+  const schema = createInvitationSchema(needsPhoto);
 
-type InvitationFormValues = z.infer<typeof invitationSchema>;
+  const invitationSchema = schema.pick({
+    groom: true,
+    bride: true,
+    slug: true,
+    image: true,
+  });
 
-const InvitationForm: React.FC<InvitationFormProps> = ({ searchParams }) => {
+  type InvitationFormValues = z.infer<typeof invitationSchema>;
+
   useUserInvitations();
   useThemes();
   const addInvitationAtFirst = useInvitationStore(
@@ -94,7 +101,6 @@ const InvitationForm: React.FC<InvitationFormProps> = ({ searchParams }) => {
           handleError(error, "invitation");
         }
       }
-    } finally {
       setLoading(false);
     }
   };
@@ -193,30 +199,34 @@ const InvitationForm: React.FC<InvitationFormProps> = ({ searchParams }) => {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="image"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabelText required>Foto</FormLabelText>
-                  <FormControl>
-                    <ImageUpload
-                      id={field.name}
-                      disabled={loading}
-                      onChange={(url) => field.onChange(url)}
-                      onRemove={(publicId) => {
-                        setImageDelete((prev) => [...prev, publicId]);
-                        field.onChange("");
-                      }}
-                      value={field.value || ""}
-                      path="users/invitations"
-                    />
-                  </FormControl>
-                  <FormDescription>Foto digunakan untuk cover</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {needsPhoto && (
+              <FormField
+                control={form.control}
+                name="image"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabelText required>Foto</FormLabelText>
+                    <FormControl>
+                      <ImageUpload
+                        id={field.name}
+                        disabled={loading}
+                        onChange={(url) => field.onChange(url)}
+                        onRemove={(publicId) => {
+                          setImageDelete((prev) => [...prev, publicId]);
+                          field.onChange("");
+                        }}
+                        value={field.value || ""}
+                        path="users/invitations"
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Foto digunakan untuk cover
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
             <div className="space-y-1 md:col-span-3">
               <div className="bg-gradient-pink-purple p-3 rounded-md text-xs text-slate-800">
                 <span className="font-medium pe-1">Link undangan : </span>

@@ -184,11 +184,19 @@ const InvitationPaymentCard: React.FC<InvitationPaymentCardProps> = ({
         )}
 
         {status === "CANCELLED" && (
-          <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 text-sm text-center space-y-2">
+          <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 text-sm text-center space-y-3">
             <p>
               Pembayaran telah dibatalkan. Kamu bisa membuat undangan baru kapan
               saja.
             </p>
+            <LinkButton
+              variant="primary"
+              className="w-full"
+              href={`/dashboard/invitation/new/theme`}
+              disabled={isFetching}
+            >
+              Buat Undangan Baru
+            </LinkButton>
           </div>
         )}
 

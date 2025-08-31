@@ -105,7 +105,7 @@ export async function POST(req: Request) {
     if (!userId) return unauthorizedError();
 
     const body = await req.json();
-    const parsed = InvitationSchema.createInvitationSchema.safeParse(body);
+    const parsed = InvitationSchema.createApiInvitationSchema.safeParse(body);
 
     if (!parsed.success) {
       return handleZodError(parsed.error);

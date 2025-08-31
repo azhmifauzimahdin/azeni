@@ -84,7 +84,6 @@ const InvitationCheckoutForm: React.FC<InvitationCheckoutFormProps> = ({
           handleError(error, "referral");
         }
       }
-    } finally {
       setIsCheckingOut(false);
     }
   };
