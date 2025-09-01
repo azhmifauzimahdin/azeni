@@ -259,7 +259,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                   image={imageSrc}
                   crop={crop}
                   zoom={zoom}
-                  aspect={1}
+                  aspect={3 / 4}
                   onCropChange={setCrop}
                   onZoomChange={setZoom}
                   onCropComplete={onCropComplete}
@@ -306,7 +306,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         <Img
           src={value || defaultValue}
           alt="Foto"
-          wrapperClassName="w-1/3 md:w-full aspect-square rounded overflow-hidden mb-3 mx-auto"
+          wrapperClassName="w-1/3 md:w-full aspect-[3/4] rounded overflow-hidden mb-3 mx-auto"
           sizes="125px"
         />
 

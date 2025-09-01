@@ -206,7 +206,7 @@ const Luxury2Page: React.FC<Invitation> = (initialInvitation) => {
                           }
                           alt="Groom"
                           wrapperClassName="aspect-[3/4] w-10/12 mx-auto shadow-md border-2 border-gold-luxury-002 rounded-t-[200px] rounded-b-[200px] overflow-hidden"
-                          sizes="300px"
+                          sizes="600px"
                           priority
                           data-aos="fade-down"
                         />
@@ -259,7 +259,7 @@ const Luxury2Page: React.FC<Invitation> = (initialInvitation) => {
                           }
                           alt="Bride"
                           wrapperClassName="aspect-[3/4] w-10/12 mx-auto shadow-md border-2 border-gold-luxury-002 rounded-t-[200px] rounded-b-[200px] overflow-hidden"
-                          sizes="300px"
+                          sizes="600px"
                           priority
                           data-aos="fade-down"
                         />
@@ -692,7 +692,7 @@ const Luxury2Page: React.FC<Invitation> = (initialInvitation) => {
                 data-aos-duration="1200"
                 data-aos-delay="500"
               >
-                <div className="font-cormorant text-gold-luxury-002 text-5xl">
+                <div className="font-cormorant text-gold-luxury-002 text-4xl">
                   {invitation.groom} & {invitation.bride}
                 </div>
               </div>

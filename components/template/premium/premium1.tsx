@@ -29,7 +29,11 @@ import LeftSidebar from "../../ui/left-sidebar";
 import Link from "next/link";
 import { isSameDate } from "@/lib/utils/convert-date";
 import LiveStream from "@/components/ui/live-stream";
-import { IoLogoInstagram } from "react-icons/io5";
+import {
+  IoLogoInstagram,
+  IoLogoWhatsapp,
+  IoMailOutline,
+} from "react-icons/io5";
 
 const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
   const [invitation, setInvitation] = useState<Invitation>(initialInvitation);
@@ -85,7 +89,7 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
     <div className="flex justify-end min-h-screen bg-gray-100 text-sm">
       <LeftSidebar imageSrc={invitation.image}>
         <h1 className="text-3xl">The Wedding Of</h1>
-        <div className="font-alex text-8xl">
+        <div className="font-gallery text-8xl">
           {invitation.groom} & {invitation.bride}
         </div>
         <div>
@@ -97,7 +101,10 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
         <div className={cn(isModalOpen && "h-screen-dvh overflow-hidden")}>
           <audio ref={audioRef} src={invitation.music?.src} loop />
           <SpinningDisc play={musicPlaying} />
-          <BottomNavbar navLinks={navLinks} />
+          <BottomNavbar
+            navLinks={navLinks}
+            wrapperClassName="bg-white/10 backdrop-blur-md border border-white/20"
+          />
 
           <InvitationModalPremium
             isOpen={isModalOpen}
@@ -118,36 +125,16 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
             className="flex-center h-screen-fixed overflow-hidden relative"
           >
             {/* DECORATIONS */}
-            <Premium1Decoration withAOS={false} />
+            <Premium1Decoration />
 
             {/* Konten utama */}
             <div className="flex-section relative z-20 w-full">
               <div>The Wedding Of</div>
-              <Img
-                src={invitation.image}
-                alt="Foto"
-                wrapperClassName="aspect-square w-4/12 rounded-tr-3xl rounded-br-lg rounded-bl-3xl rounded-tl-lg shadow-md mb-3"
-                sizes="300px"
-                priority
-              />
-              <div className="mb-3">
-                <div className="font-alex text-4xl text-green-primary">
+              <div>
+                <div className="font-gallery text-4xl text-green-primary mb-3">
                   {invitation.groom} & {invitation.bride}
                 </div>
                 <div>{formattedMarriageDate}</div>
-              </div>
-              <GoogleCalender
-                title={`Pernikahan ${invitation.groom} & ${invitation.bride}`}
-                startTime={
-                  marriageEvent?.startDate || getEffectiveDate(invitation)
-                }
-                endTime={marriageEvent?.endDate || getEffectiveDate(invitation)}
-                className={buttonVariants({
-                  className: "bg-green-primary hover:bg-green-primary/90",
-                })}
-              />
-              <div className="mt-5">
-                <CountdownTimer targetDate={getEffectiveDate(invitation)} />
               </div>
             </div>
           </section>
@@ -176,15 +163,14 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
           {/* ====== Couple Section ======*/}
           {invitation.couple && (
             <section className="flex-center relative !px-0 overflow-hidden">
-              <Premium1Decoration withAOS={false} />
+              <Premium1Decoration />
               <div className="flex-section relative z-20 w-full py-16">
-                <Img
-                  src="/assets/img/bismillah.png"
-                  alt="bismillah"
-                  wrapperClassName="w-[200px] h-[47px]"
-                  sizes="200px"
+                <h1
+                  className="relative z-10 text-3xl tracking-wider text-green-primary font-bold font-gallery uppercase"
                   data-aos="fade-up"
-                />
+                >
+                  PASANGAN
+                </h1>
                 <h2 className="mb-6 px-3" data-aos="fade-up">
                   {invitation.setting?.coupleIntroductionText}
                 </h2>
@@ -195,8 +181,8 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
                       "/assets/img/default-groom-invitation.png"
                     }
                     alt="Groom"
-                    wrapperClassName="aspect-square rounded-tr-3xl rounded-br-lg shadow-md border-4 border-l-0 border-white"
-                    sizes="200px"
+                    wrapperClassName="aspect-[3/4] rounded-tr-3xl rounded-br-lg shadow-md border-4 border-l-0 border-white"
+                    sizes="600px"
                     data-aos="fade-right"
                   />
                   <div className="self-start px-3 text-left space-y-2">
@@ -206,6 +192,8 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
                     >
                       {invitation.couple?.groomName}
                     </h2>
+                  </div>
+                  <div className="text-center col-span-2 px-6 py-5 space-y-3">
                     {invitation.couple?.groomAddress && (
                       <p
                         className="text-sm font-medium"
@@ -217,20 +205,21 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
                     )}
                     <p
                       className="text-slate-600 text-sm"
-                      data-aos="fade-left"
+                      data-aos="fade-up"
                       data-aos-delay="700"
                     >
-                      Putra dari Bapak {invitation.couple?.brideFather} &&nbsp;
-                      Ibu {invitation.couple?.brideMother}
+                      Putra dari Bapak {invitation.couple?.groomFather} &&nbsp;
+                      Ibu {invitation.couple?.groomMother}
                     </p>
                     <p
                       className="text-slate-600 text-sm"
-                      data-aos="fade-left"
+                      data-aos="fade-up"
                       data-aos-delay="700"
                     >
                       <Link
                         href={invitation.couple?.groomInstagram}
                         target="_blank"
+                        className="inline-block"
                       >
                         <IoLogoInstagram size={20} />
                       </Link>
@@ -238,7 +227,7 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
                   </div>
                 </div>
                 <div
-                  className="font-alex text-5xl font-bold my-3 text-green-primary"
+                  className="font-gallery text-5xl font-bold mt-3 mb-6 text-green-primary"
                   data-aos="flip-left"
                 >
                   &
@@ -251,26 +240,38 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
                     >
                       {invitation.couple?.brideName}
                     </h2>
-                    {invitation.couple?.brideAddress && (
+                  </div>
+                  <Img
+                    src={
+                      invitation.couple?.brideImage ||
+                      "/assets/img/default-bride-invitation.png"
+                    }
+                    alt="Bridge"
+                    wrapperClassName="aspect-[3/4] rounded-tl-3xl rounded-bl-lg shadow-md border-4 border-r-0 border-white"
+                    sizes="600px"
+                    data-aos="fade-left"
+                  />
+                  <div className="text-center col-span-2 px-6 py-5 space-y-3">
+                    {invitation.couple?.groomAddress && (
                       <p
                         className="text-sm font-medium"
                         data-aos="fade-up"
                         data-aos-delay="700"
                       >
-                        {invitation.couple?.brideAddress}
+                        {invitation.couple?.groomAddress}
                       </p>
                     )}
                     <p
                       className="text-slate-600 text-sm"
-                      data-aos="fade-right"
+                      data-aos="fade-up"
                       data-aos-delay="700"
                     >
-                      Putri dari Bapak {invitation.couple?.brideFather} &&nbsp;
-                      Ibu {invitation.couple?.brideMother}
+                      Putri dari Bapak {invitation.couple?.groomFather} &&nbsp;
+                      Ibu {invitation.couple?.groomMother}
                     </p>
                     <p
-                      className="text-slate-600 text-sm text-right"
-                      data-aos="fade-left"
+                      className="text-slate-600 text-sm"
+                      data-aos="fade-up"
                       data-aos-delay="700"
                     >
                       <Link
@@ -282,16 +283,6 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
                       </Link>
                     </p>
                   </div>
-                  <Img
-                    src={
-                      invitation.couple?.brideImage ||
-                      "/assets/img/default-bride-invitation.png"
-                    }
-                    alt="Bridge"
-                    wrapperClassName="aspect-square rounded-tl-3xl rounded-bl-lg shadow-md border-4 border-r-0 border-white"
-                    sizes="200px"
-                    data-aos="fade-left"
-                  />
                 </div>
               </div>
             </section>
@@ -299,12 +290,51 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
 
           {/* ====== Schdule Section ======*/}
           {invitation.schedules.length > 0 && (
-            <section
-              id="schedule"
-              className="flex-center relative overflow-hidden"
-            >
-              <Premium1Decoration withAOS={false} />
-              <div className="flex-section relative z-20 w-full py-16">
+            <section id="schedule" className="relative overflow-hidden">
+              <Premium1Decoration />
+              <div className="w-10/12 p-8 overflow-hidden relative py-16 mx-auto flex flex-col items-center gap-3 mt-16">
+                <div data-aos="zoom-in">
+                  <Img
+                    src="/assets/svg/countdown-gray.svg"
+                    alt="Countdown"
+                    wrapperClassName="w-20 h-20 mx-auto"
+                    sizes="300px"
+                  />
+                </div>
+
+                <div
+                  className="text-2xl font-bold text-green-primary"
+                  data-aos="fade-up"
+                  data-aos-delay="100"
+                >
+                  {formatDate(
+                    getEffectiveDate(invitation),
+                    "EEEE, dd MMMM yyyy"
+                  )}
+                </div>
+                <div className="mb-5" data-aos="flip-up" data-aos-delay="200">
+                  <CountdownTimer
+                    targetDate={getEffectiveDate(invitation)}
+                    textColor="text-slate-700"
+                    bgColor="bg-transparant"
+                  />
+                </div>
+                <div data-aos="fade-up" data-aos-delay="300">
+                  <GoogleCalender
+                    title={`Pernikahan ${invitation.groom} & ${invitation.bride}`}
+                    startTime={
+                      marriageEvent?.startDate || getEffectiveDate(invitation)
+                    }
+                    endTime={
+                      marriageEvent?.endDate || getEffectiveDate(invitation)
+                    }
+                    className={buttonVariants({
+                      className: "bg-green-primary hover:bg-green-primary/90",
+                    })}
+                  />
+                </div>
+              </div>
+              <div className="flex-section relative z-20 w-full pb-16">
                 <h2 className="mb-3" data-aos="fade-up">
                   {invitation.setting?.scheduleIntroductionText}
                 </h2>
@@ -425,6 +455,7 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
             <section className="bg-green-primary text-white py-16 relative">
               <LiveStream
                 invitation={invitation}
+                titleClassName="relative z-10 text-3xl tracking-wider font-bold font-gallery uppercase"
                 buttonVariant={buttonVariants({ variant: "white-outline" })}
               />
             </section>
@@ -436,9 +467,12 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
               id="story"
               className="flex-center relative overflow-hidden"
             >
-              <Premium1Decoration withAOS={false} />
+              <Premium1Decoration />
               <div className="relative z-20 w-full py-16">
-                <h2 className="section-title" data-aos="fade-up">
+                <h2
+                  className="relative z-10 text-3xl tracking-wider text-green-primary font-bold font-gallery uppercase text-center"
+                  data-aos="fade-up"
+                >
                   Cerita Kita
                 </h2>
                 <div
@@ -485,11 +519,17 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
               id="galleries"
               className="flex-center relative overflow-hidden"
             >
-              <Premium1Decoration withAOS={false} />
-              <div className="relative z-20 w-full py-16">
-                <h2 className="section-title" data-aos="fade-up">
+              <Premium1Decoration type="002" />
+              <div className="relative text-center z-20 w-full py-16">
+                <h2
+                  className="relative z-10 text-3xl tracking-wider text-green-primary font-bold font-gallery uppercase"
+                  data-aos="fade-up"
+                >
                   Galeri
                 </h2>
+                <p className="mb-8" data-aos="fade-up">
+                  Photo By {invitation.groom} & {invitation.bride}
+                </p>
                 <GalleryGrid galleries={invitation.galleries} />
               </div>
             </section>
@@ -515,33 +555,26 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
 
           {/* ====== RSVP Section ======*/}
           <section className="flex-center relative overflow-hidden">
-            <Premium1Decoration withAOS={false} />
+            <Premium1Decoration />
             <div className="flex-center flex-col text-center gap-3 relative z-20 w-full px-3 py-6 my-3 bg-white/10 border-white/30 backdrop-blur-md shadow-md rounded-lg">
-              <h2 className="section-title" data-aos="fade-up">
+              <h2
+                className="relative z-10 text-3xl tracking-wider text-green-primary font-bold font-gallery uppercase"
+                data-aos="fade-up"
+              >
                 Konfirmasi Kehadiran
               </h2>
               <p data-aos="zoom-in">
                 {invitation.setting?.rsvpIntroductionText || ""}
               </p>
-              <Img
-                src={invitation.image}
-                alt="Foto"
-                wrapperClassName="aspect-square w-4/12 rounded-tr-3xl rounded-br-lg rounded-bl-3xl rounded-tl-lg shadow-md mb-3"
-                data-aos="zoom-in"
-                sizes="300px"
-              />
-              <div className="mb-3" data-aos="zoom-in">
-                <div className="font-alex text-5xl text-green-primary">
-                  {invitation.groom} & {invitation.bride}
-                </div>
-                <div>{formattedMarriageDate}</div>
-              </div>
               {invitation.setting?.rsvpEnabled && (
                 <div className="w-full">
                   <RSVP
                     invitation={invitation}
                     onSubmit={handleSubmitRSVP}
                     isLoading={isSubmittingRSVP}
+                    textColor="text-green-primary"
+                    borderColor="border-green-primary"
+                    buttonClassName="bg-green-primary hover:bg-green-secondary text-white"
                   />
                 </div>
               )}
@@ -560,6 +593,98 @@ const Premium1Page: React.FC<Invitation> = (initialInvitation) => {
               />
             </section>
           )}
+
+          <div className="h-screen-dvh space-y-16 overflow-hidden">
+            <div className="w-full h-full flex flex-col items-center justify-center relative">
+              <Premium1Decoration />
+              <div
+                className="flex flex-col items-center justify-center text-center relative z-20 w-full"
+                data-aos="fade-up"
+                data-aos-delay="200"
+                data-aos-duration="1000"
+              >
+                <h1
+                  className="text-xl tracking-wider"
+                  data-aos="fade-down"
+                  data-aos-duration="1000"
+                >
+                  Terima Kasih
+                </h1>
+                <p
+                  className="tracking-wider mb-5"
+                  data-aos="fade-up"
+                  data-aos-duration="1000"
+                  data-aos-delay="300"
+                >
+                  Atas Kehadiran dan Doa Restunya
+                </p>
+                <div
+                  className="space-y-3 mb-12"
+                  data-aos="zoom-in"
+                  data-aos-duration="1200"
+                  data-aos-delay="500"
+                >
+                  <div className="font-gallery text-green-primary text-4xl">
+                    {invitation.groom} & {invitation.bride}
+                  </div>
+                </div>
+              </div>
+
+              <div
+                className="absolute bottom-24 w-full flex flex-col items-center justify-center text-center"
+                data-aos="fade-up"
+                data-aos-duration="1000"
+                data-aos-delay="700"
+              >
+                <Img
+                  src="/assets/img/azen-green.png"
+                  alt="Wedding"
+                  sizes="300px"
+                  wrapperClassName="w-8 h-8 mb-3 mx-auto"
+                  data-aos="zoom-in"
+                  data-aos-duration="1000"
+                />
+                <div className="mb-3 font-thin text-xs space-y-3 tracking-wider">
+                  Undangan digital © 2025 - {new Date().getFullYear()}
+                </div>
+                <ul
+                  className="flex gap-3"
+                  data-aos="fade-up"
+                  data-aos-duration="1000"
+                  data-aos-delay="900"
+                >
+                  <li>
+                    <Link
+                      href="mailto:azen.invitation@gmail.com"
+                      className="hover:text-gold-luxury-002 transition"
+                    >
+                      <IoMailOutline size={20} />
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="https://www.instagram.com/azen.inv?igsh=Nmp6djVucWNzejdm&utm_source=qr"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-gold-luxury-002 transition"
+                    >
+                      <IoLogoInstagram size={20} />
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="https://api.whatsapp.com/send/?phone=628895276116&text=Halo%2C+saya+tertarik+dengan+undangan+digitalnya.%0ABisa+saya+dapatkan+informasi+lebih+lanjut%3F&type=phone_number&app_absent=0"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-gold-luxury-002 transition"
+                    >
+                      <IoLogoWhatsapp size={20} />
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

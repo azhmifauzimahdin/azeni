@@ -205,7 +205,7 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
                           }
                           alt="Groom"
                           wrapperClassName="aspect-[3/4] w-10/12 mx-auto shadow-md border-4 border-white rounded-b-3xl rounded-t-[200px] overflow-hidden"
-                          sizes="300px"
+                          sizes="600px"
                           priority
                           data-aos="fade-down"
                         />
@@ -258,7 +258,7 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
                           }
                           alt="Bride"
                           wrapperClassName="aspect-[3/4] w-10/12 mx-auto shadow-md border-4 border-white rounded-b-3xl rounded-t-[200px] overflow-hidden"
-                          sizes="300px"
+                          sizes="600px"
                           priority
                           data-aos="fade-down"
                         />
@@ -669,7 +669,7 @@ const Luxury1Page: React.FC<Invitation> = (initialInvitation) => {
                 data-aos-duration="1200"
                 data-aos-delay="500"
               >
-                <div className="font-italiana text-5xl">
+                <div className="font-italiana text-4xl">
                   {invitation.groom} & {invitation.bride}
                 </div>
               </div>

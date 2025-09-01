@@ -258,7 +258,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                   image={imageSrc}
                   crop={crop}
                   zoom={zoom}
-                  aspect={1}
+                  aspect={3 / 4}
                   onCropChange={setCrop}
                   onZoomChange={setZoom}
                   onCropComplete={onCropComplete}
@@ -303,7 +303,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 
       <div>
         {value ? (
-          <div className="relative w-[200px] h-[200px] rounded-md">
+          <div className="relative w-[200px] h-[270px] rounded-md">
             <Button
               variant="delete"
               size="icon"
@@ -320,7 +320,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
             <Img
               src={value || "/assets/img/default-groom.png"}
               alt="Foto"
-              wrapperClassName="rounded-lg w-full aspect-square mx-auto mb-1"
+              wrapperClassName="rounded-lg w-full aspect-[3/4] mx-auto mb-1"
               sizes="200px"
               isFetching={isFetching}
             />

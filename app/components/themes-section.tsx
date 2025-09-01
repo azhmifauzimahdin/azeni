@@ -13,8 +13,9 @@ const ThemesSection: React.FC = () => {
   const router = useRouter();
   const { themes, isFetching } = useThemes();
 
-  const [search, setSearch] = useState("");
-  const [activeCategory, setActiveCategory] = useState("Semua");
+  const [search, setSearch] = useState<string>("");
+  const [activeCategory, setActiveCategory] = useState<string>("Semua");
+  const [selectedThemeId, setSelectThemeId] = useState<string | null>(null);
 
   const categoryList = useMemo(() => {
     const categories = themes.map((t) => t.category?.name || "Tanpa Kategori");
@@ -110,9 +111,11 @@ const ThemesSection: React.FC = () => {
                 >
                   <ThemeCard
                     data={theme}
-                    onActivate={(id) =>
-                      router.push(`/dashboard/invitation/new?theme_id=${id}`)
-                    }
+                    onActivate={(id) => {
+                      setSelectThemeId(theme.id);
+                      router.push(`/dashboard/invitation/new?theme_id=${id}`);
+                    }}
+                    loading={theme.id === selectedThemeId}
                     demoHref={`/${theme.invitation?.slug}/${theme.invitation?.guest.code}`}
                   />
                 </div>

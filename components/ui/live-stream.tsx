@@ -29,7 +29,7 @@ const LiveStream: React.FC<LiveStreamProps> = ({
     <div
       className={cn("relative text-center px-3 py-8 mx-auto", wrapperClassName)}
     >
-      <h2 className={titleClassName} data-aos="zoom-in">
+      <h2 className={cn("mb-3", titleClassName)} data-aos="zoom-in">
         Live Streaming
       </h2>
       <p className="font-semibold" data-aos="zoom-in">

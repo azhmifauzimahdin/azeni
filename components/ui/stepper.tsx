@@ -30,7 +30,7 @@ const Stepper: React.FC<StepperProps> = ({ currentStep }) => {
 
   return (
     <div className="w-full overflow-x-auto hide-scrollbar">
-      <div className="flex items-start justify-start gap-6 px-4 py-2 min-w-max">
+      <div className="flex items-center justify-center gap-6 px-4 py-2 min-w-max">
         {steps.map((step, index) => {
           const isCompleted = index < currentStep;
           const isActive = index === currentStep;

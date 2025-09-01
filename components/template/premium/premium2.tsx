@@ -188,7 +188,7 @@ const Premium2Page: React.FC<Invitation> = (initialInvitation) => {
                     }
                     alt="Groom"
                     wrapperClassName="w-1/2 aspect-[3/4] mx-auto bg-gradient-to-r from-[#2a5da0] to-[#214d80] rounded-t-[200px] rounded-b-[200px] border-2 border-[#214d80] shadow-md mb-5"
-                    sizes="200px"
+                    sizes="600px"
                     data-aos="zoom-in"
                     data-aos-delay="200"
                   />
@@ -249,7 +249,7 @@ const Premium2Page: React.FC<Invitation> = (initialInvitation) => {
                     }
                     alt="Bride"
                     wrapperClassName="w-1/2 aspect-[3/4] mx-auto bg-gradient-to-r from-[#2a5da0] to-[#214d80] rounded-t-[200px] rounded-b-[200px] border-2 border-[#214d80] shadow-md mb-5"
-                    sizes="200px"
+                    sizes="600px"
                     data-aos="zoom-in"
                     data-aos-delay="200"
                   />
@@ -655,7 +655,7 @@ const Premium2Page: React.FC<Invitation> = (initialInvitation) => {
                   data-aos-duration="1200"
                   data-aos-delay="500"
                 >
-                  <div className="font-playfair text-[#214d80] text-5xl">
+                  <div className="font-playfair text-[#214d80] text-4xl">
                     {invitation.groom} & {invitation.bride}
                   </div>
                 </div>
@@ -668,7 +668,7 @@ const Premium2Page: React.FC<Invitation> = (initialInvitation) => {
                 data-aos-delay="700"
               >
                 <Img
-                  src="/assets/img/azen-white.png"
+                  src="/assets/img/azen-green.png"
                   alt="Wedding"
                   sizes="300px"
                   wrapperClassName="w-8 h-8 mb-3 mx-auto"

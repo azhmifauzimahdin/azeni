@@ -18,11 +18,11 @@ export default function LandingPage() {
       <WhatsAppFloating />
       <HeroSection />
       <BenefitsSection />
-      <FeaturesSection />
       <ThemesSection />
+      <FeaturesSection />
       <WorkflowSection />
-      <FaqsSection />
       <CtaSection />
+      <FaqsSection />
       <Footer />
     </div>
   );

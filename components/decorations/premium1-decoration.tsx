@@ -4,119 +4,211 @@ import { Img } from "../ui/Img";
 
 interface Premium1DecorationProps {
   withAOS?: boolean;
+  type?: "001" | "002" | "003";
 }
 
 const Premium1Decoration: React.FC<Premium1DecorationProps> = ({
   withAOS = true,
+  type = "001",
 }) => {
   const aosAttr = (animation: string) =>
     withAOS ? { "data-aos": animation } : {};
 
   return (
     <>
-      <div className="absolute top-8 -left-40" {...aosAttr("fade-down-left")}>
-        <div>
-          <Img
-            src="/assets/themes/premium-001/img/leaf_green_01.png"
-            alt="Leaf Green"
-            wrapperClassName="w-56 aspect-square animate-leaf-wiggle"
-            sizes="300px"
-            priority
-          />
-        </div>
-      </div>
+      {type === "001" ? (
+        <>
+          <div
+            className="absolute -top-2 -left-5 z-20"
+            {...aosAttr("fade-right")}
+          >
+            <Img
+              src="/assets/themes/premium-001/img/leaf-green-02.png"
+              alt="Leaf Green"
+              wrapperClassName="w-36 aspect-square animate-leaf-float"
+              sizes="300px"
+              priority
+            />
+          </div>
+          <div
+            className="absolute -top-2 -right-5 z-20"
+            {...aosAttr("fade-left")}
+          >
+            <div className="scale-x-[-1]">
+              <Img
+                src="/assets/themes/premium-001/img/leaf-green-02.png"
+                alt="Leaf Green"
+                wrapperClassName="w-36 aspect-square animate-leaf-float"
+                sizes="300px"
+                priority
+              />
+            </div>
+          </div>
 
-      <div
-        className="absolute -top-10 -left-28"
-        {...aosAttr("fade-down-right")}
-      >
-        <div className="rotate-[65deg]">
-          <Img
-            src="/assets/themes/premium-001/img/leaf_green_02.png"
-            alt="Leaf Green"
-            wrapperClassName="w-52 aspect-square animate-leaf-wiggle"
-            sizes="300px"
-            priority
-          />
-        </div>
-      </div>
+          <div
+            className="absolute -bottom-2 -left-6 z-20"
+            {...aosAttr("fade-right")}
+          >
+            <Img
+              src="/assets/themes/premium-001/img/leaf-green-01.png"
+              alt="Leaf Green"
+              wrapperClassName="w-28 aspect-square animate-leaf-float"
+              sizes="300px"
+              priority
+            />
+          </div>
+          <div
+            className="absolute -bottom-2 -right-6 z-20"
+            {...aosAttr("fade-left")}
+          >
+            <div className="scale-x-[-1]">
+              <Img
+                src="/assets/themes/premium-001/img/leaf-green-01.png"
+                alt="Leaf Green"
+                wrapperClassName="w-28 aspect-square animate-leaf-float"
+                sizes="300px"
+                priority
+              />
+            </div>
+          </div>
 
-      <div className="absolute top-12 -left-40" {...aosAttr("zoom-in")}>
-        <div className="rotate-[75deg]">
-          <Img
-            src="/assets/themes/premium-001/img/leaf_gold_01.png"
-            alt="Leaf Gold"
-            wrapperClassName="w-56 aspect-square animate-leaf-wiggle"
-            sizes="300px"
-            priority
-          />
-        </div>
-      </div>
+          <div
+            className="absolute top-0 -left-14 z-0"
+            {...aosAttr("fade-down")}
+          >
+            <Img
+              src="/assets/themes/premium-001/img/abstract_splash.png"
+              alt="Abstract Splash"
+              wrapperClassName="w-96 aspect-square animate-leaf-float opacity-35"
+              sizes="300px"
+              priority
+            />
+          </div>
+          <div
+            className="absolute bottom-0 -right-14 z-0"
+            {...aosAttr("fade-up")}
+          >
+            <div className="scale-y-[-1] scale-x-[-1]">
+              <Img
+                src="/assets/themes/premium-001/img/abstract_splash.png"
+                alt="Abstract Splash"
+                wrapperClassName="w-96 aspect-square animate-leaf-float opacity-35"
+                sizes="300px"
+                priority
+              />
+            </div>
+          </div>
+        </>
+      ) : type === "002" ? (
+        <>
+          <div
+            className="absolute  top-0 -left-14 z-0"
+            {...aosAttr("fade-down")}
+          >
+            <Img
+              src="/assets/themes/premium-001/img/abstract_splash.png"
+              alt="Abstract Splash"
+              wrapperClassName="w-96 aspect-square animate-leaf-float opacity-35"
+              sizes="300px"
+              priority
+            />
+          </div>
+          <div
+            className="absolute bottom-0 -right-14 z-0"
+            {...aosAttr("fade-up")}
+          >
+            <div className="scale-y-[-1] scale-x-[-1]">
+              <Img
+                src="/assets/themes/premium-001/img/abstract_splash.png"
+                alt="Abstract Splash"
+                wrapperClassName="w-96 aspect-square animate-leaf-float opacity-35"
+                sizes="300px"
+                priority
+              />
+            </div>
+          </div>
+        </>
+      ) : type === "003" ? (
+        <>
+          <div
+            className="absolute -top-2 -left-5 z-20"
+            {...aosAttr("fade-right")}
+          >
+            <Img
+              src="/assets/themes/premium-001/img/leaf-green-02.png"
+              alt="Leaf Green"
+              wrapperClassName="w-36 aspect-square animate-leaf-float"
+              sizes="300px"
+              priority
+            />
+          </div>
+          <div
+            className="absolute -top-2 -right-5 z-20"
+            {...aosAttr("fade-left")}
+          >
+            <div className="scale-x-[-1]">
+              <Img
+                src="/assets/themes/premium-001/img/leaf-green-02.png"
+                alt="Leaf Green"
+                wrapperClassName="w-36 aspect-square animate-leaf-float"
+                sizes="300px"
+                priority
+              />
+            </div>
+          </div>
 
-      <div className="absolute -top-16 -right-24" {...aosAttr("fade-left")}>
-        <Img
-          src="/assets/themes/premium-001/img/abstract_splash.png"
-          alt="Abstract Splash"
-          wrapperClassName="w-72 aspect-square"
-          sizes="300px"
-          priority
-        />
-      </div>
+          <div
+            className="absolute -bottom-2 -left-6 z-20"
+            {...aosAttr("fade-right")}
+          >
+            <Img
+              src="/assets/themes/premium-001/img/leaf-green-01.png"
+              alt="Leaf Green"
+              wrapperClassName="w-28 aspect-square animate-leaf-float"
+              sizes="300px"
+              priority
+            />
+          </div>
+          <div
+            className="absolute -bottom-2 -right-6 z-20"
+            {...aosAttr("fade-left")}
+          >
+            <div className="scale-x-[-1]">
+              <Img
+                src="/assets/themes/premium-001/img/leaf-green-01.png"
+                alt="Leaf Green"
+                wrapperClassName="w-28 aspect-square animate-leaf-float"
+                sizes="300px"
+                priority
+              />
+            </div>
+          </div>
 
-      {/* BOTTOM DECORATIONS */}
-      <div
-        className="absolute -bottom-28 -right-8"
-        {...aosAttr("fade-up-right")}
-      >
-        <div className="-rotate-[30deg]">
-          <Img
-            src="/assets/themes/premium-001/img/leaf_green_01.png"
-            alt="Leaf Green"
-            wrapperClassName="w-56 aspect-square animate-leaf-wiggle"
-            sizes="300px"
-            priority
-          />
-        </div>
-      </div>
-
-      <div className="absolute -bottom-28 -right-36" {...aosAttr("zoom-in-up")}>
-        <div className="rotate-12">
-          <Img
-            src="/assets/themes/premium-001/img/leaf_gold_01.png"
-            alt="Leaf Gold"
-            wrapperClassName="w-72 aspect-square animate-leaf-wiggle"
-            sizes="300px"
-            priority
-          />
-        </div>
-      </div>
-
-      <div
-        className="absolute -bottom-20 -right-8"
-        {...aosAttr("fade-up-left")}
-      >
-        <div className="rotate-[60deg]">
-          <Img
-            src="/assets/themes/premium-001/img/leaf_green_02.png"
-            alt="Leaf Green"
-            wrapperClassName="w-56 aspect-square animate-leaf-wiggle"
-            sizes="300px"
-            priority
-          />
-        </div>
-      </div>
-
-      <div className="absolute -bottom-16 -left-24" {...aosAttr("zoom-in-up")}>
-        <div className="rotate-180">
-          <Img
-            src="/assets/themes/premium-001/img/abstract_splash.png"
-            alt="Abstract Splash"
-            wrapperClassName="w-72 aspect-square"
-            sizes="300px"
-            priority
-          />
-        </div>
-      </div>
+          <div className="absolute top-0 -left-5 z-0" {...aosAttr("fade-down")}>
+            <Img
+              src="/assets/themes/premium-001/img/abstract_splash.png"
+              alt="Abstract Splash"
+              wrapperClassName="w-96 aspect-square animate-leaf-float opacity-50"
+              sizes="300px"
+              priority
+            />
+          </div>
+          <div
+            className="absolute bottom-0 -right-5 z-0"
+            {...aosAttr("fade-up")}
+          >
+            <div className="scale-y-[-1] scale-x-[-1]">
+              <Img
+                src="/assets/themes/premium-001/img/abstract_splash.png"
+                alt="Abstract Splash"
+                wrapperClassName="w-96 aspect-square animate-leaf-float opacity-50"
+                sizes="300px"
+                priority
+              />
+            </div>
+          </div>
+        </>
+      ) : null}
     </>
   );
 };

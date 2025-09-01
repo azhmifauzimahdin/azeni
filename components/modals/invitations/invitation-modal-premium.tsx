@@ -41,64 +41,67 @@ const InvitationModalPremium: React.FC<InvitationModalProps> = ({
     >
       {/* ====== Start Premium 001 ======*/}
       {variant === "001" ? (
-        <div className="bg-green-100/15 relative flex flex-col items-center justify-center h-screen-fixed gap-3">
+        <div className="bg-green-100/15 h-screen-fixed p-5 relative">
           {/* DECORATIONS */}
           <Premium1Decoration />
+          <div className="flex flex-col items-center justify-center bg-white rounded-3xl gap-3 h-full z-10 relative">
+            {/* IMAGE PASANGAN */}
+            <Img
+              src={invitation.image || "/assets/img/rey-dinda/cover-basic.png"}
+              alt="Foto"
+              wrapperClassName="aspect-[3/4] w-4/12 rounded-tr-3xl rounded-br-xl rounded-bl-3xl rounded-tl-xl border-2 border-green-primary shadow-md bg-gradient-to-b from-white to-green-50 mb-4"
+              sizes="500px"
+              priority
+              data-aos="zoom-in"
+            />
 
-          {/* IMAGE PASANGAN */}
-          <Img
-            src={invitation.image}
-            alt="Foto"
-            wrapperClassName="aspect-square w-4/12 rounded-tr-3xl rounded-br-lg rounded-bl-3xl rounded-tl-lg shadow-md mb-3"
-            sizes="300px"
-            priority
-            data-aos="zoom-in"
-          />
-
-          <h1 data-aos="fade-up">The Wedding Of</h1>
-          <div
-            className="font-alex text-4xl text-green-primary"
-            data-aos="fade-up"
-            data-aos-delay="200"
-          >
-            {invitation.groom} & {invitation.bride}
-          </div>
-
-          <div
-            className="grid grid-cols-3 items-center gap-3 my-3"
-            data-aos="fade-up"
-            data-aos-delay="300"
-          >
-            <div className="justify-self-end">{dateParts[0] ?? "-"}</div>
-            <div className="justify-self-center text-3xl font-medium border-r-2 border-l-2 text-green-primary border-green-primary px-3">
-              {dateParts[1] ?? "-"}
+            <h1 data-aos="fade-up">The Wedding Of</h1>
+            <div
+              className="font-gallery text-4xl text-green-primary font-bold"
+              data-aos="fade-up"
+              data-aos-delay="200"
+            >
+              {invitation.groom} & {invitation.bride}
             </div>
-            <div className="justify-self-start">{dateParts[2] ?? "-"}</div>
-            <div className="col-span-3 text-center text-lg">
-              {dateParts[3] ?? "-"}
+
+            <div
+              className="grid grid-cols-3 items-center gap-3 my-3"
+              data-aos="fade-up"
+              data-aos-delay="300"
+            >
+              <div className="justify-self-end">{dateParts[0] ?? "-"}</div>
+              <div className="justify-self-center text-3xl font-medium border-r-2 border-l-2 text-green-primary border-green-primary px-3">
+                {dateParts[1] ?? "-"}
+              </div>
+              <div className="justify-self-start">{dateParts[2] ?? "-"}</div>
+              <div className="col-span-3 text-center text-lg">
+                {dateParts[3] ?? "-"}
+              </div>
             </div>
-          </div>
 
-          <div
-            className="text-center mb-3"
-            data-aos="fade-up"
-            data-aos-delay="400"
-          >
-            <div>Kepada:</div>
-            <div>Yth. Bapak/Ibu/Saudara/i</div>
-            <div className="font-bold capitalize">{invitation.guest.name}</div>
-            <div className="text-xs">{invitation.guest.address}</div>
-          </div>
+            <div
+              className="text-center mb-3"
+              data-aos="fade-up"
+              data-aos-delay="400"
+            >
+              <div>Kepada:</div>
+              <div>Yth. Bapak/Ibu/Saudara/i</div>
+              <div className="font-bold capitalize">
+                {invitation.guest.name}
+              </div>
+              <div className="text-xs">{invitation.guest.address}</div>
+            </div>
 
-          <Button
-            variant="default"
-            onClick={onClose}
-            className="bg-green-primary hover:bg-green-secondary text-white"
-            data-aos="zoom-in"
-            data-aos-delay="500"
-          >
-            <MailOpen className="mr-2" /> Buka Undangan
-          </Button>
+            <Button
+              variant="default"
+              onClick={onClose}
+              className="bg-green-primary hover:bg-green-secondary text-white"
+              data-aos="zoom-in"
+              data-aos-delay="500"
+            >
+              <MailOpen className="mr-2" /> Buka Undangan
+            </Button>
+          </div>
         </div>
       ) : variant === "002" ? (
         <div className="bg-green-100/15 h-screen-fixed p-5 relative">
