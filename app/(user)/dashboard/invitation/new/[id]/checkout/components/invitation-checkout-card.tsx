@@ -151,7 +151,7 @@ const InvitationCheckoutCard: React.FC<InvitationCheckoutCardProps> = ({
             className="object-cover"
           />
           <div>
-            <p className="font-medium">{theme.name}</p>
+            <p className="font-medium capitalize">{theme.name}</p>
             <div className="text-sm text-muted-foreground">
               {hasThemeDiscount ? (
                 <>

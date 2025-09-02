@@ -77,7 +77,7 @@ const ThemesSection: React.FC = () => {
             autoComplete="off"
           />
 
-          <div className="flex gap-2 flex-wrap justify-center">
+          <div className="flex gap-1 flex-wrap justify-center">
             {categoryList.map((cat) => (
               <Button
                 variant={activeCategory === cat ? "primary" : "outline"}

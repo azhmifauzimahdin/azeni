@@ -23,9 +23,11 @@ import ImageUpload from "./image-upload";
 import { Input } from "@/components/ui/input";
 import { getFolderFromInvitationId } from "@/lib/utils/get-folder-from-invitation-id";
 import { createCoupleSchema } from "@/lib/schemas/couple";
-import useAdminInvitationStore from "@/stores/admin-invitation-store";
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
+import useImageTemplates from "@/hooks/use-image-template";
+import ImageSelect from "@/components/ui/image-select";
+import useAdminInvitationStore from "@/stores/admin-invitation-store";
 
 type CoupleFormValues = z.infer<typeof createCoupleSchema>;
 
@@ -42,7 +44,10 @@ const CoupleForm: React.FC<CoupleFormsProps> = ({
   initialData,
   isFetching,
 }) => {
-  const needsPhoto = !initialData?.theme?.category.name.includes("Tanpa Foto");
+  const noPhoto = initialData?.theme?.category.name
+    .toLowerCase()
+    .includes("tanpa foto");
+  const { imageTemplates } = useImageTemplates();
   const [loading, setLoading] = useState(false);
   const [loadingUploadGroomImage, setLoadingUploadGroomImage] = useState(false);
   const [loadingUploadBrideImage, setLoadingUploadBrideImage] = useState(false);
@@ -170,30 +175,38 @@ const CoupleForm: React.FC<CoupleFormsProps> = ({
           className="grid grid-cols-1 md:grid-cols-2 gap-8 card-dashboard"
         >
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            {needsPhoto && (
-              <div>
-                <ImageUpload
-                  isLoadingUpload={loadingUploadGroomImage}
-                  isLoadingDelete={loadingDeleteGroomImage}
-                  disabled={loading}
-                  onChange={(url) => {
-                    handleUploadImage("groomImage", url);
-                    setGroomImage(url);
-                  }}
-                  onRemove={() => handleDeleteImage("groomImage")}
-                  path={`users/couples/${getFolderFromInvitationId(params.id)}`}
-                  value={groomImage}
-                  defaultValue="/assets/img/default-groom.png"
+            <div className="space-y-3">
+              <ImageUpload
+                isLoadingUpload={loadingUploadGroomImage}
+                isLoadingDelete={loadingDeleteGroomImage}
+                disabled={loading}
+                onChange={(url) => {
+                  handleUploadImage("groomImage", url);
+                  setGroomImage(url);
+                }}
+                onRemove={() => handleDeleteImage("groomImage")}
+                path={`users/couples/${getFolderFromInvitationId(params.id)}`}
+                value={groomImage}
+                defaultValue="/assets/img/default-groom.png"
+                isFetching={isFetching}
+                hiddenButton={noPhoto}
+              />
+              {noPhoto && (
+                <ImageSelect
+                  imageTemplates={imageTemplates.filter(
+                    (item) => item.type === "groom"
+                  )}
                   isFetching={isFetching}
+                  buttonClassName="sm:w-full mx-auto"
+                  isLoading={loadingUploadGroomImage || loadingDeleteGroomImage}
+                  onSelect={(value) => {
+                    if (value) handleUploadImage("groomImage", value);
+                    else handleDeleteImage("groomImage");
+                  }}
                 />
-              </div>
-            )}
-            <div
-              className={cn(
-                "space-y-4",
-                needsPhoto ? "md:col-span-3" : "md:col-span-4"
               )}
-            >
+            </div>
+            <div className={cn("space-y-4 md:col-span-3")}>
               <FormField
                 control={form.control}
                 name="groomName"
@@ -297,30 +310,38 @@ const CoupleForm: React.FC<CoupleFormsProps> = ({
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            {needsPhoto && (
-              <div>
-                <ImageUpload
-                  isLoadingUpload={loadingUploadBrideImage}
-                  isLoadingDelete={loadingDeleteBrideImage}
-                  disabled={loading}
-                  onChange={(url) => {
-                    handleUploadImage("brideImage", url);
-                    setBrideImage(url);
-                  }}
-                  onRemove={() => handleDeleteImage("brideImage")}
-                  path={`couple/${getFolderFromInvitationId(params.id)}`}
-                  value={brideImage}
-                  defaultValue="/assets/img/default-bride.png"
+            <div className="space-y-3">
+              <ImageUpload
+                isLoadingUpload={loadingUploadBrideImage}
+                isLoadingDelete={loadingDeleteBrideImage}
+                disabled={loading}
+                onChange={(url) => {
+                  handleUploadImage("brideImage", url);
+                  setBrideImage(url);
+                }}
+                onRemove={() => handleDeleteImage("brideImage")}
+                path={`couple/${getFolderFromInvitationId(params.id)}`}
+                value={brideImage}
+                defaultValue="/assets/img/default-bride.png"
+                isFetching={isFetching}
+                hiddenButton={noPhoto}
+              />
+              {noPhoto && (
+                <ImageSelect
+                  imageTemplates={imageTemplates.filter(
+                    (item) => item.type === "bride"
+                  )}
                   isFetching={isFetching}
+                  buttonClassName="sm:w-full mx-auto"
+                  isLoading={loadingUploadBrideImage || loadingDeleteBrideImage}
+                  onSelect={(value) => {
+                    if (value) handleUploadImage("brideImage", value);
+                    else handleDeleteImage("brideImage");
+                  }}
                 />
-              </div>
-            )}
-            <div
-              className={cn(
-                "space-y-4",
-                needsPhoto ? "md:col-span-3" : "md:col-span-4"
               )}
-            >
+            </div>
+            <div className={cn("space-y-4 md:col-span-3")}>
               <FormField
                 control={form.control}
                 name="brideName"

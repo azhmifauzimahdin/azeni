@@ -39,7 +39,27 @@ export async function POST(_: Request, { params }: { params: { id: string } }) {
         ...(role !== "admin" && { userId }),
       },
       include: {
-        theme: true,
+        theme: {
+          include: {
+            invitations: {
+              where: {
+                isTemplate: true,
+              },
+              orderBy: {
+                createdAt: "asc",
+              },
+              include: {
+                couple: true,
+                guests: {
+                  take: 1,
+                  where: { name: "tamu" },
+                  orderBy: { createdAt: "asc" },
+                },
+              },
+            },
+            category: true,
+          },
+        },
         transaction: {
           include: {
             status: true,
@@ -176,10 +196,38 @@ export async function POST(_: Request, { params }: { params: { id: string } }) {
       },
     });
 
+    let couple;
+    if (
+      invitationByUserId.theme?.category.name
+        .toLowerCase()
+        .includes("tanpa foto")
+    ) {
+      couple = await prisma.couple.create({
+        data: {
+          invitationId: invitationByUserId.id,
+          groomImage:
+            invitationByUserId.theme.invitations[0].couple?.groomImage,
+          groomName: "",
+          groomFather: "",
+          groomMother: "",
+          brideImage:
+            invitationByUserId.theme.invitations[0].couple?.brideImage,
+          brideName: "",
+          brideFather: "",
+          brideMother: "",
+        },
+      });
+    }
+
     return ResponseJson(
       {
         message: "Transaksi berhasil dibuat",
-        data: { transaction: transaction, guest: guest, setting: setting },
+        data: {
+          transaction: transaction,
+          guest: guest,
+          setting: setting,
+          couple: couple,
+        },
       },
       { status: 201 }
     );

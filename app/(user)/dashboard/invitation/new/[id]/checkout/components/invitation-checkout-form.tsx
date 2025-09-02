@@ -38,6 +38,9 @@ const InvitationCheckoutForm: React.FC<InvitationCheckoutFormProps> = ({
   const updateSettingInInvitation = useInvitationStore(
     (state) => state.updateSettingInInvitation
   );
+  const updateCoupleInInvitation = useInvitationStore(
+    (state) => state.updateCoupleInInvitation
+  );
   const updateTransactionById = useTransactionStore(
     (state) => state.updateTransactionById
   );
@@ -73,6 +76,7 @@ const InvitationCheckoutForm: React.FC<InvitationCheckoutFormProps> = ({
       addOrUpdateGuestToInvitation(params.id, res.data.guest);
       updateSettingInInvitation(params.id, res.data.setting);
       updateTransactionById(res.data.transaction.id, res.data.transaction);
+      updateCoupleInInvitation(res.data.transaction.id, res.data.couple);
       router.push(
         `payment?order_id=${res.data.transaction.orderId}&status_code=201&transaction_status=pending`
       );

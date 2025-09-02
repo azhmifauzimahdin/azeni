@@ -78,17 +78,6 @@ export async function DELETE(
       return expiredInvitationError();
     }
 
-    const themeCategoryName =
-      invitationByUserId.theme?.category?.name?.toLowerCase() || "";
-    if (themeCategoryName.includes("tanpa foto")) {
-      return ResponseJson(
-        {
-          message: "Tema ini tidak mendukung upload foto.",
-        },
-        { status: 403 }
-      );
-    }
-
     type CoupleImageField = "groomImage" | "brideImage";
     const existingImage =
       invitationByUserId.couple?.[params.field as CoupleImageField];

@@ -42,7 +42,7 @@ const InvitationForm: React.FC<InvitationFormProps> = ({
   searchParams,
   theme,
 }) => {
-  const needsPhoto = !theme.category.name.includes("Tanpa Foto");
+  const needsPhoto = !theme.category.name.toLowerCase().includes("tanpa foto");
   const schema = createInvitationSchema(needsPhoto);
 
   const invitationSchema = schema.pick({

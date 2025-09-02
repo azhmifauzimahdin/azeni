@@ -75,7 +75,7 @@ export async function POST(
 
     const themeCategoryName =
       invitationByUserId.theme?.category?.name?.toLowerCase() || "";
-    if (themeCategoryName.includes("tanpa foto")) {
+    if (themeCategoryName.toLowerCase().includes("tanpa foto")) {
       return ResponseJson(
         {
           message: "Tema ini tidak mendukung upload foto.",

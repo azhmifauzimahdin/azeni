@@ -77,7 +77,7 @@ const InvitationThemeForm: React.FC = () => {
         />
       </div>
 
-      <div className="flex gap-2 overflow-x-auto pb-2 mb-4">
+      <div className="flex gap-1 overflow-x-auto justify-center sm:justify-start pb-2 mb-4 flex-wrap">
         {categoryList.map((cat) => (
           <Button
             variant={activeCategory === cat ? "primary" : "outline"}

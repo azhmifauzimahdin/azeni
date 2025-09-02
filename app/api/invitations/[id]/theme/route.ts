@@ -76,6 +76,7 @@ export async function PATCH(
         id: themeId,
       },
       include: {
+        category: true,
         invitations: {
           include: {
             guests: {
@@ -131,7 +132,11 @@ export async function PATCH(
         musicId: theme.invitations[0].musicId,
       },
       include: {
-        theme: true,
+        theme: {
+          include: {
+            category: true,
+          },
+        },
       },
     });
 
@@ -185,6 +190,9 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
               orderBy: { createdAt: "asc" },
             },
           },
+          orderBy: {
+            createdAt: "asc",
+          },
         },
       },
       orderBy: { name: "asc" },
@@ -206,9 +214,7 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
     });
 
     const result = matchedThemes.map((theme) => {
-      const matchingInvitation = theme.invitations.find(
-        (inv) => inv.slug === theme.name
-      );
+      const matchingInvitation = theme.invitations[0];
 
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { invitations, ...themeWithoutInvitations } = theme;

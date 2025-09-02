@@ -13,6 +13,7 @@ import toast from "react-hot-toast";
 import useUserThemes from "@/hooks/use-user-theme";
 import useAdminInvitations from "@/hooks/use-admin-invitation";
 import useAdminInvitationStore from "@/stores/admin-invitation-store";
+import useImageTemplates from "@/hooks/use-image-template";
 
 interface InvitationIdContentProps {
   params: {
@@ -30,9 +31,12 @@ const InvitationIdContent: React.FC<InvitationIdContentProps> = ({
   useUserBanks();
   useUserQuoteTemplates();
   useUserThemes(params.id);
+  useImageTemplates();
 
   const invitation = getInvitationById(params.id);
-  const needsPhoto = !invitation?.theme?.category.name.includes("Tanpa Foto");
+  const needsPhoto = !invitation?.theme?.category.name
+    .toLowerCase()
+    .includes("tanpa foto");
 
   const updateSettingInInvitation = useAdminInvitationStore(
     (state) => state.updateSettingInInvitation

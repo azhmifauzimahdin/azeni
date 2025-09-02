@@ -426,3 +426,17 @@ model LiveStream {
 
   invitation    Invitation  @relation("InvitationLiveStream", fields: [invitationId], references: [id], onDelete: Cascade)
 }
+
+enum ImageTemplateType {
+  cover
+  bride
+  groom
+}
+
+model ImageTemplate{
+  id            String      @id @default(uuid())
+  type          ImageTemplateType
+  image         String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}

@@ -43,10 +43,8 @@ export const imageFieldSchema = z.object({
     invalid_type_error: "Field gambar harus berupa string tertentu",
   }),
 
-  url: z
-    .string({
-      required_error: "URL gambar wajib diisi",
-      invalid_type_error: "URL gambar harus berupa teks",
-    })
-    .url({ message: "URL gambar harus berupa link yang valid" }),
+  url: z.string({
+    required_error: "URL gambar wajib diisi",
+    invalid_type_error: "URL gambar harus berupa teks",
+  }),
 });

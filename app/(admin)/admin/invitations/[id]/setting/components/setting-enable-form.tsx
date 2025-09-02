@@ -88,16 +88,16 @@ const SettingEnableForm: React.FC<SettingEnableFormsProps> = ({
         onSubmit={(e) => e.preventDefault()}
       >
         <Alert variant="default">
-          Hapus komentar / ucapan & doa hanya tersedia untuk pemilik undangan.
+          Hapus ucapan & doa hanya tersedia untuk pemilik undangan.
         </Alert>
         <div className="flex items-center justify-between">
           <div className="space-y-1 pr-4">
             <Label htmlFor="auto-date" className="text-base font-medium">
-              Komentar / ucapan & doa di undangan
+              ucapan & doa di undangan
             </Label>
             <p className="text-xs text-muted-foreground">
-              Aktifkan fitur ini agar tamu bisa menulis komentar / ucapan & doa
-              di undangan. Nonaktifkan jika tidak ingin ditampilkan.
+              Aktifkan fitur ini agar tamu bisa menulis ucapan & doa di
+              undangan. Nonaktifkan jika tidak ingin ditampilkan.
             </p>
           </div>
           <FormField

@@ -199,17 +199,19 @@ const Luxury2Page: React.FC<Invitation> = (initialInvitation) => {
                     </h2>
                     <div className="w-full grid grid-cols-[1fr_auto_1fr] gap-3">
                       <div className="space-y-4">
-                        <Img
-                          src={
-                            invitation.couple?.groomImage ||
-                            "/assets/img/default-groom-invitation.png"
-                          }
-                          alt="Groom"
-                          wrapperClassName="aspect-[3/4] w-10/12 mx-auto shadow-md border-2 border-gold-luxury-002 rounded-t-[200px] rounded-b-[200px] overflow-hidden"
-                          sizes="600px"
-                          priority
-                          data-aos="fade-down"
-                        />
+                        {invitation.couple?.groomImage && (
+                          <Img
+                            src={
+                              invitation.couple?.groomImage ||
+                              "/assets/img/illustration/groom.png"
+                            }
+                            alt="Groom"
+                            wrapperClassName="aspect-[3/4] w-10/12 mx-auto shadow-md border-2 border-gold-luxury-002 rounded-t-[200px] rounded-b-[200px] overflow-hidden"
+                            sizes="600px"
+                            priority
+                            data-aos="fade-down"
+                          />
+                        )}
                         <h2
                           className="text-xl font-semibold text-gold-luxury-002"
                           data-aos="zoom-in"
@@ -235,7 +237,7 @@ const Luxury2Page: React.FC<Invitation> = (initialInvitation) => {
                         </p>
                         <p data-aos="fade-up" data-aos-delay="700">
                           <Link
-                            href={invitation.couple?.groomInstagram}
+                            href={invitation.couple?.groomInstagram || ""}
                             target="_blank"
                             className="inline-block text-gold-luxury-002"
                           >
@@ -252,17 +254,19 @@ const Luxury2Page: React.FC<Invitation> = (initialInvitation) => {
                         </div>
                       </div>
                       <div className="space-y-4">
-                        <Img
-                          src={
-                            invitation.couple?.brideImage ||
-                            "/assets/img/default-bride-invitation.png"
-                          }
-                          alt="Bride"
-                          wrapperClassName="aspect-[3/4] w-10/12 mx-auto shadow-md border-2 border-gold-luxury-002 rounded-t-[200px] rounded-b-[200px] overflow-hidden"
-                          sizes="600px"
-                          priority
-                          data-aos="fade-down"
-                        />
+                        {invitation.couple?.brideImage && (
+                          <Img
+                            src={
+                              invitation.couple?.brideImage ||
+                              "/assets/img/illustration/bride.png"
+                            }
+                            alt="Bride"
+                            wrapperClassName="aspect-[3/4] w-10/12 mx-auto shadow-md border-2 border-gold-luxury-002 rounded-t-[200px] rounded-b-[200px] overflow-hidden"
+                            sizes="600px"
+                            priority
+                            data-aos="fade-down"
+                          />
+                        )}
                         <h2
                           className="text-xl font-semibold text-gold-luxury-002"
                           data-aos="zoom-in"
@@ -288,7 +292,7 @@ const Luxury2Page: React.FC<Invitation> = (initialInvitation) => {
                         </p>
                         <p data-aos="fade-up" data-aos-delay="700">
                           <Link
-                            href={invitation.couple?.brideInstagram}
+                            href={invitation.couple?.brideInstagram || ""}
                             target="_blank"
                             className="inline-block text-gold-luxury-002"
                           >

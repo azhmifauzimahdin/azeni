@@ -29,6 +29,16 @@ export default clerkMiddleware(async (auth, req) => {
     role = user.publicMetadata.role;
   }
 
+  // Block request tanpa Origin header
+  // if (pathname.startsWith("/api/") && !pathname.startsWith("/api/public")) {
+  //   if (!origin || !allowedOrigins.includes(origin)) {
+  //     return new NextResponse(JSON.stringify({ error: "Forbidden" }), {
+  //       status: 403,
+  //       headers: { "Content-Type": "application/json" },
+  //     });
+  //   }
+  // }
+
   function addCorsHeaders(response: NextResponse, origin: string) {
     if (allowedOrigins.includes(origin)) {
       response.headers.set("Access-Control-Allow-Origin", origin);

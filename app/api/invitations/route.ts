@@ -153,6 +153,12 @@ export async function POST(req: Request) {
       },
       include: {
         invitations: {
+          where: {
+            isTemplate: true,
+          },
+          orderBy: {
+            createdAt: "asc",
+          },
           include: {
             guests: {
               take: 1,
@@ -161,6 +167,7 @@ export async function POST(req: Request) {
             },
           },
         },
+        category: true,
       },
     });
 
@@ -204,7 +211,9 @@ export async function POST(req: Request) {
         themeId,
         musicId: theme.invitations[0].musicId,
         slug: newSlug,
-        image,
+        image: theme.category.name.toLowerCase().includes("tanpa foto")
+          ? theme.invitations[0].image
+          : image,
         status: true,
         date,
         expiresAt,

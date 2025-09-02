@@ -127,7 +127,7 @@ async function main() {
     },
   });
 
-  const paymentStatus = await prisma.paymentStatus.create({
+  const paymentStatusSuccess = await prisma.paymentStatus.create({
     data: {
       name: "SUCCESS",
     },
@@ -175,6 +175,47 @@ async function main() {
       {
         name: "Dialah yang menciptakan kamu dari diri yang satu dan dari padanya Dia menciptakan istrinya, agar dia merasa senang kepadanya.",
         author: "QS. Al-A'raf: 189",
+      },
+    ],
+  });
+
+  await prisma.imageTemplate.createMany({
+    data: [
+      {
+        type: "cover",
+        image: "/assets/img/illustration/cover-luxury-001.png",
+      },
+      {
+        type: "cover",
+        image: "/assets/img/illustration/cover-premium-001.png",
+      },
+      {
+        type: "cover",
+        image: "/assets/img/illustration/cover-premium-002.png",
+      },
+      {
+        type: "groom",
+        image: "/assets/img/illustration/groom-luxury-001.png",
+      },
+      {
+        type: "groom",
+        image: "/assets/img/illustration/groom-premium-001.png",
+      },
+      {
+        type: "groom",
+        image: "/assets/img/illustration/groom-premium-002.png",
+      },
+      {
+        type: "bride",
+        image: "/assets/img/illustration/bride-luxury-001.png",
+      },
+      {
+        type: "bride",
+        image: "/assets/img/illustration/bride-premium-001.png",
+      },
+      {
+        type: "bride",
+        image: "/assets/img/illustration/bride-premium-001.png",
       },
     ],
   });
@@ -234,7 +275,7 @@ async function main() {
         originalAmount: themePremium1.originalPrice,
         amount: amountPremium1,
         date: new Date("2025-01-01T12:00:00Z"),
-        statusId: paymentStatus.id,
+        statusId: paymentStatusSuccess.id,
       },
     ],
   });
@@ -522,7 +563,7 @@ Hormat kami,
       slug: "premium-001-basic",
       themeId: themePremium1Basic.id,
       musicId: musicPremium1Basic?.id || null,
-      // image: "/assets/img/rey-dinda/cover.jpg",
+      image: "/assets/img/illustration/cover-premium-001.png",
       date: new Date("2028-07-27T00:00:00Z"),
       isTemplate: true,
       expiresAt: new Date("2030-12-31T00:00:00Z"),
@@ -546,7 +587,7 @@ Hormat kami,
         originalAmount: themePremium1Basic.originalPrice,
         amount: amountPremium1Basic,
         date: new Date("2025-01-01T12:00:00Z"),
-        statusId: paymentStatus.id,
+        statusId: paymentStatusSuccess.id,
       },
     ],
   });
@@ -631,14 +672,14 @@ Hormat kami,
         groomMother: "Lam Baghdadi",
         groomAddress:
           "Jl. Melati No. 25, Sukamaju, Cibinong, Bogor, Jawa Barat",
-        // groomImage: "/assets/img/rey-dinda/rey.jpg",
+        groomImage: "/assets/img/illustration/groom-premium-001.png",
         groomInstagram: "https://www.instagram.com/",
         brideName: "Nyimas Khodijah Nasthiti Adinda",
         brideFather: "Kemas Herman",
         brideMother: "Hulwati Husna",
         brideAddress:
           "Jl. Kenanga Raya Blok B-12, Sukahati, Cibinong, Bogor, Jawa Barat",
-        // brideImage: "/assets/img/rey-dinda/dinda.jpg",
+        brideImage: "/assets/img/illustration/bride-premium-001.png",
         brideInstagram: "https://www.instagram.com/",
       },
     ],
@@ -759,12 +800,6 @@ Hormat kami,
       discount: 25000,
       isPercent: false,
       colorTag: "brown",
-    },
-  });
-
-  const paymentStatusSuccess = await prisma.paymentStatus.findFirst({
-    where: {
-      name: "SUCCESS",
     },
   });
 
@@ -1040,6 +1075,262 @@ Hormat kami,
   await prisma.liveStream.create({
     data: {
       invitationId: invitationLuxury1.id,
+      startDate: new Date("2028-07-27T02:00:00Z"),
+      endDate: new Date("2028-07-27T08:00:00Z"),
+      urlYoutube: "https://youtube.com/",
+      urlInstagram: "https://instagram.com/",
+      urlTiktok: "https://tiktok.com/",
+    },
+  });
+
+  // ============================================================
+  // Luxury 1 Basic
+  // ============================================================
+
+  const themeCategoryLuxuryBasic = await prisma.themeCategory.create({
+    data: {
+      name: "Luxury Tanpa Foto",
+    },
+  });
+
+  const themeLuxury1Basic = await prisma.theme.create({
+    data: {
+      name: "luxury 001 basic",
+      categoryId: themeCategoryLuxuryBasic.id,
+      thumbnail: "/assets/themes/luxury-001/img/thumbnail-basic.png",
+      originalPrice: 100000,
+      discount: 25000,
+      isPercent: false,
+      colorTag: "brown",
+    },
+  });
+
+  const musicLuxury1Basic = await prisma.music.findFirst({
+    where: {
+      origin: "https://www.youtube.com/watch?v=ZeFpigRaXbI",
+    },
+  });
+
+  // Create Invitation
+  const invitationLuxury1Basic = await prisma.invitation.create({
+    data: {
+      userId: "user_30JNC1ArV5rsaCSXTv3dncovRuN",
+      groom: "Rizky",
+      bride: "Putri",
+      slug: "luxury-001-basic",
+      themeId: themeLuxury1Basic.id,
+      musicId: musicLuxury1Basic?.id || null,
+      image: "/assets/img/illustration/cover-luxury-001.png",
+      date: new Date("2028-07-27T00:00:00Z"),
+      isTemplate: true,
+      expiresAt: new Date("2030-12-31T00:00:00Z"),
+    },
+  });
+
+  const amountLuxury1Basic = calculateFinalPrice(
+    themeLuxury1Basic.originalPrice,
+    themeLuxury1Basic.discount,
+    themeLuxury1Basic.isPercent
+  );
+
+  await prisma.transaction.createMany({
+    data: [
+      {
+        orderId: randomUUID(),
+        invitationId: invitationLuxury1Basic.id,
+        invitationSlug: invitationLuxury1Basic.slug,
+        groomName: invitationLuxury1Basic.groom,
+        brideName: invitationLuxury1Basic.bride,
+        originalAmount: themeLuxury1Basic.originalPrice,
+        amount: amountLuxury1Basic,
+        date: new Date("2025-01-01T12:00:00Z"),
+        statusId: paymentStatusSuccess?.id || "",
+      },
+    ],
+  });
+
+  // Create Setting
+  await prisma.setting.createMany({
+    data: [
+      {
+        invitationId: invitationLuxury1Basic.id,
+        liveStreamEnabled: true,
+        whatsappMessageTemplate: `
+  Assalamu'alaikum warahmatullahi wabarakatuh,
+  
+  Segala puji bagi Allah SWT yang telah mempertemukan dua insan dalam ikatan suci pernikahan.
+  
+  Dengan penuh syukur, kami bermaksud mengabarkan kabar bahagia bahwa kami akan melangsungkan akad nikah dan walimatul 'urs dalam waktu dekat.
+  
+  InsyaAllah akan menikah:
+  
+  *{{brideName}} & {{groomName}}*  
+  
+  Kami mengundang Bapak/Ibu/Saudara/i *{{name}}* untuk turut hadir dan berbagi doa restu dalam momen istimewa ini. Doa dan kehadiran Anda sangat berarti bagi kami dan keluarga besar.
+  
+  Informasi lengkap mengenai waktu dan tempat pelaksanaan acara dapat dilihat melalui undangan digital berikut:
+  
+  {{invitationLink}}
+  
+  Semoga Allah SWT memberkahi langkah kami, dan semoga Bapak/Ibu/Saudara/i senantiasa diberi kesehatan dan kemudahan dalam segala urusan.
+  
+  Wassalamu'alaikum warahmatullahi wabarakatuh.  
+  Hormat kami,  
+  *{{brideName}} & {{groomName}}*
+  `.trim(),
+      },
+    ],
+  });
+
+  // Create Quote
+  await prisma.quote.createMany({
+    data: [
+      {
+        name: "Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang. Sungguh, pada yang demikian itu benar-benar terdapat tanda-tanda (kebesaran Allah) bagi kaum yang berpikir.",
+        author: "QS. Ar-Rum: 21",
+        invitationId: invitationLuxury1Basic.id,
+      },
+    ],
+  });
+
+  // Create Schedule
+  await prisma.schedule.createMany({
+    data: [
+      {
+        invitationId: invitationLuxury1Basic.id,
+        type: "marriage",
+        name: "Akad Nikah",
+        startDate: new Date("2028-07-27T02:00:00Z"),
+        endDate: new Date("2028-07-27T05:00:00Z"),
+        location: "Villa Azila, Cipayung, Jakarta Timur",
+        locationMaps: "https://maps.app.goo.gl/6Ti5v9FkwVf5gkhx6",
+        timezone: "WIB",
+      },
+      {
+        invitationId: invitationLuxury1Basic.id,
+        type: "reception",
+        name: "Resepsi",
+        startDate: new Date("2028-07-27T05:00:00Z"),
+        endDate: new Date("2028-07-27T08:00:00Z"),
+        location: "Villa Azila, Cipayung, Jakarta Timur",
+        locationMaps: "https://maps.app.goo.gl/6Ti5v9FkwVf5gkhx6",
+        timezone: "WIB",
+      },
+    ],
+  });
+
+  // Create Couple
+  await prisma.couple.createMany({
+    data: [
+      {
+        invitationId: invitationLuxury1Basic.id,
+        groomName: "Rizky Pratama",
+        groomFather: "Bambang Supriyanto",
+        groomMother: "Siti Aminah",
+        groomAddress:
+          "Jl. Melati No. 25, Sukamaju, Cibinong, Bogor, Jawa Barat",
+        groomImage: "/assets/img/illustration/groom-luxury-001.png",
+        groomInstagram: "https://www.instagram.com/",
+        brideName: "Putri Ayu Lestari",
+        brideFather: "Ahmad Syafrudin",
+        brideMother: "Dewi Hartati",
+        brideAddress:
+          "Jl. Kenanga Raya Blok B-12, Sukahati, Cibinong, Bogor, Jawa Barat",
+        brideImage: "/assets/img/illustration/bride-luxury-001.png",
+        brideInstagram: "https://www.instagram.com/",
+      },
+    ],
+  });
+
+  // Create Story
+  await prisma.story.createMany({
+    data: [
+      {
+        invitationId: invitationLuxury1Basic.id,
+        title: "Pertemuan",
+        date: new Date("2020-01-01T00:00:00Z"),
+        description:
+          "Semua berawal dari sebuah pertemuan sederhana. Kami dipertemukan dalam satu kegiatan di komunitas, tanpa pernah menyangka bahwa pertemuan itu akan menjadi awal dari kisah yang lebih indah. Dari obrolan ringan, tumbuh rasa nyaman. Dari pertemanan yang tulus, perlahan hadir rasa yang lebih mendalam.",
+        // image: "/assets/img/rizky-putri/story-pertemuan.jpg",
+      },
+      {
+        invitationId: invitationLuxury1Basic.id,
+        title: "Lamaran",
+        date: new Date("2025-05-25T00:00:00Z"),
+        description:
+          "Hingga akhirnya, pada 25 April 2025, ia menyatakan niat tulus untuk membawa hubungan ini ke jenjang yang lebih serius. Dengan restu keluarga dan niat yang mantap, kami bertunangan dan mulai mempersiapkan langkah besar berikutnya.",
+        // image: "/assets/img/rizky-putri/story-lamaran.jpg",
+      },
+      {
+        invitationId: invitationLuxury1Basic.id,
+        title: "Pernikahan",
+        date: new Date("2028-07-27T00:00:00Z"),
+        description:
+          "Dan kini, dengan penuh rasa syukur, kami mengundang keluarga dan sahabat terkasih untuk menjadi bagian dari hari bahagia kami, sebuah momen sakral di mana kami mengikat janji suci untuk sehidup semati.",
+        // image: "/assets/img/rizky-putri/story-pernikahan.jpg",
+      },
+    ],
+  });
+
+  // Create BankAccounts
+  await prisma.bankAccount.createMany({
+    data: [
+      {
+        invitationId: invitationLuxury1Basic.id,
+        bankId: bankMandiri?.id || "",
+        accountNumber: "2732638623612512",
+        name: "Rizky Pratama",
+      },
+      {
+        invitationId: invitationLuxury1Basic.id,
+        bankId: bankBCA?.id || "",
+        accountNumber: "8364718172726262",
+        name: "Putri Ayu Lestari",
+      },
+      {
+        invitationId: invitationLuxury1Basic.id,
+        bankId: bankKado?.id || "",
+        accountNumber: "XXXXX",
+        name: "Villa Azila, Cipayung, Jakarta Timur",
+      },
+    ],
+  });
+
+  const kodeLuxury1Basic = await generateUniqueCode();
+
+  const guestLuxuri1Basic = await prisma.guest.create({
+    data: {
+      code: kodeLuxury1Basic,
+      invitationId: invitationLuxury1Basic.id,
+      name: "tamu",
+      address: "Magelang",
+      isAttending: false,
+      color: "bg-teal-500",
+    },
+  });
+
+  const commentLuxury1Basic = await prisma.comment.create({
+    data: {
+      invitationId: invitationLuxury1Basic.id,
+      guestId: guestLuxuri1Basic.id,
+      message:
+        "Semoga Allah SWT menjadikan kalian pasangan yang saling mencintai, saling mendukung, dan saling mengingatkan dalam kebaikan.",
+    },
+  });
+
+  await prisma.comment.create({
+    data: {
+      invitationId: invitationLuxury1Basic.id,
+      parentId: commentLuxury1Basic.id,
+      guestId: guestLuxuri1Basic.id,
+      message:
+        "Terima kasih atas ucapannya yang indah, semoga kebaikan dan kebahagiaan juga selalu bersama kamu.",
+    },
+  });
+
+  await prisma.liveStream.create({
+    data: {
+      invitationId: invitationLuxury1Basic.id,
       startDate: new Date("2028-07-27T02:00:00Z"),
       endDate: new Date("2028-07-27T08:00:00Z"),
       urlYoutube: "https://youtube.com/",
@@ -1685,7 +1976,7 @@ Hormat kami,
       slug: "premium-002-basic",
       themeId: themePremium2Basic.id,
       musicId: musicPremium2Basic?.id || null,
-      // image: "/assets/img/aditya-nabila/cover.png",
+      image: "/assets/img/illustration/cover-premium-002.png",
       date: new Date("2028-07-27T00:00:00Z"),
       isTemplate: true,
       expiresAt: new Date("2030-12-31T00:00:00Z"),
@@ -1794,14 +2085,14 @@ Hormat kami,
         groomMother: "Siti Marlina",
         groomAddress:
           "Jl. Melati No. 25, Sukamaju, Cibinong, Bogor, Jawa Barat",
-        // groomImage: "/assets/img/aditya-nabila/aditya.png",
+        groomImage: "/assets/img/illustration/groom-premium-002.png",
         groomInstagram: "https://www.instagram.com/",
         brideName: "Nabila Shafira Rahmawati",
         brideFather: "Budi Santoso",
         brideMother: "Dewi Lestari",
         brideAddress:
           "Jl. Kenanga Raya Blok B-12, Sukahati, Cibinong, Bogor, Jawa Barat",
-        // brideImage: "/assets/img/aditya-nabila/nabila.png",
+        brideImage: "/assets/img/illustration/bride-premium-002.png",
         brideInstagram: "https://www.instagram.com/",
       },
     ],

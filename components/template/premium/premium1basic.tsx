@@ -87,7 +87,7 @@ const Premium1BasicPage: React.FC<Invitation> = (initialInvitation) => {
 
   return (
     <div className="flex justify-end min-h-screen bg-gray-100 text-sm">
-      <LeftSidebar imageSrc={invitation.image}>
+      <LeftSidebar>
         <Premium1Decoration type="003" />
         <h1 className="text-3xl">The Wedding Of</h1>
         <div className="font-gallery text-8xl text-green-primary mb-3 z-20 relative">
@@ -176,13 +176,18 @@ const Premium1BasicPage: React.FC<Invitation> = (initialInvitation) => {
                   {invitation.setting?.coupleIntroductionText}
                 </h2>
                 <div className="grid grid-cols-2 gap-3">
-                  <Img
-                    src="/assets/img/rey-dinda/rey-basic.png"
-                    alt="Groom"
-                    wrapperClassName="aspect-[3/4] bg-green-primary rounded-tr-3xl rounded-br-lg shadow-md border-4 border-l-0 border-white"
-                    sizes="600px"
-                    data-aos="fade-right"
-                  />
+                  {invitation.couple?.groomImage && (
+                    <Img
+                      src={
+                        invitation.couple?.groomImage ||
+                        "/assets/img/illustration/groom.png"
+                      }
+                      alt="Groom"
+                      wrapperClassName="aspect-[3/4] bg-green-primary rounded-tr-3xl rounded-br-lg shadow-md border-4 border-l-0 border-white"
+                      sizes="600px"
+                      data-aos="fade-right"
+                    />
+                  )}
                   <div className="self-start px-3 text-left space-y-2">
                     <h2
                       className="text-2xl font-semibold text-green-primary"
@@ -215,7 +220,7 @@ const Premium1BasicPage: React.FC<Invitation> = (initialInvitation) => {
                       data-aos-delay="700"
                     >
                       <Link
-                        href={invitation.couple?.groomInstagram}
+                        href={invitation.couple?.groomInstagram || ""}
                         target="_blank"
                         className="inline-block"
                       >
@@ -239,13 +244,18 @@ const Premium1BasicPage: React.FC<Invitation> = (initialInvitation) => {
                       {invitation.couple?.brideName}
                     </h2>
                   </div>
-                  <Img
-                    src="/assets/img/rey-dinda/dinda-basic.png"
-                    alt="Bridge"
-                    wrapperClassName="aspect-[3/4] bg-green-primary rounded-tl-3xl rounded-bl-lg shadow-md border-4 border-r-0 border-white"
-                    sizes="600px"
-                    data-aos="fade-left"
-                  />
+                  {invitation.couple?.brideImage && (
+                    <Img
+                      src={
+                        invitation.couple?.brideImage ||
+                        "/assets/img/illustration/bride.png"
+                      }
+                      alt="Bridge"
+                      wrapperClassName="aspect-[3/4] bg-green-primary rounded-tl-3xl rounded-bl-lg shadow-md border-4 border-r-0 border-white"
+                      sizes="600px"
+                      data-aos="fade-left"
+                    />
+                  )}
                   <div className="text-center col-span-2 px-6 py-5 space-y-3">
                     {invitation.couple?.groomAddress && (
                       <p
@@ -270,7 +280,7 @@ const Premium1BasicPage: React.FC<Invitation> = (initialInvitation) => {
                       data-aos-delay="700"
                     >
                       <Link
-                        href={invitation.couple?.brideInstagram}
+                        href={invitation.couple?.brideInstagram || ""}
                         target="_blank"
                         className="inline-block"
                       >

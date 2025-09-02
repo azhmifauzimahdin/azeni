@@ -180,18 +180,20 @@ const Premium2Page: React.FC<Invitation> = (initialInvitation) => {
                   {invitation.setting?.coupleIntroductionText}
                 </h2>
 
-                <div className="text-center space-y-3">
-                  <Img
-                    src={
-                      invitation.couple?.groomImage ||
-                      "/assets/img/aditya-nabila/aditya-basic.png"
-                    }
-                    alt="Groom"
-                    wrapperClassName="w-1/2 aspect-[3/4] mx-auto bg-gradient-to-r from-[#2a5da0] to-[#214d80] rounded-t-[200px] rounded-b-[200px] border-2 border-[#214d80] shadow-md mb-5"
-                    sizes="600px"
-                    data-aos="zoom-in"
-                    data-aos-delay="200"
-                  />
+                <div className="text-center space-y-3 w-full">
+                  {invitation.couple?.groomImage && (
+                    <Img
+                      src={
+                        invitation.couple?.groomImage ||
+                        "/assets/img/illustration/groom.png"
+                      }
+                      alt="Groom"
+                      wrapperClassName="w-1/2 aspect-[3/4] mx-auto bg-gradient-to-r from-[#2a5da0] to-[#214d80] rounded-t-[200px] rounded-b-[200px] border-2 border-[#214d80] shadow-md mb-5"
+                      sizes="600px"
+                      data-aos="zoom-in"
+                      data-aos-delay="200"
+                    />
+                  )}
 
                   <h2
                     className="font-playfair text-2xl font-semibold text-[#214d80]"
@@ -224,7 +226,7 @@ const Premium2Page: React.FC<Invitation> = (initialInvitation) => {
                     data-aos-delay="800"
                   >
                     <Link
-                      href={invitation.couple?.groomInstagram}
+                      href={invitation.couple?.groomInstagram || ""}
                       target="_blank"
                       className="inline-block"
                     >
@@ -241,18 +243,20 @@ const Premium2Page: React.FC<Invitation> = (initialInvitation) => {
                   &
                 </div>
 
-                <div className="text-center space-y-3">
-                  <Img
-                    src={
-                      invitation.couple?.brideImage ||
-                      "/assets/img/aditya-nabila/nabila-basic.png"
-                    }
-                    alt="Bride"
-                    wrapperClassName="w-1/2 aspect-[3/4] mx-auto bg-gradient-to-r from-[#2a5da0] to-[#214d80] rounded-t-[200px] rounded-b-[200px] border-2 border-[#214d80] shadow-md mb-5"
-                    sizes="600px"
-                    data-aos="zoom-in"
-                    data-aos-delay="200"
-                  />
+                <div className="text-center space-y-3 w-full">
+                  {invitation.couple?.brideImage && (
+                    <Img
+                      src={
+                        invitation.couple?.brideImage ||
+                        "/assets/img/illustration/bride.png"
+                      }
+                      alt="Bride"
+                      wrapperClassName="w-1/2 aspect-[3/4] mx-auto bg-gradient-to-r from-[#2a5da0] to-[#214d80] rounded-t-[200px] rounded-b-[200px] border-2 border-[#214d80] shadow-md mb-5"
+                      sizes="600px"
+                      data-aos="zoom-in"
+                      data-aos-delay="200"
+                    />
+                  )}
 
                   <h2
                     className="font-playfair text-2xl font-semibold text-[#214d80]"
@@ -286,7 +290,7 @@ const Premium2Page: React.FC<Invitation> = (initialInvitation) => {
                     data-aos-delay="800"
                   >
                     <Link
-                      href={invitation.couple?.brideInstagram}
+                      href={invitation.couple?.brideInstagram || ""}
                       target="_blank"
                       className="inline-block"
                     >

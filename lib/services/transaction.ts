@@ -1,4 +1,4 @@
-import { Guest, Setting, Theme, Transaction } from "@/types";
+import { Couple, Guest, Setting, Theme, Transaction } from "@/types";
 import httpRequest, { ApiResponse } from "./api";
 
 export async function reOrderTransaction(
@@ -88,6 +88,7 @@ export async function checkoutByInvitationId(invitationId: string): Promise<
     transaction: Transaction;
     guest: Guest;
     setting: Setting;
+    couple: Couple;
   }>
 > {
   const res = await httpRequest.post(

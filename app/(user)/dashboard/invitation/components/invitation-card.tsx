@@ -16,9 +16,9 @@ const InvitationCard: React.FC<InvitationCardProps> = ({ data }) => {
   return (
     <div className="w-full bg-white rounded-lg shadow p-6 space-y-5">
       <div className="flex gap-3">
-        {data.image ? (
+        {data.theme?.thumbnail ? (
           <Img
-            src={data.image}
+            src={data.theme.thumbnail}
             alt="Cover"
             wrapperClassName="w-16 h-16 rounded"
             sizes="64px"

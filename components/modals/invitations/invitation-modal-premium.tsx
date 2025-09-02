@@ -47,7 +47,7 @@ const InvitationModalPremium: React.FC<InvitationModalProps> = ({
           <div className="flex flex-col items-center justify-center bg-white rounded-3xl gap-3 h-full z-10 relative">
             {/* IMAGE PASANGAN */}
             <Img
-              src={invitation.image || "/assets/img/rey-dinda/cover-basic.png"}
+              src={invitation.image || "/assets/img/illustration/cover.png"}
               alt="Foto"
               wrapperClassName="aspect-[3/4] w-4/12 rounded-tr-3xl rounded-br-xl rounded-bl-3xl rounded-tl-xl border-2 border-green-primary shadow-md bg-gradient-to-b from-white to-green-50 mb-4"
               sizes="500px"
@@ -110,9 +110,7 @@ const InvitationModalPremium: React.FC<InvitationModalProps> = ({
           <div className="flex flex-col items-center justify-center bg-white rounded-3xl gap-3 h-full z-10 relative">
             {/* IMAGE PASANGAN */}
             <Img
-              src={
-                invitation.image || "/assets/img/aditya-nabila/cover-basic.png"
-              }
+              src={invitation.image || "/assets/img/illustration/cover.png"}
               alt="Foto"
               wrapperClassName="aspect-[3/4] w-4/12 mb-3 rounded-t-[200px] rounded-b-[200px] border-2 border-[#214d80] shadow-md"
               sizes="300px"

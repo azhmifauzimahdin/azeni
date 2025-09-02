@@ -25,6 +25,7 @@ interface ImageUploadProps {
   value: string;
   defaultValue: string;
   path: string;
+  hiddenButton?: boolean;
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
@@ -37,6 +38,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   value,
   defaultValue,
   path,
+  hiddenButton = false,
 }) => {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -303,54 +305,67 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       </Modal>
 
       <div>
-        <Img
-          src={value || defaultValue}
-          alt="Foto"
-          wrapperClassName="w-1/3 md:w-full aspect-[3/4] rounded overflow-hidden mb-3 mx-auto"
-          sizes="125px"
-        />
+        {value ? (
+          <Img
+            src={value || defaultValue}
+            alt="Foto"
+            wrapperClassName="w-1/3 md:w-full aspect-[3/4] rounded overflow-hidden mb-3 mx-auto"
+            sizes="300px"
+          />
+        ) : (
+          <div className="w-1/3 md:w-full aspect-[3/4] rounded overflow-hidden mb-3 mx-auto flex-center border border-slate-300 text-slate-500 text-sm">
+            Tanpa Foto
+          </div>
+        )}
 
-        <input
-          type="file"
-          accept="image/*"
-          ref={fileInputRef}
-          onChange={handleFileChange}
-          style={{ display: "none" }}
-        />
+        {!hiddenButton && (
+          <>
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              style={{ display: "none" }}
+            />
 
-        <div
-          className={clsx(
-            "grid justify-items-center gap-3",
-            value ? "grid-cols-2 md:grid-cols-1" : "grid-cols-1"
-          )}
-        >
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={handleClick}
-            isLoading={isLoadingUpload}
-            disabled={isLoadingUpload || isLoadingDelete || disabled}
-            className={clsx("w-auto md:w-full", value && "justify-self-end")}
-            isFetching={isFetching}
-          >
-            <ImagePlus className="h-4 w-4 mr-2" />
-            Upload
-          </Button>
-
-          {value && (
-            <Button
-              variant="destructive"
-              onClick={handleRemove}
-              isLoading={isLoadingDelete}
-              disabled={isLoadingUpload || isLoadingDelete || disabled}
-              type="button"
-              className="w-auto md:w-full justify-self-start"
-              isFetching={isFetching}
+            <div
+              className={clsx(
+                "grid justify-items-center gap-3",
+                value ? "grid-cols-2 md:grid-cols-1" : "grid-cols-1"
+              )}
             >
-              <Trash2 className="h-4 w-4 mr-2" /> Hapus
-            </Button>
-          )}
-        </div>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={handleClick}
+                isLoading={isLoadingUpload}
+                disabled={isLoadingUpload || isLoadingDelete || disabled}
+                className={clsx(
+                  "w-auto md:w-full",
+                  value && "justify-self-end"
+                )}
+                isFetching={isFetching}
+              >
+                <ImagePlus className="h-4 w-4 mr-2" />
+                Upload
+              </Button>
+
+              {value && (
+                <Button
+                  variant="destructive"
+                  onClick={handleRemove}
+                  isLoading={isLoadingDelete}
+                  disabled={isLoadingUpload || isLoadingDelete || disabled}
+                  type="button"
+                  className="w-auto md:w-full justify-self-start"
+                  isFetching={isFetching}
+                >
+                  <Trash2 className="h-4 w-4 mr-2" /> Hapus
+                </Button>
+              )}
+            </div>
+          </>
+        )}
       </div>
     </>
   );

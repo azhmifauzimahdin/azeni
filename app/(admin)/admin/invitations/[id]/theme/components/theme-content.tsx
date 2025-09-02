@@ -110,7 +110,7 @@ const ThemeContent: React.FC<ThemeContentProps> = ({ params }) => {
               src={invitation.theme.thumbnail}
               alt={invitation.theme.name}
               wrapperClassName="w-1/5 aspect-square flex-none"
-              sizes="32px"
+              sizes="200px"
             />
             <div className="p-3">
               <h3>Tema Aktif</h3>
@@ -137,7 +137,7 @@ const ThemeContent: React.FC<ThemeContentProps> = ({ params }) => {
           />
         </div>
 
-        <div className="flex gap-2 overflow-x-auto pb-2 mb-4">
+        <div className="flex gap-1 overflow-x-auto justify-center sm:justify-start pb-2 mb-4 flex-wrap">
           {categoryList.map((cat) => (
             <Button
               variant={activeCategory === cat ? "primary" : "outline"}

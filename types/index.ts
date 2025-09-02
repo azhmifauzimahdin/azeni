@@ -18,3 +18,4 @@ export * from "./referral-code";
 export * from "./theme-category";
 export * from "./cloudinary";
 export * from "./live-stream";
+export * from "./image-template";

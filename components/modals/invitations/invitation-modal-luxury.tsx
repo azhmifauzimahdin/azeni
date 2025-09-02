@@ -51,7 +51,7 @@ const InvitationModalLuxury: React.FC<InvitationModalProps> = ({
           {/* Konten di depan */}
           <div className="relative z-10 flex flex-col items-center shadow-md justify-center gap-3 h-full text-white">
             <Img
-              src={invitation.image}
+              src={invitation.image || "/assets/img/illustration/cover.png"}
               alt="Foto"
               wrapperClassName="aspect-[3/4] w-4/12 mx-auto shadow-md rounded-b-3xl rounded-t-[200px] overflow-hidden border border-slate-300 mb-3"
               sizes="300px"
@@ -120,7 +120,7 @@ const InvitationModalLuxury: React.FC<InvitationModalProps> = ({
           {/* Konten di depan */}
           <div className="relative z-10 flex flex-col items-center shadow-md justify-center gap-3 h-full text-white">
             <Img
-              src={invitation.image}
+              src={invitation.image || "/assets/img/illustration/cover.png"}
               alt="Foto"
               wrapperClassName="aspect-[3/4] w-4/12 mx-auto shadow-md rounded-t-[200px] rounded-b-[200px] overflow-hidden border border-gold-luxury-002 mb-3"
               sizes="300px"

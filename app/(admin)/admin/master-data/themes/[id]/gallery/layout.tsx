@@ -34,7 +34,7 @@ export default async function GalleryLayout({
     },
   });
 
-  if (invitation?.theme?.category.name.includes("Tanpa Foto")) {
+  if (invitation?.theme?.category.name.toLowerCase().includes("tanpa foto")) {
     notFound();
   }
 
