@@ -28,8 +28,8 @@ const HeroSection: React.FC = () => {
           </div>
           <nav className="hidden md:flex gap-6 text-white text-sm">
             {[
-              { href: "#fitur", label: "Fitur" },
               { href: "#tema", label: "Tema" },
+              { href: "#fitur", label: "Fitur" },
               { href: "#tutorial", label: "Tutorial" },
               { href: "#faq", label: "FAQ" },
             ].map(({ href, label }) => (

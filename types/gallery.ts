@@ -3,6 +3,7 @@ export interface Gallery {
   invitationId: string;
   image: string;
   description: string;
+  isCover: boolean;
   createdAt: string;
   updatedAt: string;
 }

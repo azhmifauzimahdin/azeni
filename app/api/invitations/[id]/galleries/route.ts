@@ -60,6 +60,7 @@ export async function POST(
             category: true,
           },
         },
+        galleries: true,
       },
     });
 
@@ -79,6 +80,18 @@ export async function POST(
       return ResponseJson(
         {
           message: "Tema ini tidak mendukung upload foto.",
+        },
+        { status: 403 }
+      );
+    }
+
+    const maxGalleries =
+      invitationByUserId.galleries.length >=
+      Number(process.env.NEXT_PUBLIC_MAX_GALLERIES);
+    if (maxGalleries) {
+      return ResponseJson(
+        {
+          message: `Batas maksimum galeri tercapai (${process.env.NEXT_PUBLIC_MAX_GALLERIES} foto).`,
         },
         { status: 403 }
       );

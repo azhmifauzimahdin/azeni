@@ -22,6 +22,8 @@ const InvitationModalLuxury: React.FC<InvitationModalProps> = ({
   onClose,
   variant = "001",
 }) => {
+  const coverUrl = invitation.galleries.find((g) => g.isCover)?.image ?? null;
+
   return (
     <div
       className={clsx(
@@ -37,7 +39,7 @@ const InvitationModalLuxury: React.FC<InvitationModalProps> = ({
           {/* Background pakai Img */}
           {invitation.galleries.length > 0 && (
             <Img
-              src={invitation.galleries[0].image}
+              src={coverUrl || "/assets/img/bg-hero.jpg"}
               alt="Background"
               wrapperClassName="absolute inset-0 w-full h-full"
               className="object-cover"
@@ -106,7 +108,7 @@ const InvitationModalLuxury: React.FC<InvitationModalProps> = ({
           {/* Background pakai Img */}
           {invitation.galleries.length > 0 && (
             <Img
-              src={invitation.galleries[0].image}
+              src={coverUrl || "/assets/img/bg-hero.jpg"}
               alt="Background"
               wrapperClassName="absolute inset-0 w-full h-full"
               className="object-cover"

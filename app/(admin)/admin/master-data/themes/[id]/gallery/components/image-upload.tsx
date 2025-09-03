@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useCallback, useState } from "react";
@@ -12,7 +13,7 @@ import {
 import toast from "react-hot-toast";
 import { uploadImageToCloudinary } from "@/lib/services/image";
 import { ImageService } from "@/lib/services";
-import ImageUi from "@/components/ui/image";
+import ImageUI from "@/components/ui/image";
 import ImageNext from "next/image";
 import type { Gallery } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -45,21 +46,28 @@ interface MultipleImageUploadProps {
   values: Gallery[];
   onUploadFinish: (url: string) => Promise<Gallery>;
   onRemove: (galleryId: string, imageUrl: string) => void;
+  onUpdateCover: (galleryId: string) => void;
   isFetching?: boolean;
   path?: string;
+  isFull?: boolean;
 }
 
 export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
   values,
   onUploadFinish,
   onRemove,
+  onUpdateCover,
   isFetching,
   path = "default",
+  isFull,
 }) => {
   const [uploadingFiles, setUploadingFiles] = useState<
     { key: string; previewUrl: string; progress: number; isReady: boolean }[]
   >([]);
   const [deletingGalleryId, setDeletingGalleryId] = useState<string | null>(
+    null
+  );
+  const [updatingGalleryId, setUpdatingGalleryId] = useState<string | null>(
     null
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -136,7 +144,6 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
             continue;
           }
         } else {
-          // Untuk non-HEIC langsung preload
           const img = new Image();
           img.onload = () => {
             setUploadingFiles((prev) =>
@@ -205,6 +212,15 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
     [onUploadFinish, path]
   );
 
+  const handleUpdate = async (galleryId: string) => {
+    setUpdatingGalleryId(galleryId);
+    try {
+      await onUpdateCover(galleryId);
+    } finally {
+      setUpdatingGalleryId(null);
+    }
+  };
+
   const handleRemove = async (galleryId: string, imageUrl: string) => {
     setDeletingGalleryId(galleryId);
     try {
@@ -235,19 +251,21 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
 
   return (
     <div>
-      <div
-        {...getRootProps()}
-        className="p-6 border-2 border-dashed rounded-md text-center cursor-pointer hover:bg-gray-100"
-      >
-        <input {...getInputProps()} />
-        <div className="flex flex-col items-center justify-center text-gray-600">
-          <ImagePlus className="w-6 h-6 mb-2" />
-          <p className="text-sm font-medium">
-            Klik atau seret untuk mengunggah foto
-          </p>
-          <p className="text-xs text-gray-400">Format JPG, PNG, dll.</p>
+      {!isFull && (
+        <div
+          {...getRootProps()}
+          className="p-6 border-2 border-dashed rounded-md text-center cursor-pointer hover:bg-gray-100"
+        >
+          <input {...getInputProps()} />
+          <div className="flex flex-col items-center justify-center text-gray-600">
+            <ImagePlus className="w-6 h-6 mb-2" />
+            <p className="text-sm font-medium">
+              Klik atau seret untuk mengunggah foto
+            </p>
+            <p className="text-xs text-gray-400">Format JPG, PNG, dll.</p>
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-5">
         {isFetching
@@ -265,6 +283,11 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
             ))
           : currentvalues.map((item, index) => (
               <div key={item.id} className="relative">
+                {item.isCover && (
+                  <div className="absolute top-3 left-3 bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs px-3 py-1 rounded-full shadow z-10">
+                    Foto Utama
+                  </div>
+                )}
                 <div
                   onClick={() => {
                     setCurrentIndex(index);
@@ -304,7 +327,7 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
                 <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-green-app-primary" />
               </div>
             ) : (
-              <ImageUi
+              <ImageUI
                 src={file.previewUrl}
                 alt="Uploading..."
                 aspectRatio="aspect-square"
@@ -357,7 +380,7 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
                     minWidth: "50vw",
                     minHeight: "200px",
                   }}
-                  className="block object-contain rounded-md shadow-xl"
+                  className="block object-contain rounded-md"
                 />
               </div>
             </div>
@@ -391,23 +414,41 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
             </button>
 
             <CloseModalButton onClick={() => setIsModalOpen(false)} />
-            <Button
-              variant="delete"
-              type="button"
-              size="sm"
-              onClick={() => {
-                const current = values[currentIndex];
-                if (current) {
-                  handleRemove(current.id, current.image);
-                  setIsModalOpen(false);
-                }
-              }}
-              isLoading={deletingGalleryId === values[currentIndex]?.id}
-              className="absolute bottom-2 right-1/2 translate-x-1/2 z-10 rounded-full"
-            >
-              Hapus
-              <span className="sr-only">Hapus foto</span>
-            </Button>
+            <div className="w-full flex-center gap-2 absolute bottom-2 right-1/2 translate-x-1/2 z-10">
+              {!values[currentIndex]?.isCover && (
+                <Button
+                  variant="secondary"
+                  type="button"
+                  size="sm"
+                  onClick={() => {
+                    const current = values[currentIndex];
+                    if (current) {
+                      handleUpdate(current.id);
+                    }
+                  }}
+                  isLoading={updatingGalleryId === values[currentIndex]?.id}
+                  className="rounded-full"
+                >
+                  Jadikan Foto Utama
+                </Button>
+              )}
+              <Button
+                variant="delete"
+                type="button"
+                size="sm"
+                onClick={() => {
+                  const current = values[currentIndex];
+                  if (current) {
+                    handleRemove(current.id, current.image);
+                    setIsModalOpen(false);
+                  }
+                }}
+                isLoading={deletingGalleryId === values[currentIndex]?.id}
+                className="rounded-full"
+              >
+                Hapus
+              </Button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>

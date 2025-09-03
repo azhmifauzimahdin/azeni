@@ -253,6 +253,7 @@ model Gallery {
   invitationId  String
   image         String
   description   String
+  isCover       Boolean       @default(false)
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 

@@ -159,12 +159,26 @@ const DashboardLayout = ({
 
         <div
           className={cn(
-            "px-3 pt-14 pb-16 md:p-6 md:pt-14 transition-all duration-300",
+            "px-3 pt-14 pb-16 md:p-6 md:pt-14 transition-all duration-300 min-h-screen",
             isSidebarCollapsed ? "sm:ml-16" : "sm:ml-64"
           )}
           onClick={handleCloseSidebar}
         >
           {children}
+        </div>
+        <div
+          className={cn(
+            "transition-all duration-300 border-t py-4 px-6 text-xs text-muted-foreground",
+            isSidebarCollapsed ? "sm:ml-16" : "sm:ml-64"
+          )}
+        >
+          ©&nbsp;
+          {2025 === new Date().getFullYear()
+            ? 2025
+            : `2025 - ${new Date().getFullYear()}`}
+          &nbsp;
+          <strong>{process.env.NEXT_PUBLIC_BRAND_NAME}</strong>. All rights
+          reserved.
         </div>
       </div>
     </>

@@ -14,7 +14,7 @@ const BenefitsSection: React.FC = () => {
   ];
 
   return (
-    <section className="py-16 px-6" id="fitur">
+    <section className="py-16 px-6">
       <div className="max-w-4xl mx-auto text-center">
         <div className="text-center mb-12" data-aos="fade-up">
           <h2 className="relative inline-block text-3xl font-bold tracking-tight text-green-app-primary">

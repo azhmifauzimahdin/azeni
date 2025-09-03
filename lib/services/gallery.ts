@@ -15,6 +15,16 @@ export async function createGallery(
   return res.data;
 }
 
+export async function updateCoverGallery(
+  invitationId: string,
+  galleryId: string
+): Promise<ApiResponse<Gallery[]>> {
+  const res = await httpRequest.patch(
+    `/api/invitations/${invitationId}/galleries/${galleryId}`
+  );
+  return res.data;
+}
+
 export async function deleteGallery(
   invitationId: string,
   galleryId: string

@@ -14,12 +14,14 @@ interface GalleryFormsProps {
   };
   initialData: Invitation | undefined;
   isFetching?: boolean;
+  isFull?: boolean;
 }
 
 const GalleryForm: React.FC<GalleryFormsProps> = ({
   params,
   initialData,
   isFetching,
+  isFull,
 }) => {
   const [galleries, setGalleries] = useState<Gallery[]>([]);
 
@@ -28,6 +30,10 @@ const GalleryForm: React.FC<GalleryFormsProps> = ({
   );
   const deleteGalleryFromInvitation = useInvitationStore(
     (state) => state.deleteGalleryFromInvitation
+  );
+
+  const replaceGalleriesInInvitation = useInvitationStore(
+    (state) => state.replaceGalleriesInInvitation
   );
 
   useEffect(() => {
@@ -50,9 +56,18 @@ const GalleryForm: React.FC<GalleryFormsProps> = ({
       await GalleryService.deleteGallery(params.id, galleryId);
       deleteGalleryFromInvitation(params.id, galleryId);
       toast.success("Gambar berhasil dihapus.");
-    } catch (error) {
-      console.error(error);
+    } catch {
       toast.error("Gagal menghapus gambar. Coba lagi.");
+    }
+  };
+
+  const onUpdateCover = async (galleryId: string) => {
+    try {
+      const res = await GalleryService.updateCoverGallery(params.id, galleryId);
+      replaceGalleriesInInvitation(params.id, res.data);
+      toast.success("Gambar berhasil dijadikan foto utama.");
+    } catch {
+      toast.error("Gagal menjadikan foto utama. Coba lagi.");
     }
   };
 
@@ -63,8 +78,10 @@ const GalleryForm: React.FC<GalleryFormsProps> = ({
           values={galleries}
           onUploadFinish={(url) => onUploadFinish(params.id, url)}
           onRemove={onRemove}
+          onUpdateCover={onUpdateCover}
           isFetching={isFetching}
           path={`users/galleries/${getFolderFromInvitationId(params.id)}`}
+          isFull={isFull}
         />
       </div>
     </>

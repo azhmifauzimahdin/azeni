@@ -94,6 +94,10 @@ interface InvitationState {
     invitationId: string,
     galleryId: string
   ) => void;
+  replaceGalleriesInInvitation: (
+    invitationId: string,
+    newGalleries: Gallery[]
+  ) => void;
 }
 
 const useAdminInvitationStore = create<InvitationState>((set) => ({
@@ -679,6 +683,17 @@ const useAdminInvitationStore = create<InvitationState>((set) => ({
           galleries: updatedGalleries,
         };
       }),
+    })),
+  replaceGalleriesInInvitation: (invitationId, newGalleries) =>
+    set((state) => ({
+      invitations: state.invitations.map((invitation) =>
+        invitation.id === invitationId
+          ? {
+              ...invitation,
+              galleries: [...newGalleries],
+            }
+          : invitation
+      ),
     })),
 }));
 

@@ -95,7 +95,11 @@ const Footer: React.FC = () => {
       </div>
 
       <div className="border-t py-4 text-center text-xs text-muted-foreground">
-        © 2025 - {new Date().getFullYear()}&nbsp;
+        ©&nbsp;
+        {2025 === new Date().getFullYear()
+          ? 2025
+          : `2025 - ${new Date().getFullYear()}`}
+        &nbsp;
         <strong>{process.env.NEXT_PUBLIC_BRAND_NAME}</strong>. All rights
         reserved.
       </div>
