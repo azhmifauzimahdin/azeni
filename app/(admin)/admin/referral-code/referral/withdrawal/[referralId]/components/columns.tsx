@@ -12,6 +12,13 @@ export const columns = ({
   onProofClick: (id: string) => void;
 }): ColumnDef<ReferralWithdrawal>[] => [
   {
+    accessorKey: "referralCode.code",
+    header: "Kode",
+    meta: {
+      className: "whitespace-nowrap",
+    },
+  },
+  {
     accessorKey: "amount",
     header: "Nominal Penarikan",
     cell: ({ row }) => {

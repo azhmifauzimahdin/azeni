@@ -52,6 +52,7 @@ export async function GET() {
         withdrawals: {
           include: {
             bank: true,
+            referralCode: true,
           },
           orderBy: {
             createdAt: "desc",

@@ -21,6 +21,9 @@ const ReferralCodeWithdrawalForm: React.FC<ReferralCodeWithdrawalFormProps> = ({
   const [withdrawal, setWitdhrawal] = useState<ReferralWithdrawal | undefined>(
     undefined
   );
+
+  console.log(initialData);
+
   return (
     <>
       <ImagePreviewModal
