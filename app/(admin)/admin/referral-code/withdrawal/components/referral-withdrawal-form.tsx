@@ -80,8 +80,8 @@ const ReferralWithdrawalForm: React.FC<ReferralWithdrawalFormsProps> = ({
   const upsertReferralWithdrawalAtFirst = useAdminReferralWithdrawalStore(
     (state) => state.upsertReferralWithdrawalAtFirst
   );
-  const upsertWithdrawalToReferralCode = useAdminReferralCodeStore(
-    (state) => state.upsertWithdrawalToReferralCode
+  const upsertReferralCodeAtFirst = useAdminReferralCodeStore(
+    (state) => state.upsertReferralCodeAtFirst
   );
 
   const form = useForm<ReferralWithdrawalFormValues>({
@@ -102,8 +102,9 @@ const ReferralWithdrawalForm: React.FC<ReferralWithdrawalFormsProps> = ({
         updatingWithdrawalId,
         data
       );
-      upsertReferralWithdrawalAtFirst(res.data);
-      upsertWithdrawalToReferralCode(res.data.referralCode.id, res.data);
+      upsertReferralWithdrawalAtFirst(res.data.withdrawal);
+      upsertReferralCodeAtFirst(res.data.referralCode);
+      console.log(res.data);
       toast.success("Penarikan dana berhasil diproses.");
       form.reset({
         status: "APPROVED",

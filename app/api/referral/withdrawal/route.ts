@@ -109,8 +109,13 @@ export async function POST(req: Request) {
     }
 
     const totalIncome = await prisma.transaction.aggregate({
-      where: { referralCodeId: referral.id },
-      _sum: { amount: true },
+      where: {
+        referralCodeId: referral.id,
+        status: {
+          name: "SUCCESS",
+        },
+      },
+      _sum: { referrerRewardAmount: true },
     });
 
     const totalWithdrawn = await prisma.referralWithdrawal.aggregate({
@@ -121,9 +126,9 @@ export async function POST(req: Request) {
       _sum: { amount: true },
     });
 
-    const balance = new Decimal(totalIncome._sum.amount || 0).minus(
-      totalWithdrawn._sum.amount || 0
-    );
+    const balance = new Decimal(
+      totalIncome._sum.referrerRewardAmount || 0
+    ).minus(totalWithdrawn._sum.amount || 0);
 
     if (balance.lessThan(amount)) {
       return ResponseJson(
@@ -132,7 +137,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const MIN_WITHDRAWAL_AMOUNT = 10000;
+    const MIN_WITHDRAWAL_AMOUNT = 50000;
 
     if (amount < MIN_WITHDRAWAL_AMOUNT) {
       return ResponseJson(

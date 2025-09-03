@@ -49,6 +49,14 @@ export const referralCodeSchema = z.object({
     .optional()
     .or(z.literal("").transform(() => undefined)),
 
+  referrerReward: decimalSchema.refine((val) => val > 0, {
+    message: "Reward harus lebih dari 0",
+  }),
+
+  referrerIsPercent: z.boolean({
+    required_error: "Harus pilih apakah reward persen atau nominal",
+  }),
+
   isActive: z.boolean().default(true),
 });
 
@@ -102,6 +110,16 @@ export const referralCodeFormSchema = z.object({
     )
     .or(z.literal("").transform(() => undefined)),
 
+  referrerReward: z
+    .string({ required_error: "Reward harus diisi" })
+    .refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
+      message: "Reward harus berupa angka lebih dari 0",
+    }),
+
+  referrerIsPercent: z.boolean({
+    required_error: "Harus pilih apakah diskon persen atau nominal",
+  }),
+
   isActive: z.boolean({
     required_error: "Status wajib diisi",
     invalid_type_error: "Status harus berupa boolean (ya/tidak)",
@@ -152,7 +170,7 @@ export const referralWithdrawalFormSchema = (
     amount: z
       .string({ required_error: "Jumlah penarikan harus diisi" })
       .refine((val) => !isNaN(Number(val)) && Number(val) >= minAmount, {
-        message: "Jumlah penarikan minimal Rp 50.000",
+        message: `Jumlah penarikan minimal ${formatRupiah(minAmount)}`,
       })
       .refine((val) => Number(val) <= maxAmount, {
         message: `Jumlah penarikan tidak boleh lebih dari sisa saldo ${formatRupiah(

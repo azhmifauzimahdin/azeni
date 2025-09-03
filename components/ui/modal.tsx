@@ -42,7 +42,7 @@ const Modal = ({
             initialFocusRef.current.focus();
           }
         }}
-        className="max-h-screen-dvh p-0 flex flex-col gap-1 overflow-hidden"
+        className="max-h-[98vh] p-0 flex flex-col gap-1 overflow-hidden"
       >
         <div className="sticky top-0 z-10 flex items-center justify-between bg-white pl-6 pr-3 pt-3">
           <DialogHeader className="flex-1">

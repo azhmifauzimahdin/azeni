@@ -54,7 +54,9 @@ export async function createReferralCodeWithdrawalById(
 export async function updateStatusReferralCodeWithdrawal(
   id: string,
   request: RequestUpdateStatusReferralWithdrawal
-): Promise<ApiResponse<ReferralWithdrawal>> {
+): Promise<
+  ApiResponse<{ withdrawal: ReferralWithdrawal; referralCode: ReferralCode }>
+> {
   const res = await httpRequest.patch(
     `/api/referral/withdrawal/${id}`,
     request

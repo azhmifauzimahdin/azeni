@@ -90,7 +90,8 @@ async function main() {
   await prisma.referralConfig.create({
     data: {
       userId: "39efd6e4-0a47-4a39-b4e0-ef1f8756c4f5",
-      description: "Dapatkan potongan harga langsung sebesar Rp10.000.",
+      description: "Dapatkan potongan harga langsung sebesar Rp5.000.",
+      referrerReward: 5000,
       discount: 5000,
       isPercent: false,
       maxDiscount: 0,

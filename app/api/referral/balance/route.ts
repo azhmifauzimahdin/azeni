@@ -34,7 +34,7 @@ export async function GET() {
           statusId: status.id,
         },
         select: {
-          referralDiscountAmount: true,
+          referrerRewardAmount: true,
         },
       },
       withdrawals: {
@@ -56,7 +56,7 @@ export async function GET() {
   }
 
   const totalReward = referral.transactions.reduce((acc, trx) => {
-    return acc + (trx.referralDiscountAmount?.toNumber() ?? 0);
+    return acc + (trx.referrerRewardAmount?.toNumber() ?? 0);
   }, 0);
 
   const totalWithdrawn = referral.withdrawals.reduce((acc, wd) => {

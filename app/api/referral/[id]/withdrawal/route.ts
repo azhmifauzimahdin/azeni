@@ -100,7 +100,7 @@ export async function POST(
 
     if (amount < MIN_WITHDRAWAL_AMOUNT) {
       return ResponseJson(
-        { message: "Minimal penarikan adalah Rp50.000" },
+        { message: "Minimal penarikan adalah Rp10.000" },
         { status: 400 }
       );
     }

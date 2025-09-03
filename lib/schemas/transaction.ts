@@ -10,8 +10,9 @@ export const applyReferralSchema = z.object({
     .string()
     .trim()
     .toUpperCase()
-    .regex(/^[A-Z0-9]+$/, {
-      message: "Kode hanya boleh terdiri dari huruf kapital dan angka",
+    .regex(/^[A-Z0-9-]+$/, {
+      message:
+        "Kode hanya boleh terdiri dari huruf kapital, angka, dan strip (-)",
     })
     .min(6, { message: "Kode referral minimal 6 karakter" })
     .max(12, { message: "Kode referral maksimal 12 karakter" })

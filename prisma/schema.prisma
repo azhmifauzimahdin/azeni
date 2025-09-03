@@ -81,6 +81,7 @@ model Transaction {
   originalAmount  Decimal?      @db.Decimal(10, 2)
   amount          Decimal       @db.Decimal(10, 2)
   referralDiscountAmount Decimal?      @db.Decimal(10, 2)
+  referrerRewardAmount   Decimal?      @db.Decimal(10, 2)
   date            DateTime
   statusId        String
   redirectUrl     String?
@@ -344,6 +345,8 @@ model ReferralCode {
   discount      Decimal       @db.Decimal(10, 2)
   isPercent     Boolean
   maxDiscount   Decimal?      @db.Decimal(10, 2)
+  referrerReward Decimal      @db.Decimal(10, 2)
+  referrerIsPercent Boolean   @default(false)
   isActive      Boolean       @default(true)
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
@@ -364,6 +367,10 @@ model ReferralCodeLog {
   newIsPercent    Boolean?
   oldMaxDiscount  Decimal?    @db.Decimal(10, 2)
   newMaxDiscount  Decimal?    @db.Decimal(10, 2)
+  newReferrerReward  Decimal?    @db.Decimal(10, 2)
+  oldReferrerReward  Decimal?    @db.Decimal(10, 2)
+  oldReferrerIsPercent Boolean?
+  newReferrerIsPercent Boolean?
   changedAt       DateTime    @default(now())
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
@@ -401,6 +408,8 @@ model ReferralConfig {
   userId            String
   description       String
   discount          Int
+  referrerReward    Decimal      @db.Decimal(10, 2)
+  referrerIsPercent Boolean   @default(false)
   isPercent         Boolean
   maxDiscount       Int
   startDate         DateTime

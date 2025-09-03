@@ -39,7 +39,20 @@ async function generateUniqueCode(): Promise<string> {
   return code;
 }
 
-async function main() {}
+async function main() {
+  await prisma.referralCode.create({
+    data: {
+      userId: "user-123",
+      userName: "Budi",
+      code: "AZEN123",
+      description: "Kode referral spesial",
+      referrerReward: new Decimal(5000),
+      discount: new Decimal(5000),
+      isPercent: false,
+      maxDiscount: new Decimal(20000),
+    },
+  });
+}
 
 main()
   .catch((e) => {

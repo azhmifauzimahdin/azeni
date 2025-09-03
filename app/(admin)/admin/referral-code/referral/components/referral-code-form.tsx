@@ -89,11 +89,14 @@ const ReferralCodesForm: React.FC<ReferralCodesFormProps> = ({
       discount: "0",
       isPercent: false,
       maxDiscount: "0",
+      referrerReward: "0",
+      referrerIsPercent: false,
       isActive: true,
     },
   });
 
   const isPercent = form.watch("isPercent");
+  const referrerIsPercent = form.watch("referrerIsPercent");
 
   const onSubmit = async (data: ReferralCodeFormValues) => {
     try {
@@ -117,6 +120,8 @@ const ReferralCodesForm: React.FC<ReferralCodesFormProps> = ({
         discount: "0",
         isPercent: false,
         maxDiscount: "0",
+        referrerReward: "0",
+        referrerIsPercent: false,
         isActive: true,
       });
       setUpdatingReferralCodeId(null);
@@ -138,6 +143,8 @@ const ReferralCodesForm: React.FC<ReferralCodesFormProps> = ({
       discount: referralCode?.discount.toString() ?? "0",
       isPercent: referralCode?.isPercent,
       maxDiscount: referralCode?.maxDiscount?.toString() ?? "0",
+      referrerReward: referralCode?.referrerReward?.toString() ?? "0",
+      referrerIsPercent: referralCode?.referrerIsPercent,
       isActive: referralCode?.isActive,
     });
   };
@@ -369,6 +376,59 @@ const ReferralCodesForm: React.FC<ReferralCodesFormProps> = ({
                   <FormDescription>
                     Masukkan angka 0 jika tidak ingin membatasi maksimal diskon
                   </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="referrerIsPercent"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel required htmlFor={field.name}>
+                    Jenis Reward
+                  </FormLabel>
+                  <FormControl>
+                    <Select
+                      value={field.value ? "percent" : "flat"}
+                      onValueChange={(val) => field.onChange(val === "percent")}
+                      disabled={isLoading}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Pilih jenis reward" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="flat">Flat (Rp)</SelectItem>
+                        <SelectItem value="percent">Persen (%)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormDescription>
+                    Pilih apakah reward berupa nominal atau persen.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="referrerReward"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel required htmlFor={field.name}>
+                    Reward
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      id={field.name}
+                      type={referrerIsPercent ? "percent" : "currency"}
+                      placeholder={referrerIsPercent ? "10" : "20000"}
+                      disabled={isLoading}
+                      {...field}
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

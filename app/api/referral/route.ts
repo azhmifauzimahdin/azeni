@@ -19,6 +19,11 @@ export async function GET() {
       },
       include: {
         transactions: {
+          where: {
+            status: {
+              name: "SUCCESS",
+            },
+          },
           include: {
             status: true,
             referralCode: true,
@@ -97,6 +102,8 @@ export async function POST(_: Request) {
         userId,
         userName,
         code: uniqueCode,
+        referrerReward: config?.referrerReward ?? 10000,
+        referrerIsPercent: config?.referrerIsPercent ?? false,
         description: config?.description ?? "Diskon langsung Rp10.000",
         discount: config?.discount ?? 10000,
         isPercent: config?.isPercent ?? false,

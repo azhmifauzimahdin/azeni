@@ -68,7 +68,7 @@ export async function GET() {
     const referralCodesWithBalance = referralCodes.map((ref) => {
       const totalReward = ref.transactions.reduce((acc, trx) => {
         if (trx.status?.id === status.id) {
-          return acc + (trx.referralDiscountAmount?.toNumber() ?? 0);
+          return acc + (trx.referrerRewardAmount?.toNumber() ?? 0);
         }
         return acc;
       }, 0);
@@ -126,6 +126,8 @@ export async function POST(req: Request) {
       discount,
       isPercent,
       maxDiscount,
+      referrerReward,
+      referrerIsPercent,
       isActive,
     } = parsed.data;
 
@@ -164,6 +166,8 @@ export async function POST(req: Request) {
         discount,
         isPercent,
         maxDiscount,
+        referrerReward,
+        referrerIsPercent,
         isActive,
       },
       include: {

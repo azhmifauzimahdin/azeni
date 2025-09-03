@@ -36,8 +36,16 @@ export async function PUT(
       return handleZodError(parsed.error);
     }
 
-    const { code, description, discount, isPercent, maxDiscount, isActive } =
-      parsed.data;
+    const {
+      code,
+      description,
+      discount,
+      isPercent,
+      maxDiscount,
+      referrerReward,
+      referrerIsPercent,
+      isActive,
+    } = parsed.data;
 
     const existingReferral = await prisma.referralCode.findUnique({
       where: { id: params.referralId },
@@ -71,32 +79,51 @@ export async function PUT(
         discount,
         isPercent,
         maxDiscount,
+        referrerReward,
+        referrerIsPercent,
         isActive,
       },
     });
 
-    const isDiscountChanged = discount !== Number(existingReferral.discount);
-    const isIsPercentChanged = isPercent !== existingReferral.isPercent;
+    const isDiscountChanged =
+      discount !== Number(existingReferral.discount) ||
+      isPercent !== existingReferral.isPercent;
     const isMaxDiscountChanged =
       (maxDiscount ?? null) !==
       (existingReferral.maxDiscount !== null
         ? Number(existingReferral.maxDiscount)
         : null);
 
-    if (isDiscountChanged || isIsPercentChanged || isMaxDiscountChanged) {
+    const isReferrerChanged =
+      referrerReward !== Number(existingReferral.referrerReward) ||
+      referrerIsPercent !== existingReferral.referrerIsPercent;
+
+    if (isDiscountChanged || isMaxDiscountChanged || isReferrerChanged) {
       await prisma.referralCodeLog.create({
         data: {
           userId,
           userName,
           referralCodeId: params.referralId,
+
           oldDiscount: isDiscountChanged ? existingReferral.discount : null,
           newDiscount: isDiscountChanged ? discount : null,
-          oldIsPercent: isIsPercentChanged ? existingReferral.isPercent : null,
-          newIsPercent: isIsPercentChanged ? isPercent : null,
+
+          oldIsPercent: isDiscountChanged ? existingReferral.isPercent : null,
+          newIsPercent: isDiscountChanged ? isPercent : null,
+
           oldMaxDiscount: isMaxDiscountChanged
             ? existingReferral.maxDiscount
             : null,
           newMaxDiscount: isMaxDiscountChanged ? maxDiscount : null,
+
+          oldReferrerReward: isReferrerChanged
+            ? existingReferral.referrerReward
+            : null,
+          newReferrerReward: isReferrerChanged ? referrerReward : null,
+          oldReferrerIsPercent: isReferrerChanged
+            ? existingReferral.referrerIsPercent
+            : null,
+          newReferrerIsPercent: isReferrerChanged ? referrerIsPercent : null,
         },
       });
     }

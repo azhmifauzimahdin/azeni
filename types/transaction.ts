@@ -10,6 +10,7 @@ export interface Transaction {
   originalAmount: string;
   amount: string;
   referralDiscountAmount: string;
+  referrerRewardAmount: string;
   date: string;
   snapToken: string;
   redirectUrl: string;

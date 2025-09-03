@@ -7,6 +7,8 @@ export interface ReferralCode {
   userName: string;
   code: string;
   description?: string;
+  referrerReward: string;
+  referrerIsPercent: boolean;
   discount: string;
   isPercent: boolean;
   maxDiscount?: string;
@@ -40,6 +42,10 @@ export interface ReferralCodeLog {
   newIsPercent: boolean | null;
   oldMaxDiscount: string | null;
   newMaxDiscount: string | null;
+  oldReferrerReward: string | null;
+  newReferrerReward: string | null;
+  oldReferrerIsPercent: string | null;
+  newReferrerIsPercent: string | null;
   changedAt: string;
   createdAt: string;
   updatedAt: string;

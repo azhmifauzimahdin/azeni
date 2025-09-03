@@ -345,11 +345,15 @@ const ReferralCodeForm: React.FC<ReferralCodeFormsProps> = ({
               {referralCode && (
                 <Alert variant="gradientPinkPurple">
                   Bagikan kode referral Anda agar pembeli mendapat potongan
-                  harga dan Anda memperoleh saldo&nbsp;
+                  harga&nbsp;
                   <span className="font-semibold">
                     {referralCode.isPercent
                       ? `${referralCode.discount}% dari harga awal`
                       : `${formatRupiah(Number(referralCode.discount))}`}
+                  </span>
+                  &nbsp;dan Anda memperoleh saldo&nbsp;
+                  <span className="font-semibold">
+                    {formatRupiah(Number(referralCode.referrerReward))}
                   </span>
                   . Penarikan dana hanya dapat dilakukan minimal&nbsp;
                   <span className="font-semibold">Rp 50.000</span>.

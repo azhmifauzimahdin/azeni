@@ -25,11 +25,6 @@ export const columns: ColumnDef<Transaction>[] = [
     },
   },
   {
-    accessorKey: "referralCode.code",
-    header: "Referral",
-    cell: ({ row }) => row.original.referralCode?.code || "-",
-  },
-  {
     accessorKey: "originalAmount",
     header: "Tema",
     cell: ({ row }) =>
@@ -95,6 +90,19 @@ export const columns: ColumnDef<Transaction>[] = [
         style: "currency",
         currency: "IDR",
       }).format(Number(row.original.amount)),
+    meta: {
+      className: "whitespace-nowrap",
+    },
+  },
+  {
+    accessorKey: "referrerRewardAmount",
+    header: "Reward",
+    cell: ({ row }) => {
+      return new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+      }).format(Number(row.original.referrerRewardAmount));
+    },
     meta: {
       className: "whitespace-nowrap",
     },

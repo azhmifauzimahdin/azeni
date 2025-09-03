@@ -56,7 +56,7 @@ const ActionsCell = ({
             onClick={() => onWithdrawal(id)}
             className="flex items-center gap-2 py-2 cursor-pointer"
             disabled={
-              Number(balance?.totalReward ?? 0) < 10000 ||
+              Number(balance?.availableBalance ?? 0) < 10000 ||
               withdrawals.some((w) => w.status === "PENDING")
             }
           >
@@ -94,7 +94,7 @@ export const columns = ({
   },
   {
     accessorKey: "balance.totalReward",
-    header: "Total Saldo",
+    header: "Total Reward",
     cell: ({ row }) =>
       new Intl.NumberFormat("id-ID", {
         style: "currency",
@@ -127,24 +127,25 @@ export const columns = ({
     },
   },
   {
-    accessorKey: "isPercent",
-    header: "Persen",
-    cell: ({ row }) => {
-      return (
-        <Badge variant={row.original.isPercent ? "success" : "secondary"}>
-          {row.original.isPercent ? "Ya" : "Tidak"}
-        </Badge>
-      );
-    },
-  },
-  {
     accessorKey: "maxDiscount",
-    header: "Maksimal",
+    header: "Maksimal Diskon",
     cell: ({ row }) =>
       new Intl.NumberFormat("id-ID", {
         style: "currency",
         currency: "IDR",
       }).format(Number(row.original.maxDiscount)),
+  },
+  {
+    accessorKey: "referrerReward",
+    header: "Reward",
+    cell: ({ row }) => {
+      if (row.original.referrerIsPercent)
+        return `${row.original.referrerReward}%`;
+      return new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+      }).format(Number(row.original.referrerReward));
+    },
   },
   {
     accessorKey: "isActive",

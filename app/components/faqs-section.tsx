@@ -17,6 +17,10 @@ const faqs = [
     a: "Bisa! Jika tema favoritmu belum tersedia, kamu dapat mengajukan request, dan tim kami akan membantu menghadirkan tema yang sesuai keinginanmu.",
   },
   {
+    q: "Apakah tema tanpa foto bisa ganti foto karakter?",
+    a: "Ya, pada tema tanpa foto kamu tetap bisa mengganti ilustrasi atau karakter default dengan pilihan gambar karakter lain yang tersedia.",
+  },
+  {
     q: "Apakah bisa request musik untuk undangan?",
     a: "Bisa! Kamu dapat memilih dan meminta lagu favoritmu untuk diputar di undangan. Admin akan membantu menambahkan musik sesuai permintaan.",
   },

@@ -21,13 +21,13 @@ export const transactionColumns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => row.original.referralCode?.code || "-",
   },
   {
-    accessorKey: "referralDiscountAmount",
-    header: "Nominal Referral",
+    accessorKey: "referrerRewardAmount",
+    header: "Nominal Reward",
     cell: ({ row }) => {
       return new Intl.NumberFormat("id-ID", {
         style: "currency",
         currency: "IDR",
-      }).format(Number(row.original.referralDiscountAmount));
+      }).format(Number(row.original.referrerRewardAmount));
     },
     meta: {
       className: "whitespace-nowrap",

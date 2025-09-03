@@ -79,6 +79,7 @@ export async function PATCH(
           amount: baseAmount,
           referralCodeId: null,
           referralDiscountAmount: new Decimal(0),
+          referrerRewardAmount: new Decimal(0),
         },
         include: { status: true, referralCode: true },
       });
@@ -150,6 +151,9 @@ export async function PATCH(
     }
 
     const finalAmount = Decimal.max(0, baseAmount.sub(discount));
+    const referrerReward = referral.referrerIsPercent
+      ? baseAmount.mul(referral.referrerReward ?? 0).div(100)
+      : referral.referrerReward ?? new Decimal(0);
 
     const updated = await prisma.transaction.update({
       where: { id: transaction.id },
@@ -157,6 +161,7 @@ export async function PATCH(
         amount: finalAmount,
         referralCodeId: referral.id,
         referralDiscountAmount: discount,
+        referrerRewardAmount: referrerReward,
       },
       include: {
         status: true,

@@ -10,6 +10,7 @@ const BenefitsSection: React.FC = () => {
     "Undang tamu tanpa batas",
     "Proses lebih cepat tanpa antri",
     "Tema favorit belum tersedia? Bisa request khusus sesuai keinginan",
+    "Tema tanpa foto tetap bisa ganti foto karakter sesuai pilihan",
   ];
 
   return (
