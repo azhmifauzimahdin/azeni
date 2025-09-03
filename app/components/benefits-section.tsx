@@ -9,8 +9,8 @@ const BenefitsSection: React.FC = () => {
     "Tersedia menu RSVP interaktif",
     "Undang tamu tanpa batas",
     "Proses lebih cepat tanpa antri",
-    "Tema favorit belum tersedia? Bisa request khusus sesuai keinginan",
-    "Tema tanpa foto tetap bisa ganti foto karakter sesuai pilihan",
+    "Bisa request tema sesuai keinginan",
+    "Tema tanpa foto tetap bisa ganti foto karakter",
   ];
 
   return (
@@ -18,7 +18,7 @@ const BenefitsSection: React.FC = () => {
       <div className="max-w-4xl mx-auto text-center">
         <div className="text-center mb-12" data-aos="fade-up">
           <h2 className="relative inline-block text-3xl font-bold tracking-tight text-green-app-primary">
-            Kenapa Pilih {process.env.NEXT_PUBLIC_BRAND_NAME}?
+            Kenapa Pilih Undangan {process.env.NEXT_PUBLIC_BRAND_NAME}?
             <span className="absolute left-1/2 -bottom-2 -translate-x-1/2 w-16 h-1 bg-green-app-primary/60 rounded-full" />
           </h2>
         </div>

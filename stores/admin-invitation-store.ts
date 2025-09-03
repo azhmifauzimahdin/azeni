@@ -23,6 +23,7 @@ interface InvitationState {
     statusName: "PENDING" | "SUCCESS" | "FAILED" | "CANCELLED" | "REFUNDED"
   ) => void;
   updateSlugInInvitation: (invitationId: string, slug: string) => void;
+  updateImageInInvitation: (invitationId: string, image: string) => void;
   updateDateInInvitation: (
     invitationId: string,
     date: string,
@@ -161,6 +162,17 @@ const useAdminInvitationStore = create<InvitationState>((set) => ({
           ? {
               ...invitation,
               slug,
+            }
+          : invitation
+      ),
+    })),
+  updateImageInInvitation: (invitationId, image) =>
+    set((state) => ({
+      invitations: state.invitations.map((invitation) =>
+        invitation.id === invitationId
+          ? {
+              ...invitation,
+              image,
             }
           : invitation
       ),

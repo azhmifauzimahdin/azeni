@@ -74,6 +74,14 @@ export async function updateLinkByUserId(
   return res.data;
 }
 
+export async function updateImageByInvitationId(
+  id: string,
+  request: { image: string }
+): Promise<ApiResponse<Invitation>> {
+  const res = await httpRequest.patch(`/api/invitations/${id}/cover`, request);
+  return res.data;
+}
+
 export async function updateDateByUserId(
   id: string,
   request: { date: Date }

@@ -73,9 +73,13 @@ export async function POST(
       invitationByUserId.couple?.[field as CoupleImageField];
 
     if (existingImage && existingImage !== url) {
-      const publicId = extractCloudinaryPublicId(existingImage);
-      if (publicId) {
-        await cloudinary.uploader.destroy(publicId);
+      if (existingImage && existingImage !== image) {
+        if (existingImage.startsWith("https://res.cloudinary.com/")) {
+          const publicId = extractCloudinaryPublicId(existingImage);
+          if (publicId) {
+            await cloudinary.uploader.destroy(publicId);
+          }
+        }
       }
     }
 

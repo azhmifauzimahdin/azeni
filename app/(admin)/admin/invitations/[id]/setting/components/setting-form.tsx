@@ -7,6 +7,7 @@ import SettingDeleteForm from "./setting-delete-form";
 import SettingScanForm from "./setting-scan-form";
 import SettingEnableForm from "./setting-enable-form";
 import SettingIntroductionForm from "./setting-introduction-form";
+import SettingCoverForm from "./setting-cover-form";
 
 interface SettingFormsProps {
   params: { id: string };
@@ -21,11 +22,22 @@ const SettingForm: React.FC<SettingFormsProps> = ({
 }) => {
   return (
     <div className="space-y-4">
-      <SettingEnableForm
-        params={params}
-        initialData={initialData}
-        isFetching={isFetching}
-      />
+      <div className="flex flex-col md:flex-row gap-3">
+        <div className="w-full md:w-44">
+          <SettingCoverForm
+            params={params}
+            initialData={initialData}
+            isFetching={isFetching}
+          />
+        </div>
+        <div className="flex-1">
+          <SettingEnableForm
+            params={params}
+            initialData={initialData}
+            isFetching={isFetching}
+          />
+        </div>
+      </div>
       <SettingLinkForm
         params={params}
         initialData={initialData}

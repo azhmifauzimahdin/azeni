@@ -48,6 +48,10 @@ export const updateLinkInvitationSchema = z.object({
     }),
 });
 
+export const updateImageInvitationSchema = z.object({
+  image: z.string().min(1, { message: "Foto tidak boleh kosong" }),
+});
+
 export const createApiInvitationSchema = z.object({
   themeId: z
     .string({

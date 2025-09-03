@@ -84,7 +84,7 @@ const SettingEnableForm: React.FC<SettingEnableFormsProps> = ({
   return (
     <Form {...form}>
       <form
-        className="card-dashboard space-y-4"
+        className="card-dashboard space-y-4 h-full"
         onSubmit={(e) => e.preventDefault()}
       >
         <Alert variant="default">
@@ -93,7 +93,7 @@ const SettingEnableForm: React.FC<SettingEnableFormsProps> = ({
         <div className="flex items-center justify-between">
           <div className="space-y-1 pr-4">
             <Label htmlFor="auto-date" className="text-base font-medium">
-              ucapan & doa di undangan
+              Ucapan & doa di undangan
             </Label>
             <p className="text-xs text-muted-foreground">
               Aktifkan fitur ini agar tamu bisa menulis ucapan & doa di

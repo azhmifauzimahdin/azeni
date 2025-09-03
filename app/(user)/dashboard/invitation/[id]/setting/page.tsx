@@ -2,7 +2,7 @@ import { generatePageMetadata } from "@/lib/metadata";
 import SettingContent from "./components/setting-content";
 
 export const generateMetadata = () =>
-  generatePageMetadata({ fallbackTitle: "RSVP" });
+  generatePageMetadata({ fallbackTitle: "Pengaturan" });
 
 interface SettingProps {
   params: {
