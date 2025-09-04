@@ -40,3 +40,11 @@ export interface ThemeCategory {
   updatedAt: string;
   themes?: Theme[];
 }
+
+export interface ThemeBackground {
+  id: string;
+  image: string;
+  type: string;
+  createdAt: string;
+  updatedAt: string;
+}

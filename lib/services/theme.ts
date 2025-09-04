@@ -12,6 +12,11 @@ export async function fetchThemes(): Promise<ApiResponse<Theme[]>> {
   return res.data;
 }
 
+export async function fetchThemeBackgrounds(): Promise<ApiResponse<Theme[]>> {
+  const res = await httpRequest.get("/api/theme-backgrounds");
+  return res.data;
+}
+
 export async function createTheme(
   request: ThemeRequest
 ): Promise<ApiResponse<Theme>> {

@@ -22,7 +22,15 @@ const InvitationModalLuxury: React.FC<InvitationModalProps> = ({
   onClose,
   variant = "001",
 }) => {
-  const coverUrl = invitation.galleries.find((g) => g.isCover)?.image ?? null;
+  const noPhoto = invitation.theme?.category.name
+    .toLowerCase()
+    .includes("tanpa foto");
+  let coverUrl;
+  if (noPhoto)
+    coverUrl =
+      invitation.themeBackgrounds?.find((bg) => bg.image.includes(variant))
+        ?.image ?? null;
+  else coverUrl = invitation.galleries.find((g) => g.isCover)?.image ?? null;
 
   return (
     <div
@@ -37,15 +45,13 @@ const InvitationModalLuxury: React.FC<InvitationModalProps> = ({
       {variant === "001" ? (
         <div className="relative h-screen-fixed w-full ">
           {/* Background pakai Img */}
-          {invitation.galleries.length > 0 && (
-            <Img
-              src={coverUrl || "/assets/img/bg-hero.jpg"}
-              alt="Background"
-              wrapperClassName="absolute inset-0 w-full h-full"
-              className="object-cover"
-              priority
-            />
-          )}
+          <Img
+            src={coverUrl || "/assets/img/bg-hero.jpg"}
+            alt="Background"
+            wrapperClassName="absolute inset-0 w-full h-full"
+            className="object-cover"
+            priority
+          />
 
           {/* Overlay hitam transparan */}
           <div className="absolute inset-0 bg-black/60" />
@@ -106,15 +112,13 @@ const InvitationModalLuxury: React.FC<InvitationModalProps> = ({
       ) : variant === "002" ? (
         <div className="relative h-screen-fixed w-full ">
           {/* Background pakai Img */}
-          {invitation.galleries.length > 0 && (
-            <Img
-              src={coverUrl || "/assets/img/bg-hero.jpg"}
-              alt="Background"
-              wrapperClassName="absolute inset-0 w-full h-full"
-              className="object-cover"
-              priority
-            />
-          )}
+          <Img
+            src={coverUrl || "/assets/img/bg-hero.jpg"}
+            alt="Background"
+            wrapperClassName="absolute inset-0 w-full h-full"
+            className="object-cover"
+            priority
+          />
 
           {/* Overlay hitam transparan */}
           <div className="absolute inset-0 bg-black/60" />

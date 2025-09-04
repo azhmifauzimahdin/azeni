@@ -335,10 +335,19 @@ export async function GET(
       guest: guest ?? null,
     };
 
+    let themeBackgrounds;
+    if (invitation?.theme?.category.name === "Luxury Tanpa Foto") {
+      themeBackgrounds = await prisma.themeBackground.findMany();
+    }
+    const InvitationFinal = {
+      ...dataWithGuest,
+      themeBackgrounds,
+    };
+
     return ResponseJson(
       {
         message: "Data undangan berhasil diambil",
-        data: dataWithGuest,
+        data: InvitationFinal,
       },
       { status: 200 }
     );

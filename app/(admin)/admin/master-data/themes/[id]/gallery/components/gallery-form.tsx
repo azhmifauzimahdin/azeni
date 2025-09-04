@@ -15,6 +15,7 @@ interface GalleryFormsProps {
   initialData: Invitation | undefined;
   isFetching?: boolean;
   isFull?: boolean;
+  disabledMainPhoto?: boolean;
 }
 
 const GalleryForm: React.FC<GalleryFormsProps> = ({
@@ -22,6 +23,7 @@ const GalleryForm: React.FC<GalleryFormsProps> = ({
   initialData,
   isFetching,
   isFull,
+  disabledMainPhoto,
 }) => {
   const [galleries, setGalleries] = useState<Gallery[]>([]);
 
@@ -82,6 +84,7 @@ const GalleryForm: React.FC<GalleryFormsProps> = ({
           isFetching={isFetching}
           path={`users/galleries/${getFolderFromInvitationId(params.id)}`}
           isFull={isFull}
+          disabledMainPhoto={disabledMainPhoto}
         />
       </div>
     </>

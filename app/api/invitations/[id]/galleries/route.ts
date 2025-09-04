@@ -97,11 +97,14 @@ export async function POST(
       );
     }
 
+    const isCover = invitationByUserId.galleries.length > 0;
+
     const gallery = await prisma.gallery.create({
       data: {
         invitationId: params.id,
         image,
         description,
+        isCover: !isCover,
       },
     });
 

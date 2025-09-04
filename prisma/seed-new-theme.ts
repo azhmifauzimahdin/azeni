@@ -40,17 +40,25 @@ async function generateUniqueCode(): Promise<string> {
 }
 
 async function main() {
-  await prisma.referralCode.create({
-    data: {
-      userId: "user-123",
-      userName: "Budi",
-      code: "AZEN123",
-      description: "Kode referral spesial",
-      referrerReward: new Decimal(5000),
-      discount: new Decimal(5000),
-      isPercent: false,
-      maxDiscount: new Decimal(20000),
-    },
+  await prisma.themeBackground.createMany({
+    data: [
+      {
+        image: "/assets/bg-theme/bg-theme-001.jpg",
+        type: "001",
+      },
+      {
+        image: "/assets/bg-theme/bg-theme-002.jpg",
+        type: "001",
+      },
+      {
+        image: "/assets/bg-theme/bg-theme-003.jpg",
+        type: "001",
+      },
+      {
+        image: "/assets/bg-theme/bg-theme-004.jpg",
+        type: "001",
+      },
+    ],
   });
 }
 

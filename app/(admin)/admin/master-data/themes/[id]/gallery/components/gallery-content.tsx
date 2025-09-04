@@ -54,6 +54,7 @@ const GalleryContent: React.FC<GalleryContentProps> = ({ params }) => {
           initialData={invitation}
           isFetching={isFetching}
           isFull={maxGalleries}
+          disabledMainPhoto={!isModalThemeImageNeeded}
         />
       </div>
     </>

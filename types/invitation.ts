@@ -10,7 +10,7 @@ import { Quote } from "./quote";
 import { Schedule } from "./schedule";
 import { Setting } from "./setting";
 import { Story } from "./story";
-import { Theme } from "./theme";
+import { Theme, ThemeBackground } from "./theme";
 import { Transaction } from "./transaction";
 
 export interface InvitationRequest {
@@ -54,4 +54,5 @@ export interface Invitation {
   guests: Guest[];
   guest: Guest;
   invitationChanges: InvitationChange[];
+  themeBackgrounds: ThemeBackground[] | null;
 }

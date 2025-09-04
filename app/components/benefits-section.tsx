@@ -11,6 +11,7 @@ const BenefitsSection: React.FC = () => {
     "Proses lebih cepat tanpa antri",
     "Bisa request tema sesuai keinginan",
     "Tema tanpa foto tetap bisa ganti foto karakter",
+    "Tema baru hadir tiap bulan",
   ];
 
   return (

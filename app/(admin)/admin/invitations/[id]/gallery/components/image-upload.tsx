@@ -50,6 +50,7 @@ interface MultipleImageUploadProps {
   isFetching?: boolean;
   path?: string;
   isFull?: boolean;
+  disabledMainPhoto?: boolean;
 }
 
 export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
@@ -60,6 +61,7 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
   isFetching,
   path = "default",
   isFull,
+  disabledMainPhoto,
 }) => {
   const [uploadingFiles, setUploadingFiles] = useState<
     { key: string; previewUrl: string; progress: number; isReady: boolean }[]
@@ -283,7 +285,7 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
             ))
           : currentvalues.map((item, index) => (
               <div key={item.id} className="relative">
-                {item.isCover && (
+                {item.isCover && !disabledMainPhoto && (
                   <div className="absolute top-3 left-3 bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs px-3 py-1 rounded-full shadow z-10">
                     Foto Utama
                   </div>
@@ -415,7 +417,7 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
 
             <CloseModalButton onClick={() => setIsModalOpen(false)} />
             <div className="w-full flex-center gap-2 absolute bottom-2 right-1/2 translate-x-1/2 z-10">
-              {!values[currentIndex]?.isCover && (
+              {!values[currentIndex]?.isCover && !disabledMainPhoto && (
                 <Button
                   variant="secondary"
                   type="button"
